@@ -2,8 +2,6 @@ import os
 import openai
 import requests
 import subprocess
- #   Add a new button with text "SurpriseMe" to the code
-
 
 cmd = "git branch"
 subprocess.call(cmd.split(), shell=False)
@@ -19,7 +17,7 @@ def make_changes(path, task):
         # Read the contents of the file
         file_contents = str(file.read())
 
-    openai.api_key = "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"
+    openai.api_key = "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"
     response=openai.Edit.create(
       model="code-davinci-edit-001",
       input=file_contents,
@@ -54,7 +52,7 @@ if tag == "#HTML":
      make_changes(path,task)
      push()
 elif tag == "#CSS":
-     path = "css/style.css"
+     path = "style.css"
      branch_out(task_id)
      make_changes(path,task)
      push()
