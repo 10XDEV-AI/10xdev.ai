@@ -7,7 +7,14 @@ import fileinput
 task = input("Describe a change you would want to be implemented : ")
 task_id = input("Enter Task ID for branch name: ")
 #retrain = input("Would you like to retrain the model? [y/n] :")
-openai.api_key = input("API Key: ")
+
+text_file = open("key.txt", "r")
+
+#read whole file to a string
+openai.api_key =  text_file.read()
+
+#close file
+text_file.close()
 
 df = pd.read_csv('code_search_embeddings.csv')
 df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
@@ -90,3 +97,6 @@ def push():
 branch_out(task_id)
 make_changes(task)
 push()
+
+if input("Go to main[y/n]" =="y"):
+    branch_out("main")
