@@ -73,7 +73,6 @@ body {
   padding: 0px 0px 5px 5px;
 }
 
-/*  Submit button Styles */
 #login-form-submit {
   width: 100%;
   padding: 7px;
@@ -81,7 +80,7 @@ body {
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  background-color: #3a3a3a;
+  background-color: #D75442;
   cursor: pointer;
   outline: none;
 }
