@@ -4,17 +4,17 @@ import os
 import pandas as pd
 import fileinput
 
-#cmd = "git branch"
-#subprocess.call(cmd.split(), shell=False)
-
+#task = "Make Submit Button Red"
 task = input("Describe a change you would want to be implemented : ")
 task_id = input("Enter Task ID for branch name: ")
-retrain = input("Would you like to retrain the model? [y/n] :")
+#retrain = input("Would you like to retrain the model? [y/n] :")
 
 
 df = pd.read_csv('code_search_embeddings.csv')
+df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
+
 def get_embedding(task):
-    openai.api_key = "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"
+    openai.api_key = "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"
     response = openai.Embedding.create(
         input=task,
         model="text-embedding-ada-002"
@@ -30,6 +30,7 @@ def replace(filename,startStop,new_code_block):
 
     '''
     # Replace the specified lines with the new code block
+    startStop = eval(startStop)
     with fileinput.input(filename, inplace=True) as f:
         for i, line in enumerate(f, 1):
             if startStop[0] <= i <= startStop[1]:
@@ -48,13 +49,16 @@ def search_functions(df, code_query):
     return res
 
 def make_changes(task):
-    search_functions(df, task)
     embedding = get_embedding(task)
-    openai.api_key = "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"
-    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
+    openai.api_key = "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"
+
+    from openai.embeddings_utils import cosine_similarity
+    print(df.head)
+    df['similarities'] = df.code_embedding_vector.apply(lambda x: cosine_similarity(x, embedding))
     res = df.sort_values('similarities', ascending=False).head(1)
     code_block = res.iloc[0]['Code']
-    openai.api_key = "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"
+    print(code_block)
+
     response=openai.Edit.create(
       model="code-davinci-edit-001",
       input=code_block,
@@ -74,13 +78,11 @@ def is_not_git_branch(branch_name):
         return False
     except subprocess.CalledProcessError:
         return True
-
 def branch_out(task_id):
     if(is_not_git_branch(task_id)):
         cmd = "git checkout -b " + task_id
         subprocess.call(cmd.split(), shell=False)
     print("On branch :" + task_id)
-
 def push():
     cmd = "git add ."
     subprocess.call(cmd.split(), shell=False)
@@ -89,7 +91,9 @@ def push():
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
 
-branch_out(task_id)
-#make_changes(task)
-print(df.code_embedding)
+#branch_out(task_id)
+#print(len(df.iloc[0]['code_embedding_vector']))
+
+#print(cosine_similarity(df.iloc[0]['code_embedding_vector'], get_embedding(task)))
+make_changes(task)
 push()
