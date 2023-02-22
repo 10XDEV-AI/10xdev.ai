@@ -1,43 +1,88 @@
-import os
 import openai
-import requests
 import subprocess
+import os
+import pandas as pd
+import fileinput
 
-cmd = "git branch"
-subprocess.call(cmd.split(), shell=False)
-
-
+#task = "Make Submit Button Red"
 task = input("Describe a change you would want to be implemented : ")
-tag = input("Enter tags about the component (#HTML or #CSS) :")
-task_id = input("Enter Task ID : ")
+task_id = input("Enter Task ID for branch name: ")
+#retrain = input("Would you like to retrain the model? [y/n] :")
 
-def make_changes(path, task):
-    # Open the file in read mode
-    with open(path, 'r') as file:
-        # Read the contents of the file
-        file_contents = str(file.read())
 
-    openai.api_key = "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"
+df = pd.read_csv('code_search_embeddings.csv')
+df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
+
+def get_embedding(task):
+    openai.api_key = "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"
+    response = openai.Embedding.create(
+        input=task,
+        model="text-embedding-ada-002"
+    )
+    return response['data'][0]['embedding']
+
+def replace(filename,startStop,new_code_block):
+    # Create a backup of the original file
+    '''
+    backup_filename = filename + ".bak"
+    with open(filename, 'r') as f_in, open(backup_filename, 'w') as f_out:
+        f_out.writelines(f_in)
+
+    '''
+    # Replace the specified lines with the new code block
+    startStop = eval(startStop)
+    with fileinput.input(filename, inplace=True) as f:
+        for i, line in enumerate(f, 1):
+            if startStop[0] <= i <= startStop[1]:
+                if i == startStop[0]:
+                    print(new_code_block, end='')
+            else:
+                print(line, end='')
+    return
+def search_functions(df, code_query):
+    from openai.embeddings_utils import cosine_similarity
+    embedding = get_embedding(code_query)
+    print(type(embedding))
+    #cosine_similarity(embedding, embedding)
+    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
+    res = df.sort_values('similarities', ascending=False).head(1)
+    return res
+
+def make_changes(task):
+    embedding = get_embedding(task)
+    openai.api_key = "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"
+
+    from openai.embeddings_utils import cosine_similarity
+    print(df.head)
+    df['similarities'] = df.code_embedding_vector.apply(lambda x: cosine_similarity(x, embedding))
+    res = df.sort_values('similarities', ascending=False).head(1)
+    code_block = res.iloc[0]['Code']
+    print(code_block)
+
     response=openai.Edit.create(
       model="code-davinci-edit-001",
-      input=file_contents,
+      input=code_block,
       instruction=task
     )
-    new_code = response["choices"][0]["text"]
+    new_code_block = response["choices"][0]["text"]
 
     # Open the file in write mode
-    file = open(path, "w")
-    # Write the string to the file
-    file.write(new_code)
-    # Close the file
-    file.close()
-
+    filename = res.iloc[0]['filepath']
+    startStop = res.iloc[0]['BlockStartStop']
+    replace(filename,startStop,new_code_block)
     return "Task completed successfully."
 
-def branch_out(task):
-    cmd = "git checkout -b " + task_id
-    subprocess.call(cmd.split(), shell=False)
-
+def is_not_git_branch(branch_name):
+    try:
+        output = subprocess.check_output(['git', 'rev-parse', '--verify', branch_name])
+        return False
+    except subprocess.CalledProcessError:
+        return True
+def branch_out(task_id):
+    if(is_not_git_branch(task_id)):
+        cmd = "git checkout -b " + task_id
+        subprocess.call(cmd.split(), shell=False)
+    print("On branch :" + task_id)
 def push():
     cmd = "git add ."
     subprocess.call(cmd.split(), shell=False)
@@ -45,16 +90,10 @@ def push():
     subprocess.call(cmd.split(), shell=False)
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
-# Use the chosen option
-if tag == "#HTML":
-     path = "index.html"
-     branch_out(task_id)
-     make_changes(path,task)
-     push()
-elif tag == "#CSS":
-     path = "style.css"
-     branch_out(task_id)
-     make_changes(path,task)
-     push()
-else:
-    print("Invalid tag selected. Please choose from #HTML or #CSS.")
+
+#branch_out(task_id)
+#print(len(df.iloc[0]['code_embedding_vector']))
+
+#print(cosine_similarity(df.iloc[0]['code_embedding_vector'], get_embedding(task)))
+make_changes(task)
+push()
