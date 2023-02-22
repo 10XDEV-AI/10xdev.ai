@@ -8,7 +8,7 @@ task = input("Describe a change you would want to be implemented : ")
 task_id = input("Enter Task ID for branch name: ")
 #retrain = input("Would you like to retrain the model? [y/n] :")
 
-text_file = open("key.txt", "r")
+text_file = open("API_key.txt", "r")
 
 #read whole file to a string
 openai.api_key =  text_file.read()
