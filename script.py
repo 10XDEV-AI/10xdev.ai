@@ -8,13 +8,12 @@ import fileinput
 task = input("Describe a change you would want to be implemented : ")
 task_id = input("Enter Task ID for branch name: ")
 #retrain = input("Would you like to retrain the model? [y/n] :")
-
+openai.api_key = input("API Key: ")
 
 df = pd.read_csv('code_search_embeddings.csv')
 df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
 
 def get_embedding(task):
-    openai.api_key = "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"
     response = openai.Embedding.create(
         input=task,
         model="text-embedding-ada-002"
@@ -50,8 +49,6 @@ def search_functions(df, code_query):
 
 def make_changes(task):
     embedding = get_embedding(task)
-    openai.api_key = "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"
-
     from openai.embeddings_utils import cosine_similarity
     print(df.head)
     df['similarities'] = df.code_embedding_vector.apply(lambda x: cosine_similarity(x, embedding))
@@ -96,4 +93,4 @@ def push():
 
 #print(cosine_similarity(df.iloc[0]['code_embedding_vector'], get_embedding(task)))
 make_changes(task)
-push()
+#push()

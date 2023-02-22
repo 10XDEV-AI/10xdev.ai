@@ -1,7 +1,7 @@
 import openai
 import pandas as pd
 
-openai.api_key = "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"
+openai.api_key = input("API Key")
 
 split_files = []
 
