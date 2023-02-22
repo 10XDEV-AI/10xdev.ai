@@ -13,7 +13,7 @@ df = pd.read_csv('code_search_embeddings.csv')
 df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
 
 def get_embedding(task):
-`    response = openai.Embedding.create(
+    response = openai.Embedding.create(
         input=task,
         model="text-embedding-ada-002"
     )
@@ -87,6 +87,6 @@ def push():
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
 
-
+branch_out(task_id)
 make_changes(task)
 push()
