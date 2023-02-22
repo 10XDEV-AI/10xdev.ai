@@ -1,6 +1,5 @@
 import openai
 import subprocess
-import os
 import pandas as pd
 import fileinput
 
@@ -14,7 +13,7 @@ df = pd.read_csv('code_search_embeddings.csv')
 df['code_embedding_vector'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
 
 def get_embedding(task):
-    response = openai.Embedding.create(
+`    response = openai.Embedding.create(
         input=task,
         model="text-embedding-ada-002"
     )
@@ -41,7 +40,7 @@ def replace(filename,startStop,new_code_block):
 def search_functions(df, code_query):
     from openai.embeddings_utils import cosine_similarity
     embedding = get_embedding(code_query)
-    print(type(embedding))
+    #print(type(embedding))
     #cosine_similarity(embedding, embedding)
     df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
     res = df.sort_values('similarities', ascending=False).head(1)
@@ -50,11 +49,11 @@ def search_functions(df, code_query):
 def make_changes(task):
     embedding = get_embedding(task)
     from openai.embeddings_utils import cosine_similarity
-    print(df.head)
+    #print(df.head)
     df['similarities'] = df.code_embedding_vector.apply(lambda x: cosine_similarity(x, embedding))
     res = df.sort_values('similarities', ascending=False).head(1)
     code_block = res.iloc[0]['Code']
-    print(code_block)
+    #print(code_block)
 
     response=openai.Edit.create(
       model="code-davinci-edit-001",
@@ -88,9 +87,6 @@ def push():
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
 
-#branch_out(task_id)
-#print(len(df.iloc[0]['code_embedding_vector']))
 
-#print(cosine_similarity(df.iloc[0]['code_embedding_vector'], get_embedding(task)))
 make_changes(task)
-#push()
+push()
