@@ -21,24 +21,22 @@ def get_embedding(task):
     )
     return response['data'][0]['embedding']
 
-def replace(filename,startStop,new_code_block):
-    # Create a backup of the original file
-    '''
-    backup_filename = filename + ".bak"
-    with open(filename, 'r') as f_in, open(backup_filename, 'w') as f_out:
-        f_out.writelines(f_in)
-
-    '''
-    # Replace the specified lines with the new code block
+def replace(filename, startStop, new_code_block):
     startStop = eval(startStop)
-    with fileinput.input(filename, inplace=True) as f:
-        for i, line in enumerate(f, 1):
-            if startStop[0] <= i <= startStop[1]:
-                if i == startStop[0]:
-                    print(new_code_block, end='')
-            else:
-                print(line, end='')
-    return
+    # Read in the contents of the file
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+
+    # Delete the lines between start_index and stop_index
+    del lines[startStop[0]-1:startStop[1]+1]
+
+    # Insert the new_code_block at start_index
+    lines[startStop[0]:startStop[0]] = new_code_block
+
+    # Write the modified contents back to the file
+    with open(filename, 'w') as file:
+        file.writelines(lines)
+
 def search_functions(df, code_query):
     from openai.embeddings_utils import cosine_similarity
     embedding = get_embedding(code_query)
