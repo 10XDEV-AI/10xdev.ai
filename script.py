@@ -96,9 +96,9 @@ branch_out(task_id)
 
 #retrain = input("Would you like to retrain the model? [y/n] :")
 end = 0
-while(end = 0):
+while(end == 0):
     task = input("Describe a change you would want to be implemented : ")
-    if task = "end":
+    if task == "end":
         end = 1
         break
     make_changes(task)
