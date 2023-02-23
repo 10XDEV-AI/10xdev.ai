@@ -33,10 +33,10 @@ def replace(filename, start,stop, new_code_block):
         lines = file.readlines()
 
     # Delete the lines between start_index and stop_index
-    del lines[start-1:stop+1]
+    del lines[start:stop+1]
 
     # Insert the new_code_block at start_index
-    lines[start:stop] = new_code_block
+    lines[start:start] = new_code_block
 
     # Write the modified contents back to the file
     with open(filename, 'w') as file:
@@ -51,7 +51,6 @@ def count_lines(filepath, start, stop):
     count = 0
     global df3
     for i in df3[df3['filepath'] == filepath]['LineNumber']:
-        print(i)
         for j in i:
             if(j>=start and j<stop):
                 count +=1
@@ -108,8 +107,8 @@ def push():
 
 #task = "OTP Input Placeholder"
 
-task_id = input("Enter Task ID for branch name: ")
-branch_out(task_id)
+#task_id = input("Enter Task ID for branch name: ")
+#branch_out(task_id)
 #retrain = input("Would you like to retrain the model? [y/n] :")
 
 end = 0
