@@ -106,14 +106,12 @@ def push():
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
 
-task = "OTP Input Placeholder"
+#task = "OTP Input Placeholder"
 
-make_changes(task)
-#task_id = input("Enter Task ID for branch name: ")
-#branch_out(task_id)
-
+task_id = input("Enter Task ID for branch name: ")
+branch_out(task_id)
 #retrain = input("Would you like to retrain the model? [y/n] :")
-'''
+
 end = 0
 while(end == 0):
     task = input("Describe a change you would want to be implemented : ")
@@ -129,4 +127,3 @@ if push_flag=="y":
 
 if (input("Go to main[y/n]") =="y"):
     branch_out("main")
-'''
