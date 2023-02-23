@@ -2,7 +2,6 @@
 html {
   height: 100%;
 }
-
 /*  Body Styles */
 body {
   height: 100%;
@@ -11,12 +10,12 @@ body {
   display: grid;
   justify-items: center;
   align-items: center;
-  background-color: pink;
+  background-color: lightblue;
 }
 
 /* Holder for login items*/
 #main-holder {
-  width: 50%;
+  width: 35%;
   height: 70%;
   display: grid;
   justify-items: center;
@@ -80,7 +79,7 @@ body {
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  background-color: #D75442;
+  background-color: #33c1ea;
   cursor: pointer;
   outline: none;
 }
