@@ -3,11 +3,6 @@ import subprocess
 import pandas as pd
 import fileinput
 
-#task = "Make Submit Button Red"
-task = input("Describe a change you would want to be implemented : ")
-task_id = input("Enter Task ID for branch name: ")
-#retrain = input("Would you like to retrain the model? [y/n] :")
-
 text_file = open("API_key.txt", "r")
 
 #read whole file to a string
@@ -60,7 +55,7 @@ def make_changes(task):
     df['similarities'] = df.code_embedding_vector.apply(lambda x: cosine_similarity(x, embedding))
     res = df.sort_values('similarities', ascending=False).head(1)
     code_block = res.iloc[0]['Code']
-    #print(code_block)
+    print(code_block)
 
     response=openai.Edit.create(
       model="code-davinci-edit-001",
@@ -94,9 +89,24 @@ def push():
     cmd = "git push --set-upstream origin " + task_id
     subprocess.call(cmd.split(), shell=False)
 
-branch_out(task_id)
-make_changes(task)
-push()
 
-if input("Go to main[y/n]" =="y"):
+#task = "Make Submit Button Red"
+task_id = input("Enter Task ID for branch name: ")
+branch_out(task_id)
+
+#retrain = input("Would you like to retrain the model? [y/n] :")
+end = 0
+while(end = 0):
+    task = input("Describe a change you would want to be implemented : ")
+    if task = "end":
+        end = 1
+        break
+    make_changes(task)
+
+push_flag =  input("Push changes? [y/n] ")
+
+if push_flag=="y":
+    push()
+
+if (input("Go to main[y/n]") =="y"):
     branch_out("main")

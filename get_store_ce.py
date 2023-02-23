@@ -2,8 +2,8 @@ import openai
 import pandas as pd
 
 #task = "Make Submit Button Red"
-task = input("Describe a change you would want to be implemented : ")
-task_id = input("Enter Task ID for branch name: ")
+#task = input("Describe a change you would want to be implemented : ")
+#task_id = input("Enter Task ID for branch name: ")
 #retrain = input("Would you like to retrain the model? [y/n] :")
 
 text_file = open("API_key.txt", "r")
@@ -44,7 +44,7 @@ def split_file_by_character(filename, character):
             if extracted_text != "":
                 split_files.append([filename,(start_line,prev_end_line),extracted_text])
             #print(filename)
-            start_line = i + 1
+            start_line = i
 
     extracted_lines = lines[prev_end_line+1:len(lines)]
     # join the extracted lines into a string
