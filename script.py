@@ -16,7 +16,7 @@ openai.api_key =  text_file.read()
 text_file.close()
 
 df = pd.read_csv('code_search_line_embeddings.csv')
-df2 = pd.read_csv('code_search_openai-python.csv')
+df2 = pd.read_csv('df2.csv')
 df3 = pd.DataFrame()
 df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
 
@@ -42,13 +42,11 @@ def replace(filename, start,stop, new_code_block):
     with open(filename, 'w') as file:
         file.writelines(lines)
 
-
 def search_functions(code_query):
     embedding = get_embedding(code_query)
     df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
     res = df.sort_values('similarities', ascending=False).head(round(0.1*len(df)))
     return res
-
 def count_lines(filepath, start, stop):
     count = 0
     global df3
@@ -66,13 +64,13 @@ def get_old_code(task):
     df3 = res.groupby("filepath").agg({"LineNumber": list}).reset_index()
     # apply the function to each row of df2 and create a new column
 
-    df2['Hits'] = df2.apply(lambda row: , axis=1)
+    df2['Hits'] = df2.apply(lambda row: count_lines(row['filepath'], row['BlockStart'], row['BlockStop']), axis=1)
     df2 = df2.sort_values('Hits', ascending=False)
     return df2
 def make_changes(task):
     res = get_old_code(task)
-    #code_block = res.iloc[0]['Code']
-    code_block = ""
+    code_block = res.iloc[0]['Code']
+    #code_block = ""
     print(code_block)
 
     response=openai.Edit.create(
@@ -84,8 +82,8 @@ def make_changes(task):
 
     # Open the file in write mode
     filename = res.iloc[0]['filepath']
-    start= 0 #res.iloc[0]['BlockStart']
-    stop = 1 #res.iloc[0]['BlockStop']
+    start= res.iloc[0]['BlockStart']
+    stop = res.iloc[0]['BlockStop']
     replace(filename,start,stop,new_code_block)
     return "Task completed successfully."
 
