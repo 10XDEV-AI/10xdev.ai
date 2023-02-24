@@ -70,8 +70,10 @@ def make_changes(task):
     res = get_old_code(task)
     code_block = res.iloc[0]['Code']
     #code_block = ""
+    print("Old Code")
     print(code_block)
 
+    print("New Code")
     response=openai.Edit.create(
       model="code-davinci-edit-001",
       input=code_block,
@@ -79,6 +81,7 @@ def make_changes(task):
     )
     new_code_block = response["choices"][0]["text"]
 
+    print(new_code_block)
     # Open the file in write mode
     filename = res.iloc[0]['filepath']
     start= res.iloc[0]['BlockStart']
