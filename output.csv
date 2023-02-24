@@ -1,0 +1,267 @@
+,similarities,Code,filepath
+0,0.7210329106403774,"<!DOCTYPE html>
+",index.html
+1,0.7176515474060968,"<html lang=""en"">
+",index.html
+2,0.7209087253921197,"
+",index.html
+3,0.7210072568628773,"<!- File References ->
+",index.html
+4,0.7208948288303598,"
+",index.html
+5,0.7510495246894063,"<head>
+",index.html
+6,0.7211172966825645,"  <meta charset=""UTF-8"">
+",index.html
+7,0.7272116160724503,"  <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+",index.html
+8,0.7529429494194366,"  <title>Login</title>
+",index.html
+9,0.6985153495852756,"  <link rel=""stylesheet"" href=""style.css"">
+",index.html
+10,0.7268908170189382,"  <script defer src=""login-page.js""></script>
+",index.html
+11,0.7324338400563944,"</head>
+",index.html
+12,0.7208948288303598,"
+",index.html
+13,0.7573206863761067,"<body>
+",index.html
+14,0.7628306192207792,"<!- Login Page Holder ->
+",index.html
+15,0.7205392891928046,"<main id=""main-holder"">
+",index.html
+16,0.7208948288303598,"
+",index.html
+17,0.7380404786324982,"  <h1 id=""login-header"">Login</h1>
+",index.html
+18,0.735952493463903,"  <div id=""login-error-msg-holder"">
+",index.html
+19,0.7555623425860662,"    <p id=""login-error-msg"">Invalid username <span id=""error-msg-second-line"">and/or password</span></p>
+",index.html
+20,0.7321805007268395,"  </div>
+",index.html
+21,0.7208948288303598,"
+",index.html
+22,0.8299491721646347,"  <!- Input Feilds ->
+",index.html
+23,0.7643750009860203,"  <form id=""login-form"">
+",index.html
+24,0.8013952060092371,"    <input type=""text"" name=""username"" id=""username-field"" class=""login-form-field"" placeholder=""Username"">
+",index.html
+25,0.8015184758610195,"    <input type=""password"" name=""password"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
+",index.html
+26,0.7667242369548384,"    <input type=""submit"" value=""Login"" id=""login-form-submit"">
+",index.html
+27,0.7582744558174076,"  </form>
+",index.html
+28,0.7209087253921197,"
+",index.html
+29,0.7187882002916147,"</main>
+",index.html
+30,0.7200901818582046,"</body>
+",index.html
+31,0.7274545374313566,</html>,index.html
+32,0.6947117508603053,"/*  Page Styles */
+",style.css
+33,0.7342115173904855,"html {
+",style.css
+34,0.7068446580954967,"  height: 100%;
+",style.css
+35,0.7062895727583917,"}
+",style.css
+36,0.685570896673728,"/*  Body Styles */
+",style.css
+37,0.7397793553819791,"body {
+",style.css
+38,0.7068446580954967,"  height: 100%;
+",style.css
+39,0.7213920943587596,"  margin: 0;
+",style.css
+40,0.7224803467547062,"  font-family: Arial, Helvetica, sans-serif;
+",style.css
+41,0.7121040883715465,"  display: grid;
+",style.css
+42,0.7021747815929855,"  justify-items: center;
+",style.css
+43,0.7172059260065647,"  align-items: center;
+",style.css
+44,0.714774212649389,"  background-color: lightblue;
+",style.css
+45,0.7062895727583917,"}
+",style.css
+46,0.7208948288303598,"
+",style.css
+47,0.7002777027489826,"/* Holder for login items*/
+",style.css
+48,0.716788440964996,"#main-holder {
+",style.css
+49,0.7238906200457246,"  width: 35%;
+",style.css
+50,0.7105895828253721,"  height: 70%;
+",style.css
+51,0.7120446560864188,"  display: grid;
+",style.css
+52,0.7021747815929855,"  justify-items: center;
+",style.css
+53,0.7172059260065647,"  align-items: center;
+",style.css
+54,0.7091825971237079,"  background-color: white;
+",style.css
+55,0.7220939416072217,"  border-radius: 7px;
+",style.css
+56,0.7163507380489974,"  box-shadow: 0px 0px 5px 2px black;
+",style.css
+57,0.7062895727583917,"}
+",style.css
+58,0.7209087253921197,"
+",style.css
+59,0.7152663601827541,"/*  Login Error Message Styles */
+",style.css
+60,0.7387679784185887,"#login-error-msg-holder {
+",style.css
+61,0.721262930645041,"  width: 100%;
+",style.css
+62,0.7068446580954967,"  height: 100%;
+",style.css
+63,0.7120446560864188,"  display: grid;
+",style.css
+64,0.70200315961864,"  justify-items: center;
+",style.css
+65,0.7173142597790955,"  align-items: center;
+",style.css
+66,0.7062895727583917,"}
+",style.css
+67,0.7207703007498525,"
+",style.css
+68,0.7239682639758281,"#login-error-msg {
+",style.css
+69,0.7240818256289501,"  width: 23%;
+",style.css
+70,0.7243579415084902,"  text-align: center;
+",style.css
+71,0.7212440721981154,"  margin: 0;
+",style.css
+72,0.7341827237958695,"  padding: 5px;
+",style.css
+73,0.7272781346734999,"  font-size: 12px;
+",style.css
+74,0.7221914828010709,"  font-weight: bold;
+",style.css
+75,0.7030065673548916,"  color: #8a0000;
+",style.css
+76,0.718621923819453,"  border: 1px solid #8a0000;
+",style.css
+77,0.7125133616994015,"  background-color: #e58f8f;
+",style.css
+78,0.726521392881772,"  opacity: 0;
+",style.css
+79,0.7058234667720223,"}
+",style.css
+80,0.7208948288303598,"
+",style.css
+81,0.7196267292511292,"#error-msg-second-line {
+",style.css
+82,0.7268559895328683,"  display: block;
+",style.css
+83,0.7062895727583917,"}
+",style.css
+84,0.7208948288303598,"
+",style.css
+85,0.7817848082673672,"/*  Login form feild styles */
+",style.css
+86,0.7517974770524825,"#login-form {
+",style.css
+87,0.7256431395435462,"  align-self: flex-start;
+",style.css
+88,0.7121040883715465,"  display: grid;
+",style.css
+89,0.7021747815929855,"  justify-items: center;
+",style.css
+90,0.7172059260065647,"  align-items: center;
+",style.css
+91,0.7058234667720223,"}
+",style.css
+92,0.7208948288303598,"
+",style.css
+93,0.7755578643530447,".login-form-field::placeholder {
+",style.css
+94,0.6973687158236876,"  color: #3a3a3a;
+",style.css
+95,0.7062895727583917,"}
+",style.css
+96,0.720767919965959,"
+",style.css
+97,0.7970575062332406,".login-form-field {
+",style.css
+98,0.7179109484919397,"  border: none;
+",style.css
+99,0.7098995428724075,"  border-bottom: 1px solid #3a3a3a;
+",style.css
+100,0.7240145002271553,"  margin-bottom: 10px;
+",style.css
+101,0.7247004593205582,"  border-radius: 3px;
+",style.css
+102,0.7255357057553903,"  outline: none;
+",style.css
+103,0.7353217043309894,"  padding: 0px 0px 5px 5px;
+",style.css
+104,0.7062895727583917,"}
+",style.css
+105,0.7208948288303598,"
+",style.css
+106,0.7545098616197753,"#login-form-submit {
+",style.css
+107,0.721262930645041,"  width: 100%;
+",style.css
+108,0.7277204505869966,"  padding: 7px;
+",style.css
+109,0.7179109484919397,"  border: none;
+",style.css
+110,0.729552081796262,"  border-radius: 5px;
+",style.css
+111,0.7075497452065621,"  color: white;
+",style.css
+112,0.7221914828010709,"  font-weight: bold;
+",style.css
+113,0.7021922609970658,"  background-color: #33c1ea;
+",style.css
+114,0.7231134478770314,"  cursor: pointer;
+",style.css
+115,0.7255357057553903,"  outline: none;
+",style.css
+116,0.7062895727583917,"}
+",style.css
+117,0.7157637663998425,"//Login Button On Click Actions
+",login-page.js
+118,0.7450444654941234,"const loginForm = document.getElementById(""login-form"");
+",login-page.js
+119,0.741424101352232,"const loginButton = document.getElementById(""login-form-submit"");
+",login-page.js
+120,0.7382146527411748,"const loginErrorMsg = document.getElementById(""login-error-msg"");
+",login-page.js
+121,0.7208948288303598,"
+",login-page.js
+122,0.7111753832875539,"loginButton.addEventListener(""click"", (e) => {
+",login-page.js
+123,0.7342917885618148,"    e.preventDefault();
+",login-page.js
+124,0.7219396958898495,"    const username = loginForm.username.value;
+",login-page.js
+125,0.7213850550919324,"    const password = loginForm.password.value;
+",login-page.js
+126,0.7208948288303598,"
+",login-page.js
+127,0.7045585838190033,"    if (username === ""user"" && password === ""web_dev"") {
+",login-page.js
+128,0.7040440446192734,"        alert(""You have successfully logged in."");
+",login-page.js
+129,0.7166242768052375,"        location.reload();
+",login-page.js
+130,0.6679868933257653,"    } else {
+",login-page.js
+131,0.7499466478121287,"        loginErrorMsg.style.opacity = 1;
+",login-page.js
+132,0.6797910403665944,"    }
+",login-page.js
+133,0.7212594282954019,}),login-page.js
