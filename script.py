@@ -33,10 +33,10 @@ def replace(filename, start,stop, new_code_block):
         lines = file.readlines()
 
     # Delete the lines between start_index and stop_index
-    del lines[start:stop+1]
+    del lines[start:stop]
 
     # Insert the new_code_block at start_index
-    lines[start:stop] = new_code_block
+    lines[start:start] = new_code_block
 
     # Write the modified contents back to the file
     with open(filename, 'w') as file:
