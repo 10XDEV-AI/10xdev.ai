@@ -45,7 +45,7 @@ def replace(filename, start,stop, new_code_block):
 def search_functions(code_query):
     embedding = get_embedding(code_query)
     df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
-    res = df.sort_values('similarities', ascending=False).head(round(0.1*len(df)))
+    res = df.sort_values('similarities', ascending=False).head(round(0.05*len(df)))
     return res
 def count_lines(filepath, start, stop):
     count = 0
