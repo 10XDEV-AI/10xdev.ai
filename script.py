@@ -36,7 +36,7 @@ def replace(filename, start,stop, new_code_block):
     del lines[start:stop+1]
 
     # Insert the new_code_block at start_index
-    lines[start:start] = new_code_block
+    lines[start:stop] = new_code_block
 
     # Write the modified contents back to the file
     with open(filename, 'w') as file:
@@ -106,10 +106,12 @@ def push():
     subprocess.call(cmd.split(), shell=False)
 
 #task = "OTP Input Placeholder"
+#make_changes(task)
 
 #task_id = input("Enter Task ID for branch name: ")
 #branch_out(task_id)
 #retrain = input("Would you like to retrain the model? [y/n] :")
+
 
 end = 0
 while(end == 0):
@@ -126,3 +128,4 @@ if push_flag=="y":
 
 if (input("Go to main[y/n]") =="y"):
     branch_out("main")
+
