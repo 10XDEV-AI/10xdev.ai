@@ -1,9 +1,9 @@
 filepath,BlockStart,BlockStop,Code,Hits
-index.html,0,3,"<!DOCTYPE html>
+repo/index.html,0,3,"<!DOCTYPE html>
 <html lang=""en"">
 
 ",0
-index.html,3,14,"<!- File References ->
+repo/index.html,3,14,"<!- File References ->
 
 <head>
   <meta charset=""UTF-8"">
@@ -14,8 +14,8 @@ index.html,3,14,"<!- File References ->
 </head>
 
 <body>
-",3
-index.html,14,22,"<!- Login Page Holder ->
+",1
+repo/index.html,14,22,"<!- Login Page Holder ->
 <main id=""main-holder"">
 
   <h1 id=""login-header"">Login</h1>
@@ -23,8 +23,8 @@ index.html,14,22,"<!- Login Page Holder ->
     <p id=""login-error-msg"">Invalid username <span id=""error-msg-second-line"">and/or password</span></p>
   </div>
 
-",3
-index.html,23,32,"  <form id=""login-form"">
+",2
+repo/index.html,23,32,"  <form id=""login-form"">
     <input type=""text"" name=""username"" id=""username-field"" class=""login-form-field"" placeholder=""Username"">
     <input type=""password"" name=""password"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
     <input type=""submit"" value=""Login"" id=""login-form-submit"">
@@ -32,13 +32,13 @@ index.html,23,32,"  <form id=""login-form"">
 
 </main>
 </body>
-</html>",3
-style.css,0,4,"/*  Page Styles */
+</html>",1
+repo/style.css,0,4,"/*  Page Styles */
 html {
   height: 100%;
 }
 ",0
-style.css,4,15,"/*  Body Styles */
+repo/style.css,4,15,"/*  Body Styles */
 body {
   height: 100%;
   margin: 0;
@@ -50,7 +50,7 @@ body {
 }
 
 ",0
-style.css,15,27,"/* Holder for login items*/
+repo/style.css,15,27,"/* Holder for login items*/
 #main-holder {
   width: 35%;
   height: 70%;
@@ -63,7 +63,7 @@ style.css,15,27,"/* Holder for login items*/
 }
 
 ",1
-style.css,27,53,"/*  Login Error Message Styles */
+repo/style.css,27,53,"/*  Login Error Message Styles */
 #login-error-msg-holder {
   width: 100%;
   height: 100%;
@@ -90,7 +90,7 @@ style.css,27,53,"/*  Login Error Message Styles */
 }
 
 ",1
-style.css,54,85,"#login-form {
+repo/style.css,54,85,"#login-form {
   align-self: flex-start;
   display: grid;
   justify-items: center;
@@ -121,8 +121,8 @@ style.css,54,85,"#login-form {
   cursor: pointer;
   outline: none;
 }
-",2
-login-page.js,1,17,"const loginForm = document.getElementById(""login-form"");
+",1
+repo/login-page.js,1,17,"const loginForm = document.getElementById(""login-form"");
 const loginButton = document.getElementById(""login-form-submit"");
 const loginErrorMsg = document.getElementById(""login-error-msg"");
 

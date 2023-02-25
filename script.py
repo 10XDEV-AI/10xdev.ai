@@ -15,7 +15,7 @@ openai.api_key =  text_file.read()
 #close file
 text_file.close()
 
-df = pd.read_csv('code_search_line_embeddings.csv')
+df = pd.read_csv('df.csv')
 df2 = pd.read_csv('df2.csv')
 df3 = pd.DataFrame()
 df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
