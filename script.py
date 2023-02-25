@@ -1,10 +1,6 @@
 import openai
-import subprocess
 import pandas as pd
-import fileinput
-import numpy
-import matplotlib
-import random
+import subprocess
 from openai.embeddings_utils import cosine_similarity
 
 text_file = open("API_key.txt", "r")
@@ -110,8 +106,6 @@ def push():
 
 #task_id = input("Enter Task ID for branch name: ")
 #branch_out(task_id)
-#retrain = input("Would you like to retrain the model? [y/n] :")
-
 
 end = 0
 while(end == 0):
