@@ -15,16 +15,15 @@ repo/index.html,3,14,"<!- File References ->
 
 <body>
 ",1
-repo/index.html,14,22,"<!- Login Page Holder ->
+repo/index.html,14,21,"<!- Login Page Holder ->
 <main id=""main-holder"">
 
   <h1 id=""login-header"">Login</h1>
   <div id=""login-error-msg-holder"">
     <p id=""login-error-msg"">Invalid username <span id=""error-msg-second-line"">and/or password</span></p>
   </div>
-
 ",2
-repo/index.html,23,32,"  <form id=""login-form"">
+repo/index.html,21,31,"  <form id=""login-form"">
     <input type=""text"" name=""username"" id=""username-field"" class=""login-form-field"" placeholder=""Username"">
     <input type=""password"" name=""password"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
     <input type=""submit"" value=""Login"" id=""login-form-submit"">
@@ -33,6 +32,22 @@ repo/index.html,23,32,"  <form id=""login-form"">
 </main>
 </body>
 </html>",1
+repo/login-page.js,0,17,"const loginForm = document.getElementById(""login-form"");
+const loginButton = document.getElementById(""login-form-submit"");
+const loginErrorMsg = document.getElementById(""login-error-msg"");
+
+loginButton.addEventListener(""click"", (e) => {
+    e.preventDefault();
+    const username = loginForm.username.value;
+    const password = loginForm.password.value;
+
+    if (username === ""user"" && password === ""web_dev"") {
+        alert(""You have successfully logged in."");
+        location.reload();
+    } else {
+        loginErrorMsg.style.opacity = 1;
+    }
+})",0
 repo/style.css,0,4,"/*  Page Styles */
 html {
   height: 100%;
@@ -62,7 +77,7 @@ repo/style.css,15,27,"/* Holder for login items*/
   box-shadow: 0px 0px 5px 2px black;
 }
 
-",1
+",0
 repo/style.css,27,53,"/*  Login Error Message Styles */
 #login-error-msg-holder {
   width: 100%;
@@ -89,8 +104,8 @@ repo/style.css,27,53,"/*  Login Error Message Styles */
   display: block;
 }
 
-",1
-repo/style.css,54,85,"#login-form {
+",0
+repo/style.css,53,85,"#login-form {
   align-self: flex-start;
   display: grid;
   justify-items: center;
@@ -121,20 +136,4 @@ repo/style.css,54,85,"#login-form {
   cursor: pointer;
   outline: none;
 }
-",1
-repo/login-page.js,1,17,"const loginForm = document.getElementById(""login-form"");
-const loginButton = document.getElementById(""login-form-submit"");
-const loginErrorMsg = document.getElementById(""login-error-msg"");
-
-loginButton.addEventListener(""click"", (e) => {
-    e.preventDefault();
-    const username = loginForm.username.value;
-    const password = loginForm.password.value;
-
-    if (username === ""user"" && password === ""web_dev"") {
-        alert(""You have successfully logged in."");
-        location.reload();
-    } else {
-        loginErrorMsg.style.opacity = 1;
-    }
-})",0
+",3
