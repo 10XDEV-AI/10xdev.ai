@@ -70,7 +70,8 @@ def make_changes(task):
     response=openai.Edit.create(
       model="code-davinci-edit-001",
       input=code_block,
-      instruction=task
+      instruction=task,
+      temperature = 0.2
     )
     new_code_block = response["choices"][0]["text"]
 
