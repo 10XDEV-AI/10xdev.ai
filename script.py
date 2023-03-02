@@ -59,28 +59,47 @@ def get_old_code(task):
     df2['Hits'] = df2.apply(lambda row: count_lines(row['filepath'], row['BlockStart'], row['BlockStop']), axis=1)
     df2 = df2.sort_values('Hits', ascending=False)
     return df2
-def make_changes(task):
-    res = get_old_code(task)
-    code_block = res.iloc[0]['Code']
-    #code_block = ""
-    print("Old Code")
-    print(code_block)
+def make_changes(task,new_flag):
+    if(new_flag == 0):
+        res = get_old_code(task)
+        code_block = res.iloc[0]['Code']
+        #code_block = ""
+        print("Old Code")
+        print(code_block)
 
-    print("New Code")
-    response=openai.Edit.create(
-      model="code-davinci-edit-001",
-      input=code_block,
-      instruction=task,
-      temperature = 0.2
-    )
-    new_code_block = response["choices"][0]["text"]
+        print("New Code")
+        response=openai.Edit.create(
+          model="code-davinci-edit-001",
+          input=code_block,
+          instruction=task,
+          temperature = 0.2
+        )
+        new_code_block = response["choices"][0]["text"]
 
-    print(new_code_block)
-    # Open the file in write mode
-    filename = res.iloc[0]['filepath']
-    start= res.iloc[0]['BlockStart']
-    stop = res.iloc[0]['BlockStop']
-    replace(filename,start,stop,new_code_block)
+        print(new_code_block)
+        # Open the file in write mode
+        filename = res.iloc[0]['filepath']
+        start= res.iloc[0]['BlockStart']
+        stop = res.iloc[0]['BlockStop']
+        replace(filename,start,stop,new_code_block)
+    else:
+        filename = input("Enter filename with extension for the new file: ")
+        while("." not in filename):
+            filename = input("Please give an extension for the filename :")
+        filename = "repo/" + filename
+        print("Writing New Code to : " + filename)
+        f = open(filename, "w")
+        f.close()
+        response=openai.Edit.create(
+            model="code-davinci-edit-001",
+            input="",
+            instruction=task,
+            temperature = 0.2
+        )
+        new_code_block = response["choices"][0]["text"]
+        replace(filename, 0, 1, new_code_block)
+        print(new_code_block)
+
     return "Task completed successfully."
 
 def is_not_git_branch(branch_name):
@@ -114,7 +133,11 @@ while(end == 0):
     if task == "end":
         end = 1
         break
-    make_changes(task)
+    if task.startswith('-n'):
+        task = task[2:].strip()
+        make_changes(task, 1)
+    else:
+        make_changes(task, 0)
 
 #push_flag =  input("Push changes? [y/n] ")
 
