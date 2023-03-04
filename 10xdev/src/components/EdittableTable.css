@@ -1,0 +1,46 @@
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+table {
+  border: none;
+}
+
+tr th {
+  font-size: 18px;
+  padding: 12px;
+  text-align: left;
+}
+
+tr td {
+  text-align: centre;
+}
+
+.lineNumber {
+        border-top-style: hidden;
+        border-right-style: hidden;
+        border-left-style: hidden;
+        border-bottom-style: hidden;
+        font-size: 10px;
+    }
+
+
+.newcode {
+        border-top-style: hidden;
+        border-right-style: hidden;
+        border-left-style: hidden;
+        border-bottom-style: hidden;
+        font-size: 15px;
+    }
+
+
+.oldcode {
+        border-top-style: hidden;
+        border-right-style: hidden;
+        border-left-style: hidden;
+        border-bottom-style: hidden;
+        font-size: 15px;
+    }

@@ -1,7 +1,7 @@
 nav {
   display: flex;
   background-color: #2455C5;
-  margin: 0;
+  margin: 10;
 }
 
 .search input {
@@ -10,20 +10,20 @@ nav {
    height: 30px;
    left: 228px;
    background: #FFFFFF;
-   border-radius: 10px;
 }
 
 .search button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   width: 70px;
-  height: 39px;
+  height: 35px;
   left: 940px;
   font-weight: 500;
   font-size: 24px;
   line-height: 40px;
-  align-items: center;
   color: #000000;
-  border-radius: 10px;
 }
 
 .logo{
@@ -31,6 +31,7 @@ nav {
   height: 40px;
   left: 25px;
   top: 82px;
+  font-family: "Roboto", Helvetica;
   font-style: italic;
   font-weight: 700;
   font-size: 40px;

@@ -8,7 +8,7 @@ function Navbar() {
         10xDEV.AI
       </div>
       <div className="search">
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="What feature would you like to implement?" />
           <button>Go!</button>
       </div>
     </nav>
