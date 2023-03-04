@@ -41,6 +41,9 @@ const new_block = [
 const CodeTab = () => {
   return (
   <div className="container">
+    <div className="file-name">
+        File Name = "test.c"
+    </div>
     <OldCode data={old_block} />
     <EdittableTable/>
   </div>
