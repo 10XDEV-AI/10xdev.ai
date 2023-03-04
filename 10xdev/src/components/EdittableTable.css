@@ -1,51 +1,35 @@
 .container {
   width: 100%;
-  padding-top: 10px;
 }
 
 table {
   border-collapse: collapse;
-  border: 1px solid red;
   width: 50%;
   float: left;
 }
 
 tr th {
-  font-size: 18px;
   text-align: left;
   background-color: #F5F3F3;
 }
 
 tr td {
-  text-align: centre;
   background-color: #F5F3F3;
 }
 
 .lineNumber {
+    width: 50px;
         background-color: #E3E3E3;
     }
 
 input {
-  width: 100%;
-  border: none;
-  background-color: transparent;
-  font-size: 15px;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: 15px;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    font-family: monospace;
 }
-.newcode {
-        border-top-style: hidden;
-        border-right-style: hidden;
-        border-left-style: hidden;
-        border-bottom-style: hidden;
-        font-size: 15px;
-        width: 100%;
-    }
-
-
-.oldcode {
-        border-top-style: hidden;
-        border-right-style: hidden;
-        border-left-style: hidden;
-        border-bottom-style: hidden;
-        font-size: 15px;
-        width: 100%;
-    }

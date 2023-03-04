@@ -6,24 +6,28 @@ nav {
 
 .search input {
    position: absolute;
-   width: 700px;
+   width: 705px;
    height: 30px;
-   left: 228px;
+   left: 286px;
+   top: 12px;
    background: #FFFFFF;
+   border-radius: 15px;
 }
 
-.search button {
+button {
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  width: 70px;
-  height: 35px;
-  left: 940px;
+  width: 75px;
+  height: 32px;
+  left: 920px;
+  top: 12px;
   font-weight: 500;
   font-size: 24px;
-  line-height: 40px;
   color: #000000;
+  border-radius: 15px;
+  border: none;
 }
 
 .logo{

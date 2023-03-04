@@ -1,0 +1,30 @@
+.container {
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 50%;
+  float: left;
+}
+
+.oldcode {
+    padding: 2px;
+    font-size: 15px;
+    width: 100%;
+    font-family: monospace;
+}
+
+.lineNumber {
+        background-color: #EFFFE3;
+    }
+
+
+tr th {
+  text-align: left;
+  background-color: #F5F3F3;
+}
+
+tr td {
+  background-color: #F5F3F3;
+}
