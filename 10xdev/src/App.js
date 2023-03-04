@@ -7,17 +7,7 @@ function App() {
   return (
     <div>
         <Navbar/>
-        <Tabs>
-                <div label="index.html">
-                  <EdittableTable/>
-                </div>
-                <div label="login.js">
-                 <EdittableTable/>
-                </div>
-                <div label="styles.css">
-                  <EdittableTable/>
-                </div>
-        </Tabs>
+        <EdittableTable/>
     </div>
     );
 }

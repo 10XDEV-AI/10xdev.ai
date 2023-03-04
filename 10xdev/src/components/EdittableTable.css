@@ -1,17 +1,17 @@
-
 .container {
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  padding-top: 10px;
 }
 
 table {
-  border: none;
+  border-collapse: collapse;
+  border: 1px solid red;
+  width: 50%;
+  float: left;
 }
 
 tr th {
   font-size: 18px;
-  padding: 12px;
   text-align: left;
 }
 
@@ -20,11 +20,7 @@ tr td {
 }
 
 .lineNumber {
-        border-top-style: hidden;
-        border-right-style: hidden;
-        border-left-style: hidden;
-        border-bottom-style: hidden;
-        font-size: 10px;
+        background-color: #f2f2f2;
     }
 
 
