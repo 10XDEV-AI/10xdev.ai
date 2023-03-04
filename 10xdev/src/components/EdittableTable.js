@@ -3,15 +3,20 @@ import './EdittableTable.css';
 
 const old_block = [
   {
-  lineId: '01',
+    lineId: '01',
     lineNumber: '01',
-    oldcode: '#include <stdio.h>',
+    code_line: '#include <stdio.h>',
   },
   {
-      lineId: '02',
-      lineNumber: '02',
-      oldcode: '#include bijlee,js',
-  }
+    lineId: '02',
+    lineNumber: '02',
+    code_line: '#include <stdio.h>',
+  },
+  {
+    lineId: '03',
+    lineNumber: '03',
+    code_line: '#include <stdio.h>',
+  },
 ]
 
 const EditableTable = () => {
@@ -29,59 +34,59 @@ const EditableTable = () => {
 
   return (
     <div className="container">
-        <h3>Code Diff </h3>
-          <table>
-                    <thead>
-                      <tr>
-                        <th className='lineNumber'></th>
-                        <th>oldcode</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {employeeData.map(({lineId,lineNumber,oldcode}) => (
-                        <tr key={lineId}>
-                          <td className='lineNumber'>
-                              {lineNumber}
-                          </td>
-                          <td>
-                            <input className = "oldcode"
-                              oldcode="oldcode"
-                              value={oldcode}
-                              type="text"
-                              onChange={(e) => onChangeInput(e, lineId)}
-                              placeholder="Type oldcode"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th className='lineNumber'></th>
-                            <th>newcode</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {employeeData.map(({lineId,lineNumber,oldcode}) => (
-                            <tr key={lineId}>
-                              <td className='lineNumber'>
-                                  {lineNumber}
-                              </td>
-                              <td>
-                                <input className = "oldcode"
-                                  oldcode="oldcode"
-                                  value={oldcode}
-                                  type="text"
-                                  onChange={(e) => onChangeInput(e, lineId)}
-                                  placeholder="Type oldcode"
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+      <h1 className="title">ReactJS Editable Table</h1>
+      <table>
+        <thead>
+          <tr>
+            <th className="lineNumber"></th>
+            <th>OldCode</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employeeData.map(({ lineId, lineNumber, code_line, position }) => (
+            <tr key={lineId}>
+              <td className="lineNumber">
+                {lineNumber}
+              </td>
+              <td>
+                <input className="newcode"
+                  name="code_line"
+                  value={code_line}
+                  type="text"
+                  onChange={(e) => onChangeInput(e, lineId)}
+                  placeholder="Type Email"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <table>
+              <thead>
+                <tr>
+                  <th className="lineNumber"></th>
+                  <th>NewCode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employeeData.map(({ lineId, lineNumber, code_line, position }) => (
+                  <tr key={lineId}>
+                    <td className="lineNumber">
+                      {lineNumber}
+                    </td>
+                    <td>
+                      <input className="oldcode"
+                        name="code_line"
+                        value={code_line}
+                        type="text"
+                        onChange={(e) => onChangeInput(e, lineId)}
+                        placeholder="Type Email"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
     </div>
   )
 }

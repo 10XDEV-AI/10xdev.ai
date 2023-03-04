@@ -13,23 +13,31 @@ table {
 tr th {
   font-size: 18px;
   text-align: left;
+  background-color: #F5F3F3;
 }
 
 tr td {
   text-align: centre;
+  background-color: #F5F3F3;
 }
 
 .lineNumber {
-        background-color: #f2f2f2;
+        background-color: #E3E3E3;
     }
 
-
+input {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  font-size: 15px;
+}
 .newcode {
         border-top-style: hidden;
         border-right-style: hidden;
         border-left-style: hidden;
         border-bottom-style: hidden;
         font-size: 15px;
+        width: 100%;
     }
 
 
@@ -39,4 +47,5 @@ tr td {
         border-left-style: hidden;
         border-bottom-style: hidden;
         font-size: 15px;
+        width: 100%;
     }
