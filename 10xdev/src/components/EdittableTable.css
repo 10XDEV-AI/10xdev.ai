@@ -1,4 +1,4 @@
-.container {
+container {
   width: 100%;
 }
 
@@ -17,7 +17,7 @@ tr td {
   background-color: #F5F3F3;
 }
 
-.lineNumber {
+lineNumber {
     width: 50px;
         background-color: #E3E3E3;
     }

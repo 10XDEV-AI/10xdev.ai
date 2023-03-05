@@ -1,15 +1,11 @@
 import Navbar from './components/Navbar';
-import Menubar from './components/Menubar';
-import CodeTab from './components/CodeTab';
-import './App.css';
-import Tabs from "./components/Tabs";
+import Main from './components/Main';
 
 function App() {
   return (
-    <div>
+    <div className="container">
         <Navbar/>
-        <Menubar/>
-        <CodeTab/>
+        <Main/>
     </div>
     );
 }

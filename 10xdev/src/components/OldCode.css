@@ -1,4 +1,4 @@
-.container {
+container {
   width: 100%;
 }
 
@@ -8,14 +8,14 @@ table {
   float: left;
 }
 
-.oldcode {
+oldcode {
     padding: 2px;
     font-size: 15px;
     width: 100%;
     font-family: monospace;
 }
 
-.lineNumber {
+lineNumber {
         background-color: #EFFFE3;
     }
 
