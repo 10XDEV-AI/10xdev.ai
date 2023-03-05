@@ -1,5 +1,5 @@
 import OldCode from './OldCode';
-import EdittableTable from './EdittableTable';
+import NewCode from './NewCode';
 import './CodeTab.css';
 
 const old_block = [
@@ -23,7 +23,7 @@ const old_block = [
 const CodeTab = () => {
   return (
   <div className="codediffcontainer">
-    <div className="row">
+    <div className="filenamerow">
         <div className="file-name">
             File Name = "test.c"
         </div>
@@ -33,7 +33,7 @@ const CodeTab = () => {
             <OldCode data={old_block} />
         </div>
         <div className="newcode">
-            <EdittableTable/>
+            <NewCode/>
         </div>
     </div>
   </div>

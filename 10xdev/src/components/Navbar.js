@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navbar.css';
+import SearchBar from './SearchBar/SearchBar';
 
 function Navbar() {
   return (
@@ -7,11 +8,8 @@ function Navbar() {
       <div className="logo">
         10xDEV.AI
       </div>
-      <div className="search">
-          <input type="text" placeholder="  What feature would you like to implement?" />
-      </div>
-      <div className="button">
-        <button>Go!</button>
+      <div className="searchbarcol">
+          <SearchBar />
       </div>
     </nav>
   );

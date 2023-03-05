@@ -10,7 +10,7 @@ body {
   display: grid;
   justify-items: center;
   align-items: center;
-  background-color: lightblue;
+  /*background-color: lightblue;*/
 }
 
 /* Holder for login items*/

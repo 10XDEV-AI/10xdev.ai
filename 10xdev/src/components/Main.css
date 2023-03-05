@@ -1,14 +1,22 @@
 .container{
 width: 100%;
 }
+.row1{
+width: 100%;
+}
+
+.row2{
+width: 100%;
+}
+
 .Menubar{
 width: 20%;
-background-color:red;
+/*background-color:red;*/
 float: left;
 }
 
 .CodeTab{
 width: 80%;
-background-color:green;
+/*background-color:green;*/
 float: right;
 }

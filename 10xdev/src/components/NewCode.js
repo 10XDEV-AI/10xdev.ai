@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './EdittableTable.css';
+import './NewCode.css';
 
 const new_block = [
   {

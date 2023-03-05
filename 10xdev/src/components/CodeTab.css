@@ -1,11 +1,17 @@
 .codediffcontainer{
 width: 100%;
+padding: 10px;
 }
 .codediff{
 margin-top: 10px;
-width: 100%;
+width: 98%;
 display: flex;
 background-color: pink;
+}
+
+.filenamerow{
+width: 98%;
+background-color: lightgray;
 }
 .oldcode{
 width: 50%;

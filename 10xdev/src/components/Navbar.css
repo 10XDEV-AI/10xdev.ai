@@ -4,37 +4,8 @@ nav {
   margin: 10;
 }
 
-.search input {
-   position: absolute;
-   width: 705px;
-   height: 30px;
-   left: 286px;
-   top: 12px;
-   background: #FFFFFF;
-   border-radius: 15px;
-}
-
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 75px;
-  height: 32px;
-  left: 920px;
-  top: 12px;
-  font-weight: 500;
-  font-size: 24px;
-  color: #000000;
-  border-radius: 15px;
-  border: none;
-}
-
 .logo{
-  width: 187px;
-  height: 40px;
-  left: 25px;
-  top: 82px;
+  width: 21%;
   font-family: "Roboto", Helvetica;
   font-style: italic;
   font-weight: 700;
@@ -43,4 +14,8 @@ button {
   align-items: center;
   text-align: center;
   color: #FFFFFF;
+}
+
+.searchbarcol{
+  width: 78%;
 }
