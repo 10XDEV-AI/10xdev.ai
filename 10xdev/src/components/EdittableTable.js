@@ -47,7 +47,7 @@ const EditableTable = () => {
                       {lineNumber}
                     </td>
                     <td>
-                      <input className="newcode"
+                      <input className="newcodelines"
                         name="code_line"
                         value={code_line}
                         type="text"

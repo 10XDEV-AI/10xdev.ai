@@ -2,28 +2,36 @@
 display: flex;
 width: 100%;
 background-color: lightgrey;
-margin: 10px;
+margin-top:10px;
 }
 
 .col1{
-width: 10%;
+width: 50%;
+background-color: lightblue;
 }
 
 .col2{
-width: 80%;
+width: 40%;
+background-color: lightgreen;
 }
 
 .col3{
 width: 10%;
 }
 
+.NewFile{
+  margin-top:2px;
+}
 .textinput {
   background-color : white;
   border: 1px solid black;
   border-radius: 10px;
+  margin-top:2px;
+  width: 100%;
 }
 
 .checkbox {
+  width: 100%;
   background-color : white;
   border: 1px solid black;
   height: 18px;

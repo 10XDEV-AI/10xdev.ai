@@ -3,13 +3,15 @@ import './Menubar.css';
 
 function Menubar() {
   return (
-  <div className="container">
+  <div className="menubarcontainer">
     <div className="row">
-     On Branch "UBERUI2011"
-     </div>
-     <div className="row">
+            On Branch UBERUI2011
+    </div>
+    <div className="row">
         <div className="col1">
-          Create New File? :
+            <div className = "NewFile">
+                Create New File? :
+            </div >
         </div>
         <div className="col2">
           <input className="textinput" type="text" name="filename" />
@@ -17,10 +19,7 @@ function Menubar() {
         <div className="col3">
           <input className="checkbox" type="checkbox" name="createfile" />
         </div>
-     </div>
-     <div>
-     </div>
-
+    </div>
   </div>
   );
 }

@@ -1,6 +1,6 @@
 import Menubar from './Menubar';
 import CodeTab from './CodeTab';
-
+import './Main.css';
 function Main() {
   return (
     <div className="container">

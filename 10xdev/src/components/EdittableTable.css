@@ -1,11 +1,6 @@
-container {
-  width: 100%;
-}
-
 table {
   border-collapse: collapse;
-  width: 50%;
-  float: left;
+  width: 100%;
 }
 
 tr th {
@@ -17,12 +12,12 @@ tr td {
   background-color: #F5F3F3;
 }
 
-lineNumber {
+.lineNumber {
     width: 50px;
         background-color: #E3E3E3;
     }
 
-input {
+.newcodelines {
     width: 100%;
     border: none;
     background-color: transparent;

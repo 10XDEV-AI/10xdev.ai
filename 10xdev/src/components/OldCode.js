@@ -1,4 +1,3 @@
-
 import './OldCode.css';
 
 const old_block = [
@@ -21,26 +20,26 @@ const old_block = [
 
 const OldCodeTable = () => {
 return(
-    <table>
-        <thead>
-            <tr>
-                <th className="lineNumber"></th>
-                <th>OldCode</th>
-            </tr>
-        </thead>
-        <tbody>
-            {old_block.map(({ lineId, lineNumber, code_line, position }) => (
-            <tr key={lineId}>
-                <td className="lineNumber">
-                    {lineNumber}
-                </td>
-                <td className="oldcode">
-                    {code_line}
-                </td>
-            </tr>
-            ))}
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th className="lineNumber"></th>
+                    <th>OldCode</th>
+                </tr>
+            </thead>
+            <tbody>
+                {old_block.map(({ lineId, lineNumber, code_line, position }) => (
+                <tr key={lineId}>
+                    <td className="lineNumber">
+                        {lineNumber}
+                    </td>
+                    <td className="codeline">
+                        {code_line}
+                    </td>
+                </tr>
+                ))}
+            </tbody>
+        </table>
 )
 }
 
