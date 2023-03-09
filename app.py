@@ -1,20 +1,39 @@
-# how to use css in python_ flask
-# flask render_template example
 
-from flask import Flask, render_template
-
-# WSGI Application
-# Provide template folder name
-# The default folder name should be "templates" else need to mention custom folder name
-app = Flask(__name__, template_folder='templates', static_folder='static')
-
-# @app.route('/')
-# def welcome():
-#     return "This is the home page of Flask Application"
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/')
 def index():
-    return render_template('wtf.html')
+    return 'Hello, World!'
 
-if __name__=='__main__':
-    app.run(debug = True)
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    city = request.args.get('city')
+    data = [
+        {
+            'name': 'John',
+            'age': 30,
+            'city': 'New York'
+        },
+        {
+            'name': 'Jane',
+            'age': 25,
+            'city': 'Boston'
+        },
+        {
+            'name': 'Joe',
+            'age': 40,
+            'city': 'Chicago'
+        }
+    ]
+
+    for item in data:
+        if item['city'] == city:
+            return jsonify(item)
+
+    return jsonify({'error': 'City not found'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
