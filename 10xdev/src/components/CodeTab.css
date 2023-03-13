@@ -1,9 +1,31 @@
-.codediffcontainer{
+.UserPromptContainer{
 width: 100%;
+background-color: lightblue;
+display: flex;
+}
+
+.UserPicContainer{
+width: 10%;
+float: left;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  padding: 5px;
+}
+.userPrompttext
+{
+width: 90%;
+padding: 10px;
+}
+.codediffcontainer{
+width: 80%;
 padding: 10px;
 }
 .codediff{
-margin-top: 10px;
 width: 98%;
 display: flex;
 background-color: pink;
@@ -21,4 +43,27 @@ float: left;
 .newcode{
 width: 50%;
 float: right;
+}
+.PromptOptions{
+margin-top: 10px;
+}
+.editIcon {
+   margin-right: 10px;
+   cursor: pointer;
+}
+
+.retryIcon {
+   margin-right: 10px;
+   cursor: pointer;
+}
+
+.ResponseContainer{
+width: 100%;
+background-color: lightgreen;
+display: flex;
+}
+
+.responsePicContainer{
+width: 10%;
+float: left;
 }

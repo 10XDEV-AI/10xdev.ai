@@ -20,3 +20,10 @@ width: 80%;
 /*background-color:green;*/
 float: right;
 }
+
+.searchbarrow{
+position: absolute;
+bottom: 1%;
+right: 10%;
+width: 80%;
+}
