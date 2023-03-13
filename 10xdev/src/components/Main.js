@@ -1,6 +1,5 @@
 import Menubar from './Menubar';
 import CodeTab from './CodeTab';
-import NextButtons from './NextButtons';
 import './Main.css';
 import SearchBar from './SearchBar/SearchBar';
 import Navbar from './Navbar';

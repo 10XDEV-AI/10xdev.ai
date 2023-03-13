@@ -1,0 +1,40 @@
+.userPromptContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userPicContainer {
+  margin-right: 10px;
+  float: left;
+}
+
+.editUserPromptContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  float: left;
+}
+
+.editUserPromptContainer input {
+  width:100%;
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.editOptions {
+  display: flex;
+  float: right;
+}
+
+.editIcon {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.retryIcon {
+  cursor: pointer;
+  margin-left: 10px;
+}
