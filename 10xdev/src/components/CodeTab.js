@@ -1,6 +1,5 @@
 import CodeDiff from './CodeDiff/CodeDiff';
 import './CodeTab.css';
-import { useState } from 'react';
 import UserPrompt from './UserPrompt/UserPrompt';
 
 
