@@ -16,12 +16,6 @@ display: flex;
 width: 80%;
 padding: 10px;
 }
-.codediff{
-width: 98%;
-display: flex;
-background-color: pink;
-}
-
 
 .ResponseContainer{
 width: 100%;

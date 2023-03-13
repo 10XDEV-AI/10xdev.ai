@@ -1,11 +1,19 @@
+.userTextCol {
+  width: 80%;
+}
 .userPromptContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .userPicContainer {
   margin-right: 10px;
+  float: left;
+}
+
+.userPromptext{
+  margin-left: 10%;
   float: left;
 }
 
@@ -14,6 +22,8 @@
   align-items: center;
   justify-content: space-between;
   float: left;
+  width: 80%;
+  margin-left: 10%;
 }
 
 .editUserPromptContainer input {
@@ -24,6 +34,31 @@
   border-radius: 5px;
 }
 
+.saveButton{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cancelButton{
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
 .editOptions {
   display: flex;
   float: right;
@@ -37,4 +72,5 @@
 .retryIcon {
   cursor: pointer;
   margin-left: 10px;
+  margin-right: 10px;
 }
