@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./UserPrompt.css";
 
-function UserPrompt({ searchInput }) {
+function UserPrompt({ searchInput, onRetry }) {
   const [userPrompt, setUserPrompt] = useState(searchInput);
   const [editingPrompt, setEditingPrompt] = useState(false);
 
@@ -26,6 +26,9 @@ function UserPrompt({ searchInput }) {
     setUserPrompt(event.target.value);
   };
 
+  const handleRetry = () => {
+
+  }
   return (
     <div className="userPromptContainer">
         <div className="userPicContainer">
@@ -60,7 +63,9 @@ function UserPrompt({ searchInput }) {
           <span className="editIcon" onClick={handleEditPrompt}>
             &#x270E;
           </span>
-          <span className="retryIcon">&#x21BA;</span>
+          <span className="retryIcon" onClick={handleRetry}>
+            &#x21BA;
+          </span>
         </div>
     </div>
   );

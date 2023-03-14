@@ -24,7 +24,7 @@ function Main() {
     <div className="container">
       <Navbar/>
       <div className="UserPromptContainer">
-              <UserPrompt searchInput={searchInput}/>
+        <UserPrompt searchInput={searchInput} onRetry = {handleSearch}/>
       </div>
       <div className="ResponseContainer">
             <ResponseContainer searchResults={searchResults}/>

@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) =>{
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
       />
-      <button className="GoButton" onClick={handleClick}>Go!</button>
+      <button className="GoButton" onClick={handleClick}>{searchInput}!</button>
     </div>
   )
 }

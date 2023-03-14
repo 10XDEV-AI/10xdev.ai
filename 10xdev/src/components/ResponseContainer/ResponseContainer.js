@@ -8,7 +8,6 @@ const ResponseContainer = ({searchResults}) => {
          <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" className="avatar" />
        </div>
        <div className="codediffcontainer">
-          <h3>Search Results :</h3>
                  {searchResults && (
                    <div>
                      <p>Name: {searchResults.name}</p>
