@@ -8,8 +8,11 @@ import { useState } from 'react';
 
 function Main() {
   const [searchResults, setSearchResults] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
 
-  const handleSearch = (searchInput) => {
+  const handleSearch = (input) => {
+    setSearchInput(input);
+    console.log(searchInput);
     const url = `http://127.0.0.1:5000/api/data?city=${searchInput}`;
     fetch(url)
       .then(response => response.json())
@@ -21,13 +24,13 @@ function Main() {
     <div className="container">
       <Navbar/>
       <div className="UserPromptContainer">
-              <UserPrompt/>
+              <UserPrompt searchInput={searchInput}/>
       </div>
       <div className="ResponseContainer">
             <ResponseContainer searchResults={searchResults}/>
       </div>
       <div className="searchbarrow">
-        <SearchBar onSearch={handleSearch}/>
+        <SearchBar onSearch = {handleSearch}/>
       </div>
     </div>
   );

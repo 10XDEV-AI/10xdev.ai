@@ -3,6 +3,7 @@ import './SearchBar.css';
 
 const SearchBar = ({ onSearch }) =>{
   const [searchInput, setSearchInput] = useState('');
+
   const handleClick = () => {
     onSearch(searchInput);
   }

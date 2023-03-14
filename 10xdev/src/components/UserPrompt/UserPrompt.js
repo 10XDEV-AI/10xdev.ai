@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./UserPrompt.css";
 
-function UserPrompt() {
-  const [userPrompt, setUserPrompt] = useState("Please enter the file name to be created");
+function UserPrompt({searchInput}) {
+  const [userPrompt, setUserPrompt] = useState(searchInput);
   const [editingPrompt, setEditingPrompt] = useState(false);
   const [newPrompt, setNewPrompt] = useState(userPrompt);
 
@@ -29,18 +29,18 @@ function UserPrompt() {
       <div className="userPicContainer">
         <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" className="avatar" />
       </div>
-      <div className = "userTextCol">
-          {editingPrompt ? (
-            <div className="editUserPromptContainer">
-              <input type="text" value={newPrompt} onChange={handlePromptChange} />
-              <button className="saveButton" onClick={handleSavePrompt}>Save</button>
-              <button className="cancelButton" onClick={handleCancelPrompt}>Cancel</button>
-            </div>
-          ) : (
-            <div className="userPromptext">
-              {userPrompt}
-            </div>
-          )}
+      <div className="userTextCol">
+        {editingPrompt ? (
+          <div className="editUserPromptContainer">
+            <input type="text" value={newPrompt} onChange={handlePromptChange}/>
+            <button className="saveButton" onClick={handleSavePrompt}>Save</button>
+            <button className="cancelButton" onClick={handleCancelPrompt}>Cancel</button>
+          </div>
+        ) : (
+          <div className="userPromptext">
+            {searchInput}
+          </div>
+        )}
       </div>
       <div className="editOptions">
         <span className="editIcon" onClick={handleEditPrompt}>&#x270E;</span>
