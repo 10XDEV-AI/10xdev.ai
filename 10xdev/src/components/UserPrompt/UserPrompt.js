@@ -1,51 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./UserPrompt.css";
 
-function UserPrompt({searchInput}) {
+function UserPrompt({ searchInput }) {
   const [userPrompt, setUserPrompt] = useState(searchInput);
   const [editingPrompt, setEditingPrompt] = useState(false);
-  const [newPrompt, setNewPrompt] = useState(userPrompt);
+
+  useEffect(() => {
+    setUserPrompt(searchInput);
+  }, [searchInput]);
 
   const handleEditPrompt = () => {
     setEditingPrompt(true);
-    setNewPrompt(userPrompt);
   };
 
   const handleSavePrompt = () => {
-    setUserPrompt(newPrompt);
     setEditingPrompt(false);
   };
 
   const handleCancelPrompt = () => {
     setEditingPrompt(false);
+    setUserPrompt(searchInput);
   };
 
   const handlePromptChange = (event) => {
-    setNewPrompt(event.target.value);
+    setUserPrompt(event.target.value);
   };
 
   return (
     <div className="userPromptContainer">
-      <div className="userPicContainer">
-        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" className="avatar" />
-      </div>
-      <div className="userTextCol">
-        {editingPrompt ? (
-          <div className="editUserPromptContainer">
-            <input type="text" value={newPrompt} onChange={handlePromptChange}/>
-            <button className="saveButton" onClick={handleSavePrompt}>Save</button>
-            <button className="cancelButton" onClick={handleCancelPrompt}>Cancel</button>
-          </div>
-        ) : (
-          <div className="userPromptext">
-            {searchInput}
-          </div>
-        )}
-      </div>
-      <div className="editOptions">
-        <span className="editIcon" onClick={handleEditPrompt}>&#x270E;</span>
-        <span className="retryIcon">&#x21BA;</span>
-      </div>
+        <div className="userPicContainer">
+          <img
+            src="https://www.w3schools.com/howto/img_avatar.png"
+            alt="Avatar"
+            className="avatar"
+          />
+        </div>
+        <div className="userTextCol">
+          {editingPrompt ? (
+            <div className="editUserPromptContainer">
+              <input
+                type="text"
+                value={userPrompt}
+                onChange={handlePromptChange}
+              />
+              <button className="saveButton" onClick={handleSavePrompt}>
+                Save
+              </button>
+              <button className="cancelButton" onClick={handleCancelPrompt}>
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div className="userPromptext">
+              {userPrompt}
+            </div>
+          )}
+        </div>
+        <div className="editOptions">
+          <span className="editIcon" onClick={handleEditPrompt}>
+            &#x270E;
+          </span>
+          <span className="retryIcon">&#x21BA;</span>
+        </div>
     </div>
   );
 }
