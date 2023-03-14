@@ -1,5 +1,6 @@
 import Menubar from './Menubar';
-import CodeTab from './CodeTab';
+import ResponseContainer from './ResponseContainer/ResponseContainer';
+import UserPrompt from './UserPrompt/UserPrompt';
 import './Main.css';
 import SearchBar from './SearchBar/SearchBar';
 import Navbar from './Navbar';
@@ -19,21 +20,14 @@ function Main() {
   return (
     <div className="container">
       <Navbar/>
-      <div className="row1">
-        <CodeTab/>
+      <div className="UserPromptContainer">
+              <UserPrompt/>
+      </div>
+      <div className="ResponseContainer">
+            <ResponseContainer searchResults={searchResults}/>
       </div>
       <div className="searchbarrow">
         <SearchBar onSearch={handleSearch}/>
-      </div>
-      <div className="searchResults">
-        <h1>Search Results :</h1>
-        {searchResults && (
-          <div>
-            <p>Name: {searchResults.name}</p>
-            <p>Age: {searchResults.age}</p>
-            <p>City: {searchResults.city}</p>
-          </div>
-        )}
       </div>
     </div>
   );

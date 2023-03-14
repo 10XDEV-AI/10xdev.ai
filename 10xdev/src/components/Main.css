@@ -27,3 +27,9 @@ bottom: 1%;
 right: 10%;
 width: 80%;
 }
+
+.UserPromptContainer{
+width: 100%;
+background-color: lightblue;
+display: flex;
+}
