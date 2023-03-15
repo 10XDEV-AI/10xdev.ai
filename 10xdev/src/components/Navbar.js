@@ -10,7 +10,7 @@ function Navbar() {
       </div>
       <div className="linkscontainer">
       <div className="linkColumn">
-        <Link className='NavLinks' to="/train">Train AI</Link>
+        <Link className='NavLinks' to="/welcome">Train AI</Link>
         <Link className='NavLinks' to="/">Ask AI</Link>
       </div>
       </div>

@@ -1,35 +1,32 @@
 .container{
 width: 100%;
 }
-.row1{
+
+.logoContainer{
 width: 100%;
+position: absolute;
+top: 30%;
+text-align: center;
+font-size: 90px;
+font-family: "Roboto", Helvetica;
+font-style: italic;
+font-weight: 700;
+color:#242CF4;
 }
 
-.row2{
-width: 100%;
-}
-
-.Menubar{
-width: 20%;
-/*background-color:red;*/
-float: left;
-}
-
-.CodeTab{
-width: 80%;
-/*background-color:green;*/
-float: right;
-}
-
-.searchbarrow{
-position: fixed;
-bottom: 1%;
+.welcomesearchrow{
+position: absolute;
+bottom: 40%;
 right: 10%;
 width: 80%;
 }
 
-.UserPromptContainer{
+.subText{
 width: 100%;
-background-color: lightblue;
-display: flex;
+position: absolute;
+top: 40%;
+text-align: center;
+font-size: 35px;
+font-family: "Roboto", Helvetica;
+font-weight: 700;
 }
