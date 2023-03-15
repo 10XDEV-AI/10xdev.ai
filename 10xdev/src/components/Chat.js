@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom';
 function Chat() {
   const location = useLocation();
   const searchInput = location.state.searchInput;
-  const [searchInputs, setSearchInputs] = useState({});
   const [searchResults, setSearchResults] = useState({});
   const [chatMessages, setChatMessages] = useState([]);
 
@@ -34,7 +33,6 @@ function Chat() {
 }, [searchInput]);
 
   const handleSearch = (input, index) => {
-      setSearchInputs(prevState => ({...prevState, [index]: input}));
       const url = `http://127.0.0.1:5000/api/data?city=${input}`;
       fetch(url)
         .then(response => response.json())
