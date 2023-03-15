@@ -10,10 +10,6 @@ def get_data():
     prompt = request.args.get('prompt')
     print(prompt)
     a=(Ask_AI(prompt))
-    print(a)
-    print(type(a))
-    print(jsonify(a))
-    print(type(jsonify(a)))
     return jsonify(a)
 
 if __name__ == '__main__':
