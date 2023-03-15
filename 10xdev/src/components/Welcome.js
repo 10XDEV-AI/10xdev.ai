@@ -21,6 +21,9 @@ function Welcome() {
         <div className="welcomesearchrow">
           <SearchBar onSearch={handleSearch} />
         </div>
+        <div className="bottomText">
+            How-To  |  Quick Tips  |  About Us  |  Setup New Repo
+        </div>
       </div>
     </div>
   );
