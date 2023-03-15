@@ -6,6 +6,7 @@ import SearchBar from './SearchBar/SearchBar';
 import Navbar from './Navbar';
 import { useState } from 'react';
 
+
 function Main() {
   const [searchResults, setSearchResults] = useState(null);
   const [searchInput, setSearchInput] = useState('');
@@ -20,17 +21,36 @@ function Main() {
       .catch(error => console.log(error));
   }
 
+  const chatMessages = [
+      {
+        type: 'prompt',
+        message: <UserPrompt searchInput={searchInput} onRetry={handleSearch} />
+      },
+      {
+        type: 'response',
+        message: <ResponseContainer searchResults={searchResults} />
+      },
+      {
+        type: 'prompt',
+        message: <UserPrompt searchInput={searchInput} onRetry={handleSearch} />
+      },
+      // Add more messages as needed
+    ];
+
   return (
     <div className="container">
-      <Navbar/>
-      <div className="UserPromptContainer">
-        <UserPrompt searchInput={searchInput} onRetry = {handleSearch}/>
-      </div>
-      <div className="ResponseContainer">
-            <ResponseContainer searchResults={searchResults}/>
-      </div>
-      <div className="searchbarrow">
-        <SearchBar onSearch = {handleSearch}/>
+      <div className="container">
+        <Navbar />
+        <div className="chat-container">
+          {chatMessages.map((chatMessage, index) => (
+            <div key={index} className={chatMessage.type}>
+              {chatMessage.message}
+            </div>
+          ))}
+        </div>
+        <div className="searchbarrow">
+          <SearchBar onSearch={handleSearch} />
+        </div>
       </div>
     </div>
   );
