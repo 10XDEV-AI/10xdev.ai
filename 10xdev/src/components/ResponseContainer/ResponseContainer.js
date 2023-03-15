@@ -1,11 +1,12 @@
 import './ResponseContainer.css';
 import CodeDiff from '../CodeDiff/CodeDiff';
+import AI_Image from '../../images/10x.png';
 
 const ResponseContainer = ({searchResults}) => {
  return (
      <div className="ResponseContainer">
        <div className="responsePicContainer">
-         <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" className="avatar" />
+         <img src={AI_Image} alt="Avatar" className="avatar" />
        </div>
        <div className="codediffcontainer">
                  {searchResults && (

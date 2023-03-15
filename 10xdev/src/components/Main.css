@@ -22,7 +22,7 @@ float: right;
 }
 
 .searchbarrow{
-position: absolute;
+position: fixed;
 bottom: 1%;
 right: 10%;
 width: 80%;
