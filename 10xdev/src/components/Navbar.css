@@ -27,9 +27,9 @@ nav {
 .NavLinks{
   color: white;
   float: right;
+  padding: 7px;
 }
 .linkColumn{
 width: 100%;
 float: right;
-padding: 7px;
 }
