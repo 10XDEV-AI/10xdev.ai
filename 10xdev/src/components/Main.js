@@ -29,12 +29,7 @@ function Main() {
       {
         type: 'response',
         message: <ResponseContainer searchResults={searchResults} />
-      },
-      {
-        type: 'prompt',
-        message: <UserPrompt searchInput={searchInput} onRetry={handleSearch} />
-      },
-      // Add more messages as needed
+      }
     ];
 
   return (
