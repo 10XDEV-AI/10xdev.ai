@@ -8,29 +8,25 @@ import { useState } from 'react';
 
 
 function Main() {
+  const [searchInputs, setSearchInputs] = useState({});
   const [searchResults, setSearchResults] = useState(null);
-  const [searchInput, setSearchInput] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
 
-  const handleSearch = (input) => {
-    setSearchInput(input);
-    console.log(searchInput);
-    const url = `http://127.0.0.1:5000/api/data?city=${searchInput}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => setSearchResults(data))
-      .catch(error => console.log(error));
-  }
-
-  const chatMessages = [
-      {
-        type: 'prompt',
-        message: <UserPrompt searchInput={searchInput} onRetry={handleSearch} />
-      },
-      {
-        type: 'response',
-        message: <ResponseContainer searchResults={searchResults} />
-      }
-    ];
+const handleSearch = (input, index) => {
+  setSearchInputs(prevState => ({...prevState, [index]: input}));
+  const url = `http://127.0.0.1:5000/api/data?city=${input}`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      setSearchResults(prevState => ({...prevState, [index]: data}))
+      // add the search results to chatMessages
+      setChatMessages(prevState => [...prevState, {
+        prompt: <UserPrompt searchInput={input} onRetry={(input) => handleSearch(input, index)} />,
+        response: <ResponseContainer searchResults={data} />
+      }])
+    })
+    .catch(error => console.log(error));
+}
 
   return (
     <div className="container">
@@ -38,8 +34,9 @@ function Main() {
         <Navbar />
         <div className="chat-container">
           {chatMessages.map((chatMessage, index) => (
-            <div key={index} className={chatMessage.type}>
-              {chatMessage.message}
+            <div key={index}>
+              {chatMessage.prompt}
+              {chatMessage.response}
             </div>
           ))}
         </div>
