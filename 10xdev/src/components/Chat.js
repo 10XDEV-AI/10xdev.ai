@@ -1,13 +1,13 @@
 import Menubar from './Menubar';
 import ResponseContainer from './ResponseContainer/ResponseContainer';
 import UserPrompt from './UserPrompt/UserPrompt';
-import './Main.css';
+import './Chat.css';
 import SearchBar from './SearchBar/SearchBar';
 import Navbar from './Navbar';
 import { useState } from 'react';
 
 
-function Main() {
+function Chat() {
   const [searchInputs, setSearchInputs] = useState({});
   const [searchResults, setSearchResults] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
@@ -48,4 +48,4 @@ const handleSearch = (input, index) => {
   );
 }
 
-export default Main;
+export default Chat;
