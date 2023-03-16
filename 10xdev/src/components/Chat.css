@@ -9,27 +9,15 @@ width: 100%;
 width: 100%;
 }
 
-.Menubar{
-width: 20%;
-/*background-color:red;*/
-float: left;
-}
-
-.CodeTab{
-width: 80%;
-/*background-color:green;*/
-float: right;
-}
-
 .searchbarrow{
 position: fixed;
-bottom: 1%;
+bottom: 5px;
 right: 10%;
 width: 80%;
 }
 
-.UserPromptContainer{
+.footer{
 width: 100%;
-background-color: lightblue;
-display: flex;
+background-color: #f1f1f1;
+height: 50px;
 }

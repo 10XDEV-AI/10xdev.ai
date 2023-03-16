@@ -5,13 +5,12 @@
   display: flex;
   vertical-align: middle;
   width: 100%;
-  background-color: lightblue;
   font: 15px Proxima Nova, sans-serif;
 }
 
 .userPicContainer {
-  width: 5%;
-  float: left;
+  width: 7%;
+  align-items: center;
 }
 
 .userPromptext{

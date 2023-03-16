@@ -3,6 +3,7 @@ import pandas as pd
 import subprocess
 from openai.embeddings_utils import cosine_similarity
 
+#uses ChatGPT API to generate code
 df = pd.read_csv('df.csv')
 df2 = pd.read_csv('df2.csv')
 df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
@@ -14,17 +15,6 @@ def get_embedding(prompt):
     )
     return response['data'][0]['embedding']
 
-def replace(filename, start,stop, new_code_block):
-    # Read in the contents of the file
-    with open(filename, 'r') as file:
-        lines = file.readlines()
-    # Delete the lines between start_index and stop_index
-    del lines[start:stop]
-    # Insert the new_code_block at start_index
-    lines[start:start] = new_code_block
-    # Write the modified contents back to the file
-    with open(filename, 'w') as file:
-        file.writelines(lines)
 
 def search_functions(code_query):
     embedding = get_embedding(code_query)
@@ -51,37 +41,25 @@ def get_old_code(prompt):
 
     df2['Hits'] = df2.apply(lambda row: count_lines(row['filepath'], row['BlockStart'], row['BlockStop']), axis=1)
     df2 = df2.sort_values('Hits', ascending=False)
-    return df2
+    return df2.iloc[0]['Code']
 
-def suggest_changes(prompt,new_flag):
-    if(new_flag == 0):
-        res = get_old_code(prompt)
-        code_block = res.iloc[0]['Code']
-        #code_block = ""
-        #print("Old Code")
-        #print(code_block)
+def suggest_changes(prompt):
+    res = get_old_code(prompt)
+    code_block = res
+    # Note: you need to be using OpenAI Python v0.27.0 for the code below to work
+    import openai
 
-        #print("New Code")
-        response=openai.Edit.create(
-          model="code-davinci-edit-001",
-          input=code_block,
-          instruction=prompt,
-          temperature = 0.2
-        )
-        new_code_block = response["choices"][0]["text"]
-        #print(new_code_block)
-    else:
-        response=openai.Edit.create(
-            model="code-davinci-edit-001",
-            input="",
-            instruction=prompt,
-            temperature = 0.2
-        )
-        new_code_block = response["choices"][0]["text"]
-        #print(new_code_block)
-        code_block = ""
+    response=openai.ChatCompletion.create(
+      model="gpt-3.5-turbo",
+      messages=[
+            {"role": "system", "content": "You are a coding assistant."},
+            {"role": "user", "content": code_block+prompt}
+        ]
+    )
 
-    return [code_block, new_code_block]
+    new_code_block = response["choices"][0]["message"]['content']
+    #print(new_code_block)
+    return new_code_block
 
 def Ask_AI(prompt):
     text_file = open("API_key.txt", "r")
@@ -93,9 +71,4 @@ def Ask_AI(prompt):
     text_file.close()
 
     df3 = pd.DataFrame()
-
-    if prompt.startswith('-n'):
-        prompt = prompt[2:].strip()
-        return suggest_changes(prompt, 1)
-    else:
-        return suggest_changes(prompt, 0)
+    return suggest_changes(prompt)

@@ -4,14 +4,14 @@ from script_function import Ask_AI
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-'''
+
 @app.route('/api/data', methods=['GET'])
 def get_data():
     prompt = request.args.get('prompt')
-    print(prompt)
+    #print(prompt)
     a=(Ask_AI(prompt))
-    return jsonify(a)'''
-
+    return jsonify(a)
+'''
 @app.route('/api/data', methods=['GET'])
 def get_data():
     city = request.args.get('city')
@@ -38,6 +38,7 @@ def get_data():
             return jsonify(item)
 
     return jsonify({'error': 'City not found'})
+'''
 
 if __name__ == '__main__':
     app.run(debug=True)

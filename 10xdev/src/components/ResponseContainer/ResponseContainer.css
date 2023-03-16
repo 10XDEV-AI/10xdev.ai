@@ -14,12 +14,12 @@ padding: 10px;
 
 .ResponseContainer{
 width: 100%;
-background-color: lightgreen;
+box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1);
+background-color: #F4F4F4;
 display: flex;
 font: 15px Proxima Nova, sans-serif;
 }
 
 .responsePicContainer{
-width: 5%;
-float: left;
+width: 7%;
 }

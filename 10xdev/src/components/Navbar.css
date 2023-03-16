@@ -28,6 +28,13 @@ nav {
   color: white;
   float: right;
   padding: 7px;
+  text-decoration: none;
+}
+
+.NavLinks:hover {
+  color: blue;
+  background-color: white
+  /* Add any other hover styles you want */
 }
 
 .linkColumn{
