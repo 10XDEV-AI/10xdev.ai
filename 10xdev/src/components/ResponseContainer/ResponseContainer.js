@@ -6,32 +6,55 @@ import { CopyBlock, dracula } from "react-code-blocks";
 const ResponseContainer = ({searchResults}) => {
 
   function SplitBlocks(props) {
-    const text = props.text;
-    const blocks = text.split("```").map((block, index) => {
-      if (index % 2 === 0) {
-        // This is normal text
-        return (
-          <div key={index}>
+    const full_text = props.text;
+    const flag = (full_text[0] === "```")? 1 : 0;
+    const blocks = full_text.split("```");
+    const mapped_blocks = blocks.map((block, index) => {
+    if(flag === 0 ) {
+        if (index % 2 === 0) {
+        return(
+        <div key={index}>
             <p>{block}</p>
-          </div>
-        );
-      } else {
-        // This is code
-        return (
-          <div key={index}>
-            <CopyBlock
-              text={block}
-              language="jsx"
-              showLineNumbers={true}
-              startingLineNumber={1}
-              theme={dracula}
-              codeBlock
-            />
-          </div>
-        );
-      }
+        </div>
+            )
+        }
+        else{
+        return(<div key={index}>
+                           <CopyBlock
+                             text={block}
+                             language="jsx"
+                             showLineNumbers={true}
+                             startingLineNumber={1}
+                             theme={dracula}
+                             codeBlock
+                           />
+                         </div>)
+
+        }
+    }
+    else{
+        if (index % 2 === 0) {
+        return(<div key={index}>
+                           <CopyBlock
+                             text={block}
+                             language="jsx"
+                             showLineNumbers={true}
+                             startingLineNumber={1}
+                             theme={dracula}
+                             codeBlock
+                           />
+                         </div>)
+        }
+        else{
+        return(
+        <div key={index}>
+            <p>{block}</p>
+        </div>)
+        }
+    }
     });
-    return blocks;
+
+    return mapped_blocks;
   }
 
   return (

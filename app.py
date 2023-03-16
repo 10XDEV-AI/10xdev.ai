@@ -8,7 +8,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 @app.route('/api/data', methods=['GET'])
 def get_data():
     prompt = request.args.get('prompt')
-    #print(prompt)
+    print("Asking AI")
     a=(Ask_AI(prompt))
     return jsonify(a)
 '''
