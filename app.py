@@ -13,39 +13,17 @@ def get_projectInfo():
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
+    prompt = request.args.get('path')
+    print("Training AI")
+    return jsonify(a)
+
+@app.route('/api/setup', methods=['GET'])
+def get_projectInfo():
     prompt = request.args.get('prompt')
     print("Asking AI")
     a=(Ask_AI(prompt))
     return jsonify(a)
 
-'''
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    city = request.args.get('city')
-    data = [
-        {
-            'name': 'John',
-            'age': 30,
-            'city': 'New York'
-        },
-        {
-            'name': 'Jane',
-            'age': 25,
-            'city': 'Boston'
-        },
-        {
-            'name': 'Joe',
-            'age': 40,
-            'city': 'Chicago'
-        }
-    ]
-
-    for item in data:
-        if item['city'] == city:
-            return jsonify(item)
-
-    return jsonify({'error': 'City not found'})
-'''
 
 if __name__ == '__main__':
     app.run(debug=True)
