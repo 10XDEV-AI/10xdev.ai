@@ -1,9 +1,15 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from script_function import Ask_AI
+from projectInfo import getprojectInfo
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
+
+@app.route('/api/projectInfo', methods=['GET'])
+def get_projectInfo():
+    print("Checking Branch")
+    return jsonify(getprojectInfo())
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -11,6 +17,7 @@ def get_data():
     print("Asking AI")
     a=(Ask_AI(prompt))
     return jsonify(a)
+
 '''
 @app.route('/api/data', methods=['GET'])
 def get_data():
