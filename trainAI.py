@@ -9,7 +9,7 @@ from openai.embeddings_utils import cosine_similarity
 text_file = open("API_key.txt", "r")
 
 def get_embedding(task):
-    time.sleep(3)
+    time.sleep(2)
     response = openai.Embedding.create(
             input=task,
             model="text-embedding-ada-002"

@@ -3,8 +3,6 @@ import SearchBar0 from './SearchBar0/SearchBar0';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-
 function Welcome() {
     const navigate = useNavigate();
     const [repository, setRepository] = useState('');
@@ -49,8 +47,8 @@ function Welcome() {
                 </div>
 
                 <div className="projectinfo">
-                    Repository  : {repository} |
-                    Branch  : {branch}
+                    On Branch  : {branch} |
+                    In Repository  : {repository}
                 </div>
             </div>
         </div>
