@@ -19,8 +19,9 @@ def get_projectInfo():
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
-    prompt = request.args.get('path')
-    print("Training AI")
+    prompt = request.args.get('prompt')
+    print("Asking AI")
+    a=(Ask_AI(prompt))
     return jsonify(a)
 
 @app.route('/api/setup', methods=['POST'])

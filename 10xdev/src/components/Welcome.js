@@ -45,7 +45,6 @@ function Welcome() {
                     How-To  |  Quick Tips  |
                     <a link href="/setupNewRepo"> Setup New Repo</a>
                 </div>
-
                 <div className="projectinfo">
                     On Branch  : {branch} |
                     In Repository  : {repository}
