@@ -2,8 +2,8 @@ import openai
 import pandas as pd
 import subprocess
 from openai.embeddings_utils import cosine_similarity
+#import syncAI from syncup
 
-#uses ChatGPT API to generate code
 df = pd.read_csv('df.csv')
 df2 = pd.read_csv('df2.csv')
 df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
@@ -44,11 +44,8 @@ def get_old_code(prompt):
     return df2.iloc[0]['Code']
 
 def suggest_changes(prompt):
-    res = get_old_code(prompt)
-    code_block = res
-    # Note: you need to be using OpenAI Python v0.27.0 for the code below to work
-    import openai
-
+    code_block = get_old_code(prompt)
+    syncup()
     response=openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       messages=[
@@ -63,10 +60,8 @@ def suggest_changes(prompt):
 
 def Ask_AI(prompt):
     text_file = open("API_key.txt", "r")
-
     #read whole file to a string
     openai.api_key =  text_file.read()
-
     #close file
     text_file.close()
 
