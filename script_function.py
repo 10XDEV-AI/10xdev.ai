@@ -45,7 +45,7 @@ def get_old_code(prompt):
 
 def suggest_changes(prompt):
     code_block = get_old_code(prompt)
-    syncup()
+    #syncup()
     response=openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       messages=[
