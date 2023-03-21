@@ -3,6 +3,7 @@ from flask_cors import CORS
 from script_function import Ask_AI
 from trainAI import train_AI
 from projectInfo import getprojectInfo
+from syncAI import sync_AI
 import csv
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})

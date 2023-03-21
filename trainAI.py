@@ -46,6 +46,8 @@ def split_file(filename,blocks):
     extracted_lines = lines[prev_end_line:len(lines)]
     # join the extracted lines into a string
     extracted_text = "".join(extracted_lines)
+    if prev_end_line==-2:
+        prev_end_line=0
     blocks.append([filename,prev_end_line,len(lines),extracted_text])
     return blocks
 
@@ -67,6 +69,10 @@ def train_AI(path):
                 file_paths_details.append(os.path.join(root, filename))
     df4 = pd.DataFrame(file_paths_details)
     df4.columns = ["filepath"]
+    #create a new column that has last synced time
+    df4['last_sync'] = time.time()
+    #use the lambda function to get the last modified time of the file os.getmtime fielname
+    df4['last_updated'] = df4.filepath.apply(lambda x: os.path.getmtime(x))
     df4.to_csv("df4.csv", index=False)
 
     text_file = open("API_key.txt", "r")
