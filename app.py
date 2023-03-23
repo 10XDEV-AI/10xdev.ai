@@ -5,6 +5,7 @@ from trainAI import train_AI
 from projectInfo import getprojectInfo
 from syncAI import syncAI
 import csv
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 

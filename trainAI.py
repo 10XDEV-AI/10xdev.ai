@@ -2,6 +2,7 @@ import openai
 import os
 import pandas as pd
 import time
+import json
 import numpy
 import matplotlib
 from openai.embeddings_utils import cosine_similarity

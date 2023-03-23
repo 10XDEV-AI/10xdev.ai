@@ -15,7 +15,7 @@ filepath,BlockStart,BlockStop,Code
 </head>
 
 "
-/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,13,30,"<body>
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,13,29,"<body>
 <!-- Login Page Holder -->
 <main id=""main-holder"">
 
@@ -28,7 +28,6 @@ filepath,BlockStart,BlockStop,Code
     <input type=""text"" name=""mobile"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
     <input type=""submit"" value=""Login"" id=""login-form-submit"">
   </form>
-  <!- Login Form End ->
 </main>
 </body>
 </html>"
