@@ -3,7 +3,7 @@ from flask_cors import CORS
 from script_function import Ask_AI
 from trainAI import train_AI
 from projectInfo import getprojectInfo
-from syncAI import sync_AI
+from syncAI import syncAI
 import csv
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
@@ -34,5 +34,15 @@ def get_trainAI():
     a=(train_AI(path))
     return jsonify(a)
 
+
+@app.route('/api/sync', methods=['GET'])
+def get_syncAI():
+    print("Syncing AI")
+    syncAI()
+    a=("SYNC COMPLETE")
+    return jsonify(a)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+

@@ -5,8 +5,21 @@ import time
 import numpy
 import matplotlib
 from openai.embeddings_utils import cosine_similarity
+import shutil
 
 text_file = open("API_key.txt", "r")
+
+def create_clone(path):
+    # Remove folder if it exists
+    if os.path.exists("AIFiles"):
+        shutil.rmtree("AIFiles")
+    # Create folder
+    os.mkdir("AIFiles")
+    # Copy everything in path to AIFiles
+    for filename in os.listdir(path):
+        src = os.path.join(path, filename)
+        dst = os.path.join("AIFiles", filename)
+        shutil.copy(src, dst)
 
 def get_embedding(task):
     time.sleep(2)
@@ -53,6 +66,14 @@ def split_file(filename,blocks):
 
 def train_AI(path):
     print("Training AI")
+    #store path into info.json
+    data = {
+        'path': path
+    }
+    with open('info.json', 'w') as outfile:
+        json.dump(data, outfile)
+
+    create_clone(path)
     file_paths_details = []
     Files_to_ignore = open(path+"/.AIIgnore", "r").read().splitlines()
     print("Files and directories to ignore:")
@@ -70,9 +91,6 @@ def train_AI(path):
     df4 = pd.DataFrame(file_paths_details)
     df4.columns = ["filepath"]
     #create a new column that has last synced time
-    df4['last_sync'] = time.time()
-    #use the lambda function to get the last modified time of the file os.getmtime fielname
-    df4['last_updated'] = df4.filepath.apply(lambda x: os.path.getmtime(x))
     df4.to_csv("df4.csv", index=False)
 
     text_file = open("API_key.txt", "r")
