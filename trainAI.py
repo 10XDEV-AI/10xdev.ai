@@ -30,11 +30,6 @@ def get_embedding(task):
         )
     return response['data'][0]['embedding']
 
-def search_functions(df, code_query):
-    embedding = get_embedding(code_query)
-    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
-    res = df.sort_values('similarities', ascending=False).head(100)
-    return res
 
 def split_file(filename,blocks):
     with open(filename, 'r') as f:
