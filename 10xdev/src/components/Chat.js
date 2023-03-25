@@ -1,4 +1,3 @@
-import Menubar from './Menubar';
 import ResponseContainer from './ResponseContainer/ResponseContainer';
 import UserPrompt from './UserPrompt/UserPrompt';
 import './Chat.css';
