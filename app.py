@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from script_function import Ask_AI
+from AskAI import Ask_AI
 from trainAI import train_AI
 from projectInfo import getprojectInfo
 from syncAI import syncAI
