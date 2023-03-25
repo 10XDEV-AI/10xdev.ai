@@ -1,0 +1,43 @@
+nav {
+  background-color:#2455C5;
+  margin: 10;
+  display: flex;
+  width: 100%;
+}
+
+.logo{
+  width: 20%;
+  font-family: "Roboto", Helvetica;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 40px;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.linkscontainer{
+  width: 80%;
+  display: flex;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+}
+
+.NavLinks{
+  color: white;
+  float: right;
+  padding: 7px;
+  text-decoration: none;
+}
+
+.NavLinks:hover {
+  color: blue;
+  background-color: white
+  /* Add any other hover styles you want */
+}
+
+.linkColumn{
+width: 100%;
+float: right;
+}

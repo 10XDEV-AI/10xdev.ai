@@ -1,11 +1,12 @@
-filepath,BlockStart,BlockStop,Code,Hits
-repo/index.html,0,3,"<!DOCTYPE html>
+filepath,BlockStart,BlockStop,Code
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,0,3,"<!DOCTYPE html>
 <html lang=""en"">
 
-",0
-repo/index.html,3,14,"<!- File References ->
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,3,5,"<!- File References ->
 
-<head>
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,5,13,"<head>
   <meta charset=""UTF-8"">
   <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
   <title>Login</title>
@@ -13,48 +14,28 @@ repo/index.html,3,14,"<!- File References ->
   <script defer src=""login-page.js""></script>
 </head>
 
-<body>
-",1
-repo/index.html,14,22,"<!- Login Page Holder ->
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/index.html,13,29,"<body>
+<!-- Login Page Holder -->
 <main id=""main-holder"">
 
   <h1 id=""login-header"">Login</h1>
   <div id=""login-error-msg-holder"">
     <p id=""login-error-msg"">Invalid username <span id=""error-msg-second-line"">and/or password</span></p>
   </div>
-
-",2
-repo/index.html,22,32,"  <form id=""login-form"">
-    <input type=""text"" name=""username"" id=""username-field"" class=""login-form-field"" placeholder=""Username"">
-    <input type=""password"" name=""password"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
+  <!- Input Fields ->
+  <form id=""login-form"">
+    <input type=""text"" name=""mobile"" id=""password-field"" class=""login-form-field"" placeholder=""Password"">
     <input type=""submit"" value=""Login"" id=""login-form-submit"">
   </form>
-
 </main>
 </body>
-</html>",1
-repo/login-page.js,0,17,"const loginForm = document.getElementById(""login-form"");
-const loginButton = document.getElementById(""login-form-submit"");
-const loginErrorMsg = document.getElementById(""login-error-msg"");
-
-loginButton.addEventListener(""click"", (e) => {
-    e.preventDefault();
-    const username = loginForm.username.value;
-    const password = loginForm.password.value;
-
-    if (username === ""user"" && password === ""web_dev"") {
-        alert(""You have successfully logged in."");
-        location.reload();
-    } else {
-        loginErrorMsg.style.opacity = 1;
-    }
-})",0
-repo/style.css,0,4,"/*  Page Styles */
+</html>"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,0,15,"/*  Page Styles */
 html {
   height: 100%;
 }
-",0
-repo/style.css,4,15,"/*  Body Styles */
+/*  Body Styles */
 body {
   height: 100%;
   margin: 0;
@@ -65,8 +46,8 @@ body {
   background-color: lightblue;
 }
 
-",0
-repo/style.css,15,27,"/* Holder for login items*/
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,15,27,"/* Holder for login items*/
 #main-holder {
   width: 35%;
   height: 70%;
@@ -78,8 +59,8 @@ repo/style.css,15,27,"/* Holder for login items*/
   box-shadow: 0px 0px 5px 2px black;
 }
 
-",0
-repo/style.css,27,53,"/*  Login Error Message Styles */
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,27,36,"/*  Login Error Message Styles */
 #login-error-msg-holder {
   width: 100%;
   height: 100%;
@@ -88,7 +69,8 @@ repo/style.css,27,53,"/*  Login Error Message Styles */
   align-items: center;
 }
 
-#login-error-msg {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,36,49,"#login-error-msg {
   width: 23%;
   text-align: center;
   margin: 0;
@@ -101,23 +83,27 @@ repo/style.css,27,53,"/*  Login Error Message Styles */
   opacity: 0;
 }
 
-#error-msg-second-line {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,49,53,"#error-msg-second-line {
   display: block;
 }
 
-",0
-repo/style.css,53,85,"#login-form {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,53,61,"/*  Login form feild styles */
+#login-form {
   align-self: flex-start;
   display: grid;
   justify-items: center;
   align-items: center;
 }
 
-.login-form-field::placeholder {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,61,65,".login-form-field::placeholder {
   color: #3a3a3a;
 }
 
-.login-form-field {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,65,74,".login-form-field {
   border: none;
   border-bottom: 1px solid #3a3a3a;
   margin-bottom: 10px;
@@ -126,7 +112,8 @@ repo/style.css,53,85,"#login-form {
   padding: 0px 0px 5px 5px;
 }
 
-#login-form-submit {
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/styles.css,74,85,"#login-form-submit {
   width: 100%;
   padding: 7px;
   border: none;
@@ -136,5 +123,34 @@ repo/style.css,53,85,"#login-form {
   background-color: #33c1ea;
   cursor: pointer;
   outline: none;
-}
-",3
+}"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/dummy_1.txt,0,2,"Hello
+
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/dummy_1.txt,2,3,"
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/dummy_1.txt,3,5,"Hello
+
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/dummy_1.txt,5,6,"You are a very good per
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/login-page.js,0,5,"//Login Button On Click Actions
+const loginForm = document.getElementById(""login-form"");
+const loginButton = document.getElementById(""login-form-submit"");
+const loginErrorMsg = document.getElementById(""login-error-msg"");
+
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/login-page.js,5,17,"loginButton.addEventListener(""click"", (e) => {
+    e.preventDefault();
+    const username = loginForm.username.value;
+    const password = loginForm.password.value;
+
+    if (username === ""user"" && password === ""web_dev"") {
+        alert(""You have successfully logged in."");
+        location.reload();
+    } else {
+        loginErrorMsg.style.opacity = 1;
+    }
+})
+"
+/Users/prathameshsutone/Desktop/PR_Raiser/repo/.AIIgnore,0,1,node_modules

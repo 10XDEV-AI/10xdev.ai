@@ -1,0 +1,22 @@
+.codediff{
+background-color: pink;
+}
+.oldcode{
+width: 50%;
+float: left;
+}
+
+.newcode{
+width: 50%;
+float: right;
+}
+
+.codeRow
+{
+width: 100%;
+display: flex;
+}
+.filenamerow{
+background-color: lightgray;
+}
+

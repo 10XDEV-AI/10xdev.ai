@@ -1,20 +1,43 @@
-# how to use css in python_ flask
-# flask render_template example
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from AskAI import Ask_AI
+from trainAI import train_AI
+from projectInfo import getprojectInfo
+from syncAI import syncAI
+import csv
 
-from flask import Flask, render_template
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-# WSGI Application
-# Provide template folder name
-# The default folder name should be "templates" else need to mention custom folder name
-app = Flask(__name__, template_folder='templates', static_folder='static')
+@app.route('/api/projectInfo', methods=['GET'])
+def get_projectInfo():
+    print("Checking Branch")
+    return jsonify(getprojectInfo())
 
-# @app.route('/')
-# def welcome():
-#     return "This is the home page of Flask Application"
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    prompt = request.args.get('prompt')
+    print("Asking AI")
+    a=(Ask_AI(prompt))
+    return jsonify(a)
 
-@app.route('/')
-def index():
-    return render_template('wtf.html')
+@app.route('/api/setup', methods=['POST'])
+def get_trainAI():
+    data = request.get_json()
+    path = data.get('path')
+    print("Training AI")
+    a=(train_AI(path))
+    return jsonify(a)
 
-if __name__=='__main__':
-    app.run(debug = True)
+
+@app.route('/api/sync', methods=['GET'])
+def get_syncAI():
+    print("Syncing AI")
+    syncAI()
+    a=("SYNC COMPLETE")
+    return jsonify(a)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
