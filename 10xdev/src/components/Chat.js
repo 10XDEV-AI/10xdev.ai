@@ -77,8 +77,10 @@ function Chat() {
             </div>
           ))}
         </div>
+        <div className="spacer">
+            {/* This is a spacer div that adds empty space at the bottom */}
+        </div>
         <div className="footer">
-
         </div>
         <div className="searchbarrow">
           <SearchBar onSearch={handleSearch} />

@@ -47,7 +47,7 @@ function UserPrompt({ searchInput, onRetry }) {
                 onChange={handlePromptChange}
               />
               <button className="saveButton" onClick={handleSavePrompt}>
-                Save
+                Save & Submit
               </button>
               <button className="cancelButton" onClick={handleCancelPrompt}>
                 Cancel
