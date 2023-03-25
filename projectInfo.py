@@ -4,13 +4,11 @@ import subprocess
 
 def getprojectInfo():
     print("Checking Branch")
-    # Open csv file and get the first row
-    with open('info.csv', 'r') as file:
-        reader = csv.reader(file)
-        first_row = next(reader)
+    # Open info.json and read the path
+    with open('info.json', 'r') as f:
+        data = json.load(f)
+        repo_path = data['path']
 
-    # Get the name of the repo from the path
-    repo_path = first_row[0]
     repo_name = os.path.basename(repo_path)
 
     # Check the current branch of the repo
