@@ -200,7 +200,7 @@ def changedf(filename, old_start, old_end, new_start, new_end, new_rows):
 
 def apply_patch(filename,patch):
     commands = parse_patch(patch)
-    print("Applying Patch for :" + filename)
+    #print("Applying Patch for :" + filename)
     for command in commands:
         if command[0]=='change':
             print("Change")
@@ -276,28 +276,29 @@ def syncAI():
     for i in range(0,len(df4)):
         blocks= (split_file(df4.iloc[i][0],blocks))
 
-    line_embeddings = []
-    for i in range(0,len(new_df4)):
-        filename = new_df4.iloc[i][0]
-        with open(filename, "r") as f:
-            lines = f.readlines()
-            line_number = 0
-            for line in lines:
-                line_embeddings.append([filename,line,line_number])
-                line_number += 1
+    if(len(new_df4)>0):
+        line_embeddings = []
+        for i in range(0,len(new_df4)):
+            filename = new_df4.iloc[i][0]
+            with open(filename, "r") as f:
+                lines = f.readlines()
+                line_number = 0
+                for line in lines:
+                    line_embeddings.append([filename,line,line_number])
+                    line_number += 1
 
-    add2df = pd.DataFrame(line_embeddings)
-    add2df.columns = ["filepath","Code","LineNumber"]
-    add2df['code_embedding'] = ''
+        add2df = pd.DataFrame(line_embeddings)
+        add2df.columns = ["filepath","Code","LineNumber"]
+        add2df['code_embedding'] = ''
 
-    i=0
-    for ind in add2df.index:
-            i+=1
-            add2df['code_embedding'][ind] = get_embedding(add2df['Code'][ind])
-            print(round(100*i/len(add2df)))
-    print("Done")
+        i=0
+        for ind in add2df.index:
+                i+=1
+                add2df['code_embedding'][ind] = get_embedding(add2df['Code'][ind])
+                print(round(100*i/len(add2df)))
+        print("Done")
 
-    df = pd.concat([df, add2df], ignore_index=True)
+        df = pd.concat([df, add2df], ignore_index=True)
 
     df2 = pd.DataFrame(blocks)
     df2.columns = ["filepath","BlockStart","BlockStop","Code"]
