@@ -123,7 +123,7 @@ def train_AI(path):
     for i in range(0,len(df4)):
         filename = df4.iloc[i][0]
         with open(filename, 'r') as f:
-                print(filename)
+                #print(filename)
                 lines = f.readlines()
                 line_number = 0
                 for j in lines:
@@ -150,7 +150,7 @@ def train_AI(path):
     i=0
     rate_limit = 60
     start_time = time.time()
-    delay = 0.5
+    delay = rate_limit/60
     for ind in df.index:
             df['code_embedding'][ind] = get_embedding(df['Code'][ind],delay)
             if df['code_embedding'][ind] != None:

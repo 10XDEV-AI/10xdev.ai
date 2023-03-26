@@ -17,8 +17,6 @@ def get_embedding(prompt):
 
 def search_functions(code_query):
     embedding = get_embedding(code_query)
-    print(type(embedding))
-    print(len(embedding))
     df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding) if x is not None else 1)
     res = df.sort_values('similarities', ascending=False).head(round(0.05*len(df)))
     return res
