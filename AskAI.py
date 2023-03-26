@@ -3,11 +3,8 @@ import pandas as pd
 import subprocess
 from openai.embeddings_utils import cosine_similarity
 
-df = pd.read_csv('df.csv')
-df2 = pd.read_csv('df2.csv')
-df['code_embedding'] = df.code_embedding.apply(lambda x: str(x))
-df['code_embedding'] = df.code_embedding.apply(lambda x: x[1:-1].split(","))
-df['code_embedding'] = df.code_embedding.apply(lambda x: [list(map(float, x))])
+df = pd.DataFrame()
+df2 = pd.DataFrame()
 #df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) if y is not None else None for y in x[1:-1].split(",")])
 
 def get_embedding(prompt):
@@ -68,6 +65,12 @@ def Ask_AI(prompt):
     openai.api_key =  text_file.read()
     #close file
     text_file.close()
-
+    global df
+    global df2
+    df = pd.read_csv('df.csv')
+    df2 = pd.read_csv('df2.csv')
+    df['code_embedding'] = df.code_embedding.apply(lambda x: str(x))
+    df['code_embedding'] = df.code_embedding.apply(lambda x: x[1:-1].split(","))
+    df['code_embedding'] = df.code_embedding.apply(lambda x: [list(map(float, x))])
     df3 = pd.DataFrame()
     return suggest_changes(prompt)
