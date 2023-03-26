@@ -144,7 +144,7 @@ def add2df(filename, location, new_rows):
     #print(len(df))
     new_df = pd.DataFrame(new_rows,columns=['Code'])
     new_df['LineNumber'] = 0
-    new_df['code_embedding'] = new_df['Code'].apply(lambda x: get_embedding(x))
+    new_df['code_embedding'] = new_df['Code'].apply(lambda x: get_embedding(x,0))
     new_df['filepath'] = filename
     # Append the new_df to the original DataFrame at the given location index
     df = pd.concat([df.iloc[:location], new_df, df.iloc[location:]])
@@ -183,7 +183,7 @@ def changedf(filename, old_start, old_end, new_start, new_end, new_rows):
     global df
     new_df = pd.DataFrame(new_rows,columns=['Code'])
     new_df['LineNumber'] = 0
-    new_df['code_embedding'] = new_df['Code'].apply(lambda x: get_embedding(x))
+    new_df['code_embedding'] = new_df['Code'].apply(lambda x: get_embedding(x,0))
     new_df['filepath'] = filename
 
     boolean_index = (df['filepath'] == filename).idxmax()
