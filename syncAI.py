@@ -7,6 +7,8 @@ import time
 import numpy
 import shutil
 from trainAI import get_embedding,split_file,create_clone
+import chardet
+
 text_file = open("API_key.txt", "r")
 openai.api_key =  text_file.read()
 text_file.close()
@@ -134,10 +136,12 @@ def add2df(filename, location, new_rows):
     first_occurrence_index = df.index[boolean_index]
 
     # Print the index
-    print(first_occurrence_index)
-    location = location+first_occurrence_index
+    #print(first_occurrence_index)
+    i = first_occurrence_index
+    while(df.iloc[i]['LineNumber']>location):
+        i+=1
 
-    print(len(df))
+    #print(len(df))
     new_df = pd.DataFrame(new_rows,columns=['Code'])
     new_df['LineNumber'] = 0
     new_df['code_embedding'] = new_df['Code'].apply(lambda x: get_embedding(x))
@@ -146,7 +150,7 @@ def add2df(filename, location, new_rows):
     df = pd.concat([df.iloc[:location], new_df, df.iloc[location:]])
 
     # Display the new_df
-    print(len(df))
+    #print(len(df))
     #display(df[df['filepath']==filename])
     return
 
@@ -162,8 +166,8 @@ def delfromdf(filename, start, end):
     first_occurrence_index = df.index[boolean_index]
 
     # Print the index
-    print("First occurrence index: ")
-    print(first_occurrence_index)
+    #print("First occurrence index: ")
+    #print(first_occurrence_index)
     start = start+first_occurrence_index
     end = end+first_occurrence_index
 
@@ -188,8 +192,8 @@ def changedf(filename, old_start, old_end, new_start, new_end, new_rows):
     first_occurrence_index = df.index[boolean_index]
 
     # Print the index
-    print("First occurrence index: ")
-    print(first_occurrence_index)
+    #print("First occurrence index: ")
+    #print(first_occurrence_index)
     old_start = old_start+first_occurrence_index
     old_end = old_end+first_occurrence_index
 
@@ -219,6 +223,8 @@ def syncAI():
     global df
 
     df = pd.read_csv('df.csv')
+    #df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) if y is not None else None for y in x[1:-1].split(",")])
+
     df4 = pd.read_csv('df4.csv')
 
     path = read_info()
@@ -229,13 +235,16 @@ def syncAI():
     #print(Files_to_ignore)
 
     for root, directories, files in os.walk(path):
-            # Exclude any directories that appear in the ignore list
-            directories[:] = [d for d in directories if d not in Files_to_ignore]
-            #print("Directories:", directories)
-            for filename in files:
-                if filename not in Files_to_ignore:
-                    #print(filename)
-                    # Append the path to each file to the file_paths list
+        # Exclude any directories that appear in the ignore list
+        directories[:] = [d for d in directories if d not in Files_to_ignore]
+        #print("Directories:", directories)
+        for filename in files:
+            if filename not in Files_to_ignore:
+                #print("Analyzing : "+filename)
+                with open(os.path.join(root, filename), 'rb') as f:
+                    result = chardet.detect(f.read())
+                    #print(result['encoding'])
+                if result['encoding'] == 'ascii':
                     file_paths_details.append(os.path.join(root, filename))
 
     # Find the set difference between file_paths_details and df4["filepath"]
@@ -266,7 +275,7 @@ def syncAI():
     for ind in df4.index:
         #print(df4['filepath'][ind])
         diff= get_diff(get_clone_path(df4['filepath'][ind]),df4['filepath'][ind])
-        print(diff)
+        #print(diff)
         apply_patch(df4['filepath'][ind],diff)
 
     df['LineNumber'] = df.groupby('filepath').cumcount()
@@ -294,7 +303,7 @@ def syncAI():
         i=0
         for ind in add2df.index:
                 i+=1
-                add2df['code_embedding'][ind] = get_embedding(add2df['Code'][ind])
+                add2df['code_embedding'][ind] = get_embedding(add2df['Code'][ind],0.5)
                 print(round(100*i/len(add2df)))
         print("Done")
 

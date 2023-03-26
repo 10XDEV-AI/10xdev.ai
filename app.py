@@ -14,13 +14,6 @@ def get_projectInfo():
     print("Checking Branch")
     return jsonify(getprojectInfo())
 
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    prompt = request.args.get('prompt')
-    print("Asking AI")
-    a=(Ask_AI(prompt))
-    return jsonify(a)
-
 @app.route('/api/setup', methods=['POST'])
 def get_trainAI():
     data = request.get_json()
@@ -29,13 +22,20 @@ def get_trainAI():
     a=(train_AI(path))
     return jsonify(a)
 
-
 @app.route('/api/sync', methods=['GET'])
 def get_syncAI():
     print("Syncing AI")
     syncAI()
     a=("SYNC COMPLETE")
     return jsonify(a)
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    prompt = request.args.get('prompt')
+    print("Asking AI")
+    a=(Ask_AI(prompt))
+    return jsonify(a)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,33 +3,45 @@ import os
 import pandas as pd
 import time
 import json
-import numpy
+import numpy as np
 import matplotlib
 from openai.embeddings_utils import cosine_similarity
 import shutil
+import chardet
+import re
 
 text_file = open("API_key.txt", "r")
 
 def create_clone(path):
     # Remove folder if it exists
     if os.path.exists("AIFiles"):
+        #print("Removing AIFiles folder")
         shutil.rmtree("AIFiles")
-    # Create folder
-    os.mkdir("AIFiles")
     # Copy everything in path to AIFiles
-    for filename in os.listdir(path):
-        src = os.path.join(path, filename)
-        dst = os.path.join("AIFiles", filename)
-        shutil.copy(src, dst)
+       # Copy everything in path to AIFiles
+    shutil.copytree(path, "AIFiles")
 
-def get_embedding(task):
-    time.sleep(2)
+replace_list = ["," , "(", ")", "[", "]", "{", "}",
+                  ":", ";", "!", "?", "/", "\\", "'", '"',
+                  ">", "<", "=", "+", "-", "*", "&", "^", "%",
+                    "$", "#", "@", "~", "`", "|", "1", "2",
+                    "3","4", "5", "6", "7", "8", "9", "0",
+                     "\n"]
+
+def clean_code(x):
+    global replace_list
+    for i in replace_list:
+        x = x.replace(i, "").lstrip()
+    x = re.sub(r'\s+', ' ',x)
+    return x
+
+def get_embedding(task,delay):
+    time.sleep(delay)
     response = openai.Embedding.create(
             input=task,
             model="text-embedding-ada-002"
         )
     return response['data'][0]['embedding']
-
 
 def split_file(filename,blocks):
     with open(filename, 'r') as f:
@@ -72,21 +84,33 @@ def train_AI(path):
     create_clone(path)
     file_paths_details = []
     Files_to_ignore = open(path+"/.AIIgnore", "r").read().splitlines()
-    print("Files and directories to ignore:")
-    print(Files_to_ignore)
+    #print("Files and directories to ignore:")
+    #print(Files_to_ignore)
+
+    for file in Files_to_ignore:
+        file = os.path.join(path, file)
+        #print(file)
 
     for root, directories, files in os.walk(path):
         # Exclude any directories that appear in the ignore list
         directories[:] = [d for d in directories if d not in Files_to_ignore]
-        print("Directories:", directories)
+        #print("Directories:", directories)
+        # Exclude any files that appear in the ignore list
         for filename in files:
             if filename not in Files_to_ignore:
-                print(filename)
-                # Append the path to each file to the file_paths list
-                file_paths_details.append(os.path.join(root, filename))
+                #print("Analyzing : "+filename)
+                with open(os.path.join(root, filename), 'rb') as f:
+                    result = chardet.detect(f.read())
+                    #print(result['encoding'])
+                if result['encoding'] == 'ascii':
+                    file_paths_details.append(os.path.join(root, filename))
+
+    print("Total number of files analyzed:", len(file_paths_details))
+    print(file_paths_details)
     df4 = pd.DataFrame(file_paths_details)
     df4.columns = ["filepath"]
     #create a new column that has last synced time
+    df4['avg_line_length'] = df4.apply(lambda row: np.mean([len(i) for i in open(row['filepath'], 'r').readlines()]), axis=1)
     df4.to_csv("df4.csv", index=False)
 
     text_file = open("API_key.txt", "r")
@@ -99,6 +123,7 @@ def train_AI(path):
     for i in range(0,len(df4)):
         filename = df4.iloc[i][0]
         with open(filename, 'r') as f:
+                print(filename)
                 lines = f.readlines()
                 line_number = 0
                 for j in lines:
@@ -110,19 +135,36 @@ def train_AI(path):
 
     df = pd.DataFrame(line_embeddings)
     df2 = pd.DataFrame(blocks)
-    df.columns = ["filepath","Code","LineNumber"]
     df2.columns = ["filepath","BlockStart","BlockStop","Code"]
+    df.columns = ["filepath","Code","LineNumber"]
+    df['Block_Number'] = df.apply(lambda row: df2[(df2['filepath']==row['filepath']) & (df2['BlockStart']<=row['LineNumber']) & (df2['BlockStop']>row['LineNumber'])].index[0], axis=1)
 
+    df["code_group"] = df.Code.apply(lambda x : "short" if ( len(x.lstrip()) < 10 ) else "long")
+    df = df.groupby(["filepath", "Block_Number", "code_group"]).agg({"Code": " ".join, "LineNumber": "min"}).reset_index()
     df['code_embedding'] = ''
+    df['Code'] = df.Code.apply(lambda x : clean_code(x))
 
+    df = df[df.Code != ''].reset_index(drop=True)
+    #drop columns that are not needed
+    df = df.drop(columns=['Block_Number','code_group'])
     i=0
+    rate_limit = 60
+    start_time = time.time()
+    delay = 0.5
     for ind in df.index:
-            i+=1
-            df['code_embedding'][ind] = get_embedding(df['Code'][ind])
-            print(round(100*i/len(df)))
+            df['code_embedding'][ind] = get_embedding(df['Code'][ind],delay)
+            if df['code_embedding'][ind] != None:
+                i+=1
+                rate = 60*i/(time.time() - start_time)
+                time_elapsed = time.time() - start_time
+                print(str(round(100*ind/len(df))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(time_elapsed) + " seconds Time remaining: " + str(round((len(df)-i)/rate)) + " minutes")
+                if rate > rate_limit:
+                    delay = delay + 0.1
+                    #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
+                if rate < 0.95*rate_limit:
+                    delay = delay * 0.9
+                    #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
+
     print("Done")
     df.to_csv("df.csv", index=False)
-    df = pd.read_csv('df.csv')
-    df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
-    # apply the function to each row of df2 and create a new column
     df2.to_csv("df2.csv", index=False)

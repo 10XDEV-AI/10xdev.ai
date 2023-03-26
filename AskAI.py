@@ -2,11 +2,13 @@ import openai
 import pandas as pd
 import subprocess
 from openai.embeddings_utils import cosine_similarity
-#import syncAI from syncup
 
 df = pd.read_csv('df.csv')
 df2 = pd.read_csv('df2.csv')
-df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) for y in x[1:-1].split(",")])
+df['code_embedding'] = df.code_embedding.apply(lambda x: str(x))
+df['code_embedding'] = df.code_embedding.apply(lambda x: x[1:-1].split(","))
+df['code_embedding'] = df.code_embedding.apply(lambda x: [list(map(float, x))])
+#df['code_embedding'] = df.code_embedding.apply(lambda x: [float(y) if y is not None else None for y in x[1:-1].split(",")])
 
 def get_embedding(prompt):
     response = openai.Embedding.create(
@@ -18,7 +20,9 @@ def get_embedding(prompt):
 
 def search_functions(code_query):
     embedding = get_embedding(code_query)
-    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
+    print(type(embedding))
+    print(len(embedding))
+    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding) if x is not None else 1)
     res = df.sort_values('similarities', ascending=False).head(round(0.05*len(df)))
     return res
 
