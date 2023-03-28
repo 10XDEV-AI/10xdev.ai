@@ -27,7 +27,6 @@ function Setup() {
           setLoading(false); // set loading state to false after API call is complete
         }
   }
-
   return (
     <div>
       <label htmlFor="path-input">Enter path:</label>
