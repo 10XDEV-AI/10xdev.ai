@@ -9,6 +9,7 @@ from openai.embeddings_utils import cosine_similarity
 import shutil
 import chardet
 import re
+from gitignore_parser import parse_gitignore
 
 text_file = open("API_key.txt", "r")
 
@@ -31,12 +32,14 @@ replace_list = ["," , "(", ")", "[", "]", "{", "}",
 def clean_code(x):
     global replace_list
     for i in replace_list:
-        x = x.replace(i, "").lstrip()
+        x = x.replace(i, " ").lstrip()
     x = re.sub(r'\s+', ' ',x)
     return x
 
 def get_embedding(task,delay):
     time.sleep(delay)
+    if(task=="" or task==None):
+        return None
     response = openai.Embedding.create(
             input=task,
             model="text-embedding-ada-002"
@@ -72,6 +75,31 @@ def split_file(filename,blocks):
     blocks.append([filename,prev_end_line,len(lines),extracted_text])
     return blocks
 
+def walk_and_analyze(path):
+    file_paths_details = []
+    AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
+    for root, directories, files in os.walk(path):
+        # Check if the current directory should be ignored
+        if AIignore(root):
+            directories[:] = []  # Don't traverse this directory further
+            continue
+
+        # Process all non-ignored files in the directory
+        for filename in files:
+            if AIignore(os.path.join(root, filename)):
+                continue  # Ignore this file
+            else:
+                # Process the file
+                print("Analyzing : "+os.path.join(root, filename))
+                #time.sleep(1)
+                with open(os.path.join(root, filename), 'rb') as f:
+                    result = chardet.detect(f.read())
+                    #print(result['encoding'])
+                if result['encoding'] == 'ascii':
+                    file_paths_details.append(os.path.join(root, filename))
+    return file_paths_details
+
+
 def train_AI(path):
     print("Training AI")
     #store path into info.json
@@ -81,32 +109,9 @@ def train_AI(path):
     with open('info.json', 'w') as outfile:
         json.dump(data, outfile)
 
-    create_clone(path)
-    file_paths_details = []
-    Files_to_ignore = open(path+"/.AIIgnore", "r").read().splitlines()
-    #print("Files and directories to ignore:")
-    #print(Files_to_ignore)
-
-    for file in Files_to_ignore:
-        file = os.path.join(path, file)
-        #print(file)
-
-    for root, directories, files in os.walk(path):
-        # Exclude any directories that appear in the ignore list
-        directories[:] = [d for d in directories if d not in Files_to_ignore]
-        #print("Directories:", directories)
-        # Exclude any files that appear in the ignore list
-        for filename in files:
-            if filename not in Files_to_ignore:
-                #print("Analyzing : "+filename)
-                with open(os.path.join(root, filename), 'rb') as f:
-                    result = chardet.detect(f.read())
-                    #print(result['encoding'])
-                if result['encoding'] == 'ascii':
-                    file_paths_details.append(os.path.join(root, filename))
-
+    file_paths_details = walk_and_analyze(path)
     print("Total number of files analyzed:", len(file_paths_details))
-    print(file_paths_details)
+    #print(file_paths_details)
     df4 = pd.DataFrame(file_paths_details)
     df4.columns = ["filepath"]
     #create a new column that has last synced time
@@ -137,20 +142,20 @@ def train_AI(path):
     df2 = pd.DataFrame(blocks)
     df2.columns = ["filepath","BlockStart","BlockStop","Code"]
     df.columns = ["filepath","Code","LineNumber"]
-    df['Block_Number'] = df.apply(lambda row: df2[(df2['filepath']==row['filepath']) & (df2['BlockStart']<=row['LineNumber']) & (df2['BlockStop']>row['LineNumber'])].index[0], axis=1)
+    #df['Block_Number'] = df.apply(lambda row: df2[(df2['filepath']==row['filepath']) & (df2['BlockStart']<=row['LineNumber']) & (df2['BlockStop']>row['LineNumber'])].index[0], axis=1)
 
-    df["code_group"] = df.Code.apply(lambda x : "short" if ( len(x.lstrip()) < 10 ) else "long")
-    df = df.groupby(["filepath", "Block_Number", "code_group"]).agg({"Code": " ".join, "LineNumber": "min"}).reset_index()
+    #df["code_group"] = df.Code.apply(lambda x : "short" if ( len(x.lstrip()) < 10 ) else "long")
+    #df = df.groupby(["filepath", "Block_Number", "code_group"]).agg({"Code": " ".join, "LineNumber": "min"}).reset_index()
     df['code_embedding'] = ''
     df['Code'] = df.Code.apply(lambda x : clean_code(x))
 
-    df = df[df.Code != ''].reset_index(drop=True)
+    #df = df[df.Code != ''].reset_index(drop=True)
     #drop columns that are not needed
-    df = df.drop(columns=['Block_Number','code_group'])
+    #df = df.drop(columns=['Block_Number','code_group'])
     i=0
     rate_limit = 60
     start_time = time.time()
-    delay = rate_limit/60
+    delay = 60/rate_limit
     for ind in df.index:
             df['code_embedding'][ind] = get_embedding(df['Code'][ind],delay)
             if df['code_embedding'][ind] != None:
@@ -165,6 +170,7 @@ def train_AI(path):
                     delay = delay * 0.9
                     #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
+    create_clone(path)
     print("Done")
     df.to_csv("df.csv", index=False)
     df2.to_csv("df2.csv", index=False)
