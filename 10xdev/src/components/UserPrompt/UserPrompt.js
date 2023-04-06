@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./UserPrompt.css";
 
-function UserPrompt({ searchInput, onRetry, onChildData  }) {
+function UserPrompt({ searchInput, onRetry, onChildData ,indexval }) {
   const [userPrompt, setUserPrompt] = useState(searchInput);
   const [editingPrompt, setEditingPrompt] = useState(false);
 
@@ -20,9 +20,8 @@ function UserPrompt({ searchInput, onRetry, onChildData  }) {
         `http://127.0.0.1:5000/api/data?prompt=${userPrompt}`
       );
       const data = await response.json();
-      console.log(data);
-      //add this data to last index we are currently CHANGING 0 
-      onChildData(data, 0, userPrompt);
+      console.log(indexval);
+      onChildData(data, indexval+1, userPrompt);
     } catch (error) {
       console.log(error);
     }

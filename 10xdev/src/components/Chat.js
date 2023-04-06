@@ -14,6 +14,7 @@ function Chat() {
   const [chatMessages, setChatMessages] = useState([]);
 
   useEffect(() => {
+    //find errors in this useEffect which causing api call to be made twice
     const fetchData = async () => {
       try {
         //check for searchinput to uniquely identify the first search
@@ -27,6 +28,7 @@ function Chat() {
             index: 0,
             prompt: (
               <UserPrompt
+                indexval={0}
                 searchInput={searchInput}
                 onChildData={handleChildData}
                 onRetry={(input) => {
@@ -58,6 +60,7 @@ function Chat() {
           {
             prompt: (
               <UserPrompt
+                indexval={prevState.length -1 }
                 searchInput={input}
                 onChildData={handleChildData}
                 onRetry={(input) => {
@@ -78,9 +81,11 @@ function Chat() {
     setChatMessages((prevState) => {
       console.log(prevState);
       const updatedMessages = [...prevState]; // create a copy of prevState
+
       updatedMessages[index] = {
         prompt: (
           <UserPrompt
+            indexval={updatedMessages.length -1 }
             searchInput={input}
             onChildData={handleChildData}
             onRetry={(input) => {
