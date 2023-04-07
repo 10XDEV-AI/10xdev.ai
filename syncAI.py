@@ -107,11 +107,11 @@ def get_clone_path(path):
     # split the path by '/'
     path_parts = path.split('/')
 
-    # get the index of "repo"
-    repo_index = path_parts.index("repo")
+    # obtain the last index of the list
+    last_index = len(path_parts) - 1
 
-    # replace "repo" with "AIFiles" in the path and join the path parts back together
-    new_path = "/".join(path_parts[:repo_index] + ["AIFiles"] + path_parts[repo_index+1:])
+    # replace the second to last element with "AIFiles"
+    new_path = "/".join(path_parts[:last_index-1] + ["AIFiles"] + path_parts[last_index:])
 
     return new_path
 

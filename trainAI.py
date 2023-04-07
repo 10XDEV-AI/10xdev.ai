@@ -39,7 +39,7 @@ def clean_code(x):
 def get_embedding(task,delay):
     time.sleep(delay)
     if(task=="" or task==None):
-        return None
+        return 0
     response = openai.Embedding.create(
             input=task,
             model="text-embedding-ada-002"
@@ -158,7 +158,7 @@ def train_AI(path):
     delay = 60/rate_limit
     for ind in df.index:
             df['code_embedding'][ind] = get_embedding(df['Code'][ind],delay)
-            if df['code_embedding'][ind] != None:
+            if df['code_embedding'][ind] != 0:
                 i+=1
                 rate = 60*i/(time.time() - start_time)
                 time_elapsed = time.time() - start_time
