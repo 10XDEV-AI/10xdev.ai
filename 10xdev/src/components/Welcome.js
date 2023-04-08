@@ -2,7 +2,7 @@ import './Welcome.css';
 import SearchBar0 from './SearchBar0/SearchBar0';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { Typewriter } from 'react-simple-typewriter'
 function Welcome() {
     const navigate = useNavigate();
     const [repository, setRepository] = useState('');
@@ -33,7 +33,19 @@ function Welcome() {
         <div className="container">
             <div className="container">
                 <div className="logoContainer">
-                    10XDEV.AI
+                <Typewriter {
+                    ...{
+                        words: ['10XDEV.AI'],
+                        loop: 1,
+                        cursor: true,
+                        cursorStyle: '_',
+                        delay: 100,
+                        deleteSpeed: 50,
+                        typeSpeed: 100,
+                        style: { fontSize: '50px', fontWeight: 'bold' },
+                     }
+                } />
+                    {/* 10XDEV.AI */}
                 </div>
                 <div className="subText">
                     Ask an AI to implement new features in your app!
