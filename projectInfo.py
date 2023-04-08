@@ -19,9 +19,9 @@ def getprojectInfo():
     print(f"Repo name: {repo_name}")
     print(f"Current branch: {branch_name}")
 
-    json = {
+    respone_json = {
         "repo_name": repo_name,
         "branch_name": branch_name
     }
 
-    return json
+    return respone_json

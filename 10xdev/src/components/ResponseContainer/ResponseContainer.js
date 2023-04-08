@@ -14,8 +14,10 @@ const ResponseContainer = ({searchResults}) => {
         if (index % 2 === 0) {
         return(
         <div key={index}>
-            <p>{block}</p>
-        </div>
+             {block.split('\n').map((sentence, i) => (
+               <p key={i}>{sentence}</p>
+             ))}
+           </div>
             )
         }
         else{
@@ -48,8 +50,11 @@ const ResponseContainer = ({searchResults}) => {
         else{
         return(
         <div key={index}>
-            <p>{block}</p>
-        </div>)
+             {block.split('\n').map((sentence, i) => (
+               <p key={i}>{sentence}</p>
+             ))}
+           </div>
+           )
         }
     }
     });
