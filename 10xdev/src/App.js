@@ -8,8 +8,8 @@ function App() {
     <Router>
       <div className="Appcontainer">
         <Routes>
+          <Route exact path="/" element={<Welcome />} />
           <Route exact path="/chat" element={<Chat />} />
-          <Route exact path="/welcome" element={<Welcome />} />
           <Route exact path="/setupNewRepo" element={<Setup />} />
         </Routes>
       </div>

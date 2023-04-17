@@ -11,6 +11,8 @@
 .userPicContainer {
   width: 7%;
   align-items: center;
+  text-align: center;
+  font: 30px Proxima Nova, sans-serif;
 }
 
 .userPromptext{
@@ -67,12 +69,13 @@ float: left;
 
 .editIcon {
   cursor: pointer;
-  padding: 10px;
+  padding-top: 10px;
+  padding-right: 7px;
 }
 
 .retryIcon {
   cursor: pointer;
-  padding: 10px;
+  padding-top: 10px;
 }
 
 

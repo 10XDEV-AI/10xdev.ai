@@ -1,6 +1,4 @@
 import './ResponseContainer.css';
-import CodeDiff from '../CodeDiff/CodeDiff';
-import AI_Image from '../../images/10x.png';
 import { CopyBlock, dracula } from "react-code-blocks";
 
 const ResponseContainer = ({searchResults}) => {
@@ -65,11 +63,12 @@ const ResponseContainer = ({searchResults}) => {
   return (
     <div className="ResponseContainer">
       <div className="responsePicContainer">
-        <img src={AI_Image} alt="Avatar" className="avatar" />
+       <b> AI
+       </b>
       </div>
       <div className="codediffcontainer">
         {searchResults && (
-          <div>
+          <div className="codediff">
             <SplitBlocks text={searchResults}/>
           </div>
         )}

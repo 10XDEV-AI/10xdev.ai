@@ -1,82 +1,86 @@
 import openai
-import os
 import pandas as pd
-import time
 import json
-import numpy as np
-import matplotlib
-from openai.embeddings_utils import cosine_similarity
-import shutil
+import os
+import subprocess
 import chardet
-import re
+from utilities.readInfo import read_info
+from openai.embeddings_utils import cosine_similarity
 from gitignore_parser import parse_gitignore
+from utilities.embedding import get_embedding
+from utilities.create_clone import create_clone
+import tiktoken
+import time
+
+fs = pd.DataFrame()
 
 text_file = open("API_key.txt", "r")
+openai.api_key =  text_file.read()
+text_file.close()
 
-def create_clone(path):
-    # Remove folder if it exists
-    if os.path.exists("AIFiles"):
-        #print("Removing AIFiles folder")
-        shutil.rmtree("AIFiles")
-    # Copy everything in path to AIFiles
-       # Copy everything in path to AIFiles
-    shutil.copytree(path, "AIFiles")
 
-replace_list = ["," , "(", ")", "[", "]", "{", "}",
-                  ":", ";", "!", "?", "/", "\\", "'", '"',
-                  ">", "<", "=", "+", "-", "*", "&", "^", "%",
-                    "$", "#", "@", "~", "`", "|", "1", "2",
-                    "3","4", "5", "6", "7", "8", "9", "0",
-                     "\n"]
+def split_sent(s1):
+    words = s1.split()  # split string into words
+    #print(words)
+    n = 8  # split every n words
+    chunks = [words[i:i+n] for i in range(0, len(words), n)]  # split into chunks of size n
+    result = [' '.join(chunk) for chunk in chunks]  # join chunks into strings
+    return result
 
-def clean_code(x):
-    global replace_list
-    for i in replace_list:
-        x = x.replace(i, " ").lstrip()
-    x = re.sub(r'\s+', ' ',x)
-    return x
+def summarize_str(filename,string):
+    while True:
+        try:
+             response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": "Summarize what this file in the codebase does, assume context when neccessary."},
+                      {"role": "user", "content": "File "+filename+" has "+string}],
+                temperature=0,
+                max_tokens=256
+             )
+             return response["choices"][0]["message"]['content']
+        except Exception as e:
+             print(f"Encountered error: {e}")
+             print("Retrying in 20 seconds...")
+             time.sleep(20)
 
-def get_embedding(task,delay):
-    time.sleep(delay)
-    if(task=="" or task==None):
-        return 0
-    response = openai.Embedding.create(
-            input=task,
-            model="text-embedding-ada-002"
-        )
-    return response['data'][0]['embedding']
+def summarize_file(path,file,i):
+    root = read_info()
+    with open(os.path.join(root, file), 'rb') as f:
+        result = chardet.detect(f.read())
+    if not(result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
+            print("File "+file+" was not summarised as it is not a text file")
+            #print(result['encoding'])
+            return i,"Ignore"
+    i+=1
+    print("Summarizing "+file)
+    full_file_path = os.path.join(path, file)
+    with open(full_file_path, 'r') as f:
+        file_contents = f.read()
+    if num_tokens_from_string(file_contents) > 4096:
+        print("File too large to summarize. Splitting file into blocks.")
+        blocks = split_file_into_blocks(file)
+        summaries = []
+        for block in blocks:
+            summaries.append(summarize_str(file,block))
+        return "\n".join(summaries)
+    return i,summarize_str(file,file_contents)
 
-def split_file(filename,blocks):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-
-    start_line = 0
-    prev_end_line = -2
-    prev_line=" "
-    for i, line in enumerate(lines):
-        if  line[0]!=" " and (len(prev_line.replace(" ", "").replace("\t", ""))==1) :
-            stripped_line = line.replace(" ", "").replace("\t", "")
-            prev_end_line = i
-            extracted_lines = lines[start_line:prev_end_line]
-
-            # join the extracted lines into a string
-            extracted_text = "".join(extracted_lines)
-            if extracted_text != "":
-                blocks.append([filename,start_line,prev_end_line,extracted_text])
-            #print(filename)
-
-            start_line = i
-        prev_line=line
-    extracted_lines = lines[prev_end_line:len(lines)]
-    # join the extracted lines into a string
-    extracted_text = "".join(extracted_lines)
-    if prev_end_line==-2:
-        prev_end_line=0
-    blocks.append([filename,prev_end_line,len(lines),extracted_text])
-    return blocks
+def num_tokens_from_string(string: str) -> int:
+    encoding_name = "cl100k_base"
+    """Returns the number of tokens in a text str"cl100k_base"ing."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
 
 def walk_and_analyze(path):
     file_paths_details = []
+
+    if not os.path.exists(os.path.join(path, '.AIignore')):
+        print("AIignore does not exist. Creating one.")
+        with open(os.path.join(path, '.AIignore'), 'w') as f:
+            # You can add any initial content you want in the .AIignore file
+            f.write("")
+
     AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
     for root, directories, files in os.walk(path):
         # Check if the current directory should be ignored
@@ -90,19 +94,18 @@ def walk_and_analyze(path):
                 continue  # Ignore this file
             else:
                 # Process the file
-                print("Analyzing : "+os.path.join(root, filename))
+                print("Analyzing : "+os.path.relpath(os.path.join(root, filename), path))
+                #print("Lines of code: "+str(len(open(os.path.join(root, filename), 'r').readlines())))
+                #with open(os.path.join(root, filename), 'r') as f:
+                    #file_contents = f.read()
+                #print("Number of tokens: "+str(num_tokens_from_string(file_contents)))
+                #print()
                 #time.sleep(1)
-                with open(os.path.join(root, filename), 'rb') as f:
-                    result = chardet.detect(f.read())
-                    #print(result['encoding'])
-                if result['encoding'] == 'ascii':
-                    file_paths_details.append(os.path.join(root, filename))
+                file_paths_details.append(os.path.relpath(os.path.join(root, filename), path))
     return file_paths_details
-
 
 def train_AI(path):
     print("Training AI")
-    #store path into info.json
     data = {
         'path': path
     }
@@ -111,66 +114,67 @@ def train_AI(path):
 
     file_paths_details = walk_and_analyze(path)
     print("Total number of files analyzed:", len(file_paths_details))
-    #print(file_paths_details)
-    df4 = pd.DataFrame(file_paths_details)
-    df4.columns = ["filepath"]
-    #create a new column that has last synced time
-    df4['avg_line_length'] = df4.apply(lambda row: np.mean([len(i) for i in open(row['filepath'], 'r').readlines()]), axis=1)
-    df4.to_csv("df4.csv", index=False)
 
-    text_file = open("API_key.txt", "r")
-    openai.api_key =  text_file.read()
-    text_file.close()
+    fs = pd.DataFrame(file_paths_details)
+    #display(fs)
 
-    line_embeddings = []
-    blocks = []
-
-    for i in range(0,len(df4)):
-        filename = df4.iloc[i][0]
-        with open(filename, 'r') as f:
-                #print(filename)
-                lines = f.readlines()
-                line_number = 0
-                for j in lines:
-                    line_embeddings.append([filename,j,line_number])
-                    line_number +=1
-        blocks= (split_file(df4.iloc[i][0],blocks))
-
-    print("Total number of functions extracted:", len(blocks))
-
-    df = pd.DataFrame(line_embeddings)
-    df2 = pd.DataFrame(blocks)
-    df2.columns = ["filepath","BlockStart","BlockStop","Code"]
-    df.columns = ["filepath","Code","LineNumber"]
-    #df['Block_Number'] = df.apply(lambda row: df2[(df2['filepath']==row['filepath']) & (df2['BlockStart']<=row['LineNumber']) & (df2['BlockStop']>row['LineNumber'])].index[0], axis=1)
-
-    #df["code_group"] = df.Code.apply(lambda x : "short" if ( len(x.lstrip()) < 10 ) else "long")
-    #df = df.groupby(["filepath", "Block_Number", "code_group"]).agg({"Code": " ".join, "LineNumber": "min"}).reset_index()
-    df['code_embedding'] = ''
-    df['Code'] = df.Code.apply(lambda x : clean_code(x))
-
-    #df = df[df.Code != ''].reset_index(drop=True)
-    #drop columns that are not needed
-    #df = df.drop(columns=['Block_Number','code_group'])
+    fs.columns = ['file_path']
+    start_time = time.time()
+    rate_limit = 3
+    delay = 60/rate_limit
     i=0
+    fs['summary'] = ''
+    for ind in fs.index:
+        i_new,fs['summary'][ind] = summarize_file(path,fs['file_path'][ind],i)
+
+        if i_new !=i:
+            time.sleep(delay)
+            i = i_new
+        if i != 0:
+            rate = 60*i/(time.time() - start_time)
+            time_elapsed = time.time() - start_time
+            print(str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
+            if rate > rate_limit:
+                    delay = delay + 0.1
+                    #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
+            if rate < 0.95*rate_limit:
+                delay = delay * 0.9
+                #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
+
+    fs.to_csv('fs.csv',index=False)
+    print("100% Done")
+    #display(fs)
+
+
+    i=0
+    fs = pd.read_csv('fs.csv')
+    #display(fs)
     rate_limit = 60
     start_time = time.time()
     delay = 60/rate_limit
-    for ind in df.index:
-            df['code_embedding'][ind] = get_embedding(df['Code'][ind],delay)
-            if df['code_embedding'][ind] != 0:
-                i+=1
-                rate = 60*i/(time.time() - start_time)
-                time_elapsed = time.time() - start_time
-                print(str(round(100*ind/len(df))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(time_elapsed) + " seconds Time remaining: " + str(round((len(df)-i)/rate)) + " minutes")
-                if rate > rate_limit:
-                    delay = delay + 0.1
-                    #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
-                if rate < 0.95*rate_limit:
-                    delay = delay * 0.9
-                    #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
+    fs['embedding'] = ''
+    for ind in fs.index:
+        if str(fs['summary'][ind])=="Ignore":
+            sentences = [fs['file_path'][ind]]
+        else:
+            sentences = split_sent(str(fs['summary'][ind]))
+            sentences = [x for x in sentences if x != '']
 
+        sentence_embeddings = [get_embedding(x,delay) for x in sentences]
+        fs['embedding'][ind] = sentence_embeddings
+        i+=len(sentences)
+        rate = 60*i/(time.time() - start_time)
+        time_elapsed = time.time() - start_time
+        print(str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60,2)) + " minutes Time remaining: " + str(round((len(fs)-ind)/rate,2)) + " minutes")
+        if rate > rate_limit:
+            delay = delay + 0.1
+            #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
+        if rate < 0.95*rate_limit:
+            delay = delay * 0.9
+            #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
+
+    #display(fs)
+    fs.to_csv('fs.csv',index=False)
+    print("100% Done")
     create_clone(path)
-    print("Done")
-    df.to_csv("df.csv", index=False)
-    df2.to_csv("df2.csv", index=False)
+    return
