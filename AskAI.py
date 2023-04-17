@@ -1,74 +1,133 @@
-import openai
 import pandas as pd
-import subprocess
+import regex as re
+import time
+import openai
+import os
+import chardet
+from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
+from utilities.readInfo import read_info
+from utilities.str2float import str2float
 
-df = pd.DataFrame()
-df2 = pd.DataFrame()
+fs = pd.DataFrame()
 
-def get_embedding(prompt):
-    response = openai.Embedding.create(
-        input=prompt,
-        model="text-embedding-ada-002"
-    )
-    return response['data'][0]['embedding']
+def max_cosine_sim(embeddings,prompt_embedding):
+    y = 0
+    for x in embeddings:
+        y = max(y,cosine_similarity(x,prompt_embedding))
+    return y
 
+def filter_functions(result_string, code_query, filepaths):
+    task = "List the file paths that will be required to answer the user query based on above given file summaries"
+
+    filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
+    print(filter_prompt)
+    MAX_RETRIES = 3  # Maximum number of retries for API call
+    retries = 0  # Counter for retries
+    response = None  # Placeholder for API response
+
+    while retries < MAX_RETRIES:
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": ""},
+                    {"role": "user", "content": filter_prompt}
+                ],
+                temperature=0,
+                max_tokens=500
+            )
+            break  # Break out of loop if API call is successful
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            print("Retrying...")
+            retries += 1
+            time.sleep(2)  # Add a delay before retrying
+
+    if retries == MAX_RETRIES:
+        print("Maximum retries reached. API call failed.")
+    else:
+        response_functions = response["choices"][0]["message"]['content']
+        print(response_functions)
+
+    files  = []
+    for i in filepaths:
+        #find i in response_functions using regex
+        if re.search(i, response_functions):
+            files.append(i)
+
+    return files
 
 def search_functions(code_query):
-    embedding = get_embedding(code_query)
-    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding) if x != 0 else 1)
-    res = df.sort_values('similarities', ascending=False).head(round(0.05*len(df)))
-    return res
+    prompt_embedding = get_embedding(code_query, 0)
 
-def count_lines(filepath, start, stop):
-    count = 0
-    global df3
-    for i in df3[df3['filepath'] == filepath]['LineNumber']:
-        for j in i:
-            if(j>=start and j<stop):
-                count +=1
-    return count
+    fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
+    res = fs.sort_values('similarities', ascending=False).head(10)
 
-def get_old_code(prompt):
-    res = search_functions(prompt)
-    global df2
-    df2['Hits'] = 0
-    global df3
-    df3 = res.groupby("filepath").agg({"LineNumber": list}).reset_index()
-    # apply the function to each row of df2 and create a new column
+    res.index = range(1, len(res) + 1)
+    # Concatenate filenames, summary columns
+    file_summary_string = []
+    for index, row in res.iterrows():
+        file_path = row['file_path']
+        summary = row['summary']
+        if summary != "Ignore":
+            file_summary = 'File path: ' + file_path +"\nFile summary: " +summary
+            file_summary_string.append(file_summary)
+        else:
+            file_summary_string.append('File path: ' + file_path)
+    # Convert the concatenated list to a single string
+    result_string = '\n\n'.join(file_summary_string)
+    print(result_string)
+    filepaths = res['file_path'].tolist()
+    return filter_functions(result_string, code_query, filepaths)
 
-    df2['Hits'] = df2.apply(lambda row: count_lines(row['filepath'], row['BlockStart'], row['BlockStop']), axis=1)
-    df2 = df2.sort_values('Hits', ascending=False)
-    return df2.iloc[0]['Code']
-
-def suggest_changes(prompt):
-    code_block = get_old_code(prompt)
-    #syncup()
-    response=openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
-      messages=[
-            {"role": "system", "content": "You are a coding assistant."},
-            {"role": "user", "content": code_block+prompt}
-        ]
-    )
-
-    new_code_block = response["choices"][0]["message"]['content']
-    #print(new_code_block)
-    return new_code_block
 
 def Ask_AI(prompt):
-    text_file = open("API_key.txt", "r")
-    #read whole file to a string
-    openai.api_key =  text_file.read()
-    #close file
-    text_file.close()
-    global df
-    global df2
-    df = pd.read_csv('df.csv')
-    df2 = pd.read_csv('df2.csv')
-    df['code_embedding'] = df.code_embedding.apply(lambda x: str(x) if x != "0" else x)
-    df['code_embedding'] = df.code_embedding.apply(lambda x: x[1:-1].split(",") if x != "0" else x)
-    df['code_embedding'] = df.code_embedding.apply(lambda x: [list(map(float, x))] if x != "0" else 0)
+    global fs
+    fs = pd.read_csv('fs.csv')
+    fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
+    
+    files = search_functions(prompt)
 
-    df3 = pd.DataFrame()
-    return suggest_changes(prompt)
+    #make a string of all file content
+    final_prompt = ""
+
+    for i in files:
+        final_prompt += "\nFile path " + i + ":\n"
+        path = read_info()
+        
+        j = os.path.join(path,i)
+        with open(j, 'rb') as f:
+            result = chardet.detect(f.read())
+            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
+                final_prompt += open(j).read()
+
+    final_prompt =(final_prompt+"\n"+prompt)
+    print("Final prompt : "+ final_prompt)
+    
+    MAX_RETRIES = 3  # Maximum number of retries for API call
+    retries = 0  # Counter for retries
+
+    while retries < MAX_RETRIES:
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a coding assitant with access to the codebase. Ask for more context if required. Assume context when you can."},
+                    {"role": "user", "content": final_prompt}
+                ],
+                temperature=0
+            )
+            break  # Break out of loop if API call is successful
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            print("Retrying...")
+            retries += 1
+            time.sleep(20)  # Add a delay before retrying
+
+    if retries == MAX_RETRIES:
+        print("Maximum retries reached. API call failed.")
+    else:
+        response_functions = response["choices"][0]["message"]['content']
+
+    return response_functions

@@ -39,14 +39,25 @@ function UserPrompt({ searchInput, onRetry, onChildData ,indexval }) {
   const handleRetry = () => {
     onRetry(userPrompt);
   };
+
+  // Define an array of emojis
+  const emojis = ["🧓", "🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
+
+  function getRandomEmoji(emojiList) {
+      // Generate a random index within the range of the emojiList array
+      const index = Math.floor(Math.random() * emojiList.length);
+
+      // Return the emoji at the randomly generated index
+      return emojiList[index];
+  }
+
+  // Call the getRandomEmoji function and store the result in a variable
+  const randomEmoji = getRandomEmoji(emojis);
+
   return (
     <div className="userPromptContainer">
       <div className="userPicContainer">
-        <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          alt="Avatar"
-          className="avatar"
-        />
+        {randomEmoji}
       </div>
       <div className="userTextCol">
         {editingPrompt ? (
@@ -69,10 +80,10 @@ function UserPrompt({ searchInput, onRetry, onChildData ,indexval }) {
       </div>
       <div className="editOptions">
         <span className="editIcon" onClick={handleEditPrompt}>
-          &#x270E;
+          ✏️
         </span>
         <span className="retryIcon" onClick={handleRetry}>
-          &#x21BA;
+          🔄
         </span>
       </div>
     </div>

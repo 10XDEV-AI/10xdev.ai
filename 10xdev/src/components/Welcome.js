@@ -1,33 +1,17 @@
 import './Welcome.css';
 import SearchBar0 from './SearchBar0/SearchBar0';
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typewriter } from 'react-simple-typewriter'
+import ProjectInfo from './ProjectInfo/ProjectInfo';
+
 function Welcome() {
     const navigate = useNavigate();
-    const [repository, setRepository] = useState('');
-    const [branch, setBranch] = useState('');
 
     const handleSearch = (searchInput) => {
         navigate('/chat', { state: { searchInput } });
     }
+;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch('http://127.0.0.1:5000/api/projectInfo?');
-            const data = await response.json();
-            setRepository(data.repository);
-            setBranch(data.branch);
-            console.log('Updated repository:', data.repository);
-            console.log('Updated branch:', data.branch);
-        }
-
-        const interval = setInterval(() => {
-            fetchData();
-        }, 60000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     return (
         <div className="container">
@@ -54,9 +38,9 @@ function Welcome() {
                     <SearchBar0 onSearch={handleSearch} />
                 </div>
                 <div className="projectinfo">
-                    On Branch  : {branch} |
-                    In Repository  : {repository}
+                    <ProjectInfo/>
                 </div>
+
                 <div className="bottomText">
 
                 </div>

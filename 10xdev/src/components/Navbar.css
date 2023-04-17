@@ -18,7 +18,7 @@ nav {
 }
 
 .linkscontainer{
-  width: 80%;
+  width: 40%;
   display: flex;
   font-family: "Roboto", Helvetica;
   font-size: 20px;
@@ -43,4 +43,15 @@ width: 100%;
 
 .sync{
     float: right;
+}
+
+.navbar-projectInfo{
+width: 100%;
+font-family: "Roboto", Helvetica;
+font-size: 15px;
+color: white;
+text-align: center;
+padding: 10px;
+white-space: pre;
+
 }
