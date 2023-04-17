@@ -25,7 +25,7 @@ const ProjectInfo = () => {
 
   return (
     <div >
-      🌿 On Branch : '{branch}'      📦 In Project : '{repository}'
+      🌿Branch : '{branch}'      📦Project : '{repository}'
     </div>
   );
 };
