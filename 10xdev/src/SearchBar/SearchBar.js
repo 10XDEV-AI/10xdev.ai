@@ -10,14 +10,14 @@ const SearchBar = ({ onSearch }) =>{
 
   return (
     <div className="searchbarcontainer">
-      <input
-        className="searchinput"
-        type="text"
-        placeholder="   Type an issue, task, or a query. 10xDEV is here to help :)"
-        value={searchInput}
-        onChange={e => setSearchInput(e.target.value)}
-      />
-      <button className="GoButton" onClick={handleClick}>Go</button>
+       <input
+          className="searchinput"
+          type="text"
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+        />
+      <button className="GoButtonChat" onClick={handleClick}>🔍</button>
     </div>
   )
 }

@@ -6,7 +6,7 @@ import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
-import { useState, useEffect,useLocation } from "react";
+import { useState, useEffect } from "react";
 
 export const Chat = () => {
   const { searchTerm, isLoading,results } = useContext(SearchContext);

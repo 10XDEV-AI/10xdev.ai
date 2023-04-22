@@ -17,7 +17,7 @@ const SearchState = ({ children }) => {
           `http://127.0.0.1:5000/api/data?prompt=${searchTerm}`
         );
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setResults(data);
         setIsLoading(false);
       } catch (error) {

@@ -10,12 +10,12 @@ function Navbar() {
         10XDEV.AI
       </div>
       <div className="navbar-projectInfo">
-
+        <ProjectInfo />
       </div>
       <div className="linkscontainer">
       <div className="linkColumn">
         <div className="sync">
-
+            <Sync />
         </div>
         <Link className='NavLinks' to="/">Ask AI</Link>
 

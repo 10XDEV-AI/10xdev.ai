@@ -13,24 +13,23 @@ const ProjectInfo = () => {
       const data = await response.json();
       setRepository(data.repo_name);
       setBranch(data.branch_name);
-      console.log(data);
-      console.log('Updated branch:', data.branch_name);
+      //console.log(data);
+      //console.log('Updated branch:', data.branch_name);
       setIsLoadingProjectInfo(false);
     };
-
-    fetchData(); // Call initially when the component mounts
+    fetchData();
 
     const interval = setInterval(() => {
-      fetchData(); // Call every 60 seconds
+      fetchData();
     }, 60000);
 
-    return () => clearInterval(interval); // Clean up interval when component unmounts
-  }, []);
+    return () => clearInterval(interval);
+  }, [setIsLoadingProjectInfo]);
 
   if (!isLoadingProjectInfo) {
   return (
     <div >
-      🌿Branch : '{branch}'      📦Project : '{repository}'
+      Branch : '{branch}'      Project : '{repository}'
     </div>
   );
   } else {

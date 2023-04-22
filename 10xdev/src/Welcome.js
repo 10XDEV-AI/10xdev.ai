@@ -6,7 +6,7 @@ import ProjectInfo from './ProjectInfo/ProjectInfo';
 
 export const Welcome = () => {
 
-  const { searchTerm, setSearchTerm, setIsLoading } = useContext(SearchContext);
+  const { setSearchTerm } = useContext(SearchContext);
   const [input, setInput] = useState('');
   const navigate = useNavigate();   //for redirecting to search page
 
@@ -14,11 +14,10 @@ export const Welcome = () => {
       e.preventDefault();
       setSearchTerm(input);
       navigate('/chat'); // add this line to redirect to /chat
-      //setIsLoading(true);
   }
 
   return (
-    <div>
+    <div className='container'>
       <div className="logoContainer">
         10XDEV.AI
       </div>
@@ -28,15 +27,18 @@ export const Welcome = () => {
       <div className = 'welcomesearchrow'>
           <div className = "searchbarcol">
               <input
-                  type="text"
-                  className="searchinput"
-                  placeholder="   Type an issue, task, or a query. 10xDEV is here to help :)"
-                  onChange={(e) => setInput(e.target.value)}
-                  value={input}
+                type="text"
+                className="mainsearchinput"
+                placeholder="   Type an issue, task, or a query"
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && search(e)}
+                value={input}
               />
           </div>
           <div className = "gobuttoncol">
-            <button className="GoButton" onClick={search}>Go</button>
+            <button className="GoButton" onClick={search}>
+                🔍
+            </button>
           </div>
       </div>
       <div className="projectinfo">

@@ -16,10 +16,15 @@ color:#242CF4;
 
 .welcomesearchrow{
 display: flex;
-position: absolute;
-bottom: 45%;
-left: 23%;
-width: 60%;
+margin: auto;
+margin-top: 30%;
+width: 55%;
+border-radius: 30px;
+border: 1px solid #D3D3D3;
+}
+
+.welcomesearchrow:focus-within{
+border: 1px solid black;
 }
 
 .subText{
@@ -64,37 +69,42 @@ white-space: pre;
   height: 100%;
 }
 
-.GoButton {
-  font-size: 16px;
-  border-radius: 9px;
-  border: none;
-  height:32px;
-  width: 85px;
-  margin-left: -95%;
-}
-
-.searchinput {
+.mainsearchinput {
+   padding-left: 10px;
    width: 100%;
    height:30px;
    font-size: 16px;
    background: #FFFFFF;
-   border-radius: 20px;
-   border-radius: 9px;
-   border: none;
-   box-shadow: 0 0 5pt 2pt #D3D3D3;
    outline: none;
+   border: none;
+   border-radius: 6px;
+}
+
+.mainsearchinput::placeholder {
+  text-align: center;
 }
 
 .searchbarcol{
 display: flex;
 flex-direction: column;
 width: 100%;
+padding: 5px;
 }
 
 .gobuttoncol{
+font-size:20px;
+padding-top: 7px;
+padding-right:  10px;
 }
 
 .searchbarrow{
 display: flex;
 flex-direction: column;
+}
+
+.GoButton {
+  justify-content: center;
+  border: none;
+  background: #FFFFFF;
+  font-size: 20px;
 }
