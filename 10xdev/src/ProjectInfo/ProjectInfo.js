@@ -13,8 +13,6 @@ const ProjectInfo = () => {
       const data = await response.json();
       setRepository(data.repo_name);
       setBranch(data.branch_name);
-      //console.log(data);
-      //console.log('Updated branch:', data.branch_name);
       setIsLoadingProjectInfo(false);
     };
     fetchData();

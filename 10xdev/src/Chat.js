@@ -10,7 +10,6 @@ import { useState, useEffect } from "react";
 
 export const Chat = () => {
   const { searchTerm, isLoading,results } = useContext(SearchContext);
-  console.log("results",results);
 
   const handleSearch = (input, index) => {
       const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;

@@ -36,7 +36,6 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
         `http://127.0.0.1:5000/api/data?prompt=${userPrompt}`
       );
       const data = await response.json();
-      console.log(indexval);
       onChildData(data, indexval, userPrompt);
     } catch (error) {
       console.log(error);
