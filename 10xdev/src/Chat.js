@@ -12,32 +12,37 @@ export const Chat = () => {
   const { searchTerm, isLoading,results,setIsLoading } = useContext(SearchContext);
 
   const handleSearch = (input, index) => {
-      setIsLoading(true);
-      const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          setChatMessages((prevState) => [
-            ...prevState,
-            {
-              prompt: (
-                <UserPrompt
-                  indexval={prevState.length}
-                  searchTerm={input}
-                  onChildData={handleChildData}
-                  onRetry={(input) => {
-                    setChatMessages((prevState) => prevState.slice(0, -1));
-                    handleSearch(input, index);
-                  }}
-                />
-              ),
-              response: <ResponseContainer searchResults={data} />,
-            },
-          ]);
-        })
-        .catch((error) => console.log(error));
-        setIsLoading(false);
-    };
+    setIsLoading(true);
+    const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setChatMessages((prevState) => [
+          ...prevState,
+          {
+            prompt: (
+              <UserPrompt
+                indexval={prevState.length}
+                searchTerm={input}
+                onChildData={handleChildData}
+                onRetry={(input) => {
+                  setIsLoading(true);
+                  setChatMessages((prevState) => prevState.slice(0, -1));
+                  handleSearch(input, index);
+                }}
+              />
+            ),
+            response: <ResponseContainer searchResults={data} />,
+          },
+        ]);
+        setIsLoading(false); // move the statement here
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false); // and here
+      });
+  };
+
 
 
   const handleChildData = (data, index, input) => {
@@ -51,6 +56,7 @@ export const Chat = () => {
             searchTerm={input}
             onChildData={handleChildData}
             onRetry={(input) => {
+                setIsLoading(true);
                 setChatMessages((prevState) => prevState.slice(0, -1));
                 handleSearch(input, index);
             }}
@@ -72,6 +78,7 @@ export const Chat = () => {
               searchTerm={searchTerm}
               onChildData={handleChildData}
               onRetry={(input) => {
+                setIsLoading(true);
                 setChatMessages((prevState) => prevState.slice(0, -1));
                 handleSearch(input, 0);
               }}
@@ -89,10 +96,12 @@ export const Chat = () => {
     return <LoadingRing />;
   }
   return (
-  isLoading ? <LoadingRing /> :
-     <div className="container">
-          <div className="container">
-            <Navbar />
+      <div className="container">
+        <Navbar />
+        {isLoading ? (
+          <LoadingRing />
+        ) : (
+          <div>
             <div className="chat-container">
               {chatMessages.map((chatMessage, index) => (
                 <div key={index}>
@@ -106,11 +115,13 @@ export const Chat = () => {
             </div>
             <div className="footer"></div>
             <div className="searchbarrow">
-              <SearchBar onSearch ={handleSearch} />
+              <SearchBar onSearch={handleSearch} />
             </div>
           </div>
-        </div>
-  );
+        )}
+      </div>
+    );
+
 };
 
 export default Chat;

@@ -9,7 +9,7 @@ const SearchBar = ({ onSearch }) =>{
   }
 
   return (
-    <div className="searchbarcontainer">
+    <div className="chatsearchbarcontainer">
        <input
           className="searchinput"
           type="text"

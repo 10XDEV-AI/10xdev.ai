@@ -1,13 +1,23 @@
-.searchbarcontainer {
+.chatsearchbarcontainer {
   display: flex;
   padding:5px;
   height: 100%;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+}
+
+.searchbarrow{
+position: fixed;
+bottom: 5px;
+right: 15%;
+width: 70%;
 }
 
 .GoButtonChat {
   justify-content: center;
   border: none;
   font-size: 20px;
+  background: #FFFFFF;
 }
 
 .searchinput {
@@ -16,7 +26,6 @@
    background: #FFFFFF;
    border-radius: 6px;
    border: none;
-   box-shadow: 0 0 5pt 2pt #D3D3D3;
    outline: none;
    margin: 1px;
 }

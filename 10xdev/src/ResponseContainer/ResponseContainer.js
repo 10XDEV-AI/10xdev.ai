@@ -5,8 +5,8 @@ const ResponseContainer = ({searchResults}) => {
 
   function SplitBlocks(props) {
     const full_text = props.text;
-    const flag = (full_text[0] === "```")? 1 : 0;
-    const blocks = full_text.split("```");
+    const flag = (full_text[0] === "```\n")? 1 : 0;
+    const blocks = full_text.split("```\n");
     const mapped_blocks = blocks.map((block, index) => {
     if(flag === 0 ) {
         if (index % 2 === 0) {
