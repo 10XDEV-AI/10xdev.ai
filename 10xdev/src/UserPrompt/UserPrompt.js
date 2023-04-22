@@ -1,9 +1,9 @@
 import React, { useState, useEffect,useContext } from "react";
-
+import SearchContext from "../context/SearchContext";
 import "./UserPrompt.css";
 
 function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
-
+  const {isLoading,setIsLoading,userPic} = useContext(SearchContext);
   const [userPrompt, setUserPrompt] = useState(searchTerm);
   const [editingPrompt, setEditingPrompt] = useState(false);
 
@@ -12,25 +12,14 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
     }, [searchTerm]);
 
   // Define an array of emojis
-  const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
 
-  function getRandomEmoji(emojiList) {
-      // Generate a random index within the range of the emojiList array
-      const index = Math.floor(Math.random() * emojiList.length);
-
-      // Return the emoji at the randomly generated index
-      return emojiList[index];
-  }
-
-  // Call the getRandomEmoji function and store the result in a variable
-  const randomEmoji = getRandomEmoji(emojis);
   const handleEditPrompt = () => {
     setEditingPrompt(true);
   };
 
-
   const handleSavePrompt = async (e) => {
     setEditingPrompt(false);
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://127.0.0.1:5000/api/data?prompt=${userPrompt}`
@@ -40,6 +29,7 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const handleCancelPrompt = () => {
@@ -57,7 +47,7 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
   return (
     <div className="userPromptContainer">
       <div className="userPicContainer">
-        {randomEmoji}
+        {userPic}
       </div>
       <div className="userTextCol">
         {editingPrompt ? (

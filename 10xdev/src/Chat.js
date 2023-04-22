@@ -9,9 +9,10 @@ import Navbar from "./Navbar";
 import { useState, useEffect } from "react";
 
 export const Chat = () => {
-  const { searchTerm, isLoading,results } = useContext(SearchContext);
+  const { searchTerm, isLoading,results,setIsLoading } = useContext(SearchContext);
 
   const handleSearch = (input, index) => {
+      setIsLoading(true);
       const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
       fetch(url)
         .then((response) => response.json())
@@ -35,6 +36,7 @@ export const Chat = () => {
           ]);
         })
         .catch((error) => console.log(error));
+        setIsLoading(false);
     };
 
 
@@ -87,6 +89,7 @@ export const Chat = () => {
     return <LoadingRing />;
   }
   return (
+  isLoading ? <LoadingRing /> :
      <div className="container">
           <div className="container">
             <Navbar />

@@ -63,8 +63,7 @@ const ResponseContainer = ({searchResults}) => {
   return (
     <div className="ResponseContainer">
       <div className="responsePicContainer">
-       <b> AI
-       </b>
+       <b> AI </b>
       </div>
       <div className="codediffcontainer">
         {searchResults && (

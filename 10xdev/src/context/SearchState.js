@@ -5,7 +5,17 @@ const SearchState = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
-  const [results, setResults] = useState('Hi');
+  const [results, setResults] = useState('');
+
+  const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
+  const defaultUserPic = getRandomEmoji(emojis);
+  const [userPic,setUserPic] = useState(defaultUserPic);
+
+  function getRandomEmoji(emojiList) {
+      // Generate a random index within the range of the emojiList array
+      const index = Math.floor(Math.random() * emojiList.length);
+      return emojiList[index];
+  }
 
   useEffect(() => {
     //find errors in this useEffect which causing api call to be made twice
@@ -37,7 +47,8 @@ const SearchState = ({ children }) => {
         setIsLoading,
         isLoadingProjectInfo,
         setIsLoadingProjectInfo,
-        results
+        results,
+        userPic,
       }}
     >
       {children}

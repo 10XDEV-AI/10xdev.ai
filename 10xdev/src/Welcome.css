@@ -108,3 +108,10 @@ flex-direction: column;
   background: #FFFFFF;
   font-size: 20px;
 }
+
+.userProfileContainer{
+position: absolute;
+top: 2%;
+right: 2%;
+font-size: 30px;
+}
