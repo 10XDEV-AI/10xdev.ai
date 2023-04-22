@@ -12,6 +12,55 @@ export const Chat = () => {
   const { searchTerm, isLoading,results } = useContext(SearchContext);
   console.log("results",results);
 
+  const handleSearch = (input, index) => {
+      const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          setChatMessages((prevState) => [
+            ...prevState,
+            {
+              prompt: (
+                <UserPrompt
+                  indexval={prevState.length}
+                  searchTerm={input}
+                  onChildData={handleChildData}
+                  onRetry={(input) => {
+                    setChatMessages((prevState) => prevState.slice(0, -1));
+                    handleSearch(input, index);
+                  }}
+                />
+              ),
+              response: <ResponseContainer searchResults={data} />,
+            },
+          ]);
+        })
+        .catch((error) => console.log(error));
+    };
+
+
+  const handleChildData = (data, index, input) => {
+    setChatMessages((prevState) => {
+      const updatedMessages = [...prevState]; // create a copy of prevState
+
+      updatedMessages[index] = {
+        prompt: (
+          <UserPrompt
+            indexval={updatedMessages.length -1 }
+            searchTerm={input}
+            onChildData={handleChildData}
+            onRetry={(input) => {
+                setChatMessages((prevState) => prevState.slice(0, -1));
+                handleSearch(input, index);
+            }}
+          />
+        ),
+        response: <ResponseContainer searchResults={data} />,
+      };
+      return updatedMessages; // return the updated copy as the new state
+    });
+  };
+
   useEffect(() => {
       setChatMessages([
         {
@@ -20,6 +69,11 @@ export const Chat = () => {
             <UserPrompt
               indexval={0}
               searchTerm={searchTerm}
+              onChildData={handleChildData}
+              onRetry={(input) => {
+                setChatMessages((prevState) => prevState.slice(0, -1));
+                handleSearch(input, 0);
+              }}
             />
           ),
           response: <ResponseContainer searchResults={results} />,
@@ -33,8 +87,6 @@ export const Chat = () => {
   if (isLoading) {
     return <LoadingRing />;
   }
-
-
   return (
      <div className="container">
           <div className="container">
@@ -52,7 +104,7 @@ export const Chat = () => {
             </div>
             <div className="footer"></div>
             <div className="searchbarrow">
-              <SearchBar/>
+              <SearchBar onSearch ={handleSearch} />
             </div>
           </div>
         </div>
