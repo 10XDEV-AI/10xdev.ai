@@ -1,8 +1,9 @@
 import './ResponseContainer.css';
 import { CopyBlock, dracula } from "react-code-blocks";
 
-const ResponseContainer = ({searchResults}) => {
-
+const ResponseContainer = ({searchResults, files}) => {
+    console.log(files);
+    console.log(searchResults);
   function SplitBlocks(props) {
     const full_text = props.text;
     const flag = (full_text[0] === "```\n")? 1 : 0;
@@ -35,15 +36,15 @@ const ResponseContainer = ({searchResults}) => {
     else{
         if (index % 2 === 0) {
         return(<div key={index}>
-                           <CopyBlock
-                             text={block}
-                             language="jsx"
-                             showLineNumbers={true}
-                             startingLineNumber={1}
-                             theme={dracula}
-                             codeBlock
-                           />
-                         </div>)
+                   <CopyBlock
+                     text={block}
+                     language="jsx"
+                     showLineNumbers={true}
+                     startingLineNumber={1}
+                     theme={dracula}
+                     codeBlock
+                   />
+                 </div>)
         }
         else{
         return(
@@ -69,6 +70,11 @@ const ResponseContainer = ({searchResults}) => {
         {searchResults && (
           <div className="codediff">
             <SplitBlocks text={searchResults}/>
+            <div className="files">
+              <u>
+                {files}
+              </u>
+            </div>
           </div>
         )}
       </div>

@@ -56,7 +56,6 @@ def syncAI():
     fs = pd.read_csv('fs.csv')
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
-    print("Syncing AI :")
     file_paths_details = []
     Files_to_ignore = open(path+"/.AIIgnore", "r").read().splitlines()
     #print("Files and directories to ignore:")
@@ -92,7 +91,8 @@ def syncAI():
 
     # Find the set difference between file_paths_details and df4["filepath"]
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
-    print("New Files : "+str(len(new_file_paths)))
+    if len(new_file_paths) > 0:
+        print("New Files : "+str(len(new_file_paths)))
 
     # Iterate over the new_file_paths set and create a new row for each file path
     new_rows = []

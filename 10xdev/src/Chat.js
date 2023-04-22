@@ -9,7 +9,7 @@ import Navbar from "./Navbar";
 import { useState, useEffect } from "react";
 
 export const Chat = () => {
-  const { searchTerm, isLoading,results,setIsLoading } = useContext(SearchContext);
+  const { searchTerm, isLoading,results,setIsLoading,files } = useContext(SearchContext);
 
   const handleSearch = (input, index) => {
     setIsLoading(true);
@@ -32,7 +32,7 @@ export const Chat = () => {
                 }}
               />
             ),
-            response: <ResponseContainer searchResults={data} />,
+            response: <ResponseContainer searchResults={data.response} files = {data.files} />,
           },
         ]);
         setIsLoading(false); // move the statement here
@@ -42,8 +42,6 @@ export const Chat = () => {
         setIsLoading(false); // and here
       });
   };
-
-
 
   const handleChildData = (data, index, input) => {
     setChatMessages((prevState) => {
@@ -62,7 +60,7 @@ export const Chat = () => {
             }}
           />
         ),
-        response: <ResponseContainer searchResults={data} />,
+        response: <ResponseContainer searchResults={data.response} files = {data.files} />,
       };
       return updatedMessages; // return the updated copy as the new state
     });
@@ -84,7 +82,7 @@ export const Chat = () => {
               }}
             />
           ),
-          response: <ResponseContainer searchResults={results} />,
+          response: <ResponseContainer searchResults={results} files={files} />,
         },
       ]);
     }, [results, searchTerm]);

@@ -11,7 +11,6 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/api/projectInfo', methods=['GET'])
 def get_projectInfo():
-    print("Checking Branch")
     return jsonify(getprojectInfo())
 
 @app.route('/api/setup', methods=['GET'])
@@ -24,7 +23,6 @@ def get_trainAI():
 
 @app.route('/api/sync', methods=['GET'])
 def get_syncAI():
-    print("Syncing AI")
     syncAI()
     a=("SYNC COMPLETE")
     return jsonify(a)
@@ -33,8 +31,11 @@ def get_syncAI():
 def get_data():
     prompt = request.args.get('prompt')
     print("Asking AI")
-    a=(Ask_AI(prompt))
-    return jsonify(a)
+    response = Ask_AI(prompt)
+    print(response)
+    print(response["files"])
+    print(type(response["files"]))
+    return jsonify({"files": response["files"], "response": response["response"]})
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ const SearchState = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
-
+  const [files, setFiles] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
   const [userPic,setUserPic] = useState(defaultUserPic);
@@ -27,8 +27,9 @@ const SearchState = ({ children }) => {
           `http://127.0.0.1:5000/api/data?prompt=${searchTerm}`
         );
         const data = await response.json();
-        //console.log(data);
-        setResults(data);
+        console.log(data);
+        setFiles(data.files);
+        setResults(data.response);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -48,6 +49,7 @@ const SearchState = ({ children }) => {
         isLoadingProjectInfo,
         setIsLoadingProjectInfo,
         results,
+        files,
         userPic,
       }}
     >

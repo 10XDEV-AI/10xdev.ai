@@ -81,6 +81,20 @@ def search_functions(code_query):
     filepaths = res['file_path'].tolist()
     return filter_functions(result_string, code_query, filepaths)
 
+def files2str(files):
+    if len(files) == 0:
+        return ""
+
+    files_str = "References : \n"
+    for i in files:
+        #find the filename from the path
+        filename = i.split("/")[-1]
+        files_str += filename + " \n"
+
+    #remove last newline
+    files_str = files_str[:-1]
+    return files_str
+
 
 def Ask_AI(prompt):
     if prompt.strip() == "":
@@ -89,7 +103,7 @@ def Ask_AI(prompt):
     global fs
     fs = pd.read_csv('fs.csv')
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-    
+
     files = search_functions(prompt)
     print(files)
     #make a string of all file content
@@ -98,7 +112,7 @@ def Ask_AI(prompt):
     for i in files:
         final_prompt += "\nFile path " + i + ":\n"
         path = read_info()
-        
+
         j = os.path.join(path,i)
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
@@ -107,7 +121,7 @@ def Ask_AI(prompt):
 
     final_prompt =(final_prompt+"\n"+prompt)
     #print("Final prompt : "+ final_prompt)
-    
+
     MAX_RETRIES = 3  # Maximum number of retries for API call
     retries = 0  # Counter for retries
 
@@ -116,7 +130,7 @@ def Ask_AI(prompt):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a coding assitant with access to the codebase. Ask for more context if required. Assume context when you can."},
+                    {"role": "system", "content": "You are a coding assistant with access to the codebase. Ask for more context if required. Assume context when you can."},
                     {"role": "user", "content": final_prompt}
                 ],
                 temperature=0
@@ -130,7 +144,8 @@ def Ask_AI(prompt):
 
     if retries == MAX_RETRIES:
         print("Maximum retries reached. API call failed.")
+        return None
     else:
         response_functions = response["choices"][0]["message"]['content']
 
-    return response_functions
+    return {'files': files2str(files), 'response': response_functions}
