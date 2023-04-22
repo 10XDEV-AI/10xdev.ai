@@ -1,19 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Chat from './components/Chat';
-import Welcome from './components/Welcome';
-import Setup from './components/Setup/Setup';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function App() {
+import Welcome from "./Welcome";
+import Chat from "./Chat";
+import SearchState from "./context/SearchState";
+
+function App () {
   return (
-    <Router>
-      <div className="Appcontainer">
-        <Routes>
-          <Route exact path="/" element={<Welcome />} />
-          <Route exact path="/chat" element={<Chat />} />
-          <Route exact path="/setupNewRepo" element={<Setup />} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+    <SearchState>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Welcome />} />
+                <Route path="/chat" element={<Chat />} />
+            </Routes>
+        </Router>
+    </SearchState>
+    </div>
   );
 }
 

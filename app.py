@@ -14,13 +14,13 @@ def get_projectInfo():
     print("Checking Branch")
     return jsonify(getprojectInfo())
 
-@app.route('/api/setup', methods=['POST'])
+@app.route('/api/setup', methods=['GET'])
 def get_trainAI():
-    data = request.get_json()
-    path = data.get('path')
+    path = request.args.get('path')
     print("Training AI")
-    a=(train_AI(path))
+    a = train_AI(path)
     return jsonify(a)
+
 
 @app.route('/api/sync', methods=['GET'])
 def get_syncAI():

@@ -21,7 +21,7 @@ def filter_functions(result_string, code_query, filepaths):
     task = "List the file paths that will be required to answer the user query based on above given file summaries"
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
-    print(filter_prompt)
+    #print(filter_prompt)
     MAX_RETRIES = 3  # Maximum number of retries for API call
     retries = 0  # Counter for retries
     response = None  # Placeholder for API response
@@ -48,7 +48,7 @@ def filter_functions(result_string, code_query, filepaths):
         print("Maximum retries reached. API call failed.")
     else:
         response_functions = response["choices"][0]["message"]['content']
-        print(response_functions)
+        #print(response_functions)
 
     files  = []
     for i in filepaths:
@@ -77,18 +77,21 @@ def search_functions(code_query):
             file_summary_string.append('File path: ' + file_path)
     # Convert the concatenated list to a single string
     result_string = '\n\n'.join(file_summary_string)
-    print(result_string)
+    #print(result_string)
     filepaths = res['file_path'].tolist()
     return filter_functions(result_string, code_query, filepaths)
 
 
 def Ask_AI(prompt):
+    if prompt.strip() == "":
+        return "Please enter a query"
+
     global fs
     fs = pd.read_csv('fs.csv')
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     
     files = search_functions(prompt)
-
+    print(files)
     #make a string of all file content
     final_prompt = ""
 
@@ -103,7 +106,7 @@ def Ask_AI(prompt):
                 final_prompt += open(j).read()
 
     final_prompt =(final_prompt+"\n"+prompt)
-    print("Final prompt : "+ final_prompt)
+    #print("Final prompt : "+ final_prompt)
     
     MAX_RETRIES = 3  # Maximum number of retries for API call
     retries = 0  # Counter for retries
