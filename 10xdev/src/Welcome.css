@@ -24,7 +24,8 @@ border: 1px solid #D3D3D3;
 }
 
 .welcomesearchrow:focus-within{
-border: 1px solid black;
+box-shadow: 0 0 5px 0px #D3D3D3;
+
 }
 
 .subText{
