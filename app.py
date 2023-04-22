@@ -12,7 +12,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 @app.route('/api/projectInfo', methods=['GET'])
 def get_projectInfo():
     print("Checking Branch")
-    return jsonify("Hi")
+    return jsonify(getprojectInfo())
 
 @app.route('/api/setup', methods=['POST'])
 def get_trainAI():
@@ -33,7 +33,7 @@ def get_syncAI():
 def get_data():
     prompt = request.args.get('prompt')
     print("Asking AI")
-    a=("Hi hello from server"+prompt)
+    a=(Ask_AI(prompt))
     return jsonify(a)
 
 
