@@ -1,0 +1,31 @@
+
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.codediffcontainer{
+width: 85%;
+padding: 10px;
+}
+
+.ResponseContainer{
+width: 100%;
+box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1);
+background-color: #F4F4F4;
+display: flex;
+}
+
+.codediff{
+font: 15px Proxima Nova, sans-serif;
+}
+
+.responsePicContainer{
+width: 7%;
+text-align: center;
+padding-top: 20px;
+font: 25px Proxima Nova, sans-serif;
+}

@@ -1,0 +1,88 @@
+.userTextCol {
+  width: 85%;
+}
+.userPromptContainer {
+  display: flex;
+  vertical-align: middle;
+  width: 100%;
+  font: 15px Proxima Nova, sans-serif;
+}
+
+.userPicContainer {
+  width: 7%;
+  align-items: center;
+  text-align: center;
+  font: 30px Proxima Nova, sans-serif;
+}
+
+.userPromptext{
+padding: 10px;
+float: left;
+}
+
+.editUserPromptContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  float: left;
+  width: 95%;
+}
+
+.editUserPromptContainer input {
+  width:100%;
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.saveButton{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.cancelButton{
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.editOptions {
+  display: flex;
+  float: right;
+}
+
+.editIcon {
+  cursor: pointer;
+  padding-top: 10px;
+  padding-right: 7px;
+}
+
+.retryIcon {
+  cursor: pointer;
+  padding-top: 10px;
+}
+
+
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  padding: 5px;
+}
