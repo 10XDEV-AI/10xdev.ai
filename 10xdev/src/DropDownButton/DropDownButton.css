@@ -1,0 +1,35 @@
+.dropdown {
+  position: relative; /* set parent element to relative */
+  display: inline-block;
+}
+
+.userProfileButton{
+width: 200px;
+border: none;
+background: #FFFFFF;
+font-size: 30px;
+text-align: right;
+}
+
+ul {
+  list-style: none;
+  background-color: #F0F0F0;
+  font-family: "Roboto", Helvetica;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+
+}
+
+li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f4f4f4;
+  box-shadow: 0 0 5px 0px #D3D3D3;
+}

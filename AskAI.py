@@ -98,7 +98,7 @@ def files2str(files):
 
 def Ask_AI(prompt):
     if prompt.strip() == "":
-        return "Please enter a query"
+        return {'files': "", 'response': "Please enter a query"}
 
     global fs
     fs = pd.read_csv('fs.csv')

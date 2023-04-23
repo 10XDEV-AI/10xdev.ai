@@ -3,6 +3,7 @@ from flask_cors import CORS
 from AskAI import Ask_AI
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
+from utilities.IgnoreAI import IgnoreAI
 from syncAI import syncAI
 import csv
 
@@ -33,10 +34,13 @@ def get_data():
     print("Asking AI")
     response = Ask_AI(prompt)
     print(response)
-    print(response["files"])
-    #print(type(response["files"]))
     return jsonify({"files": response["files"], "response": response["response"]})
 
+@app.route('/api/Ignore', methods=['GET'])
+def get_AIIgnore():
+    path = request.args.get('path')
+    files2ignore,files2analyze = IgnoreAI(path)
+    return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyze})
 
 if __name__ == '__main__':
     app.run(debug=True)
