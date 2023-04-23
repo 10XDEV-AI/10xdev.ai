@@ -16,7 +16,7 @@ const SearchBar = ({ onSearch }) =>{
           value={searchInput}
           onChange={e => setSearchInput(e.target.value)}
           onKeyPress={e => {
-          if (e.keyCode == '13' || e.which == '13') {
+          if (e.keyCode === '13' || e.which === '13') {
             handleClick();
           }}}
         />

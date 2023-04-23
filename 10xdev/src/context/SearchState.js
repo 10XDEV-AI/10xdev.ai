@@ -9,7 +9,7 @@ const SearchState = ({ children }) => {
   const [files, setFiles] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
-  const [userPic,setUserPic] = useState(defaultUserPic);
+  const userPic = defaultUserPic;
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array

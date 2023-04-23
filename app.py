@@ -34,7 +34,7 @@ def get_data():
     response = Ask_AI(prompt)
     print(response)
     print(response["files"])
-    print(type(response["files"]))
+    #print(type(response["files"]))
     return jsonify({"files": response["files"], "response": response["response"]})
 
 

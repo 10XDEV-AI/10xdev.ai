@@ -6,8 +6,14 @@ const ResponseContainer = ({searchResults, files}) => {
     console.log(searchResults);
   function SplitBlocks(props) {
     const full_text = props.text;
-    const flag = (full_text[0] === "```\n")? 1 : 0;
-    const blocks = full_text.split("```\n");
+    const flag = (full_text[0] === "```")? 1 : 0;
+    const blocks = full_text.split("```");
+    // remove the first and last \n in all blocks if it exists
+    for (let i = 0; i < blocks.length; i++) {
+        if (blocks[i][0] === "\n") {
+            blocks[i] = blocks[i].slice(1);
+        }
+    }
     const mapped_blocks = blocks.map((block, index) => {
     if(flag === 0 ) {
         if (index % 2 === 0) {

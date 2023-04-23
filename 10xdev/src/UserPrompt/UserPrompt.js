@@ -3,7 +3,7 @@ import SearchContext from "../context/SearchContext";
 import "./UserPrompt.css";
 
 function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
-  const {isLoading,setIsLoading,userPic} = useContext(SearchContext);
+  const {setIsLoading,userPic} = useContext(SearchContext);
   const [userPrompt, setUserPrompt] = useState(searchTerm);
   const [editingPrompt, setEditingPrompt] = useState(false);
 
