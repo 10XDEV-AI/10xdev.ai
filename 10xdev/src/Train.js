@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Train.css';
 import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
@@ -51,6 +52,7 @@ const Train = () => {
       });
   };
 
+  const navigate = useNavigate();
   const handleTrain = async () => {
       setIsLoading(true);
       try {
@@ -61,6 +63,7 @@ const Train = () => {
         console.error(error);
       }
       setIsLoading(false);
+      navigate('/repos');
   };
 
 
