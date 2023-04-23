@@ -19,7 +19,7 @@ function DropdownButton() {
       navigate('/repos');
     }
     if (option === 3) {
-        navigate('/welcome');
+         window.open(window.location.href, '_blank');
     }
     setIsOpen(false); // close the dropdown after an option is selected
   };

@@ -28,6 +28,11 @@ font-size: 15px;
 
 .ignorecontainer{
   display : flex;
+  position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 .ignorebox {
 width: 50%;
@@ -111,4 +116,19 @@ border-radius: 20px;
 font-size: 13px;
 margin:2px;
 
+}
+
+.ignoretips{
+width: 50%;
+background-color: #f3fafe ;
+margin-left: 25%;
+margin-top: 10px;
+border-radius: 10px;
+padding: 10px;
+border: 1px dashed #D3D3D3;
+font: 15px "Roboto", Helvetica;
+}
+
+.ignoretips h2{
+text-align: center;
 }

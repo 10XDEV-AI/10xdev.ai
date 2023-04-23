@@ -36,7 +36,8 @@ export default function Repos() {
             </div>
             <div className="repo-card-buttons">
                 <button className="repo-card-button">Select ✋️</button>
-                <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>
+                {repo.Directory !== "Test" &&
+                <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>}
             </div>
           </div>
         ))}

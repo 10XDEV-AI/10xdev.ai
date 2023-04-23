@@ -33,7 +33,6 @@ def get_Repos():
                 branch_name = output.decode('utf-8').strip()
                 directories.append({"Directory": entry.name, "AIIgnore": True, "Branch": branch_name})
 
-    print(directories)
     return jsonify(directories)
 
 @app.route('/api/Repos/<directory>', methods=['DELETE'])
@@ -56,10 +55,10 @@ def delete_repo(directory):
             repos = info['repos']
             if directory in repos:
                 repos.remove(directory)
+                info['current_repo'] = "Test"
             else:
                 return jsonify({"message": f"{directory} does not exist in the list of repositories."}), 404
 
-        data['current_repo'] = "Test"
         with open('AIFiles/info.json', 'w') as f:
             json.dump(info, f)
 

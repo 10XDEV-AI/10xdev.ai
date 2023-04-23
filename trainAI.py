@@ -28,7 +28,6 @@ def split_sent(s1):
 
 def summarize_str(filename,string):
     while True:
-        return "Hi"
         try:
              response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -107,6 +106,7 @@ def walk_and_analyze(path):
 def train_AI(path):
     print("Training AI")
 
+    fsfilename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
     if not os.path.exists(os.path.join("AIFiles", "info.json")):
         print("info.json does not exist. Creating one.")
         with open(os.path.join("AIFiles", "info.json"), 'w') as f:
@@ -117,13 +117,13 @@ def train_AI(path):
         data = json.load(f)
         #set current_repo to the value of the key 'path'
 
-        data['current_repo'] = path
+        data['current_repo'] = path.split('/')[-1]
         #check if the key 'repos' exists
         if 'repos' not in data:
             data['repos'] = []
         #check if the value of the key 'path' is not in the list of repos
         if path not in data['repos']:
-            data['repos'].append(path)
+            data['repos'].append(path.split('/')[-1])
 
     with open('AIFiles/info.json', 'w') as outfile:
         json.dump(data, outfile)
@@ -135,7 +135,7 @@ def train_AI(path):
 
     fs.columns = ['file_path']
     start_time = time.time()
-    rate_limit = 60
+    rate_limit = 3
     delay = 60/rate_limit
     i=0
     fs['summary'] = ''
@@ -156,13 +156,13 @@ def train_AI(path):
                 delay = delay * 0.9
                 #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
-    fs.to_csv('fs.csv',index=False)
+    fs.to_csv(fsfilename,index=False)
     print("100% Done")
     #display(fs)
 
 
     i=0
-    fs = pd.read_csv('fs.csv')
+    fs = pd.read_csv(fsfilename)
     #display(fs)
     rate_limit = 60
     start_time = time.time()
@@ -190,8 +190,7 @@ def train_AI(path):
 
     #display(fs)
 
-    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
-    fs.to_csv(filename,index=False)
+    fs.to_csv(fsfilename,index=False)
     print("100% Done")
     create_clone(path)
     return

@@ -112,23 +112,40 @@ const Train = () => {
            )}
         </div>
         <div className="filesdiff">
-              {showFilesToIgnore && showFilesToAnalyze && (
-              <div className="ignorecontainer">
-                <div className="ignorebox">
-                  <div className="ignoretext">
-                    <h2>Files to Analyze:</h2>
-                    <pre>{filesToAnalyze}</pre>
-                  </div>
-                </div>
-                <div className="ignorebox">
-                  <div className="ignoretext">
-                    <h2>Files to Ignore:</h2>
-                    <pre>{filesToIgnore}</pre>
-                  </div>
-                </div>
-              </div>
-              )}
-            </div>
+              {
+              (showFilesToIgnore && showFilesToAnalyze) ? (
+                    <div className="ignorecontainer">
+                      <div className="ignorebox">
+                        <div className="ignoretext">
+                          <h2>Files to Analyze:</h2>
+                          <pre>{filesToAnalyze}</pre>
+                        </div>
+                      </div>
+                      <div className="ignorebox">
+                        <div className="ignoretext">
+                          <h2>Files to Ignore:</h2>
+                          <pre>{filesToIgnore}</pre>
+                        </div>
+                      </div>
+                    </div>
+                    ):
+                    (
+                        <div className="ignorecontainer">
+                            <div className="ignoretips">
+                            <h2> 💡Tips on '.AIIgnore' File:</h2>
+                            <ul>
+                                <li> Add folders like node_modules, .git, .vscode, etc. to .AIIgnore file </li>
+                                <li> Add files like .DS_Store, .gitignore, etc. to .AIIgnore file </li>
+                                <li> Add any other files that are not required for training </li>
+                                <li> Break down big files to smaller files </li>
+                                <li> Works well with small files </li>
+                                <li> Works well for files with comments </li>
+                            </ul>
+                            </div>
+                        </div>
+                    )
+              }
+        </div>
     </div>
     )}
   </div>
