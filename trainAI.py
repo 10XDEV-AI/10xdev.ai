@@ -18,7 +18,6 @@ text_file = open("API_key.txt", "r")
 openai.api_key =  text_file.read()
 text_file.close()
 
-
 def split_sent(s1):
     words = s1.split()  # split string into words
     #print(words)
@@ -29,6 +28,7 @@ def split_sent(s1):
 
 def summarize_str(filename,string):
     while True:
+        return "Hi"
         try:
              response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -106,12 +106,27 @@ def walk_and_analyze(path):
 
 def train_AI(path):
     print("Training AI")
-    data = {
-        'path': path
-    }
-    with open('info.json', 'w') as outfile:
-        json.dump(data, outfile)
 
+    if not os.path.exists(os.path.join("AIFiles", "info.json")):
+        print("info.json does not exist. Creating one.")
+        with open(os.path.join("AIFiles", "info.json"), 'w') as f:
+            # You can add any initial content you want in the .AIignore file
+            f.write("{}")
+
+    with open('AIFiles/info.json', 'r') as f:
+        data = json.load(f)
+        #set current_repo to the value of the key 'path'
+
+        data['current_repo'] = path
+        #check if the key 'repos' exists
+        if 'repos' not in data:
+            data['repos'] = []
+        #check if the value of the key 'path' is not in the list of repos
+        if path not in data['repos']:
+            data['repos'].append(path)
+
+    with open('AIFiles/info.json', 'w') as outfile:
+        json.dump(data, outfile)
     file_paths_details = walk_and_analyze(path)
     print("Total number of files analyzed:", len(file_paths_details))
 
@@ -120,7 +135,7 @@ def train_AI(path):
 
     fs.columns = ['file_path']
     start_time = time.time()
-    rate_limit = 3
+    rate_limit = 60
     delay = 60/rate_limit
     i=0
     fs['summary'] = ''
@@ -174,7 +189,9 @@ def train_AI(path):
             #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     #display(fs)
-    fs.to_csv('fs.csv',index=False)
+
+    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
+    fs.to_csv(filename,index=False)
     print("100% Done")
     create_clone(path)
     return

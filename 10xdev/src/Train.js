@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import './Train.css';
+import Navbar from './Navbar';
+import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
+import SearchContext from "./context/SearchContext";
+import LoadingRing from "./Loader/Loader";
 
 const Train = () => {
+  const {isLoading,setIsLoading}  = useContext(SearchContext);
   const [input, setInput] = useState('');
   const [filesToAnalyze, setFilesToAnalyze] = useState('');
   const [filesToIgnore, setFilesToIgnore] = useState('');
   const [showTrainButton, setShowTrainButton] = useState(false);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
+  const [recentSearches, setRecentSearches] = useState([]);
+
+  useEffect(() => {
+    const searches = JSON.parse(localStorage.getItem('recentSearches'));
+    if (searches) {
+      setRecentSearches(searches);
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -29,50 +42,94 @@ const Train = () => {
         setShowTrainButton(true);
         setShowFilesToIgnore(true);
         setShowFilesToAnalyze(true);
+        // Add the current search to recent searches
+        setRecentSearches((prevSearches) => {
+          const newSearches = [input, ...prevSearches.filter((s) => s !== input)];
+          localStorage.setItem('recentSearches', JSON.stringify(newSearches));
+          return newSearches;
+        });
       });
   };
 
-  const handleTrain = () => {
-    fetch(`http://127.0.0.1:5000/api/train?prompt=${input}`)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+  const handleTrain = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/api/train?path=${input}`);
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+      setIsLoading(false);
   };
 
+
   return (
-    <div className="container">
-      <label className="label">
-        Path of repository to train:
-        <input
-          type="text"
-          value={input}
-          onChange={handleInputChange}
-          className="input-field"
-        />
-      </label>
-      <div>
-        <button onClick={handleGetGitIgnore} className="button">
-          Get GitIgnore
-        </button>
-        {showTrainButton && (
-          <button onClick={handleTrain} className="button">
-            Start Training
-          </button>
-        )}
-      </div>
-      {showFilesToIgnore && showFilesToAnalyze && (
-        <div className="ignorebox">
-          <div className="ignoretext">
-            <h2>Files to Analyze:</h2>
-            <pre>{filesToAnalyze}</pre>
-          </div>
-          <div className="ignoretext">
-            <h2>Files to Ignore:</h2>
-            <pre>{filesToIgnore}</pre>
+  <div>
+    <Navbar />
+    {isLoading? (
+        <LoadingRing />
+         ):(
+    <div>
+        <div className="GetIgnorecontainer">
+          <label className="pathsearchrow">
+            <div className="pathsearchlabel">
+                Train AI on Path:
+            </div>
+            <input
+              type="text"
+              value={input}
+              onChange={handleInputChange}
+              className="pathsearchbar"
+            />
+          </label>
+          <div className="gitIgnorebuttoncontainer">
+            <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
+              Get GitIgnore
+            </button>
+            {showTrainButton && (
+              <button onClick={handleTrain} className="gitIgnorebutton">
+                Start Training
+              </button>
+            )}
           </div>
         </div>
-      )}
+        <div className="IgnoreCheckcontainer">
+           {input && < CheckAIIgnore path={input} />}
+           {(
+           <div>
+             <ul  className="recent-searches">
+               {recentSearches.map((search) => (
+                 <li className="recent-search-bullets">
+                   <button className="recent-search-button" onClick={() => setInput(search)}>{search}</button>
+                 </li>
+               ))}
+             </ul>
+           </div>
+           )}
+        </div>
+        <div className="filesdiff">
+              {showFilesToIgnore && showFilesToAnalyze && (
+              <div className="ignorecontainer">
+                <div className="ignorebox">
+                  <div className="ignoretext">
+                    <h2>Files to Analyze:</h2>
+                    <pre>{filesToAnalyze}</pre>
+                  </div>
+                </div>
+                <div className="ignorebox">
+                  <div className="ignoretext">
+                    <h2>Files to Ignore:</h2>
+                    <pre>{filesToIgnore}</pre>
+                  </div>
+                </div>
+              </div>
+              )}
+            </div>
     </div>
-  );
+    )}
+  </div>
+    );
 };
 
 export default Train;

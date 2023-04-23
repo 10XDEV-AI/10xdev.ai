@@ -53,7 +53,9 @@ def sumarize(filename):
 def syncAI():
     path = read_info()
     global fs
-    fs = pd.read_csv('fs.csv')
+    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
+
+    fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
     file_paths_details = []
@@ -126,7 +128,8 @@ def syncAI():
     #print(new_fs)
     #append new_fs to fs
     fs = pd.concat([fs, new_fs], ignore_index=True)
-    fs.to_csv('fs.csv', index=False)
+
+    fs.to_csv(filename, index=False)
     #print(fs)
     create_clone(read_info())
 

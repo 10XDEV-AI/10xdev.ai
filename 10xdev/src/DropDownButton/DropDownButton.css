@@ -1,17 +1,17 @@
 .dropdown {
   position: relative; /* set parent element to relative */
   display: inline-block;
+  float: right;
 }
 
 .userProfileButton{
-width: 200px;
 border: none;
-background: #FFFFFF;
+background: none;
 font-size: 30px;
 text-align: right;
 }
 
-ul {
+.drop-down-list {
   list-style: none;
   background-color: #F0F0F0;
   font-family: "Roboto", Helvetica;
@@ -21,15 +21,19 @@ ul {
   top: 100%;
   right: 0;
   z-index: 1;
-
+  font-size: 15px;
+  width: 180px;
 }
 
-li {
+.drop-down-bullets {
   padding: 8px;
   cursor: pointer;
+
+white-space: pre;
 }
 
-li:hover {
-  background-color: #f4f4f4;
+.drop-down-bullets:hover {
+  background-color: #2455C5;
+  color: #FFFFFF;
   box-shadow: 0 0 5px 0px #D3D3D3;
 }

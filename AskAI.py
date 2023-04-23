@@ -101,7 +101,9 @@ def Ask_AI(prompt):
         return {'files': "", 'response': "Please enter a query"}
 
     global fs
-    fs = pd.read_csv('fs.csv')
+    path = read_info()
+    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
+    fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
     files = search_functions(prompt)
