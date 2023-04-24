@@ -125,8 +125,6 @@ def syncAI():
         if(new_fs['summary'][ind] != "Ignore"):
             new_fs['embedding'][ind] = get_embedding(new_fs['summary'][ind],0.5)
 
-    #print(new_fs)
-    #append new_fs to fs
     fs = pd.concat([fs, new_fs], ignore_index=True)
 
     fs.to_csv(fsfilename, index=False)

@@ -4,8 +4,10 @@ from AskAI import Ask_AI
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
+from utilities.logger import get_last_logs
 from syncAI import syncAI
-import csv,os,subprocess,shutil,json
+import csv,os,subprocess,shutil,json,time
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
@@ -34,6 +36,19 @@ def get_Repos():
                 directories.append({"Directory": entry.name, "AIIgnore": True, "Branch": branch_name})
 
     return jsonify(directories)
+
+@app.route('/api/SelectRepo', methods=['GET'])
+def select_Repos():
+    directory = request.args.get('directory')
+    try:
+        with open(os.path.join('AIFiles','info.json'), 'r') as f:
+            info = json.load(f)
+            info['current_repo'] = directory
+        with open(os.path.join('AIFiles','info.json'), 'w') as f:
+            json.dump(info, f)
+        return 'Success'
+    except Exception as e:
+        return f'Error: {e}'
 
 @app.route('/api/Repos/<directory>', methods=['DELETE'])
 def delete_repo(directory):
@@ -95,6 +110,9 @@ def get_CheckAIIgnore():
     else:
         return jsonify({"AIIgnore": False})
 
+@app.route('/api/logs', methods = ['GET'])
+def get_logs():
+    return jsonify(get_last_logs())
 if __name__ == '__main__':
     app.run(debug=True)
 

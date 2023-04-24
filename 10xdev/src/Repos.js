@@ -21,6 +21,16 @@ export default function Repos() {
       .catch(error => console.error(error));
   }, []);
 
+  const handlSelect = useCallback((directory) => {
+      fetch(`http://127.0.0.1:5000/api/SelectRepo?directory=${directory}`, {
+        method: 'GET',
+      })
+      .then(() => {window.location.reload();})
+      .catch(error => console.error(error));
+
+    }, []);
+
+
   return (
   <div>
     <Navbar />
@@ -35,7 +45,7 @@ export default function Repos() {
                 <p>AIIgnore: {repo.AIIgnore.toString()}</p>
             </div>
             <div className="repo-card-buttons">
-                <button className="repo-card-button">Select ✋️</button>
+                <button className="repo-card-button" onClick={() => handlSelect(repo.Directory)}>Select ✋️</button>
                 {repo.Directory !== "Test" &&
                 <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>}
             </div>

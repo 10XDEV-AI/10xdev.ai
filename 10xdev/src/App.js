@@ -5,6 +5,7 @@ import Repos from "./Repos";
 import Welcome from "./Welcome";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
+import Loader from "./Loader/Loader";
 
 function App () {
   return (
@@ -16,6 +17,7 @@ function App () {
                 <Route path="/chat" element={<Chat/>} />
                 <Route path="/train" element={<Train/>} />
                 <Route path="/repos" element={<Repos/>} />
+                <Route path="/test" element={<Loader/>} />
             </Routes>
         </Router>
     </SearchState>

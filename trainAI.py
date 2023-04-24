@@ -11,6 +11,7 @@ from utilities.embedding import get_embedding
 from utilities.create_clone import create_clone
 import tiktoken
 import time
+from utilities.logger import log
 
 fs = pd.DataFrame()
 
@@ -38,8 +39,8 @@ def summarize_str(filename,string):
              )
              return response["choices"][0]["message"]['content']
         except Exception as e:
-             print(f"Encountered error: {e}")
-             print("Retrying in 20 seconds...")
+             log(f"Encountered error: {e}")
+             log("Retrying in 20 seconds...")
              time.sleep(20)
 
 def summarize_file(path,file,i):
@@ -47,26 +48,26 @@ def summarize_file(path,file,i):
     with open(os.path.join(root, file), 'rb') as f:
         result = chardet.detect(f.read())
     if not(result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
-            print("File "+file+" was not summarised as it is not a text file")
+            p=("File "+file+" was not Analyzed as it is not a text file")
+            log(p)
             #print(result['encoding'])
             return i,"Ignore"
     i+=1
-    print("Summarizing "+file)
+    p=("Analyzing "+file)
+    log(p)
     full_file_path = os.path.join(path, file)
     with open(full_file_path, 'r') as f:
         file_contents = f.read()
-    if num_tokens_from_string(file_contents) > 4096:
-        print("File too large to summarize. Splitting file into blocks.")
-        blocks = split_file_into_blocks(file)
-        summaries = []
-        for block in blocks:
-            summaries.append(summarize_str(file,block))
-        return "\n".join(summaries)
+    if num_tokens_from_string(file_contents) > 3000:
+        p = ("File "+file+" was not analyzed as it is too long")
+        log(p)
+        return i,"File content too long"
     return i,summarize_str(file,file_contents)
 
 def num_tokens_from_string(string: str) -> int:
     encoding_name = "cl100k_base"
     """Returns the number of tokens in a text str"cl100k_base"ing."""
+    string = " ".join(string.split())#remove extra spaces
     encoding = tiktoken.get_encoding(encoding_name)
     num_tokens = len(encoding.encode(string))
     return num_tokens
@@ -75,7 +76,7 @@ def walk_and_analyze(path):
     file_paths_details = []
 
     if not os.path.exists(os.path.join(path, '.AIignore')):
-        print("AIignore does not exist. Creating one.")
+        log("AIignore does not exist. Creating one.")
         with open(os.path.join(path, '.AIignore'), 'w') as f:
             # You can add any initial content you want in the .AIignore file
             f.write("")
@@ -93,22 +94,17 @@ def walk_and_analyze(path):
                 continue  # Ignore this file
             else:
                 # Process the file
-                print("Analyzing : "+os.path.relpath(os.path.join(root, filename), path))
-                #print("Lines of code: "+str(len(open(os.path.join(root, filename), 'r').readlines())))
-                #with open(os.path.join(root, filename), 'r') as f:
-                    #file_contents = f.read()
-                #print("Number of tokens: "+str(num_tokens_from_string(file_contents)))
-                #print()
-                #time.sleep(1)
+                #log("Evaluating size for : "+os.path.relpath(os.path.join(root, filename), path))
+
                 file_paths_details.append(os.path.relpath(os.path.join(root, filename), path))
     return file_paths_details
 
 def train_AI(path):
-    print("Training AI")
+    log("Training AI")
 
     fsfilename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
     if not os.path.exists(os.path.join("AIFiles", "info.json")):
-        print("info.json does not exist. Creating one.")
+        log("info.json does not exist. Creating one.")
         with open(os.path.join("AIFiles", "info.json"), 'w') as f:
             # You can add any initial content you want in the .AIignore file
             f.write("{}")
@@ -128,8 +124,8 @@ def train_AI(path):
     with open('AIFiles/info.json', 'w') as outfile:
         json.dump(data, outfile)
     file_paths_details = walk_and_analyze(path)
-    print("Total number of files analyzed:", len(file_paths_details))
-
+    p=("Total number of files analyzed:", len(file_paths_details))
+    #log(p)
     fs = pd.DataFrame(file_paths_details)
     #display(fs)
 
@@ -139,6 +135,7 @@ def train_AI(path):
     delay = 60/rate_limit
     i=0
     fs['summary'] = ''
+    log("Starting analysis")
     for ind in fs.index:
         i_new,fs['summary'][ind] = summarize_file(path,fs['file_path'][ind],i)
 
@@ -148,7 +145,9 @@ def train_AI(path):
         if i != 0:
             rate = 60*i/(time.time() - start_time)
             time_elapsed = time.time() - start_time
-            print(str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
+            p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
+            print(p)
+            log(p)
             if rate > rate_limit:
                     delay = delay + 0.1
                     #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
@@ -157,10 +156,10 @@ def train_AI(path):
                 #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     fs.to_csv(fsfilename,index=False)
-    print("100% Done")
+    log("Analyzed all files succesfully")
     #display(fs)
 
-
+    log('Evaluating code blocks')
     i=0
     fs = pd.read_csv(fsfilename)
     #display(fs)
@@ -180,7 +179,9 @@ def train_AI(path):
         i+=len(sentences)
         rate = 60*i/(time.time() - start_time)
         time_elapsed = time.time() - start_time
-        print(str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60,2)) + " minutes Time remaining: " + str(round((len(fs)-ind)/rate,2)) + " minutes")
+        p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60,2)) + " minutes Time remaining: " + str(round((len(fs)-ind)/rate,2)) + " minutes")
+        print(p)
+        log(p)
         if rate > rate_limit:
             delay = delay + 0.1
             #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
@@ -192,5 +193,6 @@ def train_AI(path):
 
     fs.to_csv(fsfilename,index=False)
     print("100% Done")
+    log("100% Done. Synchronizing Files")
     create_clone(path)
     return

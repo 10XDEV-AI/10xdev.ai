@@ -7,8 +7,12 @@ function DropdownButton() {
 
   const navigate = useNavigate(); // move the useNavigate hook outside of the handleOptionClick function
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen); // toggle the dropdown state
+  const newTab = async () => {
+    const currentUrl = window.location.href;
+    // remove the last part of the url
+    const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+    // open a new tab with the new url
+    window.open(newUrl, '_blank');
   };
 
   const handleOptionClick = (option) => {
@@ -19,14 +23,14 @@ function DropdownButton() {
       navigate('/repos');
     }
     if (option === 3) {
-         window.open(window.location.href, '_blank');
+        newTab();
     }
     setIsOpen(false); // close the dropdown after an option is selected
   };
 
   return (
-    <div className="dropdown">
-      <button className="userProfileButton" onClick={toggleDropdown}>⚙️</button>
+    <div className="dropdown" onMouseLeave={() => setIsOpen(false)}>
+      <button className="userProfileButton" onMouseEnter={() => setIsOpen(true)}>⚙️</button>
       {isOpen && (
         <ul className="drop-down-list">
           <li className="drop-down-bullets" onClick={() => handleOptionClick(1)}> 🧠   Train Repository</li>
