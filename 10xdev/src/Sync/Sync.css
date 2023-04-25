@@ -1,3 +1,12 @@
 .sync-container{
-padding: 5px;
+display: flex;
 }
+
+.popup-container{
+display: flex;
+border: 1px solid black;
+border-radius: 5px;
+height: 100%;
+width: 100%;
+}
+
