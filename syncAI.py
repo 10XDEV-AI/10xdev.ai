@@ -8,6 +8,7 @@ from utilities.readInfo import read_info
 from utilities.embedding import get_embedding
 from utilities.create_clone import create_clone, get_clone_path, get_clone_filepath
 from utilities.str2float import str2float
+from utilities.logger import log, get_last_logs, clear_logs
 
 import chardet
 
@@ -50,7 +51,7 @@ def sumarize(filename):
 
     return summarize_str(filename,file_contents)
 
-def syncAI():
+def syncAI(sync_flag):
     path = read_info()
     global fs
     fsfilename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
@@ -80,6 +81,7 @@ def syncAI():
         #print("Clone Path : "+clone_path)
         if get_diff(os.path.join(path, file) , clone_path) != "":
             print("File "+file+" has changed")
+            log("File "+file+" has changed. Syncing AI...")
             fs.loc[fs["file_path"] == file, "summary"] = sumarize(file)
             time.sleep(20)
             fs.loc[fs["file_path"] == file, "embedding"] = None
@@ -92,9 +94,14 @@ def syncAI():
             #print(type(get_embedding( fs.loc[fs["file_path"] == file, "summary"],0)))
 
     # Find the set difference between file_paths_details and df4["filepath"]
+
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
     if len(new_file_paths) > 0:
         print("New Files : "+str(len(new_file_paths)))
+        log("New Files : "+str(len(new_file_paths)))
+        if(sync_flag==0):
+            clear_logs()
+            return "NEW",list(new_file_paths)
 
     # Iterate over the new_file_paths set and create a new row for each file path
     new_rows = []
@@ -120,6 +127,7 @@ def syncAI():
     new_fs['embedding'] = ''
     new_fs['summary'] = ''
     for ind in new_fs.index:
+        log("Analyzing New File : "+new_fs['file_path'][ind])
         new_fs['summary'][ind] = sumarize(new_fs['file_path'][ind])
         time.sleep(20)
         if(new_fs['summary'][ind] != "Ignore"):
@@ -130,5 +138,5 @@ def syncAI():
     fs.to_csv(fsfilename, index=False)
     #print(fs)
     create_clone(read_info())
-
-    return
+    clear_logs()
+    return "DONE",list(new_file_paths)

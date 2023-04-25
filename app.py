@@ -84,9 +84,15 @@ def delete_repo(directory):
 
 @app.route('/api/sync', methods=['GET'])
 def get_syncAI():
-    syncAI()
-    a=("SYNC COMPLETE")
-    return jsonify(a)
+    sync_new_flag = request.args.get('sync_new')
+    if sync_new_flag == 'true':
+        message,files =  syncAI(True)
+        print(message)
+
+    else:
+        message,files =  syncAI(False)
+        print(message)
+    return jsonify({"message": message, "files": files})
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
