@@ -8,6 +8,7 @@ from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
 from utilities.readInfo import read_info
 from utilities.str2float import str2float
+from utilities.logger import log, get_last_logs, clear_logs
 
 fs = pd.DataFrame()
 
@@ -61,6 +62,7 @@ def filter_functions(result_string, code_query, filepaths):
 def search_functions(code_query):
     prompt_embedding = get_embedding(code_query, 0)
 
+
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
     res = fs.sort_values('similarities', ascending=False).head(10)
 
@@ -105,9 +107,10 @@ def Ask_AI(prompt):
     filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-
+    log("Analyzing your query...")
     files = search_functions(prompt)
-    print(files)
+    log("Analyzing files: " + str(files))
+    #print(files)
     #make a string of all file content
     final_prompt = ""
 
@@ -122,6 +125,7 @@ def Ask_AI(prompt):
                 final_prompt += open(j).read()
 
     final_prompt =(final_prompt+"\n"+prompt)
+    log("Asking ChatGPt-3...")
     #print("Final prompt : "+ final_prompt)
 
     MAX_RETRIES = 3  # Maximum number of retries for API call
@@ -149,5 +153,5 @@ def Ask_AI(prompt):
         return None
     else:
         response_functions = response["choices"][0]["message"]['content']
-
+    clear_logs()
     return {'files': files2str(files), 'response': response_functions}

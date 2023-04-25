@@ -11,7 +11,7 @@ from utilities.embedding import get_embedding
 from utilities.create_clone import create_clone
 import tiktoken
 import time
-from utilities.logger import log
+from utilities.logger import log, get_last_logs, clear_logs
 
 fs = pd.DataFrame()
 
@@ -195,4 +195,5 @@ def train_AI(path):
     print("100% Done")
     log("100% Done. Synchronizing Files")
     create_clone(path)
+    clear_logs()
     return

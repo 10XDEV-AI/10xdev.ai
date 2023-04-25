@@ -28,3 +28,8 @@ def log(msg):
 def get_last_logs(n=10):
     """Returns the last n log statements from log_history."""
     return log_history[-n:]
+
+
+def clear_logs():
+    """Clears the log_history."""
+    log_history.clear()
