@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Sync from './Sync/Sync';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
+import DropdownButton from './DropDownButton/DropDownButton';
 function Navbar() {
   return (
     <nav>
@@ -17,8 +17,7 @@ function Navbar() {
         <div className="sync">
             <Sync />
         </div>
-        <Link className='NavLinks' to="/">Ask AI</Link>
-
+        <DropdownButton/>
       </div>
       </div>
     </nav>

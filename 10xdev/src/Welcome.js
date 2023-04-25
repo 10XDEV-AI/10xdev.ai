@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
 import './Welcome.css';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
+import DropDownButton from './DropDownButton/DropDownButton';
 
 export const Welcome = () => {
 
@@ -45,8 +46,9 @@ export const Welcome = () => {
         <ProjectInfo />
       </div>
       <div className="userProfileContainer">
-        {userPic}
+        <DropDownButton/>
       </div>
+
     </div>
   );
 }

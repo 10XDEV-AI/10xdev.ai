@@ -5,9 +5,10 @@ import simplejson as json
 
 def getprojectInfo():
     # Open info.json and read the path
-    with open('info.json', 'r') as f:
+
+    with open('AIFiles/info.json', 'r') as f:
         data = json.load(f)
-        repo_path = data['path']
+        repo_path = data['current_repo']
 
     repo_name = os.path.basename(repo_path)
 
