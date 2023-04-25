@@ -6,6 +6,7 @@ import Welcome from "./Welcome";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
 import Sync from "./Sync/Sync";
+import Navbar from "./Navbar";
 
 function App () {
   return (
@@ -17,7 +18,6 @@ function App () {
                 <Route path="/chat" element={<Chat/>} />
                 <Route path="/train" element={<Train/>} />
                 <Route path="/repos" element={<Repos/>} />
-                <Route path="/test" element={<Sync/>} />
             </Routes>
         </Router>
     </SearchState>

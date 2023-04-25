@@ -14,10 +14,11 @@ function Navbar() {
       </div>
       <div className="linkscontainer">
       <div className="linkColumn">
+      <DropdownButton/>
         <div className="sync">
-            <Sync />
+
+        <Sync />
         </div>
-        <DropdownButton/>
       </div>
       </div>
     </nav>

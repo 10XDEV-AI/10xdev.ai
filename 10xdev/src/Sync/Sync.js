@@ -7,7 +7,18 @@ function Sync() {
   const [showWarning, setShowWarning] = useState(false);
   const [newFiles, setNewFiles] = useState([]);
   const [isRequestInProgress, setIsRequestInProgress] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // State variable to track whether to show the popup
 
+
+   // Event handler for when the user hovers over an item
+    const handleMouseOver = () => {
+      setShowPopup(true);
+    };
+
+    // Event handler for when the user stops hovering over an item
+    const handleMouseLeave = () => {
+      setShowPopup(false);
+    };
   const syncData = async () => {
       if (isRequestInProgress) {
         return; // Do not make API call if isRequestInProgress is true
@@ -90,51 +101,67 @@ const handleSyncNewClick = async () => {
   }
 };
 
+  return (
+  <div>
+    <div onMouseLeave={handleMouseLeave}>
 
-return (
-  <div className="sync-container">
-    <button className="sync-button" onClick={syncData} disabled={isSyncing}>
-        Sync
-    </button>
-    {isSyncing ? (
-      <div>
-        <span className="refresh-icon" >
-          ⏳
-        </span>
-      </div>
-    ) : showTick ? (
-    <div>
-      <span className="tick-icon" >
-        ✅
-      </span>
-      <div className="popup-container">
-        All files synced successfully
-      </div>
-    </div>
-    ) : showWarning ? (
-      <div>
-        <button className="refresh-button" onClick={syncData} disabled={isSyncing}>
-            Refresh
-        </button>
-        <button
-          className="sync-new-button"
-          onClick={handleSyncNewClick}
-          disabled={isSyncing}
-        >
-          Sync New Files
-        </button>
-        <span className="warning-icon">
-          ⚠️
-        </span>
-        {newFiles.length > 0 && (
-              <div className="new-files-list">
-                <ul>
-                  {newFiles.map((file, index) => (
-                    <li key={index}>{file}</li>
-                  ))}
-                </ul>
-              </div>
+      {isSyncing ? (
+        <div>
+        <div className="sync-container">
+            <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
+                Sync ⏳
+              </button>
+        </div>
+          {showPopup &&(
+            <div className="popup-container">
+            <h1> ⚒️</h1>
+            Syncing...
+            <LogViewer />
+            </div>
             )}
+        </div>
+      ) : showTick ? (
+        <div>
+          <div className="sync-container">
+            <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
+                Sync ✅
+            </button>
+          </div>
+          {showPopup &&
+              <div className="popup-container">
+              <h1>👍🏻</h1>
+                 All files synced successfully
+              </div>
+          }
+        </div>
+      ) : showWarning ? (
+        <div>
+            <div className="sync-container">
+             <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
+              Sync ⚠️
+             </button>
+            </div>
+        {newFiles.length > 0 && showPopup && (
+        <div className="popup-container">
+            <div className="new-files-list">
+                <ul className="popup-container-bullet">
+                    {newFiles.map((file, index) => (
+                    <li key={index}>{file}</li>
+                ))}
+                </ul>
+            </div>
+            <button className="PopUpbutton" onClick={syncData} disabled={isSyncing}>
+                Refresh
+            </button>
+            <button
+              className="PopUpbutton"
+              onClick={handleSyncNewClick}
+              disabled={isSyncing}
+            >
+              Sync New Files
+            </button>
+        </div>
+        )}
       </div>
     ) : (
       <span className="cross-icon" aria-label="cross" role="img">
@@ -142,6 +169,7 @@ return (
       </span>
     )}
 
+    </div>
   </div>
 );
 }
