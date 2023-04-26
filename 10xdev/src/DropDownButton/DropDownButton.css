@@ -7,8 +7,9 @@
 .userProfileButton{
 border: none;
 background: none;
-font-size: 30px;
+font-size: 25px;
 text-align: right;
+padding: 5px;
 }
 
 .drop-down-list {
@@ -28,8 +29,7 @@ text-align: right;
 .drop-down-bullets {
   padding: 8px;
   cursor: pointer;
-
-white-space: pre;
+  white-space: pre;
 }
 
 .drop-down-bullets:hover {
