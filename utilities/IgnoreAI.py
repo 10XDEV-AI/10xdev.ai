@@ -1,21 +1,23 @@
 import os
-import gitignore_parser
+from gitignore_parser import parse_gitignore
 
 def IgnoreAI(path):
     files2analyse = []
-    files2ignore = open(path+"/.AIIgnore", "r").read().splitlines()
+    AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
 
+    print("Files to ignore : "+str((AIignore)))
     for root, directories, files in os.walk(path):
-        # Exclude any directories that appear in the ignore list
-        directories[:] = [d for d in directories if d not in files2ignore]
-        #print("Directories:", directories)
+        if AIignore(root):
+                    directories[:] = []  # Don't traverse this directory further
+                    continue
         for filename in files:
-            #print("File : "+filename)
-            if os.path.relpath(os.path.join(root, filename), path) not in files2ignore:
-                # Append relative path to file to file_paths_details list
+            if AIignore(os.path.join(root, filename)):
+                continue
+            else:
+                print("File : "+os.path.relpath(os.path.join(root, filename), path))
                 files2analyse.append(os.path.relpath(os.path.join(root, filename), path))
 
     print("Files to analyse : "+str((files2analyse)))
-
-    print("Files to ignore : "+str((files2ignore)))
+    files2ignore = open(os.path.join(path, '.AIignore'), 'r').read().splitlines()
+    print("Files to ignore : "+str(files2ignore))
     return files2ignore,files2analyse

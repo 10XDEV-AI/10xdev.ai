@@ -3,7 +3,8 @@ import './Navbar.css';
 import Sync from './Sync/Sync';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
 import DropdownButton from './DropDownButton/DropDownButton';
-function Navbar() {
+
+function Navbar({LoadProjectInfo, LoadSync}) {
   return (
     <nav>
       <div className="logo">
@@ -14,11 +15,12 @@ function Navbar() {
       </div>
       <div className="linkscontainer">
       <div className="linkColumn">
-      <DropdownButton/>
-        <div className="sync">
-
-        <Sync />
-        </div>
+        <DropdownButton />
+        {LoadSync ? (
+          <div className="sync">
+            <Sync />
+          </div>
+        ) : null}
       </div>
       </div>
     </nav>

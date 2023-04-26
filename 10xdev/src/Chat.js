@@ -95,7 +95,7 @@ export const Chat = () => {
   }
   return (
       <div className="container">
-        <Navbar />
+        <Navbar LoadSync = "True" />
         {isLoading ? (
           <LoadingRing />
         ) : (

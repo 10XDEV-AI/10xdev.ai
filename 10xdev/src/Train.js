@@ -88,7 +88,7 @@ const Train = () => {
           </label>
           <div className="gitIgnorebuttoncontainer">
             <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
-              Get GitIgnore
+              Get .AIIgnore
             </button>
             {showTrainButton && (
               <button onClick={handleTrain} className="gitIgnorebutton">

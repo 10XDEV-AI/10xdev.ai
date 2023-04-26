@@ -44,8 +44,7 @@ def summarize_str(filename,string):
              time.sleep(20)
 
 def summarize_file(path,file,i):
-    root = read_info()
-    with open(os.path.join(root, file), 'rb') as f:
+    with open(os.path.join(path, file), 'rb') as f:
         result = chardet.detect(f.read())
     if not(result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
             p=("File "+file+" was not Analyzed as it is not a text file")
@@ -103,26 +102,7 @@ def train_AI(path):
     log("Training AI")
 
     fsfilename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
-    if not os.path.exists(os.path.join("AIFiles", "info.json")):
-        log("info.json does not exist. Creating one.")
-        with open(os.path.join("AIFiles", "info.json"), 'w') as f:
-            # You can add any initial content you want in the .AIignore file
-            f.write("{}")
 
-    with open('AIFiles/info.json', 'r') as f:
-        data = json.load(f)
-        #set current_repo to the value of the key 'path'
-
-        data['current_repo'] = path.split('/')[-1]
-        #check if the key 'repos' exists
-        if 'repos' not in data:
-            data['repos'] = []
-        #check if the value of the key 'path' is not in the list of repos
-        if path not in data['repos']:
-            data['repos'].append(path.split('/')[-1])
-
-    with open('AIFiles/info.json', 'w') as outfile:
-        json.dump(data, outfile)
     file_paths_details = walk_and_analyze(path)
     p=("Total number of files analyzed:", len(file_paths_details))
     #log(p)
@@ -190,6 +170,27 @@ def train_AI(path):
             #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     #display(fs)
+    with open('AIFiles/info.json', 'r') as f:
+            data = json.load(f)
+            #set current_repo to the value of the key 'path'
+
+            data['current_repo'] = path
+            #check if the key 'repos' exists
+            if 'repos' not in data:
+                data['repos'] = []
+            #check if the value of the key 'path' is not in the list of repos
+            if path not in data['repos']:
+                data['repos'].append(path)
+
+    with open('AIFiles/info.json', 'w') as outfile:
+        json.dump(data, outfile)
+
+
+    new_fs = pd.DataFrame(columns=['file_path','summary','embedding'])
+    new_fs['file_path'][0] = "Overview.py"
+    new_fs['summary'][0] = "High level Overview, Architecture , File Structure , Dependencies "
+    new_fs['embedding'][0] = get_embedding("High level Overview, Architecture , File Structure , Dependencies ",delay)
+    fs = pd.concat([new_fs,fs])
 
     fs.to_csv(fsfilename,index=False)
     print("100% Done")
