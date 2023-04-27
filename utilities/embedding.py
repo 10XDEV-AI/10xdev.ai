@@ -14,8 +14,8 @@ def get_embedding(task, delay):
             input=task,
             model="text-embedding-ada-002")
         return response['data'][0]['embedding']
-    except openai.errors.APIError as e:
+    except Exception as e:
         print(f"Error: {e}")
         print("Retrying after 5 seconds...")
         time.sleep(5)
-        return get_embedding(task, delay)  # Retry after 5 seconds
+        return get_embedding(task, delay)  # Retry after 5 second s

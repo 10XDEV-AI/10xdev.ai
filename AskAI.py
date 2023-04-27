@@ -19,7 +19,7 @@ def max_cosine_sim(embeddings,prompt_embedding):
     return y
 
 def filter_functions(result_string, code_query, filepaths):
-    task = "List the file paths that will be required to answer the user query based on above given file summaries"
+    task = "List the top one , two or three file paths that will be required to answer the user query based on above given file summaries. Do not return any filepaths if the user query is not related to any of these."
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
     #print(filter_prompt)
@@ -61,7 +61,6 @@ def filter_functions(result_string, code_query, filepaths):
 
 def search_functions(code_query):
     prompt_embedding = get_embedding(code_query, 0)
-
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
     res = fs.sort_values('similarities', ascending=False).head(10)
@@ -122,7 +121,10 @@ def Ask_AI(prompt):
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
             if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
-                final_prompt += open(j).read()
+                final_contents = open(j).read()
+                #remove extra whitespaces and newlines
+                final_contents = re.sub(r'\s+', ' ', final_contents)
+                final_prompt += final_contents
 
     final_prompt =(final_prompt+"\n"+prompt)
     log("Asking ChatGPt-3...")

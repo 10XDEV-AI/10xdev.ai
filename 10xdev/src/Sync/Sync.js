@@ -143,12 +143,23 @@ const handleSyncNewClick = async () => {
             </div>
         {newFiles.length > 0 && showPopup && (
         <div className="popup-container">
-            <div className="new-files-list">
+            <div >
+                <h1>📁</h1>
+                <h2>
+                New files found
+                </h2>
+                <p>
+                Add new files to the .AIIgnore file to ignore them.
+                </p>
+                <p>Click on "Sync New Files" if you want the AI to analyze these files.
+                </p>
+                <div className="new-files-container">
                 <ul className="popup-container-bullet">
                     {newFiles.map((file, index) => (
                     <li key={index}>{file}</li>
                 ))}
                 </ul>
+                </div>
             </div>
             <button className="PopUpbutton" onClick={syncData} disabled={isSyncing}>
                 Refresh

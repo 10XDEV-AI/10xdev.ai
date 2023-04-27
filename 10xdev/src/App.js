@@ -5,8 +5,6 @@ import Repos from "./Repos";
 import Welcome from "./Welcome";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
-import Sync from "./Sync/Sync";
-import Navbar from "./Navbar";
 
 function App () {
   return (

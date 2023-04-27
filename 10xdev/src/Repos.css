@@ -24,9 +24,7 @@
   border: 1px dashed #D3D3D3;
   border-radius: 5px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  width: 100%;
   max-width: 800px;
   display: flex;
 }
@@ -62,4 +60,21 @@
 
 .repo-card-info{
 width: 100%;
+}
+
+.repos-button-container{
+width: 100%;
+display: flex;
+}
+
+
+.repos-button{
+
+margin-left: auto;
+width: 15%;
+border: none;
+background-color: #2455C5;
+padding: 10px;
+border-radius: 20px;
+color: white;
 }

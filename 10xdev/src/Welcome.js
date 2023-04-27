@@ -7,7 +7,7 @@ import DropDownButton from './DropDownButton/DropDownButton';
 
 export const Welcome = () => {
 
-  const { setSearchTerm,userPic } = useContext(SearchContext);
+  const { setSearchTerm } = useContext(SearchContext);
   const [input, setInput] = useState('');
   const navigate = useNavigate();   //for redirecting to search page
 

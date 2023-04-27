@@ -88,7 +88,6 @@ export const Chat = () => {
     }, [results, searchTerm]);
 
   const [chatMessages, setChatMessages] = useState([]);
-  const data = results;
 
   if (isLoading) {
     return <LoadingRing />;
