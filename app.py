@@ -102,7 +102,6 @@ def get_data():
     prompt = request.args.get('prompt')
     print("Asking AI")
     response = Ask_AI(prompt)
-    print(response)
     return jsonify({"files": response["files"], "response": response["response"]})
 
 @app.route('/api/Ignore', methods=['GET'])

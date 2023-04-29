@@ -106,7 +106,7 @@ def train_AI(path):
         if i != 0:
             rate = 60*i/(time.time() - start_time)
             time_elapsed = time.time() - start_time
-            p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
+            p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " files/min. Time Elapsed: " +str(round(time_elapsed/60, 2) + " minutes"))
             print(p)
             log(p)
             if rate > rate_limit:
@@ -140,7 +140,7 @@ def train_AI(path):
         i+=len(sentences)
         rate = 60*i/(time.time() - start_time)
         time_elapsed = time.time() - start_time
-        p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60,2)) + " minutes Time remaining: " + str(round((len(fs)-ind)/rate,2)) + " minutes")
+        p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " blocks/min. Time Elapsed: " +str(round(time_elapsed/60,2)) + " minutes Time remaining: " + str(round((len(fs)-ind)/rate,2)) + " minutes")
         print(p)
         log(p)
         if rate > rate_limit:
