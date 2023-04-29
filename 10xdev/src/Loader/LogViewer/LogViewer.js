@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './LogViewer.css';
 
 function LogViewer() {
   const [logs, setLogs] = useState('');
@@ -27,9 +28,11 @@ function LogViewer() {
   }, []);
 
   return (
-    <div>
-      <pre>{logs}</pre>
-    </div>
+      <div class="logs">
+        <div class="log-col-2">
+            <pre>{logs}</pre>
+        </div>
+      </div>
   );
 }
 

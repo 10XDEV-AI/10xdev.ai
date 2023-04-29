@@ -132,7 +132,7 @@ def train_AI(path):
                     delay = delay + 0.1
                     #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
             if rate < 0.95*rate_limit:
-                delay = delay * 0.9
+                delay = delay * 0.8
                 #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     fs.to_csv(fsfilename,index=False)
@@ -182,15 +182,8 @@ def train_AI(path):
             if path not in data['repos']:
                 data['repos'].append(path)
 
-    with open('AIFiles/info.json', 'w') as outfile:
+    with open(os.path.join('AIFiles','info.json'), 'w') as outfile:
         json.dump(data, outfile)
-
-
-    new_fs = pd.DataFrame(columns=['file_path','summary','embedding'])
-    new_fs['file_path'][0] = "Overview.py"
-    new_fs['summary'][0] = "High level Overview, Architecture , File Structure , Dependencies "
-    new_fs['embedding'][0] = get_embedding("High level Overview, Architecture , File Structure , Dependencies ",delay)
-    fs = pd.concat([new_fs,fs])
 
     fs.to_csv(fsfilename,index=False)
     print("100% Done")

@@ -15,10 +15,7 @@ const SearchBar = ({ onSearch }) =>{
           type="text"
           value={searchInput}
           onChange={e => setSearchInput(e.target.value)}
-          onKeyPress={e => {
-          if (e.keyCode === '13' || e.which === '13') {
-            handleClick();
-          }}}
+          onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         />
       <button className="GoButtonChat" onClick={handleClick}>🔍</button>
     </div>
