@@ -1,9 +1,18 @@
-import openai
+import threading
 import time
+import openai
 
+RATE_LIMIT = 3 # Change this to the rate limit set by the chat model
+requests_made = 0
+request_queue = []
 
 def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperature=0, max_tokens=256):
-    while True:
+    global requests_made
+    if requests_made >= RATE_LIMIT:
+        request_queue.append((model, system_message, prompt, temperature, max_tokens))
+        return "Rate limit reached. Your request has been queued."
+    else:
+        requests_made += 1
         try:
             response = openai.ChatCompletion.create(
                 model=model,
@@ -14,7 +23,24 @@ def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperat
             )
             return response["choices"][0]["message"]['content']
         except Exception as e:
-
-            log(f"Encountered error: {e}")
-            log("Retrying in 20 seconds...")
+            print(f"Encountered error: {e}")
+            print("Retrying in 20 seconds...")
             time.sleep(20)
+        finally:
+            requests_made -= 1
+
+def process_requests():
+    global requests_made
+    while requests_made < RATE_LIMIT and request_queue:
+        print("Processing request queue...")
+        print(requests_made)
+        request = request_queue.pop(0)
+        AskGPT(*request)
+
+def timer():
+    while True:
+        time.sleep(60)
+        process_requests()
+
+t = threading.Thread(target=timer)
+t.start()

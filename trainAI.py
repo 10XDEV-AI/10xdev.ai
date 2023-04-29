@@ -97,24 +97,7 @@ def train_AI(path):
     i=0
     fs['summary'] = ''
     log("Starting analysis")
-    for ind in fs.index:
-        i_new,fs['summary'][ind] = summarize_file(path,fs['file_path'][ind],i)
-
-        if i_new !=i:
-            time.sleep(delay)
-            i = i_new
-        if i != 0:
-            rate = 60*i/(time.time() - start_time)
-            time_elapsed = time.time() - start_time
-            p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " files/min. Time Elapsed: " +str(round(time_elapsed/60, 2) + " minutes"))
-            print(p)
-            log(p)
-            if rate > rate_limit:
-                    delay = delay + 0.1
-                    #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
-            if rate < 0.95*rate_limit:
-                delay = delay * 0.8
-                #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
+    fs['summary'] = fs.apply(lambda x: summarize_file(path,x['file_path'],i), axis=1)
 
     fs.to_csv(fsfilename,index=False)
     log("Analyzed all files succesfully")
@@ -153,9 +136,6 @@ def train_AI(path):
     #display(fs)
     with open('AIFiles/info.json', 'r') as f:
             data = json.load(f)
-            #set current_repo to the value of the key 'path'
-
-            data['current_repo'] = path
             #check if the key 'repos' exists
             if 'repos' not in data:
                 data['repos'] = []

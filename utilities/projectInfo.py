@@ -10,7 +10,7 @@ def getprojectInfo(repo_name = True, branch_name = True, full_path = False):
         data = json.load(f)
         repo_path = data['current_repo']
 
-    repo_name = os.path.basename(repo_path)
+    repo_name = repo_path.split('/')[-1]
 
     # Check the current branch of the repo
     if os.path.exists(os.path.join(repo_path, '.git')):

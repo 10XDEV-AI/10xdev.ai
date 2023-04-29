@@ -27,38 +27,63 @@ def get_trainAI():
 
 @app.route('/api/Repos', methods=['GET'])
 def get_Repos():
-    # List all repositories in AIFiles folder
-    directories = []
+    with open(os.path.join('AIFiles','info.json'), 'r') as f:
+        info = json.load(f)
 
-    for entry in os.scandir('AIFiles'):
-        if entry.is_dir():
-            #check for .AIIgnore
-            if os.path.exists(entry.path+"/.AIIgnore"):
-                output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=entry.path)
-                branch_name = output.decode('utf-8').strip()
-                directories.append({"Directory": entry.name, "AIIgnore": True, "Branch": branch_name})
+    print(info)
+
+    directories = []
+    extra_directories = []
+
+    info_repos = info['repos']
+    print(info_repos)
+    print("Repos SIze: ",len(info_repos))
+
+    for repo in info_repos:
+        repo_name = repo.split('/')[-1]
+        print(repo)
+
+    for repo in info_repos:
+        repo_name = repo.split('/')[-1]
+        print(repo)
+        if os.path.exists(os.path.join('AIFiles',repo_name)):
+            output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo)
+            branch_name = output.decode('utf-8').strip()
+            directories.append({"Directory": repo_name, "AIIgnore": True, "Branch": branch_name, "Full_Path": repo})
+        else:
+            extra_directories.append(repo)
+
+    for repo in extra_directories:
+        info_repos.remove(repo)
+        if info['current_repo'] == repo:
+            info['current_repo'] = "Test"
+
+    info['repos'] = info_repos
+
+    with open(os.path.join('AIFiles','info.json'), 'w') as f:
+        json.dump(info, f)
 
     return jsonify(directories)
 
 @app.route('/api/SelectRepo', methods=['GET'])
 def select_Repos():
-    directory = request.args.get('directory')
+    Full_Path = request.args.get('Full_Path')
     try:
         with open(os.path.join('AIFiles','info.json'), 'r') as f:
             info = json.load(f)
-            info['current_repo'] = directory
+            info['current_repo'] = Full_Path
         with open(os.path.join('AIFiles','info.json'), 'w') as f:
             json.dump(info, f)
         return 'Success'
     except Exception as e:
         return f'Error: {e}'
 
-@app.route('/api/Repos/<directory>', methods=['DELETE'])
-def delete_repo(directory):
-    if directory is None or directory.strip() == "":
+@app.route('/api/Repos/<Full_path>', methods=['DELETE'])
+def delete_repo(Full_path):
+    if Full_path is None or Full_path.strip() == "":
         return jsonify({"message": "Invalid directory name."}), 400
-
-    repo_path = os.path.join('AIFiles', directory)
+    repo_name = Full_path.split('/')[-1]
+    repo_path = os.path.join('AIFiles', repo_name)
     if os.path.exists(repo_path):
         shutil.rmtree(repo_path)
 
@@ -71,18 +96,18 @@ def delete_repo(directory):
         with open('AIFiles/info.json', 'r') as f:
             info = json.load(f)
             repos = info['repos']
-            if directory in repos:
-                repos.remove(directory)
+            if Full_path in repos:
+                repos.remove(Full_path)
                 info['current_repo'] = "Test"
             else:
-                return jsonify({"message": f"{directory} does not exist in the list of repositories."}), 404
+                return jsonify({"message": f"{repo_name} does not exist in the list of repositories."}), 404
 
         with open('AIFiles/info.json', 'w') as f:
             json.dump(info, f)
 
-        return jsonify({"message": f"{directory} has been deleted."}), 200
+        return jsonify({"message": f"{repo_name} has been deleted."}), 200
     else:
-        return jsonify({"message": f"{directory} does not exist."}), 404
+        return jsonify({"message": f"{repo_name} does not exist."}), 404
 
 
 @app.route('/api/sync', methods=['GET'])
