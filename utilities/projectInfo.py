@@ -16,6 +16,7 @@ def getprojectInfo(repo_name = True, branch_name = True, full_path = False):
     if os.path.exists(os.path.join(repo_path, '.git')):
         output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo_path)
         branch_name = output.decode('utf-8').strip()
+        print("Branch name: ", branch_name)
     else:
         branch_name = None
 

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,render_template
 from flask_cors import CORS
 from AskAI import Ask_AI
 from trainAI import train_AI
@@ -7,9 +7,14 @@ from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
 from syncAI import syncAI
 import csv,os,subprocess,shutil,json,time
+import webbrowser,threading,random
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_folder='10xdev/build/static', template_folder='10xdev/build')
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/api/projectInfo', methods=['GET'])
 def get_projectInfo():
@@ -119,6 +124,7 @@ def get_CheckAIIgnore():
 @app.route('/api/logs', methods = ['GET'])
 def get_logs():
     return jsonify(get_last_logs())
+
 if __name__ == '__main__':
     app.run(debug=True)
 
