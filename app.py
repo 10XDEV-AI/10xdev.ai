@@ -7,8 +7,6 @@ from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
 from syncAI import syncAI
 import csv,os,subprocess,shutil,json,time
-import webbrowser,threading,random
-
 
 app = Flask(__name__, static_folder='10xdev/build/static', template_folder='10xdev/build')
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})

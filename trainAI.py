@@ -2,15 +2,14 @@ import openai
 import pandas as pd
 import json
 import os
-import subprocess
 import chardet
-from utilities.readInfo import read_info
-from openai.embeddings_utils import cosine_similarity
 from gitignore_parser import parse_gitignore
 from utilities.embedding import get_embedding
 from utilities.create_clone import create_clone
-import tiktoken
+from utilities.tokenCount import tokenCount
+from utilities.AskGPT import AskGPT
 import time
+
 from utilities.logger import log, get_last_logs, clear_logs
 
 fs = pd.DataFrame()
@@ -27,21 +26,10 @@ def split_sent(s1):
     result = [' '.join(chunk) for chunk in chunks]  # join chunks into strings
     return result
 
-def summarize_str(filename,string):
-    while True:
-        try:
-             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "system", "content": "Summarize what this file in the codebase does, assume context when neccessary."},
-                      {"role": "user", "content": "File "+filename+" has "+string}],
-                temperature=0,
-                max_tokens=256
-             )
-             return response["choices"][0]["message"]['content']
-        except Exception as e:
-             log(f"Encountered error: {e}")
-             log("Retrying in 20 seconds...")
-             time.sleep(20)
+def summarize_str(filename,file_contents):
+    prompt = "File "+filename+" has "+file_contents
+    system_message = "Summarize what this file in the codebase does, assume context when neccessary."
+    return AskGPT(model = "gpt-3.5-turbo", system_message = system_message, prompt=prompt, temperature=0, max_tokens=256)
 
 def summarize_file(path,file,i):
     with open(os.path.join(path, file), 'rb') as f:
@@ -57,19 +45,12 @@ def summarize_file(path,file,i):
     full_file_path = os.path.join(path, file)
     with open(full_file_path, 'r') as f:
         file_contents = f.read()
-    if num_tokens_from_string(file_contents) > 3000:
+    if tokenCount(file_contents) > 3000:
         p = ("File "+file+" was not analyzed as it is too long")
         log(p)
         return i,"File content too long"
     return i,summarize_str(file,file_contents)
 
-def num_tokens_from_string(string: str) -> int:
-    encoding_name = "cl100k_base"
-    """Returns the number of tokens in a text str"cl100k_base"ing."""
-    string = " ".join(string.split())#remove extra spaces
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
 
 def walk_and_analyze(path):
     file_paths_details = []
