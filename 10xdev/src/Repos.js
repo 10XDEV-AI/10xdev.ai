@@ -14,8 +14,8 @@ export default function Repos() {
       .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = useCallback((directory) => {
-    fetch(`http://127.0.0.1:5000/api/Repos/${directory}`, {
+  const handleDelete = useCallback((Full_Path) => {
+    fetch(`http://127.0.0.1:5000/api/Repos/${Full_Path}`, {
       method: 'DELETE',
     })
       .then(response => response.json())
@@ -24,8 +24,8 @@ export default function Repos() {
       .catch(error => console.error(error));
   }, []);
 
-  const handlSelect = useCallback((directory) => {
-    fetch(`http://127.0.0.1:5000/api/SelectRepo?directory=${directory}`, {
+  const handlSelect = useCallback((Full_Path) => {
+    fetch(`http://127.0.0.1:5000/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
       .then(() => {window.location.reload();})
@@ -45,9 +45,10 @@ export default function Repos() {
                 <h2>{repo.Directory}</h2>
                 <p>Branch: {repo.Branch}</p>
                 <p>AIIgnore: {repo.AIIgnore.toString()}</p>
+                <p>Full Path: {repo.Full_Path}</p>
               </div>
               <div className="repo-card-buttons">
-                <button className="repo-card-button" onClick={() => handlSelect(repo.Directory)}>Select ✋️</button>
+                <button className="repo-card-button" onClick={() => handlSelect(repo.Full_Path)}>Select ✋️</button>
                 {repo.Directory !== "Test" &&
                 <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>}
               </div>
