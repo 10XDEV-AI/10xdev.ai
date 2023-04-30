@@ -52,7 +52,8 @@ width: 50px;
 .ignoretable{
 max-width: 100%;
 }
-.tdp{
+.ignoretable th{
+text-align: left;
 }
 .ignoretext table tr td{
 padding-left: 10px;
