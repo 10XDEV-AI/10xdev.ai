@@ -25,7 +25,7 @@ def log(msg):
     if len(log_history) > MAX_LOGS:
         log_history.pop(0)
 
-def get_last_logs(n=10):
+def get_last_logs(n=15):
     """Returns the last n log statements from log_history."""
     return log_history[-n:]
 

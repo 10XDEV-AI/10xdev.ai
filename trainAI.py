@@ -1,16 +1,11 @@
-import openai
-import pandas as pd
-import json
-import os
-import chardet
-from gitignore_parser import parse_gitignore
+import pandas as pd,json,os,time,chardet,openai
 from utilities.embedding import get_embedding
 from utilities.create_clone import create_clone
 from utilities.tokenCount import tokenCount
 from utilities.AskGPT import AskGPT
-import time
+from utilities.files2analyze import files2analyze
 
-from utilities.logger import log, get_last_logs, clear_logs
+from utilities.logger import log, clear_logs
 
 fs = pd.DataFrame()
 
@@ -20,7 +15,6 @@ text_file.close()
 
 def split_sent(s1):
     words = s1.split()  # split string into words
-    #print(words)
     n = 8  # split every n words
     chunks = [words[i:i+n] for i in range(0, len(words), n)]  # split into chunks of size n
     result = [' '.join(chunk) for chunk in chunks]  # join chunks into strings
@@ -52,63 +46,28 @@ def summarize_file(path,file):
     return summarize_str(file,file_contents)
 
 
-def walk_and_analyze(path):
-    file_paths_details = []
-
-    if not os.path.exists(os.path.join(path, '.AIignore')):
-        log("AIignore does not exist. Creating one.")
-        with open(os.path.join(path, '.AIignore'), 'w') as f:
-            # You can add any initial content you want in the .AIignore file
-            f.write("")
-
-    AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
-    for root, directories, files in os.walk(path):
-        # Check if the current directory should be ignored
-        if AIignore(root):
-            directories[:] = []  # Don't traverse this directory further
-            continue
-
-        # Process all non-ignored files in the directory
-        for filename in files:
-            if AIignore(os.path.join(root, filename)):
-                continue  # Ignore this file
-            else:
-                # Process the file
-                #log("Evaluating size for : "+os.path.relpath(os.path.join(root, filename), path))
-
-                file_paths_details.append(os.path.relpath(os.path.join(root, filename), path))
-    return file_paths_details
-
 def train_AI(path):
     log("Training AI")
 
     fsfilename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
 
-    file_paths_details = walk_and_analyze(path)
-    p=("Total number of files analyzed:", len(file_paths_details))
-    #log(p)
+    file_paths_details = files2analyze(path)
     fs = pd.DataFrame(file_paths_details)
-    #display(fs)
-
     fs.columns = ['file_path']
-    start_time = time.time()
-    rate_limit = 3
-    delay = 60/rate_limit
-    i=0
+
     log("Starting analysis")
     fs['summary'] = fs.apply(lambda x: summarize_file(path,x['file_path']), axis=1)
 
     fs.to_csv(fsfilename,index=False)
     log("Analyzed all files succesfully")
-    #display(fs)
+
 
     log('Evaluating code blocks')
     i=0
     fs = pd.read_csv(fsfilename)
-    #display(fs)
     rate_limit = 60
     start_time = time.time()
-    delay = 60/rate_limit
+    delay = 40/rate_limit
     fs['embedding'] = ''
     for ind in fs.index:
         if str(fs['summary'][ind])=="Ignore":
@@ -132,7 +91,6 @@ def train_AI(path):
             delay = delay * 0.9
             #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
-    #display(fs)
     with open('AIFiles/info.json', 'r') as f:
             data = json.load(f)
             #check if the key 'repos' exists

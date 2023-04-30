@@ -51,3 +51,15 @@
   width: 70%;
   text-align: center;
 }
+
+.loading-cancel{
+  position: absolute;
+  top: 90%;
+  right: 15%;
+  width: 10%;
+  text-align: center;
+  color: #696969;
+  border-color:  #696969;
+  background: none;
+  border-radius: 20px;
+}

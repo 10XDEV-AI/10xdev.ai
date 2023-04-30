@@ -5,24 +5,21 @@ from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
+from utilities.files2analyze import files2analyze
 
 text_file = open("API_key.txt", "r")
 openai.api_key = text_file.read()
 text_file.close()
 
 fs = pd.DataFrame()
-
-
 def get_diff(old_file_path, new_file_path):
     result = subprocess.run(["diff", old_file_path, new_file_path], capture_output=True, text=True)
     return result.stdout
-
 
 def summarize_str(filename, file_contents):
     prompt = "File " + filename + " has " + file_contents
     system_message = "Summarize what this file in the codebase does, assume context when neccessary."
     return AskGPT(model="gpt-3.5-turbo", system_message=system_message, prompt=prompt, temperature=0, max_tokens=256)
-
 
 def sumarize(filename):
     root = read_info()
@@ -37,7 +34,6 @@ def sumarize(filename):
 
     return summarize_str(filename, file_contents)
 
-
 def syncAI(sync_flag):
     path = read_info()
     global fs
@@ -46,25 +42,11 @@ def syncAI(sync_flag):
     fs = pd.read_csv(fsfilename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
-    file_paths_details = []
-    Files_to_ignore = open(path + "/.AIIgnore", "r").read().splitlines()
-    # print("Files and directories to ignore:")
-    # print(Files_to_ignore)
-
-    for root, directories, files in os.walk(path):
-        # Exclude any directories that appear in the ignore list
-        directories[:] = [d for d in directories if d not in Files_to_ignore]
-        # print("Directories:", directories)
-        for filename in files:
-            # print("File : "+filename)
-            if os.path.relpath(os.path.join(root, filename), path) not in Files_to_ignore:
-                # Append relative path to file to file_paths_details list
-                file_paths_details.append(os.path.relpath(os.path.join(root, filename), path))
+    file_paths_details = files2analyze(path)
 
     for file in file_paths_details:
         clone_path = get_clone_filepath(path, file)
-        # print("File : "+file)
-        # print("Clone Path : "+clone_path)
+
         if get_diff(os.path.join(path, file), clone_path) != "":
             print("File " + file + " has changed")
             log("File " + file + " has changed. Syncing AI...")
@@ -75,9 +57,6 @@ def syncAI(sync_flag):
     for ind in fs.index:
         if (fs['embedding'][ind] == None):
             fs['embedding'][ind] = get_embedding(fs['summary'][ind], 0.5)
-
-            print(type(fs.loc[fs["file_path"] == file, "summary"]))
-            # print(type(get_embedding( fs.loc[fs["file_path"] == file, "summary"],0)))
 
     # Find the set difference between file_paths_details and df4["filepath"]
 

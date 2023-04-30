@@ -30,12 +30,13 @@ width: 100%;
 }
 
 .NewChatButton {
-  border-color:  #696969;
+  border : solid;
+  border-color:  #2455C5;
   background: none;
   font-size: 15px;
   border-radius: 6px;
   width: 200px;
-  color: #696969;
+  color: #2455C5;
   padding: 0px;
   border-width: 1px;
 }
@@ -48,7 +49,7 @@ width: 100%;
 
 .searchinput {
    width: 100%;
-   font-size: 12px;
+   font-size: 15px;
    background: #FFFFFF;
    border-radius: 6px;
    border: none;
