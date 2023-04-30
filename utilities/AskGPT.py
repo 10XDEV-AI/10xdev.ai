@@ -5,9 +5,13 @@ import openai
 RATE_LIMIT = 3 # Change this to the rate limit set by the chat model
 requests_made = 0
 request_queue = []
+from utilities.tokenCount import tokenCount
 
 def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperature=0, max_tokens=256):
     global requests_made
+    if tokenCount(prompt+system_message) > 4096:
+        return "Your files are too long. Please try again with a shorter prompt or use GPT-4 instead."
+
     if requests_made >= RATE_LIMIT:
         request_queue.append((model, system_message, prompt, temperature, max_tokens))
         return "Rate limit reached. Your request has been queued."

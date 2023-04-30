@@ -1,16 +1,25 @@
+.bottombar{
+display: flex;
+width: 100%;
+}
+
 .chatsearchbarcontainer {
   display: flex;
   padding:5px;
   height: 100%;
   border-radius: 6px;
   background-color: #FFFFFF;
+  width: 100%;
+  margin-left: 20%;
+margin-right: 5%;
+
 }
 
 .searchbarrow{
 position: fixed;
 bottom: 5px;
-right: 15%;
-width: 70%;
+right: 2%;
+width: 100%;
 }
 
 .GoButtonChat {
@@ -20,9 +29,26 @@ width: 70%;
   background: #FFFFFF;
 }
 
+.NewChatButton {
+  border-color:  #696969;
+  background: none;
+  font-size: 15px;
+  border-radius: 6px;
+  width: 200px;
+  color: #696969;
+  padding: 0px;
+  border-width: 1px;
+}
+
+.NewChatButton:hover {
+  background: #2455C5;
+  color: #FFFFFF;
+  box-shadow: 0 0 5px 0px #D3D3D3;
+}
+
 .searchinput {
    width: 100%;
-   font-size: 16px;
+   font-size: 12px;
    background: #FFFFFF;
    border-radius: 6px;
    border: none;

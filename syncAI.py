@@ -1,7 +1,7 @@
 import time, chardet, openai, subprocess, os, pandas as pd
 from utilities.readInfo import read_info
 from utilities.embedding import get_embedding
-from utilities.create_clone import create_clone, get_clone_path, get_clone_filepath
+from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT

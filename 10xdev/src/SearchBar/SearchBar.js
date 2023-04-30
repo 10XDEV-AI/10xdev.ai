@@ -8,7 +8,16 @@ const SearchBar = ({ onSearch }) =>{
     onSearch(searchInput);
   }
 
+  const newTab = async () => {
+      const currentUrl = window.location.href;
+      // remove the last part of the url
+      const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+      // open a new tab with the new url
+      window.open(newUrl, '_blank');
+    };
+
   return (
+  <div className="bottombar">
     <div className="chatsearchbarcontainer">
        <input
           className="searchinput"
@@ -18,7 +27,11 @@ const SearchBar = ({ onSearch }) =>{
           onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         />
       <button className="GoButtonChat" onClick={handleClick}>🔍</button>
+
     </div>
+    <button className="NewChatButton" onClick={newTab}>Start New Topic</button>
+
+  </div>
   )
 }
 

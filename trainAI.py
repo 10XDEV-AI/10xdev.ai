@@ -31,15 +31,15 @@ def summarize_str(filename,file_contents):
     system_message = "Summarize what this file in the codebase does, assume context when neccessary."
     return AskGPT(model = "gpt-3.5-turbo", system_message = system_message, prompt=prompt, temperature=0, max_tokens=256)
 
-def summarize_file(path,file,i):
+def summarize_file(path,file):
     with open(os.path.join(path, file), 'rb') as f:
         result = chardet.detect(f.read())
     if not(result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
             p=("File "+file+" was not Analyzed as it is not a text file")
             log(p)
             #print(result['encoding'])
-            return i,"Ignore"
-    i+=1
+            return "Ignore"
+
     p=("Analyzing "+file)
     log(p)
     full_file_path = os.path.join(path, file)
@@ -48,8 +48,8 @@ def summarize_file(path,file,i):
     if tokenCount(file_contents) > 3000:
         p = ("File "+file+" was not analyzed as it is too long")
         log(p)
-        return i,"File content too long"
-    return i,summarize_str(file,file_contents)
+        return "File content too long"
+    return summarize_str(file,file_contents)
 
 
 def walk_and_analyze(path):
@@ -95,9 +95,8 @@ def train_AI(path):
     rate_limit = 3
     delay = 60/rate_limit
     i=0
-    fs['summary'] = ''
     log("Starting analysis")
-    fs['summary'] = fs.apply(lambda x: summarize_file(path,x['file_path'],i), axis=1)
+    fs['summary'] = fs.apply(lambda x: summarize_file(path,x['file_path']), axis=1)
 
     fs.to_csv(fsfilename,index=False)
     log("Analyzed all files succesfully")
