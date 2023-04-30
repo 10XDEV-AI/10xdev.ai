@@ -1,16 +1,15 @@
 import pandas as pd
 import regex as re
-import time
-import openai
 import os
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
 from utilities.readInfo import read_info
 from utilities.str2float import str2float
-from utilities.logger import log, get_last_logs, clear_logs
+from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
+
 
 fs = pd.DataFrame()
 
@@ -36,7 +35,7 @@ def filter_functions(result_string, code_query, filepaths):
     return files
 
 def search_functions(code_query):
-    prompt_embedding = get_embedding(code_query, 0)
+    prompt_embedding = get_embedding(code_query)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
     res = fs.sort_values('similarities', ascending=False).head(10)
@@ -134,6 +133,6 @@ def Ask_AI(prompt):
     print("Asking ChatGPT-3...")
     FinalAnswer = AskGPT(model = "gpt-3.5-turbo", system_message = system_message, prompt=final_prompt, temperature=0, max_tokens=max)
 
-
+    clear_logs()
 
     return {'files': files2str(files), 'response': FinalAnswer}
