@@ -3,9 +3,9 @@ import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
 import SearchContext from "../context/SearchContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoadingRing = () => {
-
   return (
   <div>
     <div className="loading-ring">

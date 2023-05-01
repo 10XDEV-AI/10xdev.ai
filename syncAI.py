@@ -1,6 +1,6 @@
 import time, chardet, openai, subprocess, os, pandas as pd
 from utilities.readInfo import read_info
-from utilities.embedding import get_embedding
+from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.logger import log, clear_logs
@@ -56,7 +56,7 @@ def syncAI(sync_flag):
 
     for ind in fs.index:
         if (fs['embedding'][ind] == None):
-            fs['embedding'][ind] = get_embedding(fs['summary'][ind], 0.5)
+            fs['embedding'][ind] = split_embed(fs['summary'][ind])
 
     # Find the set difference between file_paths_details and df4["filepath"]
 
@@ -96,7 +96,7 @@ def syncAI(sync_flag):
         new_fs['summary'][ind] = sumarize(new_fs['file_path'][ind])
         time.sleep(20)
         if (new_fs['summary'][ind] != "Ignore"):
-            new_fs['embedding'][ind] = get_embedding(new_fs['summary'][ind], 0.5)
+            new_fs['embedding'][ind] = split_embed(new_fs['summary'][ind])
 
     fs = pd.concat([fs, new_fs], ignore_index=True)
 

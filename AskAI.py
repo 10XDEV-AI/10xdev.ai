@@ -10,6 +10,7 @@ from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 
+
 fs = pd.DataFrame()
 
 def max_cosine_sim(embeddings,prompt_embedding):
@@ -34,7 +35,7 @@ def filter_functions(result_string, code_query, filepaths):
     return files
 
 def search_functions(code_query):
-    prompt_embedding = get_embedding(code_query, 0)
+    prompt_embedding = get_embedding(code_query)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
     res = fs.sort_values('similarities', ascending=False).head(10)
