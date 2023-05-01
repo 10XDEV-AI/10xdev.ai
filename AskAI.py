@@ -47,7 +47,7 @@ def search_functions(code_query):
         file_path = row['file_path']
         summary = row['summary']
         if summary != "Ignore":
-            file_summary = 'File path: ' + file_path +"\nFile summary: " +summary
+            file_summary = 'File path: ' + str(file_path) +"\nFile summary: " +summary
             file_summary_string.append(file_summary)
         else:
             file_summary_string.append('File path: ' + file_path)

@@ -6,7 +6,7 @@ from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
 from syncAI import syncAI
-import csv,os,subprocess,shutil,json,time
+import os,subprocess,shutil,json
 
 app = Flask(__name__, static_folder='10xdev/build/static', template_folder='10xdev/build')
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
@@ -30,22 +30,15 @@ def get_Repos():
     with open(os.path.join('AIFiles','info.json'), 'r') as f:
         info = json.load(f)
 
-    print(info)
 
     directories = []
     extra_directories = []
 
     info_repos = info['repos']
-    print(info_repos)
-    print("Repos SIze: ",len(info_repos))
 
     for repo in info_repos:
         repo_name = repo.split('/')[-1]
-        print(repo)
 
-    for repo in info_repos:
-        repo_name = repo.split('/')[-1]
-        print(repo)
         if os.path.exists(os.path.join('AIFiles',repo_name)):
             output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo)
             branch_name = output.decode('utf-8').strip()
@@ -115,11 +108,9 @@ def get_syncAI():
     sync_new_flag = request.args.get('sync_new')
     if sync_new_flag == 'true':
         message,files =  syncAI(True)
-        print(message)
 
     else:
         message,files =  syncAI(False)
-        print(message)
     return jsonify({"message": message, "files": files})
 
 @app.route('/api/data', methods=['GET'])

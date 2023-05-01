@@ -6,16 +6,6 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoadingRing = () => {
-  const {setIsLoading } = useContext(SearchContext);
-
-  const navigate = useNavigate();
-
-  const handleCancel = () => {
-    console.log("Cancel button clicked");
-    setIsLoading(false);
-    navigate("/"); // navigate to home page
-  };
-
   return (
   <div>
     <div className="loading-ring">
@@ -27,7 +17,7 @@ const LoadingRing = () => {
     <div className ='logbox'>
         <LogViewer />
     </div>
-    <button className ='loading-cancel' onCLick={handleCancel}>Run in Background</button>
+    Click th back button to 'Run in Background'
     </div>
   );
 };

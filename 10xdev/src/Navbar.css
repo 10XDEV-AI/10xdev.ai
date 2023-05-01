@@ -56,3 +56,12 @@ text-align: center;
 padding: 10px;
 white-space: pre;
 }
+
+.logo a {
+  color: white;
+  text-decoration: none; /* Removes underline */
+}
+
+.logo a:hover {
+  text-decoration: none;
+}

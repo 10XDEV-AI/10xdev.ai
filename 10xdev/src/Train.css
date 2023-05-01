@@ -49,6 +49,12 @@ font: 15px "Roboto", Helvetica;
 width: 50px;
 }
 
+.ignoretext ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 5;
+}
+
 .ignoretable{
 max-width: 100%;
 }
