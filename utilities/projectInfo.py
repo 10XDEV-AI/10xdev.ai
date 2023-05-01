@@ -1,9 +1,9 @@
-import csv
 import os
 import subprocess
 import simplejson as json
 
-def getprojectInfo(repo_name = True, branch_name = True, full_path = False):
+
+def getprojectInfo(repo_name=True, branch_name=True, full_path=False):
     # Open info.json and read the path
 
     with open('AIFiles/info.json', 'r') as f:
@@ -16,10 +16,9 @@ def getprojectInfo(repo_name = True, branch_name = True, full_path = False):
     if os.path.exists(os.path.join(repo_path, '.git')):
         output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo_path)
         branch_name = output.decode('utf-8').strip()
-        print("Branch name: ", branch_name)
+
     else:
         branch_name = None
-
 
     response_json = {
         "repo_name": repo_name,
@@ -27,4 +26,3 @@ def getprojectInfo(repo_name = True, branch_name = True, full_path = False):
     }
 
     return response_json
-

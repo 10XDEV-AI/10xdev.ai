@@ -3,12 +3,15 @@ import './Navbar.css';
 import Sync from './Sync/Sync';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
 import DropdownButton from './DropDownButton/DropDownButton';
+import { Link } from 'react-router-dom';
 
 function Navbar({LoadProjectInfo, LoadSync}) {
   return (
     <nav>
       <div className="logo">
-        10XDEV.AI
+        <Link to="/">
+          10XDEV.AI
+        </Link>
       </div>
       <div className="navbar-projectInfo">
         <ProjectInfo />

@@ -5,11 +5,6 @@ import SearchContext from "../context/SearchContext";
 import { useContext } from "react";
 
 const LoadingRing = () => {
-  const {setIsLoading } = useContext(SearchContext);
-
-  const handleCancel = () => {
-    setIsLoading(false);
-  };
 
   return (
   <div>
@@ -22,7 +17,7 @@ const LoadingRing = () => {
     <div className ='logbox'>
         <LogViewer />
     </div>
-    <button className ='loading-cancel' onCLick={handleCancel}>Run in Background</button>
+    Click th back button to 'Run in Background'
     </div>
   );
 };

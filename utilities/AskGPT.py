@@ -29,7 +29,8 @@ def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperat
         except Exception as e:
             print(f"Encountered error: {e}")
             print("Retrying in 20 seconds...")
-            time.sleep(20)
+            requests_made += 1
+            return request_queue.append((model, system_message, prompt, temperature, max_tokens))
         finally:
             requests_made -= 1
 

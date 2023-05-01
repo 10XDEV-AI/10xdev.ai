@@ -28,21 +28,19 @@ const Train = () => {
     setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
-  };
+      };
 
-  const handleGetGitIgnore = () => {
-    fetch(`http://127.0.0.1:5000/api/Ignore?path=${input}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setFilesToAnalyze(
-          (data.files2analyze)
-        );
-        setFilesToIgnore(
-          data.files2ignore
-        );
+  const handleGetGitIgnore = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch(`http://127.0.0.1:5000/api/Ignore?path=${input}`);
+        const data = await response.json();
+        setFilesToAnalyze(data.files2analyze);
+        setFilesToIgnore(data.files2ignore);
         setShowTrainButton(true);
         setShowFilesToIgnore(true);
         setShowFilesToAnalyze(true);
+        setIsLoading(false)
         // Add the current search to recent searches
         setRecentSearches((prevSearches) => {
           const newSearches = [input, ...prevSearches.filter((s) => s !== input)];
@@ -50,8 +48,10 @@ const Train = () => {
           return newSearches;
         });
         console.log(data);
-      });
-  };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
   const navigate = useNavigate();
   const handleTrain = async () => {
@@ -131,6 +131,7 @@ const Train = () => {
                                     <tr>
                                       <th>File Path</th>
                                       <th>Tokens</th>
+                                      <th>Status</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -138,6 +139,7 @@ const Train = () => {
                                       <tr key={index}>
                                         <td className="tdp">{file.Path}</td>
                                         <td> {file.Tokens}</td>
+                                        <td> {file.Sign}</td>
                                       </tr>
                                     ))}
                                   </tbody>

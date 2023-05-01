@@ -1,14 +1,12 @@
 import pandas as pd
 import regex as re
-import time
-import openai
 import os
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
 from utilities.readInfo import read_info
 from utilities.str2float import str2float
-from utilities.logger import log, get_last_logs, clear_logs
+from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 
@@ -48,7 +46,7 @@ def search_functions(code_query):
         file_path = row['file_path']
         summary = row['summary']
         if summary != "Ignore":
-            file_summary = 'File path: ' + file_path +"\nFile summary: " +summary
+            file_summary = 'File path: ' + str(file_path) +"\nFile summary: " +summary
             file_summary_string.append(file_summary)
         else:
             file_summary_string.append('File path: ' + file_path)
@@ -134,6 +132,6 @@ def Ask_AI(prompt):
     print("Asking ChatGPT-3...")
     FinalAnswer = AskGPT(model = "gpt-3.5-turbo", system_message = system_message, prompt=final_prompt, temperature=0, max_tokens=max)
 
-
+    clear_logs()
 
     return {'files': files2str(files), 'response': FinalAnswer}
