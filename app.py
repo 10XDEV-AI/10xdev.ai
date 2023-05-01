@@ -1,3 +1,4 @@
+import openai
 from flask import Flask, jsonify, request,render_template
 from flask_cors import CORS
 from AskAI import Ask_AI
@@ -5,6 +6,7 @@ from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
+from utilities.keyutils import set_key,delete_key,test_key
 from syncAI import syncAI
 import os,subprocess,shutil,json
 
@@ -137,8 +139,28 @@ def get_CheckAIIgnore():
 @app.route('/api/logs', methods = ['GET'])
 def get_logs():
     return jsonify(get_last_logs())
+@app.route('/api/setKey', methods=['GET'])
+def setkey():
+    key = request.args.get('apikey')
+    message,code = set_key(key)
+    return jsonify({'message':message}),code
+
+@app.route('/api', methods=['GET'])
+def getkey():
+    message,code = get_key()
+    return jsonify({'message': message}),code
+
+@app.route('/api/deleteKey', methods=['GET'])
+def deletekey():
+    message,code = delete_key()
+    return jsonify({'message': message}),code
+
+@app.route('/api/testKey', methods=['GET'])
+def test_key():
+    key = request.args.get('apikey')
+    message,code = test_key(key)
+    return jsonify({'message': message}),code
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

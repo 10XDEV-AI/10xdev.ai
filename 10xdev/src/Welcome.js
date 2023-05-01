@@ -22,8 +22,10 @@ export const Welcome = () => {
       <div className="logoContainer">
         10XDEV.AI
       </div>
-      <div className="subText">
-          Ask an AI to implement new features in your app!
+      <div className="bottomText">
+
+          🦾Train AI on code | ❓ Explain Code |  ⚠️ Fix Bugs  |  🔬 Create Testcases  |  📖  Write Documentation | 🕹️Generate commands
+
       </div>
       <div className = 'welcomesearchrow'>
           <div className = "searchbarcol">

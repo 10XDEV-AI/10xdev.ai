@@ -25,6 +25,9 @@ function DropdownButton() {
     if (option === 3) {
         newTab();
     }
+    if (option === 4) {
+        navigate('/apis');
+    }
     setIsOpen(false); // close the dropdown after an option is selected
   };
 
@@ -36,6 +39,7 @@ function DropdownButton() {
           <li className="drop-down-bullets" onClick={() => handleOptionClick(1)}> 🧠   Train Repository</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(2)}> 🧳   Your Repositories</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🏠   Ask AI</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(4)}> 🔑   API Keys</li>
         </ul>
       )}
     </div>

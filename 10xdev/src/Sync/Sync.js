@@ -109,7 +109,7 @@ const handleSyncNewClick = async () => {
         <div>
         <div className="sync-container">
             <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
-                Sync ⏳
+                Sync ⌛️
               </button>
         </div>
           {showPopup &&(
