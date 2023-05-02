@@ -107,17 +107,6 @@ const Train = () => {
         </div>
         <div className="IgnoreCheckcontainer">
            {input && < CheckAIIgnore path={input} />}
-           {(
-           <div>
-             <ul className="recent-searches">
-               {recentSearches.map((search) => (
-                 <li className="recent-search-bullets">
-                   <button className="recent-search-button" onClick={() => setInput(search)}>{search}</button>
-                 </li>
-               ))}
-             </ul>
-           </div>
-           )}
         </div>
         <div className="filesdiff">
               {

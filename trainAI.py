@@ -3,8 +3,8 @@ from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
 from utilities.files2analyze import files2analyze
 from utilities.tokenCount import tokenCount
-
 from utilities.logger import log, clear_logs
+import time
 
 text_file = open("API_key.txt", "r")
 openai.api_key = text_file.read()

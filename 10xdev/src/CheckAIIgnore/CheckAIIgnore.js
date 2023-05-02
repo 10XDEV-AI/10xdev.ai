@@ -15,7 +15,7 @@ function CheckAIIgnore({ path }) {
   } else if (ignoreExists) {
     return <div> AIIgnore file exists ✅</div>;
   } else {
-    return <div> AIIgnore file does not exist❌</div>;
+    return <div> Repo Not Found / AIIgnore file does not exist❌</div>;
   }
 }
 

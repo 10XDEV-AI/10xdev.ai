@@ -24,7 +24,7 @@ export const Welcome = () => {
       </div>
       <div className="bottomText">
 
-          🦾Train AI on code | ❓ Explain Code |  ⚠️ Fix Bugs  |  🔬 Create Testcases  |  📖  Write Documentation | 🕹️Generate commands
+          🦾Train AI on code  ❓ Explain Code  ⚠️ Fix Bugs   🔬 Create Testcases   📖  Write Documentation  🕹️Generate commands ＆ More 🪄
 
       </div>
       <div className = 'welcomesearchrow'>

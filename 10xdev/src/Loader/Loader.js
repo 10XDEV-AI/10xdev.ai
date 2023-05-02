@@ -17,7 +17,9 @@ const LoadingRing = () => {
     <div className ='logbox'>
         <LogViewer />
     </div>
-    Click th back button to 'Run in Background'
+    <button className='loading-cancel'>
+        Click the back button to 'Run in Background'
+    </button>
     </div>
   );
 };
