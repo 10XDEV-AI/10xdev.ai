@@ -1,4 +1,3 @@
-import openai
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from AskAI import Ask_AI
@@ -6,7 +5,8 @@ from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
-from utilities.keyutils import set_key, delete_key, test_key
+from utilities.keyutils import set_key, delete_key, test_key,get_key
+from utilities.rates import set_rates, get_rates
 from syncAI import syncAI
 import os, subprocess, shutil, json
 
@@ -140,9 +140,8 @@ def get_AIIgnore():
 @app.route('/api/CheckAIIgnore', methods=['GET'])
 def get_CheckAIIgnore():
     path = request.args.get('path')
-    if path.strip() != '':
-        if os.path.exists(path + "/.AIIgnore"):
-            return jsonify({"AIIgnore": True})
+    if os.path.exists(path + "/.AIIgnore"):
+        return jsonify({"AIIgnore": True})
     else:
         return jsonify({"AIIgnore": False})
 
@@ -159,10 +158,9 @@ def setkey():
     return jsonify({'message': message}), code
 
 
-@app.route('/api', methods=['GET'])
+@app.route('/api/getKey', methods=['GET'])
 def getkey():
-    message, code = get_key()
-    return jsonify({'message': message}), code
+    return jsonify(get_key())
 
 
 @app.route('/api/deleteKey', methods=['GET'])
@@ -172,11 +170,20 @@ def deletekey():
 
 
 @app.route('/api/testKey', methods=['GET'])
-def test_key():
+def testkey():
     key = request.args.get('apikey')
     message, code = test_key(key)
     return jsonify({'message': message}), code
 
+@app.route('/api/getRates', methods=['GET'])
+def getRates():
+    return jsonify(get_rates())
+
+
+@app.route('/api/setRates', methods=['GET'])
+def setRates():
+    message, code = set_rates(request.args.get('rates'))
+    return jsonify({'message': message}), code
 
 if __name__ == '__main__':
     app.run(debug=True)

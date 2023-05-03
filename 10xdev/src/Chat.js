@@ -54,9 +54,9 @@ export const Chat = () => {
             searchTerm={input}
             onChildData={handleChildData}
             onRetry={(input) => {
-                setIsLoading(true);
-                setChatMessages((prevState) => prevState.slice(0, -1));
-                handleSearch(input, index);
+            setIsLoading(true);
+            setChatMessages((prevState) => prevState.slice(0, -1));
+            handleSearch(input, index);
             }}
           />
         ),

@@ -7,13 +7,13 @@ requests_made = 0
 request_queue = []
 from utilities.tokenCount import tokenCount
 
-def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperature=0, max_tokens=256):
+def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperature=0, max_tokens=256, retrys = 3, delay = 20):
     global requests_made
     if tokenCount(prompt+system_message) > 4096:
         return "Your files are too long. Please try again with a shorter prompt or use GPT-4 instead."
 
     if requests_made >= RATE_LIMIT:
-        request_queue.append((model, system_message, prompt, temperature, max_tokens))
+        request_queue.append((model, system_message, prompt, temperature, max_tokens,retrys))
         return "Rate limit reached. Your request has been queued."
     else:
         requests_made += 1
@@ -28,9 +28,11 @@ def AskGPT(model = "gpt-3.5-turbo", system_message = '', prompt = 'Hi', temperat
             return response["choices"][0]["message"]['content']
         except Exception as e:
             print(f"Encountered error: {e}")
-            print("Retrying in 20 seconds...")
-            requests_made += 1
-            return request_queue.append((model, system_message, prompt, temperature, max_tokens))
+            if retrys>0:
+                print("Retrying in 20 seconds...")
+                time.sleep(delay)
+                requests_made += 1
+                return request_queue.append((model, system_message, prompt, temperature, max_tokens,retrys-1,delay))
         finally:
             requests_made -= 1
 
