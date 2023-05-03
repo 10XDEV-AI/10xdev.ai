@@ -69,7 +69,10 @@ const handleSetRates = () => {
     // Send new rates to Flask backend
     fetch(`http://127.0.0.1:5000/api/setRates?rates=${newRates}`)
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => {
+                    console.log(data);
+                    setMessage(data.message);
+                  });
     setRates(newRates);
   };
 
@@ -106,15 +109,11 @@ const handleSetRates = () => {
             <div>
               <h3>Your API key is set to :  {api} </h3>
               <button className='keys-cards-button' onClick={deleteKey}>Delete API Key</button>
-              {message&&
-               <p>
-                 Info : {message}
-               </p>
-               }
+
                <div>
-                     <h3>Current Rates are set to : {JSON.stringify(rates)}</h3>
+                     <h3>Current API Rates  Limits</h3>
                      <p>
-                       Rate for Chat GPT-3.5 API:
+                       Rate for ChatGPT-3.5 API:
                        <input type="number"  className="ratesinput" value={newRates[0]} onChange={handleNewRate1Change} />
                      </p>
                      <p>
@@ -122,6 +121,11 @@ const handleSetRates = () => {
                        <input type="number"  className="ratesinput"  value={newRates[1]} onChange={handleNewRate2Change} />
                      </p>
                      <button  className='keys-cards-button' onClick={handleSetRates}>Set Rates</button>
+                     {message&&
+                        <>
+                           {message}
+                        </>
+                     }
                    </div>
             </div>
           }

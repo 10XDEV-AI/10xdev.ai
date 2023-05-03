@@ -38,7 +38,7 @@ function DropdownButton() {
         <ul className="drop-down-list">
           <li className="drop-down-bullets" onClick={() => handleOptionClick(1)}> 🧠   Train Repository</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(2)}> 🧳   Your Repositories</li>
-          <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🏠   Ask AI</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🏠   New Topic</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(4)}> 🔑   API Keys</li>
         </ul>
       )}

@@ -1,10 +1,15 @@
-import queue
+import queue,os,json
 import threading
 import time
 import openai
 
-MAX_BATCH_SIZE = 60  # maximum number of requests to make in a batch
-RATE_LIMIT_INTERVAL = 60  # interval in seconds for rate limiting
+with open(os.path.join('AIFiles','info.json'), 'r') as f:
+    data = json.load(f)
+    chat_limit,embedding_limit = data['rates'].split(',')
+    openai.api_key = data.get('api_key', None)
+
+MAX_BATCH_SIZE = embedding_limit  # maximum number of requests to make in a batch
+RATE_LIMIT_INTERVAL = embedding_limit  # interval in seconds for rate limiting
 
 def split_sent(s1):
     words = s1.split()  # split string into words

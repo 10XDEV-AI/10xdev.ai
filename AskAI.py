@@ -1,6 +1,6 @@
 import pandas as pd
 import regex as re
-import os
+import os,json,openai
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
@@ -10,6 +10,9 @@ from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 
+with open(os.path.join('AIFiles','info.json'), 'r') as f:
+    data = json.load(f)
+    openai.api_key = data.get('api_key', None)
 
 fs = pd.DataFrame()
 
