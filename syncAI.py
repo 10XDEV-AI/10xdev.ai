@@ -26,40 +26,35 @@ def sumarize(filename):
     with open(os.path.join(root, filename), 'rb') as f:
         result = chardet.detect(f.read())
     if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
-        print("File " + filename + " was not summarised as it is not a text file")
+        print("File " + filename + " was not summarised as it is not a text file with ASCII or ISO-8859-1 encoding")
         return "Ignore"
     full_file_path = os.path.join(root, filename)
     with open(full_file_path, 'r') as f:
         file_contents = f.read()
-
     return summarize_str(filename, file_contents)
 
 def syncAI(sync_flag):
+    print("Syncing AI")
     path = read_info()
     global fs
     fsfilename = "AIFiles/" "fs_" + path.split('/')[-1] + ".csv"
-
     fs = pd.read_csv(fsfilename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-
     file_paths_details = files2analyze(path)
-
     for file in file_paths_details:
         clone_path = get_clone_filepath(path, file)
-
         if get_diff(os.path.join(path, file), clone_path) != "":
             print("File " + file + " has changed")
             log("File " + file + " has changed. Syncing AI...")
-            fs.loc[fs["file_path"] == file, "summary"] = sumarize(file)
+            summary = sumarize(file)
+            if summary == "Ignore":
+                continue
+            fs.loc[fs["file_path"] == file, "summary"] = summary
             time.sleep(20)
             fs.loc[fs["file_path"] == file, "embedding"] = None
-
     for ind in fs.index:
         if (fs['embedding'][ind] == None):
             fs['embedding'][ind] = split_embed(fs['summary'][ind])
-
-    # Find the set difference between file_paths_details and df4["filepath"]
-
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
     if len(new_file_paths) > 0:
         print("New Files : " + str(len(new_file_paths)))
@@ -101,7 +96,6 @@ def syncAI(sync_flag):
     fs = pd.concat([fs, new_fs], ignore_index=True)
 
     fs.to_csv(fsfilename, index=False)
-
     create_clone(read_info())
     clear_logs()
     return "DONE", list(new_file_paths)

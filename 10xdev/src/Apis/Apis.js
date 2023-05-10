@@ -8,7 +8,6 @@ export default function Apis() {
   const [api, setApi] = useState(null);
   const [apikey, setApikey] = useState('');
   const [message,setMessage] = useState('');
-  const [rates, setRates] = useState([3, 60]);
   const [newRates, setNewRates] = useState([3, 60]);
 
 useEffect(() => {
@@ -20,13 +19,13 @@ useEffect(() => {
       console.log(data);
       const response2 = await fetch(`http://127.0.0.1:5000/api/getRates`);
       const data2 = await response2.json();
-      setRates(data2);
       console.log(data2);
     } catch (error) {
       console.error(error);
     }
+    setMessage('');
   })();
-}, []);
+}, [newRates]);
 
 
   const deleteKey = () => {
@@ -73,7 +72,6 @@ const handleSetRates = () => {
                     console.log(data);
                     setMessage(data.message);
                   });
-    setRates(newRates);
   };
 
   const handleNewRate1Change = (event) => {

@@ -81,7 +81,7 @@ def Ask_AI(prompt):
 
     global fs
     path = read_info()
-    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
+    filename = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     log("Analyzing your query...")

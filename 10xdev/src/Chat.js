@@ -6,12 +6,35 @@ import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback} from "react";
 
 export const Chat = () => {
   const { searchTerm, isLoading,results,setIsLoading,files } = useContext(SearchContext);
 
-  const handleSearch = (input, index) => {
+  const handleChildData = useCallback((data, index, input) => {
+      setChatMessages((prevState) => {
+        const updatedMessages = [...prevState]; // create a copy of prevState
+
+        updatedMessages[index] = {
+          prompt: (
+            <UserPrompt
+              indexval={updatedMessages.length -1 }
+              searchTerm={input}
+              onChildData={handleChildData}
+              onRetry={(input) => {
+              setIsLoading(true);
+              setChatMessages((prevState) => prevState.slice(0, -1));
+              handleSearch(input, index);
+              }}
+            />
+          ),
+          response: <ResponseContainer searchResults={data.response} files = {data.files} />,
+        };
+        return updatedMessages; // return the updated copy as the new state
+      });
+    },[setIsLoading]);
+
+  const handleSearch = useCallback((input, index) => {
     setIsLoading(true);
     const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
     fetch(url)
@@ -41,30 +64,9 @@ export const Chat = () => {
         console.log(error);
         setIsLoading(false); // and here
       });
-  };
+  },[setIsLoading]);
 
-  const handleChildData = (data, index, input) => {
-    setChatMessages((prevState) => {
-      const updatedMessages = [...prevState]; // create a copy of prevState
 
-      updatedMessages[index] = {
-        prompt: (
-          <UserPrompt
-            indexval={updatedMessages.length -1 }
-            searchTerm={input}
-            onChildData={handleChildData}
-            onRetry={(input) => {
-            setIsLoading(true);
-            setChatMessages((prevState) => prevState.slice(0, -1));
-            handleSearch(input, index);
-            }}
-          />
-        ),
-        response: <ResponseContainer searchResults={data.response} files = {data.files} />,
-      };
-      return updatedMessages; // return the updated copy as the new state
-    });
-  };
 
   useEffect(() => {
       setChatMessages([
@@ -85,7 +87,7 @@ export const Chat = () => {
           response: <ResponseContainer searchResults={results} files={files} />,
         },
       ]);
-    }, [results, searchTerm]);
+    }, [results, searchTerm,files,handleChildData,handleSearch,setIsLoading]);
 
   const [chatMessages, setChatMessages] = useState([]);
 
@@ -94,7 +96,7 @@ export const Chat = () => {
   }
   return (
       <div className="container">
-        <Navbar LoadSync = "True" />
+        <Navbar LoadSync = "" />
         {isLoading ? (
           <LoadingRing />
         ) : (

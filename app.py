@@ -46,7 +46,7 @@ def get_Repos():
         repo_name = repo.split('/')[-1]
 
         if os.path.exists(os.path.join('AIFiles', repo_name)):
-            output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo)
+            output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
             branch_name = output.decode('utf-8').strip()
             directories.append({"Directory": repo_name, "AIIgnore": True, "Branch": branch_name, "Full_Path": repo})
         else:
