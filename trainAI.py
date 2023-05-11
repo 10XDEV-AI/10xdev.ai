@@ -6,11 +6,10 @@ from utilities.tokenCount import tokenCount
 from utilities.logger import log, clear_logs
 import time
 
-text_file = open("API_key.txt", "r")
-openai.api_key = text_file.read()
-text_file.close()
-
-
+with open(os.path.join('AIFiles','info.json'), 'r') as f:
+    data = json.load(f)
+    chat_limit,embedding_limit = data['rates'].split(',')
+    openai.api_key = data.get('api_key', None)
 
 def summarize_str(filename,string):
     while True:
@@ -57,11 +56,18 @@ def train_AI(path):
 
     file_paths_details = files2analyze(path)
 
+    if len(file_paths_details) == 0:
+        log("No files detected")
+        log("Please Add files in the project and train again")
+        log("Tip : Start with a ReadME.md")
+        time.sleep(5)
+        return
+
     fs = pd.DataFrame(file_paths_details)
     fs.columns = ['file_path']
     start_time = time.time()
-    rate_limit = 3
-    delay = 60/rate_limit
+    global chat_limit
+    delay = 60/int(chat_limit)
     i=0
     fs['summary'] = ''
     log("Starting analysis")
@@ -75,16 +81,17 @@ def train_AI(path):
         if i != 0:
             rate = 60*i/(time.time() - start_time)
             time_elapsed = time.time() - start_time
-            p = (str(round(100*ind/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
+            p = (str(round(100*(ind+1)/len(fs))) + "% done. Rate: " + str(round(rate,2)) + " requests/min. Time Elapsed: " +str(round(time_elapsed/60, 2)))
             print(p)
             log(p)
-            if rate > rate_limit:
-                delay = delay + 0.1
+            if rate > int(chat_limit):
+                delay = delay + 0.2
                 #print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
-            if rate < 0.95*rate_limit:
+            if rate < 0.9*int(chat_limit):
                 delay = delay * 0.8
                 #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
+    fs = fs[fs['summary']!="Ignore"]
     fs.to_csv(fsfilename,index=False)
     log("Analyzed all files succesfully")
 

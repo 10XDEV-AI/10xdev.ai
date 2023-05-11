@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Train.css';
 import Navbar from './Navbar';
@@ -14,14 +14,6 @@ const Train = () => {
   const [showTrainButton, setShowTrainButton] = useState(false);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
-  const [recentSearches, setRecentSearches] = useState([]);
-
-  useEffect(() => {
-    const searches = JSON.parse(localStorage.getItem('recentSearches'));
-    if (searches) {
-      setRecentSearches(searches);
-    }
-  }, []);
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -41,13 +33,6 @@ const Train = () => {
         setShowFilesToIgnore(true);
         setShowFilesToAnalyze(true);
         setIsLoading(false)
-        // Add the current search to recent searches
-        setRecentSearches((prevSearches) => {
-          const newSearches = [input, ...prevSearches.filter((s) => s !== input)];
-          localStorage.setItem('recentSearches', JSON.stringify(newSearches));
-          return newSearches;
-        });
-        console.log(data);
       } catch (error) {
         console.log(error);
       }

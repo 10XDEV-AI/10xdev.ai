@@ -14,7 +14,7 @@ def getprojectInfo(repo_name=True, branch_name=True, full_path=False):
 
     # Check the current branch of the repo
     if os.path.exists(os.path.join(repo_path, '.git')):
-        output = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo_path)
+        output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_path)
         branch_name = output.decode('utf-8').strip()
 
     else:

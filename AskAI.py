@@ -1,6 +1,6 @@
 import pandas as pd
 import regex as re
-import os
+import os,json,openai
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
@@ -10,6 +10,9 @@ from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 
+with open(os.path.join('AIFiles','info.json'), 'r') as f:
+    data = json.load(f)
+    openai.api_key = data.get('api_key', None)
 
 fs = pd.DataFrame()
 
@@ -78,7 +81,7 @@ def Ask_AI(prompt):
 
     global fs
     path = read_info()
-    filename  = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
+    filename = "AIFiles/" "fs_"+path.split('/')[-1]+".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     log("Analyzing your query...")
