@@ -16,6 +16,9 @@ def files2analyze(path):
         if AIignore(root):
             directories[:] = []  # Don't traverse this directory further
             continue
+        if any(d.startswith(".") for d in root.split(os.path.sep)):
+            directories[:] = []  # Don't traverse this directory further
+            continue
 
         # Process all non-ignored files in the directory
         for filename in files:

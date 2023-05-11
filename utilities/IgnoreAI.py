@@ -18,8 +18,6 @@ def process_file(root, filename, path):
     if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
         log("Analysing : "+str(filename))
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
-        print(filename)
-        print(len(re.split(r'[.,;\n\s]+',file_contents)))
         if len(re.split(r'[.,;\n\s]+',file_contents)) > 4096:
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '❌', "Sign": '❌'}
         else:
@@ -34,6 +32,9 @@ def IgnoreAI(path):
     with ThreadPoolExecutor() as executor:
         futures = []
         for root, directories, files in os.walk(path):
+            if any(d.startswith(".") for d in root.split(os.path.sep)):
+                directories[:] = []  # Don't traverse this directory further
+                continue
             if AIignore(root):
                 directories[:] = []  # Don't traverse this directory further
                 continue

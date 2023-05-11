@@ -29,9 +29,10 @@ font-size: 15px;
 .ignorecontainer{
   display : flex;
   position: absolute;
-    top: 24%;
-    width: 100%;
+  top: 24%;
+  width: 100%;
 }
+
 .ignorebox {
 width: 50%;
 float: left;
