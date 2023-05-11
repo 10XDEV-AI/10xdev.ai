@@ -70,6 +70,24 @@ def files2str(files):
     #remove last newline
     files_str = files_str[:-1]
     return files_str
+def get_referenced_code(files):
+    referenced_code = []
+    base_dir = "Test"  # Update the base directory path
+
+    for file in files:
+        file_path = os.path.join(base_dir, file)  # Construct the full file path
+        print("Attempting to open file:", file_path)
+        
+        try:
+            with open(file_path, 'r') as f:
+                code = f.read()
+                code_block = f"{file}\n{code}"
+                referenced_code.append(code_block)
+        except Exception as e:
+            print("Error opening file:", file_path)
+            print("Error message:", str(e))
+
+    return referenced_code
 
 
 def Ask_AI(prompt):
@@ -83,6 +101,8 @@ def Ask_AI(prompt):
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     log("Analyzing your query...")
     files = search_functions(prompt)
+    referenced_code = get_referenced_code(files)
+    # print("Referenced code: ", referenced_code)
     log("Analyzing files: " + str(files))
     print(files)
     final_prompt = ""
@@ -135,4 +155,4 @@ def Ask_AI(prompt):
 
     clear_logs()
 
-    return {'files': files2str(files), 'response': FinalAnswer}
+    return {'files': files2str(files), 'response': FinalAnswer,'referenced_code': referenced_code}

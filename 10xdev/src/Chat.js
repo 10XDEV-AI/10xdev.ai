@@ -9,14 +9,15 @@ import Navbar from "./Navbar";
 import { useState, useEffect } from "react";
 
 export const Chat = () => {
-  const { searchTerm, isLoading,results,setIsLoading,files } = useContext(SearchContext);
-
+  const { searchTerm, isLoading,results,setIsLoading,files,referenced_code } = useContext(SearchContext);
+  
   const handleSearch = (input, index) => {
     setIsLoading(true);
     const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setChatMessages((prevState) => [
           ...prevState,
           {
@@ -32,7 +33,7 @@ export const Chat = () => {
                 }}
               />
             ),
-            response: <ResponseContainer searchResults={data.response} files = {data.files} />,
+            response: <ResponseContainer searchResults={data.response} files = {data.files} referenced_code={data.referenced_code} />,
           },
         ]);
         setIsLoading(false); // move the statement here
@@ -60,7 +61,7 @@ export const Chat = () => {
             }}
           />
         ),
-        response: <ResponseContainer searchResults={data.response} files = {data.files} />,
+        response: <ResponseContainer searchResults={data.response} files = {data.files} referenced_code={data.referenced_code} />,
       };
       return updatedMessages; // return the updated copy as the new state
     });
@@ -82,9 +83,10 @@ export const Chat = () => {
               }}
             />
           ),
-          response: <ResponseContainer searchResults={results} files={files} />,
+          response: <ResponseContainer searchResults={results} files={files} referenced_code={referenced_code} />,
         },
       ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results, searchTerm]);
 
   const [chatMessages, setChatMessages] = useState([]);
