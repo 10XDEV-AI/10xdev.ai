@@ -22,7 +22,7 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/data?prompt=${userPrompt}`
+        `/api/data?prompt=${userPrompt}`
       );
       const data = await response.json();
       onChildData(data, indexval, userPrompt);

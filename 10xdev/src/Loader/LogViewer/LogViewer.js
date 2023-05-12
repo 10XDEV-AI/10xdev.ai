@@ -6,7 +6,7 @@ function LogViewer() {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const response = await fetch('http://127.0.0.1:8000/api/logs');
+      const response = await fetch('/api/logs');
       const reader = response.body.getReader();
       let result = '';
       while (true) {
@@ -28,8 +28,8 @@ function LogViewer() {
   }, []);
 
   return (
-      <div class="logs">
-        <div class="log-col-2">
+      <div className="logs">
+        <div className="log-col-2">
             <pre>{logs}</pre>
         </div>
       </div>

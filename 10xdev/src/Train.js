@@ -25,7 +25,7 @@ const Train = () => {
   const handleGetGitIgnore = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`http://127.0.0.1:8000/api/Ignore?path=${input}`);
+        const response = await fetch(`/api/Ignore?path=${input}`);
         const data = await response.json();
         setFilesToAnalyze(data.files2analyze);
         setFilesToIgnore(data.files2ignore);
@@ -42,7 +42,7 @@ const Train = () => {
   const handleTrain = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/train?path=${input}`);
+        const response = await fetch(`/api/train?path=${input}`);
         const data = await response.json();
         console.log(data);
       } catch (error) {

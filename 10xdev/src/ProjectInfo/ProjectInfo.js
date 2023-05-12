@@ -9,7 +9,7 @@ const ProjectInfo = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoadingProjectInfo(true);
-      const response = await fetch('http://127.0.0.1:8000/api/projectInfo');
+      const response = await fetch('/api/projectInfo');
       const data = await response.json();
       setRepository(data.repo_name);
       setBranch(data.branch_name);

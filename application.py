@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, render_template
-from flask_cors import CORS
 from AskAI import Ask_AI
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
@@ -11,7 +10,6 @@ from syncAI import syncAI
 import os, subprocess, shutil, json
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
-CORS(application, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 
 @application.route('/')

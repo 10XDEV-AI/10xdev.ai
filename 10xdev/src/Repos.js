@@ -8,14 +8,14 @@ export default function Repos() {
   const [repos, setRepos] = useState([]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/Repos`)
+    fetch(`/api/Repos`)
       .then(response => response.json())
       .then(data => setRepos(data))
       .catch(error => console.error(error));
   }, []);
 
   const handleDelete = useCallback((Full_Path) => {
-    fetch(`http://127.0.0.1:8000/api/Repos/${Full_Path}`, {
+    fetch(`/api/Repos/${Full_Path}`, {
       method: 'DELETE',
     })
       .then(response => response.json())
@@ -25,7 +25,7 @@ export default function Repos() {
   }, []);
 
   const handlSelect = useCallback((Full_Path) => {
-    fetch(`http://127.0.0.1:8000/api/SelectRepo?Full_Path=${Full_Path}`, {
+    fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
       .then(() => {navigate('/')})
