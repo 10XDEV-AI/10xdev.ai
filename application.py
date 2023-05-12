@@ -7,7 +7,7 @@ from utilities.logger import get_last_logs
 from utilities.keyutils import set_key, delete_key, test_key,get_key
 from utilities.rates import set_rates, get_rates
 from syncAI import syncAI
-import os, subprocess, shutil, json
+import os, subprocess, shutil, json, openai
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 
@@ -43,7 +43,7 @@ def get_Repos():
     for repo in info_repos:
         repo_name = repo.split('/')[-1]
 
-        if os.path.exists(os.path.join('AIFiles', repo_name)):
+        if os.path.exists(repo_name):
             output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
             branch_name = output.decode('utf-8').strip()
             directories.append({"Directory": repo_name, "AIIgnore": True, "Branch": branch_name, "Full_Path": repo})
@@ -152,6 +152,7 @@ def get_logs():
 @application.route('/api/setKey', methods=['GET'])
 def setkey():
     key = request.args.get('apikey')
+    openai.api_key = key
     message, code = set_key(key)
     return jsonify({'message': message}), code
 
