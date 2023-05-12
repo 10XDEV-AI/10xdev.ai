@@ -24,7 +24,7 @@ const SearchState = ({ children }) => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `http://127.0.0.1:5000/api/data?prompt=${searchTerm}`
+          `http://127.0.0.1:8000/api/data?prompt=${searchTerm}`
         );
         const data = await response.json();
         console.log(data);
