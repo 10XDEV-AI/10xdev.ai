@@ -13,11 +13,11 @@ export default function Apis() {
 useEffect(() => {
   (async function() {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/getKey`);
+      const response = await fetch(`http://127.0.0.1:8000/api/getKey`);
       const data = await response.json();
       setApi(data);
       console.log(data);
-      const response2 = await fetch(`http://127.0.0.1:5000/api/getRates`);
+      const response2 = await fetch(`http://127.0.0.1:8000/api/getRates`);
       const data2 = await response2.json();
       console.log(data2);
     } catch (error) {
@@ -29,13 +29,13 @@ useEffect(() => {
 
 
   const deleteKey = () => {
-    fetch(`http://127.0.0.1:5000/api/deleteKey`)
+    fetch(`http://127.0.0.1:8000/api/deleteKey`)
       .then(() => {window.location.reload();})
       .catch(error => console.error(error));
   };
 
   const testKey = () => {
-    fetch(`http://127.0.0.1:5000/api/testKey?apikey=${apikey}`, {
+    fetch(`http://127.0.0.1:8000/api/testKey?apikey=${apikey}`, {
       method: 'GET',
     })
     .then(response => response.json())
@@ -48,7 +48,7 @@ useEffect(() => {
 
 
   const setKey = () => {
-    fetch(`http://127.0.0.1:5000/api/setKey?apikey=${apikey}`,{
+    fetch(`http://127.0.0.1:8000/api/setKey?apikey=${apikey}`,{
      method:'GET',
      })
       .then(response => response.json())
@@ -66,7 +66,7 @@ useEffect(() => {
 
 const handleSetRates = () => {
     // Send new rates to Flask backend
-    fetch(`http://127.0.0.1:5000/api/setRates?rates=${newRates}`)
+    fetch(`http://127.0.0.1:8000/api/setRates?rates=${newRates}`)
       .then(response => response.json())
       .then(data => {
                     console.log(data);
