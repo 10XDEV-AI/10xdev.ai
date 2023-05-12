@@ -25,6 +25,7 @@
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     font-size: 12px;
+    text-align: center;
     padding:5px;
     width: 40%;
 }
@@ -54,9 +55,6 @@
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 12px;}
-}
-.sidenav {
-    right: 0;
 }
 .referance{
     margin-top: -55px ;

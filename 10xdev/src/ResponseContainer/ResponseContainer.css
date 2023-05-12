@@ -12,14 +12,6 @@ width: 85%;
 padding: 10px;
 }
 
-.ResponseContainer.open {
-  /* Reduced size when side container is open */
-  width: 80%;
-}
-.responsePicContainer.open {
-  /* Reduced size when side container is open */
-  width: 10%;
-}
 
 .ResponseContainer{
 width: 100%;

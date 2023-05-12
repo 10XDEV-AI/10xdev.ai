@@ -7,7 +7,7 @@ const Sidecontainer = (props) => {
       <div
         id="mySidenav"
         className="sidenav bg"
-        style={{ width: props.sideContainerOpen ? "350px" : "0" }}
+        style={{ width: props.sideContainerOpen ? "20%" : "0" }}
       > <div className="referance " >References</div>
         <button  className="closedbtn" onClick={props.toggleSideContainer}>
           ⏩
@@ -20,9 +20,9 @@ const Sidecontainer = (props) => {
     const firstLine = lines[0];
     
     return (
-        <div key={index} style={{ marginTop: '10px' }}>
+        <div key={index} style={{ marginTop: '10px' ,margin:"15px" }}>
             {/* Display the first line in an h3 tag */}
-            <div className="filename">{firstLine}</div>
+            <div className="filename" style={{margin:"2px"}}>{firstLine}</div>
 
             <CopyBlock
                 style={{ overflowX: 'hidden' }}
@@ -36,7 +36,6 @@ const Sidecontainer = (props) => {
         </div>
     );
 })}
-
         </div>
       </div>
       <span

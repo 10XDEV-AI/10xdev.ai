@@ -1,18 +1,12 @@
 import './ResponseContainer.css';
-import React,{useState} from 'react'
+import React from 'react'
 import { CopyBlock, dracula } from "react-code-blocks";
 import Sidecontainer from '../Sidecontainer/Sidecontainer';
-const ResponseContainer = ({searchResults, files,referenced_code}) => {
+const ResponseContainer = ({searchResults, files,referenced_code, toggleSideContainer, sideContainerOpen}) => {
     console.log(files);
     console.log(referenced_code);
     console.log(searchResults);
-
-    const [sideContainerOpen, setSideContainerOpen] = useState(false);
-
-  const toggleSideContainer = () => {
-    setSideContainerOpen(!sideContainerOpen);
-  };
-
+ 
   function SplitBlocks(props) {
     const full_text = props.text;
     const flag = (full_text[0] === "```")? 1 : 0;
@@ -77,8 +71,8 @@ const ResponseContainer = ({searchResults, files,referenced_code}) => {
   }
 
   return (
-    <div className={`ResponseContainer ${sideContainerOpen ? 'open' : ''}`}>
-      <div className={`responsePicContainer ${sideContainerOpen ? 'open' : ''}`}>
+    <div className={`ResponseContainer `}>
+      <div className={`responsePicContainer }`}>
        <b> AI </b>
       </div>
       <div className="codediffcontainer">

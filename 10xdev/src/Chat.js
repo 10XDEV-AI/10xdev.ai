@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState,useEffect } from "react";
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import ResponseContainer from "./ResponseContainer/ResponseContainer";
@@ -6,11 +6,16 @@ import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
-import { useState, useEffect } from "react";
 
 export const Chat = () => {
-  const { searchTerm, isLoading,results,setIsLoading,files,referenced_code } = useContext(SearchContext);
-  
+  const { searchTerm, isLoading, results, setIsLoading, files ,referenced_code} = useContext(SearchContext);
+  const [sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+
+  const toggleSideContainer = () => {
+    setSideContainerOpen(!sideContainerOpen);
+  };
+
   const handleSearch = (input, index) => {
     setIsLoading(true);
     const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
@@ -33,94 +38,103 @@ export const Chat = () => {
                 }}
               />
             ),
-            response: <ResponseContainer searchResults={data.response} files = {data.files} referenced_code={data.referenced_code} />,
+            response: {
+              searchResults: data.response,
+              files: data.files,
+              referenced_code: data.referenced_code
+            }
           },
         ]);
-        setIsLoading(false); // move the statement here
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setIsLoading(false); // and here
+        setIsLoading(false);
       });
   };
 
   const handleChildData = (data, index, input) => {
     setChatMessages((prevState) => {
-      const updatedMessages = [...prevState]; // create a copy of prevState
-
+      const updatedMessages = [...prevState];
       updatedMessages[index] = {
         prompt: (
           <UserPrompt
-            indexval={updatedMessages.length -1 }
+            indexval={updatedMessages.length - 1}
             searchTerm={input}
             onChildData={handleChildData}
             onRetry={(input) => {
-                setIsLoading(true);
-                setChatMessages((prevState) => prevState.slice(0, -1));
-                handleSearch(input, index);
+              setIsLoading(true);
+              setChatMessages((prevState) => prevState.slice(0, -1));
+              handleSearch(input, index);
             }}
           />
         ),
-        response: <ResponseContainer searchResults={data.response} files = {data.files} referenced_code={data.referenced_code} />,
+        response: {
+          searchResults: data.response,
+          files: data.files,
+          referenced_code: data.referenced_code
+        } 
       };
-      return updatedMessages; // return the updated copy as the new state
+      return updatedMessages;
     });
   };
-
-  useEffect(() => {
-      setChatMessages([
-        {
-          index: 0,
-          prompt: (
-            <UserPrompt
-              indexval={0}
-              searchTerm={searchTerm}
-              onChildData={handleChildData}
-              onRetry={(input) => {
-                setIsLoading(true);
-                setChatMessages((prevState) => prevState.slice(0, -1));
-                handleSearch(input, 0);
-              }}
-            />
-          ),
-          response: <ResponseContainer searchResults={results} files={files} referenced_code={referenced_code} />,
-        },
-      ]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [results, searchTerm]);
-
-  const [chatMessages, setChatMessages] = useState([]);
 
   if (isLoading) {
     return <LoadingRing />;
   }
   return (
-      <div className="container">
-        <Navbar LoadSync = "True" />
-        {isLoading ? (
+    <>
+    <Navbar LoadSync="True" />
+    <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
+      
+      {isLoading ? (
           <LoadingRing />
         ) : (
-          <div>
-            <div className="chat-container">
-              {chatMessages.map((chatMessage, index) => (
-                <div key={index}>
-                  {chatMessage.prompt}
-                  {chatMessage.response}
-                </div>
-              ))}
-            </div>
-            <div className="spacer">
-              {/* This is a spacer div that adds empty space at the bottom */}
-            </div>
-            <div className="footer"></div>
-            <div className="searchbarrow">
-              <SearchBar onSearch={handleSearch} />
-            </div>
+      <div  >
+        {/* Initial prompt */}
+        <div>
+          <UserPrompt
+            indexval={0}
+            searchTerm={searchTerm}
+            onChildData={handleChildData}
+            onRetry={(input) => {
+              setIsLoading(true);
+              setChatMessages((prevState) => prevState.slice(0, -1));
+              handleSearch(input, 0);
+            }}
+            
+          />
+          <ResponseContainer
+              searchResults={results}
+              files={files}
+              referenced_code={referenced_code}
+              toggleSideContainer={toggleSideContainer}
+              sideContainerOpen={sideContainerOpen}
+            />
+        </div>
+        {chatMessages.map((chatMessage, index) => (
+          <div key={index}>
+            {chatMessage.prompt}
+            <ResponseContainer
+              searchResults={chatMessage.response.searchResults}
+              files={chatMessage.response.files}
+              referenced_code={chatMessage.response.referenced_code}
+              toggleSideContainer={toggleSideContainer}
+              sideContainerOpen={sideContainerOpen}
+            />
           </div>
-        )}
+        ))}
       </div>
-    );
-
+      )}
+      <div className="spacer"></div>
+      <div className="footer"></div>
+      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`  }>
+        <SearchBar onSearch={handleSearch}  />
+      </div>
+    </div>
+    </>
+  );
+  
 };
 
 export default Chat;
