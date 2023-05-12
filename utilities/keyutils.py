@@ -10,6 +10,8 @@ def set_key(key):
     with open(os.path.join('AIFiles', 'info.json'), 'w') as outfile:
         json.dump(data, outfile)
 
+    openai.api_key = data.get('key', None)
+
     return 'API key set successfully', 200
 
 
