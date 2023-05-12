@@ -16,7 +16,6 @@ CORS(application, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 @application.route('/')
 def index():
-    print(application.template_folder)
     return render_template('index.html')
 
 
