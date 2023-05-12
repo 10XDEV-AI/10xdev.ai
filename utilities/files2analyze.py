@@ -4,13 +4,13 @@ import os
 def files2analyze(path):
     file_paths_details = []
 
-    if not os.path.exists(os.path.join(path, '.AIignore')):
+    if not os.path.exists(os.path.join(path, '.AIIgnore')):
         log("AIignore does not exist. Creating one.")
-        with open(os.path.join(path, '.AIignore'), 'w') as f:
-            # You can add any initial content you want in the .AIignore file
+        with open(os.path.join(path, '.AIIgnore'), 'w') as f:
+            # You can add any initial content you want in the .AIIgnore file
             f.write("")
 
-    AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
+    AIignore = parse_gitignore(os.path.join(path,'.AIIgnore'))
     for root, directories, files in os.walk(path):
         # Check if the current directory should be ignored
         if AIignore(root):
