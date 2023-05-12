@@ -119,8 +119,9 @@ def train_AI(path):
     fs.to_csv(fsfilename, index=False)
     print("100% Done")
     log("100% Done. Synchronizing Files")
-    create_clone(path)
-    log("Files Synchronized, you will be redirected in 5 seconds")
+    log("You will be redirected in 5 seconds")
     time.sleep(5)
+    create_clone(path)
+
     clear_logs()
     return
