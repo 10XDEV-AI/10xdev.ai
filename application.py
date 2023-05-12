@@ -184,4 +184,4 @@ def setRates():
     return jsonify({'message': message}), code
 
 if __name__ == '__main__':
-    application.run(debug=True, port=5000)
+    application.run(debug=True, port=8000)

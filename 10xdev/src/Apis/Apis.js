@@ -56,7 +56,6 @@ useEffect(() => {
         console.log(data);
         setMessage(data.message);
       })
-      .then(() => {window.location.reload();})
       .catch(error => console.error(error));
   };
 
