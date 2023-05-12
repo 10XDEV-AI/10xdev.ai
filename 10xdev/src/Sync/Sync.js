@@ -27,9 +27,9 @@ function Sync() {
       setIsSyncing(true);
       setShowWarning(false);
 
-      // make API call to http://127.0.0.1:8000/api/sync and wait for response
+      // make API call to http://127.0.0.1:5000/api/sync and wait for response
       console.log("syncing with false");
-      const response = await fetch("http://127.0.0.1:8000/api/sync?sync_new=false");
+      const response = await fetch("http://127.0.0.1:5000/api/sync?sync_new=false");
 
       if (response.status === 200) {
         const result = await response.json();
@@ -72,9 +72,9 @@ const handleSyncNewClick = async () => {
     setShowWarning(false);
 
     try {
-      // Make API call to http://127.0.0.1:8000/api/sync and wait for response
+      // Make API call to http://127.0.0.1:5000/api/sync and wait for response
       console.log("syncing with true");
-      const response = await fetch("http://127.0.0.1:8000/api/sync?sync_new=true");
+      const response = await fetch("http://127.0.0.1:5000/api/sync?sync_new=true");
       const result = await response.json();
       console.log("synced with true");
       console.log(result.message);

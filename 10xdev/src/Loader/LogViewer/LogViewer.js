@@ -6,7 +6,7 @@ function LogViewer() {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const response = await fetch('http://127.0.0.1:8000/api/logs');
+      const response = await fetch('http://127.0.0.1:5000/api/logs');
       const reader = response.body.getReader();
       let result = '';
       while (true) {
