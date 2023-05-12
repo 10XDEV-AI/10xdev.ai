@@ -10,13 +10,14 @@ from utilities.rates import set_rates, get_rates
 from syncAI import syncAI
 import os, subprocess, shutil, json
 
-application = Flask(__name__, static_folder='10xdev/build/static', template_folder='10xdev/build')
+application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 CORS(application, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 
 @application.route('/')
 def index():
-    return "Hello"
+    print(application.template_folder)
+    return render_template('index.html')
 
 
 @application.route('/api/projectInfo', methods=['GET'])
