@@ -16,7 +16,7 @@ CORS(application, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 @application.route('/')
 def index():
-    return "hello"
+    return render_template('index.html')
 
 
 @application.route('/api/projectInfo', methods=['GET'])
