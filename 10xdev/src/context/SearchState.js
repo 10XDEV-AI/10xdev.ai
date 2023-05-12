@@ -7,6 +7,7 @@ const SearchState = ({ children }) => {
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
   const [files, setFiles] = useState('');
+  const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
   const userPic = defaultUserPic;
@@ -51,6 +52,8 @@ const SearchState = ({ children }) => {
         results,
         files,
         userPic,
+        path,
+        setPath
       }}
     >
       {children}

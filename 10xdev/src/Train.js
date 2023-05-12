@@ -1,5 +1,6 @@
 import React, { useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Train.css';
 import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
@@ -7,8 +8,9 @@ import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 
 const Train = () => {
-  const {isLoading,setIsLoading}  = useContext(SearchContext);
-  const [input, setInput] = useState('');
+  const {isLoading,setIsLoading,path}  = useContext(SearchContext);
+  const location = useLocation();
+  const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showTrainButton, setShowTrainButton] = useState(false);

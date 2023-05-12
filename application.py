@@ -6,6 +6,7 @@ from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import get_last_logs
 from utilities.keyutils import set_key, delete_key, test_key,get_key
 from utilities.rates import set_rates, get_rates
+from utilities.clone_repo import get_clones,select_branch
 from syncAI import syncAI
 import os, subprocess, shutil, json, openai
 
@@ -36,29 +37,23 @@ def get_Repos():
         info = json.load(f)
 
     directories = []
-    extra_directories = []
 
     info_repos = info['repos']
 
+    print(info_repos)
+
     for repo in info_repos:
+        print(repo)
         repo_name = repo.split('/')[-1]
 
-        if os.path.exists(repo_name):
+        if os.path.exists(os.path.join('AIFiles', repo_name)):
             output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
             branch_name = output.decode('utf-8').strip()
-            directories.append({"Directory": repo_name, "AIIgnore": True, "Branch": branch_name, "Full_Path": repo})
+            directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
         else:
-            extra_directories.append(repo)
-
-    for repo in extra_directories:
-        info_repos.remove(repo)
-        if info['current_repo'] == repo:
-            info['current_repo'] = "Test"
-
-    info['repos'] = info_repos
-
-    with open(os.path.join('AIFiles', 'info.json'), 'w') as f:
-        json.dump(info, f)
+            output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
+            branch_name = output.decode('utf-8').strip()
+            directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
 
     return jsonify(directories)
 
@@ -123,7 +118,6 @@ def get_syncAI():
 @application.route('/api/data', methods=['GET'])
 def get_data():
     prompt = request.args.get('prompt')
-    print("Asking AI")
     response = Ask_AI(prompt)
     return jsonify({"files": response["files"], "response": response["response"]})
 
@@ -183,6 +177,20 @@ def getRates():
 def setRates():
     message, code = set_rates(request.args.get('rates'))
     return jsonify({'message': message}), code
+
+
+@application.route('/api/clone', methods=['GET'])
+def getClones():
+    path = request.args.get('path')
+    branches,code = get_clones(path)
+    return jsonify(branches),code
+
+@application.route('/api/setBranch', methods=['GET'])
+def set_branch():
+    path = request.args.get('path')
+    branch = request.args.get('branch')
+    select_branch(path,branch)
+    return jsonify({'message': 'Success'})
 
 if __name__ == '__main__':
     application.run(debug=True, port=8000)
