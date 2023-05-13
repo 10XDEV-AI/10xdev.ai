@@ -120,7 +120,7 @@ def train_AI(path):
     print("100% Done")
     log("100% Done. Synchronizing Files")
     log("You will be redirected in 5 seconds")
-    time.sleep(5)
+    time.sleep(10)
     create_clone(path)
 
     clear_logs()

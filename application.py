@@ -41,22 +41,22 @@ def get_Repos():
     info_repos = info['repos']
 
     print(info_repos)
-
-    for repo in info_repos:
-        print(repo)
-        repo_name = repo.split('/')[-1]
-        if os.path.exists(os.path.join('AIFiles', repo_name)):
-            output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
-            branch_name = output.decode('utf-8').strip()
-            directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
-        else:
-            try:
-                output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
+    if len(info_repos) != 0:
+        for repo in info_repos:
+            print(repo)
+            repo_name = repo.split('/')[-1]
+            if os.path.exists(os.path.join('AIFiles', repo_name)):
+                output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
                 branch_name = output.decode('utf-8').strip()
-                directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
-            except subprocess.CalledProcessError as e:
-                print(f"Error: {e}")
-                # Handle the exception here, for example:
+                directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
+            else:
+                try:
+                    output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
+                    branch_name = output.decode('utf-8').strip()
+                    directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
+                except subprocess.CalledProcessError as e:
+                    print(f"Error: {e}")
+                    # Handle the exception here, for example:
 
     return jsonify(directories)
 
