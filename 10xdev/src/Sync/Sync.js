@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js"
 function Sync() {
@@ -19,7 +19,7 @@ function Sync() {
     const handleMouseLeave = () => {
       setShowPopup(false);
     };
-  const syncData = async () => {
+  const syncData = useCallback(async () => {
       if (isRequestInProgress) {
         return; // Do not make API call if isRequestInProgress is true
       }
@@ -48,7 +48,7 @@ function Sync() {
       } else {
         setShowWarning(true);
       }
-    };
+    },[isRequestInProgress]);
 
   useEffect(() => {
 
@@ -56,11 +56,11 @@ function Sync() {
     syncData();
 
     // call syncData every 60 seconds
-    const intervalId = setInterval(syncData, 60000);
+    const intervalId = setInterval(syncData, 600000);
 
     // cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, [isRequestInProgress]); // Include isRequestInProgress as a dependency in the dependency array
+  }, [isRequestInProgress, syncData]); // Include isRequestInProgress as a dependency in the dependency array
 
 
 

@@ -28,10 +28,10 @@ export default function Repos() {
     fetch(`http://127.0.0.1:5000/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
-      .then(() => {window.location.reload();})
+      .then(() => {navigate('/')})
       .catch(error => console.error(error));
 
-    }, []);
+    }, [navigate]);
 
   return (
     <div>

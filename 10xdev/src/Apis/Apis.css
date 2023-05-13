@@ -1,11 +1,11 @@
 .keys-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   font-family: "Roboto", Helvetica;
 }
 
-.key-title {
+.keys-title {
   font-size: 32px;
   text-align: center;
   margin-bottom: 20px;
@@ -13,68 +13,55 @@
   font-family: "Roboto", Helvetica;
 }
 
-.keys-cards {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.repo-card {
+.key-card {
   background-color: #f3fafe;
   border: 1px dashed #D3D3D3;
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
-  max-width: 800px;
-  display: flex;
+  max-width: 900px;
 }
 
-.repo-card h2 {
-  font-size: 24px;
-  margin-top: 0;
-  }
-
-.repo-card p {
+.key-card p {
   font-size: 16px;
-  margin-bottom: 0px;
   margin-top: 0px;
 }
 
-.repo-card p:last-child {
-  margin-bottom: 0;
-}
-
-.repo-card-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 20px;
-  align-items: center
-}
-
-.repo-card-button{
-  border: none;
+.keys-cards-button{
   font-size: 16px;
   cursor: pointer;
   background-color: #f3fafe;
-}
-
-.repo-card-info{
-width: 100%;
-}
-
-.repos-button-container{
-width: 100%;
-display: flex;
+  border: 1px dashed #D3D3D3;
+  padding:5px;
+  margin:2px;
+  border-radius:5px;
 }
 
 
-.repos-button{
+.repos-button-container {
+  width: 100%;
+}
 
-margin-left: auto;
-width: 15%;
-border: none;
-background-color: #2455C5;
-padding: 10px;
-border-radius: 20px;
-color: white;
+.repos-button {
+  margin-left: auto;
+  width: 15%;
+  border: none;
+  background-color: #2455C5;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+}
+
+.apikeyinput{
+  border: 1px dashed #D3D3D3;
+  border-radius:5px;
+  width:70%;
+  margin:10px 10px 10px 0px;
+}
+
+.ratesinput{
+border: 1px dashed #D3D3D3;
+  border-radius:5px;
+  width:45px;
+  margin:0px 10px 0px 10px;
 }

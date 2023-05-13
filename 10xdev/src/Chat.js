@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import SearchContext from "./context/SearchContext";
-import LoadingRing from "./Loader/LoaderwithoutRunInBag";
+import LoadingRing from "./Loader/Loader";
 import ResponseContainer from "./ResponseContainer/ResponseContainer";
 import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
+import { useState, useEffect, useCallback} from "react";
 
 export const Chat = () => {
   const { searchTerm, isLoading, results, setIsLoading, files ,referenced_code} = useContext(SearchContext);
@@ -16,7 +17,30 @@ export const Chat = () => {
     setSideContainerOpen(!sideContainerOpen);
   };
 
-  const handleSearch = (input, index) => {
+  const handleChildData = useCallback((data, index, input) => {
+      setChatMessages((prevState) => {
+        const updatedMessages = [...prevState]; // create a copy of prevState
+
+        updatedMessages[index] = {
+          prompt: (
+            <UserPrompt
+              indexval={updatedMessages.length -1 }
+              searchTerm={input}
+              onChildData={handleChildData}
+              onRetry={(input) => {
+              setIsLoading(true);
+              setChatMessages((prevState) => prevState.slice(0, -1));
+              handleSearch(input, index);
+              }}
+            />
+          ),
+          response: <ResponseContainer searchResults={data.response} files = {data.files} />,
+        };
+        return updatedMessages; // return the updated copy as the new state
+      });
+    },[setIsLoading]);
+
+  const handleSearch = useCallback((input, index) => {
     setIsLoading(true);
     const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
     fetch(url)
@@ -51,7 +75,7 @@ export const Chat = () => {
         console.log(error);
         setIsLoading(false);
       });
-  };
+  },[setIsLoading]);
 
   const handleChildData = (data, index, input) => {
     setChatMessages((prevState) => {
@@ -73,68 +97,65 @@ export const Chat = () => {
           searchResults: data.response,
           files: data.files,
           referenced_code: data.referenced_code
-        } 
+        }
       };
       return updatedMessages;
     });
   };
 
+  useEffect(() => {
+      setChatMessages([
+        {
+          index: 0,
+          prompt: (
+            <UserPrompt
+              indexval={0}
+              searchTerm={searchTerm}
+              onChildData={handleChildData}
+              onRetry={(input) => {
+                setIsLoading(true);
+                setChatMessages((prevState) => prevState.slice(0, -1));
+                handleSearch(input, 0);
+              }}
+            />
+          ),
+          response: <ResponseContainer searchResults={results} files={files} />,
+        },
+      ]);
+    }, [results, searchTerm,files,handleChildData,handleSearch,setIsLoading]);
+
+  const [chatMessages, setChatMessages] = useState([]);
+
   if (isLoading) {
     return <LoadingRing />;
   }
   return (
-    <>
-    <Navbar LoadSync="True" />
-    <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
-      
-      {isLoading ? (
+      <div className="container">
+        <Navbar LoadSync = "" />
+        {isLoading ? (
           <LoadingRing />
         ) : (
-      <div  >
-        {/* Initial prompt */}
-        <div>
-          <UserPrompt
-            indexval={0}
-            searchTerm={searchTerm}
-            onChildData={handleChildData}
-            onRetry={(input) => {
-              setIsLoading(true);
-              setChatMessages((prevState) => prevState.slice(0, -1));
-              handleSearch(input, 0);
-            }}
-            
-          />
-          <ResponseContainer
-              searchResults={results}
-              files={files}
-              referenced_code={referenced_code}
-              toggleSideContainer={toggleSideContainer}
-              sideContainerOpen={sideContainerOpen}
-            />
-        </div>
-        {chatMessages.map((chatMessage, index) => (
-          <div key={index}>
-            {chatMessage.prompt}
-            <ResponseContainer
-              searchResults={chatMessage.response.searchResults}
-              files={chatMessage.response.files}
-              referenced_code={chatMessage.response.referenced_code}
-              toggleSideContainer={toggleSideContainer}
-              sideContainerOpen={sideContainerOpen}
-            />
+          <div>
+            <div className="chat-container">
+              {chatMessages.map((chatMessage, index) => (
+                <div key={index}>
+                  {chatMessage.prompt}
+                  {chatMessage.response}
+                </div>
+              ))}
+            </div>
+            <div className="spacer">
+              {/* This is a spacer div that adds empty space at the bottom */}
+            </div>
+            <div className="footer"></div>
+            <div className="searchbarrow">
+              <SearchBar onSearch={handleSearch} />
+            </div>
           </div>
-        ))}
+        )}
       </div>
-      )}
-      <div className="spacer"></div>
-      <div className="footer"></div>
-      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`  }>
-        <SearchBar onSearch={handleSearch}  />
-      </div>
-    </div>
-    </>
-  );
-  
+    );
+
 };
 
 export default Chat;

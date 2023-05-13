@@ -14,8 +14,8 @@ const LoadingRing = () => {
   {loading.isLoading ? <>
     <CoolAlert message="Training in progress..." setclicked={setclicked} />
   </>:null}
-  <Welcome /> 
-  
+  <Welcome />
+
   </div> :
   <div>
     <div className="loading-ring">
@@ -34,10 +34,10 @@ const LoadingRing = () => {
     } >
         Click the back button to 'Run in Background'
     </button>
-    </div> 
+    </div>
     }
     </div>
-    
+
   );
 };
 
