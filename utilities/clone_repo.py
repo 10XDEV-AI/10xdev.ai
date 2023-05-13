@@ -1,6 +1,7 @@
 import os,json
 import shutil
 
+
 def get_clones(url):
     # Check the URL has a real git repository
     try:
@@ -18,10 +19,15 @@ def get_clones(url):
         os.chdir(repo_path)
 
         # Get the list of branches
-        branches = subprocess.check_output(['git', 'branch']).decode('utf-8').splitlines()
+        branches = subprocess.check_output(['git', 'branch','-r']).decode('utf-8').splitlines()
 
         # Filter the branch names
         filtered_branches = [branch.replace('*', '').strip() for branch in branches]
+        filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
+        filtered_branches = [branch.replace('origin/', '').strip() for branch in filtered_branches]
+
+        # remove duplicates
+        filtered_branches = list(set(filtered_branches))
 
         # Print the filtered branch names
         print(filtered_branches)

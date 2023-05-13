@@ -8,7 +8,7 @@ from utilities.keyutils import set_key, delete_key, test_key,get_key
 from utilities.rates import set_rates, get_rates
 from utilities.clone_repo import get_clones,select_branch
 from syncAI import syncAI
-import os, subprocess, shutil, json, openai
+import os, subprocess, shutil, json, openai, threading
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 
@@ -26,9 +26,10 @@ def get_projectInfo():
 @application.route('/api/train', methods=['GET'])
 def get_trainAI():
     path = request.args.get('path')
-    print("Training AI")
-    a = train_AI(path)
-    return jsonify(a)
+    # Spawn a new thread to run train_AI() in the background
+    t = threading.Thread(target=train_AI, args=(path,))
+    t.start()
+    return jsonify('Training started'), 200
 
 
 @application.route('/api/Repos', methods=['GET'])
@@ -55,7 +56,7 @@ def get_Repos():
                     branch_name = output.decode('utf-8').strip()
                     directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
                 except subprocess.CalledProcessError as e:
-                    print(f"Error: {e}")
+                    print(f"Error in get_Repos: : {e}")
                     # Handle the exception here, for example:
 
     return jsonify(directories)

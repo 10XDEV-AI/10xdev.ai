@@ -22,7 +22,7 @@ const Train = () => {
     setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
-      };
+    };
 
   const handleGetGitIgnore = async () => {
       try {
@@ -50,8 +50,6 @@ const Train = () => {
       } catch (error) {
         console.error(error);
       }
-      setIsLoading(false);
-      navigate('/repos');
   };
 
 

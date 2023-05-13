@@ -4,14 +4,6 @@
   justify-content: center;
   align-items: center;
 }
-.IgnoreCheckcontainer{
-width: 100%;
-justify-content: center;
-align-items: center;
-text-align: center;
-font-family: "Roboto", Helvetica;
-font-size: 15px;
-}
 .label {
   margin-bottom: 10px;
 }
@@ -33,38 +25,7 @@ font-size: 15px;
   width: 100%;
 }
 
-.ignorebox {
-width: 50%;
-float: left;
-background-color: #f3fafe ;
-margin: 10px;
-border-radius: 10px;
-padding: 10px;
-border: 1px dashed #D3D3D3;
-}
 
-.ignoretext{
-font: 15px "Roboto", Helvetica;
-}
-.ignoretext tbody{
-width: 50px;
-}
-
-.ignoretext ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 5;
-}
-
-.ignoretable{
-max-width: 100%;
-}
-.ignoretable th{
-text-align: left;
-}
-.ignoretext table tr td{
-padding-left: 10px;
-}
 .pathsearchrow{
 display: flex;
 width: 65%;
@@ -106,39 +67,12 @@ font-size: 18px;
 margin-left: 10px;
 padding: 10px;
 }
-.filesdiff{
-width: 100%;
-}
-
-.filesToIgnore{
-width: 100%;
-}
-
-.recent-searches{
-margin-top: 3px;
-margin-bottom: 0 ;
-padding-inline-start: 0;
-}
-.recent-search-bullets{
-list-style-type: none;
-display: inline-block;
-}
-
-.recent-search-button{
-background-color:#f3fafe;
-color: #3EB0F7;
-border: dashed 1px #D3D3D3;
-border-radius: 20px;
-font-size: 13px;
-margin:2px;
-
-}
 
 .ignoretips{
 width: 50%;
 background-color: #f3fafe ;
 margin-left: 25%;
-margin-top: 10px;
+margin-top: 5%;
 border-radius: 10px;
 padding: 10px;
 border: 1px dashed #D3D3D3;
@@ -147,5 +81,26 @@ font: 15px "Roboto", Helvetica;
 
 .ignoretips h2{
 text-align: center;
+}
+
+.branch-buttons{
+border:none;
+border-radius: 5px;
+width:100%;
+font: 15px "Roboto", Helvetica;
+padding:5px;
+margin:5px;
+}
+
+.branch-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.branch-buttons:hover
+{
+  box-shadow: 0 0 5px 0px #D3D3D3;
+  cursor: pointer;
 }
 

@@ -16,6 +16,11 @@ nav {
   text-align: center;
   color: #FFFFFF;
 }
+@media only screen and (max-width: 768px) {
+  .logo{
+    font-size: 20px;
+  }
+}
 
 .linkscontainer{
   width: 20%;

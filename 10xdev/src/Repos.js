@@ -42,7 +42,7 @@ export default function Repos() {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar LoadProjectInfo = "True"/>
       <div className="repos-container">
         <h1 className="repos-title">Repositories Trained</h1>
         <div className="repos-cards">
@@ -52,7 +52,6 @@ export default function Repos() {
                 <h2>{repo.Directory}</h2>
                 <p>Branch: {repo.Branch}</p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
-                <p>Full Path: {repo.Full_Path}</p>
               </div>
               <div className="repo-card-buttons">
                 <button className="repo-card-button" onClick={() => handleTrain(repo.Full_Path)}>Train 🧠</button>

@@ -32,7 +32,9 @@ const Clone = () => {
   const handleselect = async(branch) => {
     try {
       console.log(branch);
-      fetch(`/api/setBranch?path=${input}&branch=${branch}`);
+      const response = await fetch(`/api/setBranch?path=${input}&branch=${branch}`);
+      const data = await response.json();
+      console.log(data);
       navigate(`/repos`);
     }
     catch (error) {
@@ -58,28 +60,25 @@ const Clone = () => {
                 className="pathsearchbar"
               />
             </label>
-            <div className="gitIgnorebuttoncontainer">
+            <button onClick={handleClone} className="gitIgnorebutton">
+              Clone Repository
+            </button>
+          </div>
+          <div className="branch-container">
               {branches.length > 0 ? (
-                <div className="dropdown" onMouseLeave={() => setIsOpen(false)}>
-                  <button className="userProfileButton" onMouseEnter={() => setIsOpen(true)}>
-                    Select Branch :
-                  </button>
-                  {isOpen && (
-                    <ul className="drop-down-list">
+                <div className="ignoretips">
+                    <h2> Select your desired branch </h2>
+                  {(
+                    <ul className="branch-list">
                       {branches.map((branch,) => (
                         <li key = {branch}>
-                          <button onClick={() => handleselect(branch)}>{branch}</button>
+                          <button className="branch-buttons" onClick={() => handleselect(branch)}>{branch}</button>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
-              ) : (
-                <button onClick={handleClone} className="gitIgnorebutton">
-                  Clone Repository
-                </button>
-              )}
-            </div>
+              ) : null}
           </div>
         </div>
       )}
