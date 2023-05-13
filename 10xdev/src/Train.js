@@ -70,11 +70,12 @@ const Train = () => {
 
   return (
   <div>
-    <Navbar />
+    
     {isLoading? (
         <LoadingRing />
          ):(
     <div>
+    <Navbar />
         <div className="GetIgnorecontainer">
           <label className="pathsearchrow">
             <div className="pathsearchlabel">

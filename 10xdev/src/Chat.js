@@ -1,6 +1,6 @@
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState } from "react";
 import SearchContext from "./context/SearchContext";
-import LoadingRing from "./Loader/Loader";
+import LoadingRing from "./Loader/LoaderwithoutRunInBag";
 import ResponseContainer from "./ResponseContainer/ResponseContainer";
 import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
