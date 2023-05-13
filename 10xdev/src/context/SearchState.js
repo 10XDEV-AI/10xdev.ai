@@ -6,6 +6,7 @@ const SearchState = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
+  const [referenced_code, setreferenced_code] = useState(''); //this is the reference code of the project
   const [files, setFiles] = useState('');
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
@@ -31,9 +32,11 @@ const SearchState = ({ children }) => {
         console.log(data);
         setFiles(data.files);
         setResults(data.response);
+        setreferenced_code(data.referenced_code);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     };
     getResults();
@@ -51,6 +54,7 @@ const SearchState = ({ children }) => {
         setIsLoadingProjectInfo,
         results,
         files,
+        referenced_code,
         userPic,
         path,
         setPath

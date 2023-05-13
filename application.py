@@ -123,7 +123,7 @@ def get_syncAI():
 def get_data():
     prompt = request.args.get('prompt')
     response = Ask_AI(prompt)
-    return jsonify({"files": response["files"], "response": response["response"]})
+    return jsonify({"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
 
 
 @application.route('/api/Ignore', methods=['GET'])

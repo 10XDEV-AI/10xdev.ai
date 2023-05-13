@@ -12,8 +12,10 @@ width: 85%;
 padding: 10px;
 }
 
+
 .ResponseContainer{
 width: 100%;
+transition: width 0.2s ease;
 box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1);
 background-color: #F0F0F0;
 display: flex;
@@ -25,7 +27,8 @@ text-align: justify;
 }
 
 .responsePicContainer{
-width: 9%;
+  width: 9%;
+  transition: width 0.2s ease;
 text-align: center;
 padding-top: 20px;
 font: 25px Proxima Nova, sans-serif;
