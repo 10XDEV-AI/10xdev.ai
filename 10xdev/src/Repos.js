@@ -42,7 +42,7 @@ export default function Repos() {
 
   return (
     <div>
-      <Navbar LoadSync=""/>
+      <Navbar/>
       <div className="repos-container">
         <h1 className="repos-title">Repositories Trained</h1>
         <div className="repos-cards">
