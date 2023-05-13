@@ -5,25 +5,16 @@ width: 100%;
 
 .chatsearchbarcontainer {
   display: flex;
+  flex-direction: row;
   padding:5px;
   height: 100%;
   border-radius: 6px;
   background-color: #FFFFFF;
   width: 100%;
   margin-left: 20%;
-margin-right: 5%;
-
+  margin-right: 5%;
 }
-
-.searchbarrow{
-position: fixed;
-bottom: 5px;
-right: 2%;
-width: 100%;
-}
-
 .GoButtonChat {
-  justify-content: center;
   border: none;
   font-size: 20px;
   background: #FFFFFF;

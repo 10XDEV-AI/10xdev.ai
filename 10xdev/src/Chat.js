@@ -9,7 +9,13 @@ import Navbar from "./Navbar";
 import { useState, useEffect, useCallback} from "react";
 
 export const Chat = () => {
-  const { searchTerm, isLoading,results,setIsLoading,files } = useContext(SearchContext);
+  const { searchTerm, isLoading, results, setIsLoading, files ,referenced_code} = useContext(SearchContext);
+  const [sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+
+  const toggleSideContainer = () => {
+    setSideContainerOpen(!sideContainerOpen);
+  };
 
   const handleChildData = useCallback((data, index, input) => {
       setChatMessages((prevState) => {
@@ -40,6 +46,7 @@ export const Chat = () => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setChatMessages((prevState) => [
           ...prevState,
           {
@@ -55,18 +62,46 @@ export const Chat = () => {
                 }}
               />
             ),
-            response: <ResponseContainer searchResults={data.response} files = {data.files} />,
+            response: {
+              searchResults: data.response,
+              files: data.files,
+              referenced_code: data.referenced_code
+            }
           },
         ]);
-        setIsLoading(false); // move the statement here
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setIsLoading(false); // and here
+        setIsLoading(false);
       });
   },[setIsLoading]);
 
-
+  const handleChildData = (data, index, input) => {
+    setChatMessages((prevState) => {
+      const updatedMessages = [...prevState];
+      updatedMessages[index] = {
+        prompt: (
+          <UserPrompt
+            indexval={updatedMessages.length - 1}
+            searchTerm={input}
+            onChildData={handleChildData}
+            onRetry={(input) => {
+              setIsLoading(true);
+              setChatMessages((prevState) => prevState.slice(0, -1));
+              handleSearch(input, index);
+            }}
+          />
+        ),
+        response: {
+          searchResults: data.response,
+          files: data.files,
+          referenced_code: data.referenced_code
+        }
+      };
+      return updatedMessages;
+    });
+  };
 
   useEffect(() => {
       setChatMessages([
