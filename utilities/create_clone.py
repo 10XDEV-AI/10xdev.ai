@@ -9,7 +9,7 @@ def create_clone(path):
         shutil.rmtree(os.path.join(destination, folder_name))
     # Copy the folder at path to destination
     shutil.copytree(path, os.path.join(destination, folder_name))
-    #print(f"Successfully created a clone of {path} at {destination}!")
+    # print(f"Successfully created a clone of {path} at {destination}!")
 
 
 def get_clone_path(path):

@@ -26,7 +26,25 @@ def process_file(root, filename, path):
 
 def IgnoreAI(path):
     files2analyse = []
-    AIignore = parse_gitignore(os.path.join(path, '.AIignore'))
+    if not os.path.exists(os.path.join(path, '.AIIgnore')):
+        with ThreadPoolExecutor() as executor:
+            futures = []
+            for root, directories, files in os.walk(path):
+                if any(d.startswith(".") for d in root.split(os.path.sep)):
+                    directories[:] = []  # Don't traverse this directory further
+                    continue
+                for filename in files:
+                    futures.append(executor.submit(process_file, root, filename, path))
+
+            for future in futures:
+                result = future.result()
+                if result:
+                    files2analyse.append(result)
+
+        clear_logs()
+        return [], files2analyse
+
+    AIignore = parse_gitignore(os.path.join(path, '.AIIgnore'))
 
     print("Files to ignore : " + str(AIignore))
     with ThreadPoolExecutor() as executor:
@@ -50,7 +68,7 @@ def IgnoreAI(path):
                 files2analyse.append(result)
 
     # print("Files to analyse : "+str((files2analyse)))
-    files2ignore = open(os.path.join(path, '.AIignore'), 'r').read().splitlines()
+    files2ignore = open(os.path.join(path, '.AIIgnore'), 'r').read().splitlines()
     # print("Files to ignore : "+str(files2ignore))
     clear_logs()
     return files2ignore, files2analyse

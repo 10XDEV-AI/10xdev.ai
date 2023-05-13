@@ -8,8 +8,8 @@ with open(os.path.join('AIFiles','info.json'), 'r') as f:
     chat_limit,embedding_limit = data['rates'].split(',')
     openai.api_key = data.get('api_key', None)
 
-MAX_BATCH_SIZE = math.floor(0.9*int(embedding_limit))  # maximum number of requests to make in a batch
-RATE_LIMIT_INTERVAL = int(embedding_limit)  # interval in seconds for rate limiting
+MAX_BATCH_SIZE = math.floor(0.95*int(embedding_limit))  # maximum number of requests to make in a batch
+RATE_LIMIT = int(embedding_limit)  # interval in seconds for rate limiting
 
 def split_sent(s1):
     words = s1.split()  # split string into words
@@ -27,8 +27,8 @@ def get_embedding(task):
         return response['data'][0]['embedding']
     except Exception as e:
         print(f"Error: {e}")
-        print("Retrying after 5 seconds...")
-        time.sleep(5)
+        print("Retrying")
+        time.sleep(60/RATE_LIMIT)
         return get_embedding(task)  # Retry after 5 second s
 
 def process_batch(batch, results_queue):
@@ -44,17 +44,19 @@ def split_embed(summary):
         summary = ""
     sentences = split_sent(summary)
     sentences = [x for x in sentences if x != '']
+    sentence_embeddings = []
 
     # Create a queue to store requests for embeddings
     requests_queue = queue.Queue()
     for sentence in sentences:
         requests_queue.put(sentence)
 
+    print("Created a requets queue of size", requests_queue.qsize())
+
     # Create a queue to store results
     results_queue = queue.Queue()
 
     # Keep track of rate limiting
-    last_rate_limit_time = time.time()
     num_requests_made = 0
 
     # Process requests in batches
@@ -63,12 +65,10 @@ def split_embed(summary):
         while len(batch) < MAX_BATCH_SIZE and not requests_queue.empty():
             batch.append(requests_queue.get())
 
-        # Check if rate limit is exceeded
-        time_since_last_rate_limit = time.time() - last_rate_limit_time
-        if time_since_last_rate_limit < RATE_LIMIT_INTERVAL and num_requests_made + len(batch) > MAX_BATCH_SIZE:
-            time_to_wait = RATE_LIMIT_INTERVAL - time_since_last_rate_limit
-            time.sleep(time_to_wait)
-            last_rate_limit_time = time.time()
+        print("Created a batch of size", len(batch))
+
+        if num_requests_made >= MAX_BATCH_SIZE:
+            time.sleep(60)
             num_requests_made = 0
 
         # Make API calls in parallel
@@ -82,8 +82,13 @@ def split_embed(summary):
 
         num_requests_made += len(batch)
 
-    # Combine results from all batches
-    sentence_embeddings = []
-    while not results_queue.empty():
-        sentence_embeddings += results_queue.get()
+        # Combine results from all batches
+
+        while not results_queue.empty():
+            sentence_embeddings += results_queue.get()
+
+        print("Combined results for batch of  size "+str(num_requests_made))
+
     return sentence_embeddings
+
+

@@ -1,5 +1,6 @@
 import React, { useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Train.css';
 import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
@@ -7,8 +8,9 @@ import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 
 const Train = () => {
-  const {isLoading,setIsLoading}  = useContext(SearchContext);
-  const [input, setInput] = useState('');
+  const {isLoading,setIsLoading,path}  = useContext(SearchContext);
+  const location = useLocation();
+  const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showTrainButton, setShowTrainButton] = useState(false);
@@ -20,12 +22,12 @@ const Train = () => {
     setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
-      };
+    };
 
   const handleGetGitIgnore = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`http://127.0.0.1:5000/api/Ignore?path=${input}`);
+        const response = await fetch(`/api/Ignore?path=${input}`);
         const data = await response.json();
         setFilesToAnalyze(data.files2analyze);
         setFilesToIgnore(data.files2ignore);
@@ -42,14 +44,12 @@ const Train = () => {
   const handleTrain = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/train?path=${input}`);
+        const response = await fetch(`/api/train?path=${input}`);
         const data = await response.json();
         console.log(data);
       } catch (error) {
         console.error(error);
       }
-      setIsLoading(false);
-      navigate('/repos');
   };
 
 

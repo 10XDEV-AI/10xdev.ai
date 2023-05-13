@@ -42,7 +42,7 @@ export const Chat = () => {
 
   const handleSearch = useCallback((input, index) => {
     setIsLoading(true);
-    const url = `http://127.0.0.1:5000/api/data?prompt=${input}`;
+    const url = `/api/data?prompt=${input}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -131,7 +131,7 @@ export const Chat = () => {
   }
   return (
       <div className="container">
-        <Navbar LoadSync = "" />
+        <Navbar LoadSync = "" LoadProjectInfo = "True"/>
         {isLoading ? (
           <LoadingRing />
         ) : (

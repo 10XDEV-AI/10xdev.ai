@@ -70,11 +70,13 @@ def train_AI(path):
     delay = 60/int(chat_limit)
     i=0
     fs['summary'] = ''
+    fs['embedding'] = ''
     log("Starting analysis")
 
     for ind in fs.index:
         i_new,fs['summary'][ind] = summarize_file(path,fs['file_path'][ind],i)
-
+        if fs['summary'][ind] != "Ignore":
+            fs['embedding'][ind] = split_embed(fs['file_path'][ind])
         if i_new !=i:
             time.sleep(delay)
             i = i_new
@@ -92,17 +94,8 @@ def train_AI(path):
                 #print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     fs = fs[fs['summary']!="Ignore"]
-    fs.to_csv(fsfilename,index=False)
-    log("Analyzed all files succesfully")
 
-
-    fs.to_csv(fsfilename, index=False)
     log("Analyzed all files successfully")
-    log('Evaluating code blocks')
-
-    fs = pd.read_csv(fsfilename)
-
-    fs['embedding'] = fs['summary'].apply(lambda x: split_embed(x))
 
     with open('AIFiles/info.json', 'r') as f:
         data = json.load(f)
@@ -117,8 +110,13 @@ def train_AI(path):
         json.dump(data, outfile)
 
     fs.to_csv(fsfilename, index=False)
+
     print("100% Done")
-    log("100% Done. Synchronizing Files")
-    create_clone(path)
     clear_logs()
+    create_clone(path)
+    log("-----------------------------------------------------")
+    log("***")
+    log("Your repo was trained into the AI successfully")
+    log("***")
+    log("-----------------------------------------------------")
     return

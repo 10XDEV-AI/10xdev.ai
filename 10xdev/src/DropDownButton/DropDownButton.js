@@ -17,16 +17,19 @@ function DropdownButton() {
 
   const handleOptionClick = (option) => {
     if (option === 1) {
-      navigate('/train'); // call the useNavigate hook directly inside the function
+      navigate('/clone');
     }
     if (option === 2) {
-      navigate('/repos');
+      navigate('/train'); // call the useNavigate hook directly inside the function
     }
     if (option === 3) {
-        newTab();
+      navigate('/repos');
     }
     if (option === 4) {
-        navigate('/apis');
+        newTab();
+    }
+    if (option === 5) {
+            navigate('/apis');
     }
     setIsOpen(false); // close the dropdown after an option is selected
   };
@@ -36,10 +39,11 @@ function DropdownButton() {
       <button className="userProfileButton" onMouseEnter={() => setIsOpen(true)}>⚙️</button>
       {isOpen && (
         <ul className="drop-down-list">
-          <li className="drop-down-bullets" onClick={() => handleOptionClick(1)}> 🧠   Train Repository</li>
-          <li className="drop-down-bullets" onClick={() => handleOptionClick(2)}> 🧳   Your Repositories</li>
-          <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🏠   New Topic</li>
-          <li className="drop-down-bullets" onClick={() => handleOptionClick(4)}> 🔑   API Keys</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(1)}> ⬇️   Clone Git Repository</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(2)}> 🧠   Train Repository</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🧳   Your Repositories</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(4)}> 🏠   New Topic</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(5)}> 🔑   API Keys</li>
         </ul>
       )}
     </div>

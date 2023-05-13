@@ -4,7 +4,7 @@ function CheckAIIgnore({ path }) {
   const [ignoreExists, setIgnoreExists] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/api/CheckAIIgnore?path=${encodeURIComponent(path)}`)
+    fetch(`/api/CheckAIIgnore?path=${encodeURIComponent(path)}`)
       .then(response => response.json())
       .then(data => setIgnoreExists(data.AIIgnore))
       .catch(error => console.error(error));

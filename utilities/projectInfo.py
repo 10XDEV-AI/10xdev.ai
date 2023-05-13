@@ -6,9 +6,12 @@ import simplejson as json
 def getprojectInfo(repo_name=True, branch_name=True, full_path=False):
     # Open info.json and read the path
 
-    with open('AIFiles/info.json', 'r') as f:
+    with open(os.path.join('AIFiles','info.json'), 'r') as f:
         data = json.load(f)
         repo_path = data['current_repo']
+
+    if repo_path == "":
+        return {"repo_name": "No Repos selected", "branch_name": "No branch selected"}
 
     repo_name = repo_path.split('/')[-1]
 

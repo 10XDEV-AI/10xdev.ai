@@ -1,16 +1,15 @@
 from gitignore_parser import parse_gitignore
-from utilities.logger import log
 import os
 def files2analyze(path):
     file_paths_details = []
 
-    if not os.path.exists(os.path.join(path, '.AIignore')):
-        log("AIignore does not exist. Creating one.")
-        with open(os.path.join(path, '.AIignore'), 'w') as f:
-            # You can add any initial content you want in the .AIignore file
-            f.write("")
+    if os.path.exists(os.path.join(path, '.AIIgnore')):
+        AIignore = parse_gitignore(os.path.join(path,'.AIIgnore'))
+    else:
+        AIignore = lambda x: False
+        # Returns False for all inputs, i.e., no files or directories will be ignored
 
-    AIignore = parse_gitignore(os.path.join(path,'.AIignore'))
+
     for root, directories, files in os.walk(path):
         # Check if the current directory should be ignored
         if AIignore(root):

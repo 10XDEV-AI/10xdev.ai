@@ -6,6 +6,7 @@ import Welcome from "./Welcome";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
 import Apis from "./Apis/Apis";
+import Clone from "./Clone";
 
 function App () {
   return (
@@ -18,6 +19,7 @@ function App () {
                 <Route path="/train" element={<Train/>} />
                 <Route path="/repos" element={<Repos/>} />
                 <Route path="/apis" element={<Apis/>} />
+                <Route path="/clone" element={<Clone/>} />
             </Routes>
         </Router>
     </SearchState>

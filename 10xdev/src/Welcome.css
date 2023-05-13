@@ -3,24 +3,31 @@
 .container{
 width: 100%;
 }
-
 .logoContainer{
-width: 100%;
-position: absolute;
-top: 25%;
-text-align: center;
-font-size: 90px;
-font-family: "Roboto", Helvetica;
-font-style: italic;
-font-weight: 700;
-color:#2455C5;
+    width: 100%;
+    position: absolute;
+    top: 25%;
+    text-align: center;
+    font-size: 90px;
+    font-family: "Roboto", Helvetica;
+    font-style: italic;
+    font-weight: 700;
+    color:#2455C5;
+}
+
+@media only screen and (max-width: 768px) {
+  .logoContainer {
+    font-size: 70px;
+  }
 }
 
 .welcomesearchrow{
 display: flex;
-margin: auto;
-margin-top: 30%;
-width: 55%;
+position:absolute;
+top: 50%;
+width:60%;
+margin-left:20%;
+margin-right:20%;
 border-radius: 30px;
 border: 1px solid #D3D3D3;
 }

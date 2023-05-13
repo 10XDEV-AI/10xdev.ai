@@ -8,6 +8,7 @@ const SearchState = ({ children }) => {
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState(''); //this is the reference code of the project
   const [files, setFiles] = useState('');
+  const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
   const userPic = defaultUserPic;
@@ -25,7 +26,7 @@ const SearchState = ({ children }) => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `http://127.0.0.1:5000/api/data?prompt=${searchTerm}`
+          `/api/data?prompt=${searchTerm}`
         );
         const data = await response.json();
         console.log(data);
@@ -55,6 +56,8 @@ const SearchState = ({ children }) => {
         files,
         referenced_code,
         userPic,
+        path,
+        setPath
       }}
     >
       {children}

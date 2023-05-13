@@ -14,7 +14,9 @@ function Navbar({LoadProjectInfo, LoadSync}) {
         </Link>
       </div>
       <div className="navbar-projectInfo">
+        {LoadProjectInfo?(
         <ProjectInfo />
+        ):null}
       </div>
       <div className="linkscontainer">
       <div className="linkColumn">
