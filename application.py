@@ -47,30 +47,14 @@ def get_Repos():
         repo_name = repo.split('/')[-1]
 
         if os.path.exists(os.path.join('AIFiles', repo_name)):
-            # Change to the cloned repository directory
-            os.chdir(repo_name)
-
-            #print present working driectory
-
-            print(os.getcwd())
-
-
             output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'])
             branch_name = output.decode('utf-8').strip()
             directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
-            os.chdir('..')
         else:
-            # Change to the cloned repository directory
-            os.chdir(repo_name)
-
-            #print present working driectory
-
-            print(os.getcwd())
-
             output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'])
             branch_name = output.decode('utf-8').strip()
             directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
-            os.chdir('..')
+
     return jsonify(directories)
 
 
