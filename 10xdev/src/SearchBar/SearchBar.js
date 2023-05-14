@@ -29,8 +29,9 @@ const SearchBar = ({ onSearch }) =>{
       <button className="GoButtonChat" onClick={handleClick}>🔍</button>
 
     </div>
-    <button className="NewChatButton" onClick={newTab}>Start New Topic</button>
-
+    <div className="newchatbuttoncontainer">
+        <button className="NewChatButton" onClick={newTab}>Start New Topic</button>
+    </div>
   </div>
   )
 }

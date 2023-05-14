@@ -27,7 +27,7 @@ const ProjectInfo = () => {
   if (!isLoadingProjectInfo) {
   return (
     <div >
-      Branch : <b> {branch} </b>     Project : <b> {repository} </b>
+        Project : <b> {repository}  </b>  Branch : <b> {branch} </b>
     </div>
   );
   } else {

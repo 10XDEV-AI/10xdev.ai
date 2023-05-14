@@ -29,7 +29,10 @@ function DropdownButton() {
         newTab();
     }
     if (option === 5) {
-            navigate('/apis');
+        navigate('/apis');
+    }
+    if (option === 6) {
+        navigate('/logs');
     }
     setIsOpen(false); // close the dropdown after an option is selected
   };
@@ -44,6 +47,7 @@ function DropdownButton() {
           <li className="drop-down-bullets" onClick={() => handleOptionClick(3)}> 🧳   Your Repositories</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(4)}> 🏠   New Topic</li>
           <li className="drop-down-bullets" onClick={() => handleOptionClick(5)}> 🔑   API Keys</li>
+          <li className="drop-down-bullets" onClick={() => handleOptionClick(6)}> 🪵 Training Logs</li>
         </ul>
       )}
     </div>

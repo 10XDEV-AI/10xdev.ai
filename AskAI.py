@@ -1,18 +1,17 @@
 import pandas as pd
 import regex as re
-import os,json,openai
+import os, openai, time
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
-from utilities.readInfo import read_info
+from utilities.projectInfo import read_info
 from utilities.str2float import str2float
 from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
+from utilities.keyutils import get_key
 
-with open(os.path.join('AIFiles','info.json'), 'r') as f:
-    data = json.load(f)
-    openai.api_key = data.get('api_key', None)
+openai.api_key = get_key()
 
 fs = pd.DataFrame()
 
@@ -73,14 +72,11 @@ def files2str(files):
     #remove last newline
     files_str = files_str[:-1]
     return files_str
-def get_referenced_code(files):
+def get_referenced_code(path, files):
     referenced_code = []
-    base_dir = "Test"  # Update the base directory path
 
     for file in files:
-        file_path = os.path.join(base_dir, file)  # Construct the full file path
-        print("Attempting to open file:", file_path)
-        
+        file_path = os.path.join(path, file)
         try:
             with open(file_path, 'r') as f:
                 code = f.read()
@@ -95,7 +91,7 @@ def get_referenced_code(files):
 
 def Ask_AI(prompt):
     if prompt.strip() == "":
-        return {'files': "", 'response': "Please enter a query"}
+        return {'files': "", 'response': "Please enter a query", 'referenced_code': None}
 
     global fs
     path = read_info()
@@ -106,7 +102,8 @@ def Ask_AI(prompt):
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     log("Analyzing your query...")
     files = search_functions(prompt)
-    referenced_code = get_referenced_code(files)
+
+    referenced_code = get_referenced_code(path,files)
     # print("Referenced code: ", referenced_code)
     log("Analyzing files: " + str(files))
     print(files)
@@ -147,17 +144,15 @@ def Ask_AI(prompt):
 
 
     final_prompt +="\n"+prompt
-    log("Asking ChatGPT-3...")
     tokens = tokenCount(final_prompt)
     max =  4000 - tokens
     log("Total Tokens in the query: "+str(tokens))
     print("Total Tokens in the query: "+str(tokens))
-    log("Max tokens allowed: "+str(max))
-    print("Max tokens allowed: "+str(max))
+
     log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
     FinalAnswer = AskGPT(model = "gpt-3.5-turbo", system_message = system_message, prompt=final_prompt, temperature=0, max_tokens=max)
-
+    last_ask_time=time.time()
     clear_logs()
 
     return {'files': files2str(files), 'response': FinalAnswer,'referenced_code': referenced_code}

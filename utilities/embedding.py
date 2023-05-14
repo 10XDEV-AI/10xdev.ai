@@ -1,12 +1,10 @@
-import queue,os,json
+import queue
 import threading
 import time,math
 import openai
+from utilities.rates import get_rates
 
-with open(os.path.join('AIFiles','info.json'), 'r') as f:
-    data = json.load(f)
-    chat_limit,embedding_limit = data['rates'].split(',')
-    openai.api_key = data.get('api_key', None)
+chat_limit,embedding_limit = get_rates().split(",")
 
 MAX_BATCH_SIZE = math.floor(0.95*int(embedding_limit))  # maximum number of requests to make in a batch
 RATE_LIMIT = int(embedding_limit)  # interval in seconds for rate limiting

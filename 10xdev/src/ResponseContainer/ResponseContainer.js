@@ -3,9 +3,6 @@ import React from 'react'
 import { CopyBlock, dracula } from "react-code-blocks";
 import Sidecontainer from '../Sidecontainer/Sidecontainer';
 const ResponseContainer = ({searchResults, files,referenced_code, toggleSideContainer, sideContainerOpen}) => {
-    console.log(files);
-    console.log(referenced_code);
-    console.log(searchResults);
  
   function SplitBlocks(props) {
     const full_text = props.text;
@@ -81,8 +78,8 @@ const ResponseContainer = ({searchResults, files,referenced_code, toggleSideCont
             <SplitBlocks text={searchResults}/>
             <div className="files">
               <u>
-              <Sidecontainer files={files} referenced_code={referenced_code} toggleSideContainer={toggleSideContainer} sideContainerOpen={sideContainerOpen}  />
-            </u>
+                <Sidecontainer files={files} referenced_code={referenced_code} toggleSideContainer={toggleSideContainer} sideContainerOpen={sideContainerOpen}  />
+              </u>
             </div>
             
           </div>

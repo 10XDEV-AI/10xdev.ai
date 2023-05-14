@@ -7,7 +7,7 @@ const Sidecontainer = (props) => {
       <div
         id="mySidenav"
         className="sidenav bg"
-        style={{ width: props.sideContainerOpen ? "20%" : "0" }}
+        style={{ width: props.sideContainerOpen ? "40%" : "0" }}
       > <div className="referance " >References</div>
         <button  className="closedbtn" onClick={props.toggleSideContainer}>
           ⏩

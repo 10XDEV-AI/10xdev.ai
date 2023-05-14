@@ -3,15 +3,16 @@ from AskAI import Ask_AI
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
-from utilities.logger import get_last_logs
-from utilities.keyutils import set_key, delete_key, test_key,get_key
+from utilities.logger import get_last_logs,log
+from utilities.keyutils import set_key, delete_key, test_key, get_key
 from utilities.rates import set_rates, get_rates
-from utilities.clone_repo import get_clones,select_branch
+from utilities.clone_repo import get_clones, get_branches, select_branch
+from utilities.repoutils import select_repo, list_repos, delete_repo
 from syncAI import syncAI
-import os, subprocess, shutil, json, openai, threading
+import os, openai, threading, time
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
-
+last_ask_time = 0
 
 @application.route('/')
 def index():
@@ -26,7 +27,6 @@ def get_projectInfo():
 @application.route('/api/train', methods=['GET'])
 def get_trainAI():
     path = request.args.get('path')
-    # Spawn a new thread to run train_AI() in the background
     t = threading.Thread(target=train_AI, args=(path,))
     t.start()
     return jsonify('Training started'), 200
@@ -34,78 +34,19 @@ def get_trainAI():
 
 @application.route('/api/Repos', methods=['GET'])
 def get_Repos():
-    with open(os.path.join('AIFiles', 'info.json'), 'r') as f:
-        info = json.load(f)
-
-    directories = []
-
-    info_repos = info['repos']
-
-    print(info_repos)
-    if len(info_repos) != 0:
-        for repo in info_repos:
-            print(repo)
-            repo_name = repo.split('/')[-1]
-            if os.path.exists(os.path.join('AIFiles', repo_name)):
-                output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
-                branch_name = output.decode('utf-8').strip()
-                directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
-            else:
-                try:
-                    output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
-                    branch_name = output.decode('utf-8').strip()
-                    directories.append({"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
-                except subprocess.CalledProcessError as e:
-                    print(f"Error in get_Repos: : {e}")
-                    # Handle the exception here, for example:
-
-    return jsonify(directories)
+    return jsonify(list_repos())
 
 
 @application.route('/api/SelectRepo', methods=['GET'])
 def select_Repos():
-    Full_Path = request.args.get('Full_Path')
-    try:
-        with open(os.path.join('AIFiles', 'info.json'), 'r') as f:
-            info = json.load(f)
-            info['current_repo'] = Full_Path
-        with open(os.path.join('AIFiles', 'info.json'), 'w') as f:
-            json.dump(info, f)
-        return 'Success'
-    except Exception as e:
-        return f'Error: {e}'
+    return select_repo(request.args.get('Full_Path'))
 
 
-@application.route('/api/Repos/<Full_path>', methods=['DELETE'])
-def delete_repo(Full_path):
-    if Full_path is None or Full_path.strip() == "":
-        return jsonify({"message": "Invalid directory name."}), 400
-    repo_name = Full_path.split('/')[-1]
-    repo_path = os.path.join('AIFiles', repo_name)
-    if os.path.exists(repo_path):
-        shutil.rmtree(repo_path)
+@application.route('/api/Repos/<path>', methods=['DELETE'])
+def deleteRepo(path):
 
-        # Delete fs file
-
-        filename = "AIFiles/" "fs_" + repo_path.split('/')[-1] + ".csv"
-        if os.path.exists(filename):
-            os.remove(filename)
-
-        with open('AIFiles/info.json', 'r') as f:
-            info = json.load(f)
-            repos = info['repos']
-            if Full_path in repos:
-                repos.remove(Full_path)
-                info['current_repo'] = "Test"
-            else:
-                return jsonify({"message": f"{repo_name} does not exist in the list of repositories."}), 404
-
-        with open('AIFiles/info.json', 'w') as f:
-            json.dump(info, f)
-
-        return jsonify({"message": f"{repo_name} has been deleted."}), 200
-    else:
-        return jsonify({"message": f"{repo_name} does not exist."}), 404
+    response, code = delete_repo(path)
+    return jsonify(response), code
 
 
 @application.route('/api/sync', methods=['GET'])
@@ -122,8 +63,20 @@ def get_syncAI():
 @application.route('/api/data', methods=['GET'])
 def get_data():
     prompt = request.args.get('prompt')
+    if prompt == "":
+        return jsonify({"files": [], "response": "", "referenced_code": ""})
+
+    global last_ask_time
+    if time.time() - last_ask_time < 60/int(get_rates().split(",")[0]):
+        log("Please wait for " + str(round(int(get_rates().split(",")[0]) - (time.time() - last_ask_time))) + " seconds")
+        log("Your request has been queued because of rate limits")
+        log("Get a paid openAI account to increase your rate limits")
+        time.sleep(60/int(get_rates().split(",")[0])+1 - (time.time() - last_ask_time))
+
     response = Ask_AI(prompt)
-    return jsonify({"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
+    last_ask_time = time.time()
+    return jsonify(
+        {"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
 
 
 @application.route('/api/Ignore', methods=['GET'])
@@ -172,6 +125,7 @@ def testkey():
     message, code = test_key(key)
     return jsonify({'message': message}), code
 
+
 @application.route('/api/getRates', methods=['GET'])
 def getRates():
     return jsonify(get_rates())
@@ -186,15 +140,23 @@ def setRates():
 @application.route('/api/clone', methods=['GET'])
 def getClones():
     path = request.args.get('path')
-    branches,code = get_clones(path)
-    return jsonify(branches),code
+    branches, code = get_clones(path)
+    return jsonify(branches), code
+
 
 @application.route('/api/setBranch', methods=['GET'])
 def set_branch():
     path = request.args.get('path')
     branch = request.args.get('branch')
-    select_branch(path,branch)
+    select_branch(path, branch)
     return jsonify({'message': 'Success'})
+
+@application.route('/api/branches', methods=['GET'])
+def getBranches():
+    path = request.args.get('path')
+    branches, code = get_branches(path)
+    return jsonify(branches), code
+
 
 if __name__ == '__main__':
     application.run(debug=True, port=8000)

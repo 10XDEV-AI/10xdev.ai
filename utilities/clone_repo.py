@@ -68,3 +68,13 @@ def select_branch(path, branch):
         subprocess.run(['git', 'checkout', branch], cwd=path)
         return
 
+def get_branches(path):
+    # get the list of branches for repo at path
+    path = path.split('/')[-1]
+    result = subprocess.run(['git', 'branch','-r'], cwd=path, capture_output=True)
+    branches = result.stdout.decode().splitlines()
+    filtered_branches = [branch.replace('*', '').strip() for branch in branches]
+    filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
+    filtered_branches = [branch.replace('origin/', '').strip() for branch in filtered_branches]
+    return filtered_branches,200
+

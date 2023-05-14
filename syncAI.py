@@ -1,15 +1,14 @@
-import time, chardet, openai, subprocess, os, pandas as pd,json
-from utilities.readInfo import read_info
+import time, chardet, openai, subprocess, os, pandas as pd
+from utilities.projectInfo import read_info
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
+from utilities.keyutils import get_key
 from utilities.files2analyze import files2analyze
 
-with open(os.path.join('AIFiles','info.json'), 'r') as f:
-    data = json.load(f)
-    openai.api_key = data.get('api_key', None)
+openai.api_key = get_key()
 
 fs = pd.DataFrame()
 def get_diff(old_file_path, new_file_path):

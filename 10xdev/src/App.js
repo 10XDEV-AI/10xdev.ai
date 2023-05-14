@@ -7,6 +7,7 @@ import Chat from "./Chat";
 import SearchState from "./context/SearchState";
 import Apis from "./Apis/Apis";
 import Clone from "./Clone";
+import LoadingRing from "./Loader/Loader";
 
 function App () {
   return (
@@ -20,6 +21,7 @@ function App () {
                 <Route path="/repos" element={<Repos/>} />
                 <Route path="/apis" element={<Apis/>} />
                 <Route path="/clone" element={<Clone/>} />
+                <Route path="/logs" element={<LoadingRing/>} />
             </Routes>
         </Router>
     </SearchState>

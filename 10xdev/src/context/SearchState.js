@@ -29,13 +29,13 @@ const SearchState = ({ children }) => {
           `/api/data?prompt=${searchTerm}`
         );
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setFiles(data.files);
         setResults(data.response);
         setreferenced_code(data.referenced_code);
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         setIsLoading(false);
       }
     };
