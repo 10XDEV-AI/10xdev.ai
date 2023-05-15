@@ -79,3 +79,17 @@ padding: 10px;
 border-radius: 20px;
 color: white;
 }
+
+.change-branch-button{
+    cursor: pointer;
+    background-color: #f3fafe;
+    border: none;
+    padding:0;
+    margin: 0;
+    font:inherit;
+}
+
+.change-branch-button:hover{
+    background-color: #2455C5;
+    color:white;
+}

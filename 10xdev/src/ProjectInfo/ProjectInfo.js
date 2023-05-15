@@ -16,12 +16,6 @@ const ProjectInfo = () => {
       setIsLoadingProjectInfo(false);
     };
     fetchData();
-
-    const interval = setInterval(() => {
-      fetchData();
-    }, 60000);
-
-    return () => clearInterval(interval);
   }, [setIsLoadingProjectInfo]);
 
   if (!isLoadingProjectInfo) {

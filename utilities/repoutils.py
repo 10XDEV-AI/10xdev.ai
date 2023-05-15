@@ -1,4 +1,5 @@
 import os, json, subprocess, shutil
+from utilities.projectInfo import read_info
 
 
 def select_repo(Full_Path):
@@ -21,15 +22,17 @@ def list_repos():
 
     info_repos = info['repos']
 
-    print(info_repos)
     if len(info_repos) != 0:
+        current_repo = read_info()
         for repo in info_repos:
-            print(repo)
             repo_name = repo.split('/')[-1]
             if os.path.exists(os.path.join('AIFiles', repo_name)):
                 output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
                 branch_name = output.decode('utf-8').strip()
-                directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
+                if current_repo == repo_name:
+                    directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo, "Selected": True})
+                else:
+                    directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
             else:
                 try:
                     output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
