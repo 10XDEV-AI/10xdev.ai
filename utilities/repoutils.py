@@ -21,6 +21,7 @@ def list_repos():
     directories = []
 
     info_repos = info['repos']
+    print(info_repos)
 
     if len(info_repos) != 0:
         current_repo = read_info()
@@ -29,18 +30,27 @@ def list_repos():
             if os.path.exists(os.path.join('AIFiles', repo_name)):
                 output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
                 branch_name = output.decode('utf-8').strip()
+                print("CR")
+                print(current_repo)
+                print(repo_name)
                 if current_repo == repo_name:
                     directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo, "Selected": True})
                 else:
-                    directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo})
+                    directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo,"Selected": False})
             else:
                 try:
                     output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo)
                     branch_name = output.decode('utf-8').strip()
                     directories.append(
-                        {"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo})
+                        {"Directory": repo_name, "Trained": False, "Branch": branch_name, "Full_Path": repo,"Selected": False})
                 except subprocess.CalledProcessError as e:
                     print(f"Error in get_Repos: : {e}")
+
+        #make the repo which has selected appear at the top
+        for i in range(len(directories)):
+            if directories[i]['Selected'] == True:
+                directories.insert(0, directories.pop(i))
+
 
     return directories
 

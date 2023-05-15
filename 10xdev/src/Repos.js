@@ -5,7 +5,7 @@ import './Repos.css';
 import Navbar from './Navbar';
 
 export default function Repos() {
-  const {path, setPath} = useContext(SearchContext);
+  const {setPath} = useContext(SearchContext);
   const navigate = useNavigate();
   const [repos, setRepos] = useState([]);
 
@@ -31,7 +31,7 @@ export default function Repos() {
     fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
-      .then(() => {navigate('/')})
+      .then(() => {window.location.reload();})
       .catch(error => console.error(error));
 
     }, [navigate]);
@@ -41,18 +41,13 @@ export default function Repos() {
         navigate('/train');
     }, [navigate]);
 
-  const handleChangeBranch = useCallback((Full_Path) => {
-    fetch(`/api/ChangeBranch?Full_Path=${Full_Path}`, {
-      method: 'GET',
-    })
-      .then(() => {navigate('/')})
-      .catch(error => console.error(error));
-
+  const handleChangeBranch = useCallback(async(Full_Path) => {
+    setPath(Full_Path);
+    navigate('/branch');
     }, [navigate]);
 
     const handleSync = useCallback(async (Full_Path) => {
         setPath(Full_Path);
-        navigate('/sync');
     }, [navigate]);
 
   return (
@@ -66,20 +61,28 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2>{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button" onClick={() => handleSync(repo.Full_Path) }> Branch:  {repo.Branch} 🖋️</button>
+                <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Full_Path)}> Branch:  {repo.Branch} 🖋️</button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
               <div className="repo-card-buttons">
-                {repo.Trained !== true &&
-                <button className="repo-card-button" onClick={() => handleTrain(repo.Full_Path)}>Train 🧠</button>}
-                {repo.Selected ?
-                <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Selected ✅</button> :
-                <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Select ✋️</button>}
+                {repo.Trained !== true ? (
+                  <button className="repo-card-button" onClick={() => handleTrain(repo.Full_Path)}>Train 🧠</button>
+                ) : (
+                  <>
+                    {repo.Selected ? (
+                    <>
+                      <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Selected ✅</button>
+                      <button className="repo-card-button" onClick={() => handleSync(repo.Full_Path)}>Sync 🔄</button>
+                    </>
+                    ) : (
+                      <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Select ✋️</button>
+                    )}
+                  </>
+                )}
                 <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>
-                {repo.Trained === true &&
-                <button className="repo-card-button" onClick={() => handleSync(repo.Full_Path)}>Sync 🔄</button>}
               </div>
+
             </div>
           ))}
         </div>

@@ -59,6 +59,7 @@ import subprocess
 def select_branch(path, branch):
     # set the branch for repo at path
     path = path.split('/')[-1]
+    subprocess.run(['git', 'pull'], cwd=path)
     result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=path, capture_output=True)
     current_branch = result.stdout.decode().strip()
     if str(current_branch) == str(branch):
@@ -69,12 +70,19 @@ def select_branch(path, branch):
         return
 
 def get_branches(path):
-    # get the list of branches for repo at path
+    #get the latest pull
     path = path.split('/')[-1]
+    subprocess.run(['git', 'pull'], cwd=path)
+
     result = subprocess.run(['git', 'branch','-r'], cwd=path, capture_output=True)
     branches = result.stdout.decode().splitlines()
     filtered_branches = [branch.replace('*', '').strip() for branch in branches]
     filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
     filtered_branches = [branch.replace('origin/', '').strip() for branch in filtered_branches]
+    # remove duplicates
+    filtered_branches = list(set(filtered_branches))
+
+    # Print the filtered branch names
+    print(filtered_branches)
     return filtered_branches,200
 
