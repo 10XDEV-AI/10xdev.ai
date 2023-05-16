@@ -31,7 +31,7 @@ export default function Repos() {
     fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
-      .then(() => {window.location.reload();})
+      .then(navigate('/'))
       .catch(error => console.error(error));
 
     }, [navigate]);
@@ -73,7 +73,6 @@ export default function Repos() {
                     {repo.Selected ? (
                     <>
                       <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Selected ✅</button>
-                      <button className="repo-card-button" onClick={() => handleSync(repo.Full_Path)}>Sync 🔄</button>
                     </>
                     ) : (
                       <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Select ✋️</button>

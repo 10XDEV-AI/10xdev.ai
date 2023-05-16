@@ -107,7 +107,7 @@ return (
     <div className="spacer-top"></div>
     <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
       {isLoading ? (<LoadingRing />) : (
-      <div>
+      <div onClick = {toggleSideContainer} >
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
             <UserPrompt
