@@ -43,8 +43,14 @@ def summarize_file(path, file, i):
     log(p)
     full_file_path = os.path.join(path, file)
     with open(full_file_path, 'r') as f:
-        file_contents = f.read()
-    if tokenCount(file_contents) > 3000:
+        try:
+            file_contents = f.read()
+        except UnicodeDecodeError:
+            p = ("File " + file + " was not Analyzed as it is not a text file")
+            log(p)
+            return i, "Ignore"
+
+    if tokenCount(file_contents) > 3400:
         p = ("File " + file + " was not analyzed as it is too long")
         log(p)
 

@@ -11,10 +11,22 @@ const Branch = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetch(`/api/branches?path=${path}`)
-      .then(res => res.json())
-      .then(data => setBranches(data))
-    },[path,setIsLoading]);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/branches?path=${path}`);
+        const data = await response.json();
+        setBranches(data);
+      } catch (error) {
+        console.error('Error fetching branches:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [path, setIsLoading]);
+
 
 
   const handleselect = async(branch) => {
