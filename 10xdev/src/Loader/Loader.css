@@ -54,13 +54,21 @@
 
 .loading-cancel{
   position: absolute;
-  top: 90%;
-  right: 15%;
+  top: 10%;
+  left: 10%;
   width: 20%;
   text-align: center;
   color: #696969;
   border-color:  #696969;
   background: none;
-  border-radius: 20px;
+  border-radius: 5px;
   border-style:solid;
+}
+
+.loading-cancel:hover{
+  box-shadow: 0 0 5px 0px #D3D3D3;
+  cursor: pointer;
+  background: black;
+  color:white;
+  border-color:  black;
 }

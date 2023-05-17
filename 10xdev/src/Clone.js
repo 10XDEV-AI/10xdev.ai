@@ -10,7 +10,6 @@ const Clone = () => {
   const [branches, setBranches] = useState([]);
   const [input, setInput] = useState('');
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleClone = async (branch) => {
     setIsLoading(true);
@@ -78,7 +77,20 @@ const Clone = () => {
                     </ul>
                   )}
                 </div>
-              ) : null}
+              ) :
+              (
+              <div className="ignoretips">
+              <h2> 💡Tips on training Repository</h2>
+                  <ul>
+                      <li> Add big folders and packages not in use to .AIIgnore file </li>
+                      <li> Add any other files that are not required for training </li>
+                      <li> Break down big files to smaller files </li>
+                      <li> Works well with small files </li>
+                      <li> Works well for files with comments </li>
+                  </ul>
+              </div>
+              )
+              }
           </div>
         </div>
       )}

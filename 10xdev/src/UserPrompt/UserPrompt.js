@@ -2,8 +2,8 @@ import React, { useState, useEffect,useContext } from "react";
 import SearchContext from "../context/SearchContext";
 import "./UserPrompt.css";
 
-function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
-  const {setIsLoading,userPic} = useContext(SearchContext);
+function UserPrompt({indexval, searchTerm, onReprompt}) {
+  const {userPic} = useContext(SearchContext);
   const [userPrompt, setUserPrompt] = useState(searchTerm);
   const [editingPrompt, setEditingPrompt] = useState(false);
 
@@ -19,17 +19,7 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
 
   const handleSavePrompt = async (e) => {
     setEditingPrompt(false);
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `/api/data?prompt=${userPrompt}`
-      );
-      const data = await response.json();
-      onChildData(data, indexval, userPrompt);
-    } catch (error) {
-      console.log(error);
-    }
-    setIsLoading(false);
+    onReprompt(userPrompt,indexval);
   };
 
   const handleCancelPrompt = () => {
@@ -42,7 +32,7 @@ function UserPrompt({indexval, searchTerm, onChildData, onRetry}) {
   };
 
   const handleRetry = () => {
-    onRetry(userPrompt);
+    onReprompt(userPrompt,indexval);
   };
   return (
     <div className="userPromptContainer">

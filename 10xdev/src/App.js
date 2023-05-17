@@ -6,7 +6,9 @@ import Welcome from "./Welcome";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
 import Apis from "./Apis/Apis";
+import Branch from "./Branch/Branch";
 import Clone from "./Clone";
+import LoadingRing from "./Loader/Loader";
 
 function App () {
   return (
@@ -20,6 +22,8 @@ function App () {
                 <Route path="/repos" element={<Repos/>} />
                 <Route path="/apis" element={<Apis/>} />
                 <Route path="/clone" element={<Clone/>} />
+                <Route path="/logs" element={<LoadingRing/>} />
+                <Route path="/branch" element={<Branch/>} />
             </Routes>
         </Router>
     </SearchState>

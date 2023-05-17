@@ -6,155 +6,135 @@ import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
-import { useState, useEffect, useCallback} from "react";
+import { useState, useEffect} from "react";
 
 export const Chat = () => {
   const { searchTerm, isLoading, results, setIsLoading, files ,referenced_code} = useContext(SearchContext);
-  const [sideContainerOpen, setSideContainerOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
+  const [ sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [ chatMessages, setChatMessages] = useState([]);
 
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
   };
 
-  const handleChildData = useCallback((data, index, input) => {
-      setChatMessages((prevState) => {
-        const updatedMessages = [...prevState]; // create a copy of prevState
-
-        updatedMessages[index] = {
-          prompt: (
-            <UserPrompt
-              indexval={updatedMessages.length -1 }
-              searchTerm={input}
-              onChildData={handleChildData}
-              onRetry={(input) => {
-              setIsLoading(true);
-              setChatMessages((prevState) => prevState.slice(0, -1));
-              handleSearch(input, index);
-              }}
-            />
-          ),
-          response: <ResponseContainer searchResults={data.response} files = {data.files} />,
-        };
-        return updatedMessages; // return the updated copy as the new state
-      });
-    },[setIsLoading]);
-
-  const handleSearch = useCallback((input, index) => {
+  const handleSearch = async(input) => {
+    console.log("searching for");
+    console.log(input);
     setIsLoading(true);
-    const url = `/api/data?prompt=${input}`;
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
+    const response = await fetch(`/api/data?prompt=${input}`);
+        const data = await response.json();
         console.log(data);
+        const results = JSON.stringify(data.response);
+        const files  = (data.files);
+        const code = (data.referenced_code);
+        console.log(results);
+        console.log(files);
+        console.log(code);
         setChatMessages((prevState) => [
           ...prevState,
           {
-            prompt: (
-              <UserPrompt
-                indexval={prevState.length}
-                searchTerm={input}
-                onChildData={handleChildData}
-                onRetry={(input) => {
-                  setIsLoading(true);
-                  setChatMessages((prevState) => prevState.slice(0, -1));
-                  handleSearch(input, index);
-                }}
-              />
-            ),
-            response: {
-              searchResults: data.response,
-              files: data.files,
-              referenced_code: data.referenced_code
-            }
-          },
-        ]);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  },[setIsLoading]);
+            prompt:
+              {
+              searchTerm: input,
+              }
+              ,
+              response: {
+                searchResults: data.response,
+                files: data.files,
+                referenced_code: data.referenced_code
+              }
+          }
+          ]);
+         setIsLoading(false);
+         console.log("chatmessages");
+         console.log(chatMessages);
+     };
 
-  const handleChildData = (data, index, input) => {
+  const handleReprompt = async (input, index) => {
+    console.log("searching for");
+    console.log(input);
+    setIsLoading(true);
+    const response = await fetch(`/api/data?prompt=${input}`);
+    const data = await response.json();
+    console.log(data);
+    const results = JSON.stringify(data.response);
+    const files = data.files;
+    const code = data.referenced_code;
+    console.log(results);
+    console.log(files);
+    console.log(code);
+    console.log("index");
+    console.log(index);
     setChatMessages((prevState) => {
       const updatedMessages = [...prevState];
       updatedMessages[index] = {
-        prompt: (
-          <UserPrompt
-            indexval={updatedMessages.length - 1}
-            searchTerm={input}
-            onChildData={handleChildData}
-            onRetry={(input) => {
-              setIsLoading(true);
-              setChatMessages((prevState) => prevState.slice(0, -1));
-              handleSearch(input, index);
-            }}
-          />
-        ),
+        prompt: {
+          searchTerm: input,
+        },
         response: {
           searchResults: data.response,
           files: data.files,
-          referenced_code: data.referenced_code
-        }
+          referenced_code: data.referenced_code,
+        },
       };
       return updatedMessages;
     });
+    console.log("Updated chat messages");
+    console.log(chatMessages);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-      setChatMessages([
-        {
-          index: 0,
-          prompt: (
-            <UserPrompt
-              indexval={0}
-              searchTerm={searchTerm}
-              onChildData={handleChildData}
-              onRetry={(input) => {
-                setIsLoading(true);
-                setChatMessages((prevState) => prevState.slice(0, -1));
-                handleSearch(input, 0);
-              }}
-            />
-          ),
-          response: <ResponseContainer searchResults={results} files={files} />,
+    setChatMessages([
+      {
+        index: 0,
+        prompt: {
+          searchTerm: searchTerm,
         },
-      ]);
-    }, [results, searchTerm,files,handleChildData,handleSearch,setIsLoading]);
+        response: {
+          searchResults: results,
+          files: files,
+          referenced_code: referenced_code,
+        },
+      },
+    ]);
+  }, [results, searchTerm, files, referenced_code]);
 
-  const [chatMessages, setChatMessages] = useState([]);
 
-  if (isLoading) {
-    return <LoadingRing />;
-  }
-  return (
-      <div className="container">
-        <Navbar LoadSync = "" LoadProjectInfo = "True"/>
-        {isLoading ? (
-          <LoadingRing />
-        ) : (
-          <div>
-            <div className="chat-container">
-              {chatMessages.map((chatMessage, index) => (
-                <div key={index}>
-                  {chatMessage.prompt}
-                  {chatMessage.response}
-                </div>
-              ))}
-            </div>
-            <div className="spacer">
-              {/* This is a spacer div that adds empty space at the bottom */}
-            </div>
-            <div className="footer"></div>
-            <div className="searchbarrow">
-              <SearchBar onSearch={handleSearch} />
-            </div>
+return (
+    <>
+    <Navbar LoadSync="" LoadProjectInfo="True" />
+    <div className="spacer-top"></div>
+    <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
+      {isLoading ? (<LoadingRing />) : (
+      <div onClick = {toggleSideContainer} >
+        {chatMessages.map((chatMessage, index) => (
+          <div key={index}>
+            <UserPrompt
+                searchTerm={chatMessage.prompt.searchTerm}
+                onReprompt={handleReprompt}
+                onRetry={handleReprompt}
+                indexval={index}
+            />
+            <ResponseContainer
+                searchResults={chatMessage.response.searchResults}
+                files={chatMessage.response.files}
+                referenced_code={chatMessage.response.referenced_code}
+                toggleSideContainer={toggleSideContainer}
+                sideContainerOpen={sideContainerOpen}
+              />
           </div>
-        )}
+        ))}
       </div>
-    );
+      )}
+      <div className="spacer"></div>
+      <div className="footer"></div>
+      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`  }>
+        <SearchBar onSearch={handleSearch}  />
+      </div>
+    </div>
+    </>
+  );
 
 };
 

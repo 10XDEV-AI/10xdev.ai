@@ -15,8 +15,11 @@ function LogViewer() {
         result += new TextDecoder('utf-8').decode(value);
       }
       result = result.replace(/,/g, ',\n'); // add newline after each comma
+      result = result.replace(/"/g, ''); // remove double quotes
+      result = result.replace(/,/g, ''); // remove double quotes
       result = result.slice(1, -2); // remove first and last square brackets
       setLogs(result);
+      //console.log(result);
     };
 
 

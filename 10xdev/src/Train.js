@@ -1,6 +1,4 @@
 import React, { useState,useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import './Train.css';
 import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
@@ -9,7 +7,6 @@ import LoadingRing from "./Loader/Loader";
 
 const Train = () => {
   const {isLoading,setIsLoading,path}  = useContext(SearchContext);
-  const location = useLocation();
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [filesToIgnore, setFilesToIgnore] = useState([]);
@@ -40,7 +37,6 @@ const Train = () => {
       }
     };
 
-  const navigate = useNavigate();
   const handleTrain = async () => {
       setIsLoading(true);
       try {
@@ -136,7 +132,7 @@ const Train = () => {
                     (
                         <div className="ignorecontainer">
                             <div className="ignoretips">
-                            <h2> 💡Tips on '.AIIgnore' File:</h2>
+                            <h2> 💡Tips on training Repository</h2>
                             <ul>
                                 <li> Add folders like node_modules, .git, .vscode, etc. to .AIIgnore file </li>
                                 <li> Add files like .DS_Store, .gitignore, etc. to .AIIgnore file </li>

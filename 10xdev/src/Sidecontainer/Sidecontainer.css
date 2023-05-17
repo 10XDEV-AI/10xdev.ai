@@ -3,12 +3,13 @@
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 9999; /* Stay on top */
     top: 0;
     background-color: #fffefe; 
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; 
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
 }
 
 /* The navigation menu links */
@@ -47,6 +48,8 @@
     right: 25px;
     font-size: 12px;
     margin-left: 50px;
+    border:none;
+    padding:5px;
 }
 .sidenav {
     right: 0;

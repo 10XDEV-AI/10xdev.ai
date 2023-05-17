@@ -3,6 +3,8 @@ nav {
   margin: 10;
   display: flex;
   width: 100%;
+  position:fixed;
+  z-index:1;
 }
 
 .logo{

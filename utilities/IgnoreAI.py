@@ -46,7 +46,6 @@ def IgnoreAI(path):
 
     AIignore = parse_gitignore(os.path.join(path, '.AIIgnore'))
 
-    print("Files to ignore : " + str(AIignore))
     with ThreadPoolExecutor() as executor:
         futures = []
         for root, directories, files in os.walk(path):

@@ -26,10 +26,10 @@ width: 100%;
   background: none;
   font-size: 15px;
   border-radius: 6px;
-  width: 200px;
+  width: 150px;
   color: #2455C5;
-  padding: 0px;
   border-width: 1px;
+  padding:10px;
 }
 
 .NewChatButton:hover {
@@ -46,4 +46,8 @@ width: 100%;
    border: none;
    outline: none;
    margin: 1px;
+}
+
+.newchatbuttoncontainer{
+width:180px;
 }

@@ -16,18 +16,12 @@ const ProjectInfo = () => {
       setIsLoadingProjectInfo(false);
     };
     fetchData();
-
-    const interval = setInterval(() => {
-      fetchData();
-    }, 60000);
-
-    return () => clearInterval(interval);
   }, [setIsLoadingProjectInfo]);
 
   if (!isLoadingProjectInfo) {
   return (
     <div >
-      Branch : <b> {branch} </b>     Project : <b> {repository} </b>
+        Project : <b> {repository}  </b>  Branch : <b> {branch} </b>
     </div>
   );
   } else {
