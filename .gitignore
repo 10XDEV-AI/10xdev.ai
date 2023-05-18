@@ -4,3 +4,4 @@ API_key.txt
 *.AIIgnore
 AIFiles
 __pycache__
+node_modules
