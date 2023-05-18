@@ -9,14 +9,15 @@ import Apis from "./Apis/Apis";
 import Branch from "./Branch/Branch";
 import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
-
+import LandingPage from "./landing page/landing";
 function App () {
   return (
     <div className="App">
     <SearchState>
         <Router>
             <Routes>
-                <Route path="/" element={<Welcome/>} />
+                <Route path="/" element={<LandingPage/>} />
+                <Route path="/welcome" element={<Welcome/>} />
                 <Route path="/chat" element={<Chat/>} />
                 <Route path="/train" element={<Train/>} />
                 <Route path="/repos" element={<Repos/>} />
