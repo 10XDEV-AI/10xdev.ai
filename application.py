@@ -8,8 +8,9 @@ from utilities.keyutils import set_key, delete_key, test_key, get_key
 from utilities.rates import set_rates, get_rates
 from utilities.clone_repo import get_clones, get_branches, select_branch
 from utilities.repoutils import select_repo, list_repos, delete_repo
+from utilities.cognito import get_user_attributes
 from syncAI import syncAI
-import os, openai, threading, time
+import os, openai, threading, time, boto3
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 last_ask_time = 0
@@ -156,6 +157,19 @@ def getBranches():
     path = request.args.get('path')
     branches, code = get_branches(path)
     return jsonify(branches), code
+
+@application.route('/api/userinfo', methods=['GET'])
+def get_user():
+    # Retrieve the Authorization header from the request
+    auth_header = request.headers.get('Authorization')
+
+    # Extract the code from the Authorization header (assuming it follows the "Bearer {code}" format)
+    if auth_header and auth_header.startswith('Bearer '):
+        code = auth_header.split(' ')[1]
+
+        print(get_user_attributes(code))
+
+    return jsonify({'message': 'hi'}), 200
 
 
 if __name__ == '__main__':
