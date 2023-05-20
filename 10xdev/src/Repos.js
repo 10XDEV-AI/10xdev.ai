@@ -31,7 +31,7 @@ export default function Repos() {
     fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
-      .then(navigate('/'))
+      .then(navigate('/welcome'))
       .catch(error => console.error(error));
 
     }, [navigate]);

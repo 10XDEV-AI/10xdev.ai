@@ -59,6 +59,7 @@ import subprocess
 def select_branch(path, branch):
     # set the branch for repo at path
     path = path.split('/')[-1]
+    path = path.replace('.git', '')
     result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=path, capture_output=True)
     current_branch = result.stdout.decode().strip()
     if str(current_branch) == str(branch):
