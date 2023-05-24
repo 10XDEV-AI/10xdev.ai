@@ -10,7 +10,7 @@ from utilities.clone_repo import get_clones, get_branches, select_branch
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from syncAI import syncAI
-import os, openai, threading, time, boto3
+import os, threading, time
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 last_ask_time = 0
@@ -45,7 +45,6 @@ def select_Repos():
 
 @application.route('/api/Repos/<path>', methods=['DELETE'])
 def deleteRepo(path):
-
     response, code = delete_repo(path)
     return jsonify(response), code
 

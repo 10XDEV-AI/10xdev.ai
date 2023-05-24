@@ -17,8 +17,8 @@ import Cookies from 'js-cookie';
 function App () {
     useEffect(() => {
         // Extract the code from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        const code = urlParams.get('access_token');
 
         if (code) {
           // Store the code in an HTTP-only cookie
