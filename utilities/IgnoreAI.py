@@ -18,6 +18,7 @@ def process_file(root, filename, path):
         log("Analysed the file type "+ filename)
 
     if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
+        log(filename + "has" + result['encoding'])
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
         if len(re.split(r'[:,()\[\]{}"\n\s]+', file_contents)) > 4096 or ".pynb" in filename:
             log("Analysed the lenghth "+ filename)
