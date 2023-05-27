@@ -18,7 +18,7 @@ def process_file(root, filename, path):
     if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
         log("Analysing : "+str(filename))
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
-        if len(re.split(r'[.,;\n\s]+',file_contents)) > 4096:
+        if len(re.split(r'[:,()\[\]{}"\n\s]+', file_contents)) > 4096:
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '❌', "Sign": '❌'}
         else:
             tokens, sign = results(file_contents)
