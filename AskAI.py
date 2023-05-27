@@ -124,7 +124,6 @@ def Ask_AI(prompt):
         for file in  files:
             final_prompt+= "\nFile path " + file + ":\n"
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
-        system_message = "Act like are a coding assistant with access to the summary of files containing code. Ask for more context if required. Assume context when you can."
 
         print("Estimated tokens: "+str(estimated_tokens))
         print("Final Prompt : "+ final_prompt)
@@ -140,7 +139,7 @@ def Ask_AI(prompt):
                     final_contents = open(j).read()
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents
-        system_message = "Act like you are a coding assistant with access to the codebase. Ask for more context if required. Assume context when you can."
+        system_message = "Act like you are a coding assistant with access to the codebase."
 
 
     final_prompt +="\n"+prompt

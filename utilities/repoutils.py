@@ -30,9 +30,7 @@ def list_repos():
             if os.path.exists(os.path.join('AIFiles', repo_name)):
                 output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
                 branch_name = output.decode('utf-8').strip()
-                print("CR")
-                print(current_repo)
-                print(repo_name)
+
                 if current_repo == repo_name:
                     directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Full_Path": repo, "Selected": True})
                 else:
@@ -69,20 +67,21 @@ def delete_repo(Full_path):
         if os.path.exists(filename):
             os.remove(filename)
 
-        with open('AIFiles/info.json', 'r') as f:
+        with open('AIFiles/info.json', 'r+') as f:
             info = json.load(f)
+            f.seek(0)
+
             repos = info['repos']
-            if Full_path in repos:
-                repos.remove(Full_path)
-                info['repos'] = repos
+            repos = [repo for repo in repos if repo != Full_path]
+            print(Full_path)
+            print(repos)
+            info['repos'] = repos
+
             if info['current_repo'] == Full_path:
                 info['current_repo'] = ""
-            else:
-                return {"message": f"{repo_name} does not exist in the list of repositories."}, 404
 
-        with open('AIFiles/info.json', 'w') as f:
+            f.seek(0)
+            f.truncate()
             json.dump(info, f)
 
         return {"message": f"{repo_name} has been deleted."}, 200
-    else:
-        return {"message": f"{repo_name} does not exist."}, 404
