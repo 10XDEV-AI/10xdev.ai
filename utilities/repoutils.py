@@ -27,6 +27,8 @@ def list_repos():
         current_repo = read_info()
         for repo in info_repos:
             repo_name = repo.split('/')[-1]
+            if repo_name == "":
+                continue
             if os.path.exists(os.path.join('AIFiles', repo_name)):
                 output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_name)
                 branch_name = output.decode('utf-8').strip()

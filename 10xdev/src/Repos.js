@@ -23,7 +23,7 @@ export default function Repos() {
     })
       .then(response => response.json())
       .then(data => console.log(data))
-      .then(() => {window.location.reload();})
+      .then(navigate('/repos'))
       .catch(error => console.error(error));
   }, []);
 
@@ -31,7 +31,6 @@ export default function Repos() {
     fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
       method: 'GET',
     })
-      .then(navigate('/'))
       .catch(error => console.error(error));
 
     }, [navigate]);
