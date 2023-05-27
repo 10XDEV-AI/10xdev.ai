@@ -45,8 +45,8 @@ def select_Repos():
 @application.route('/api/Repos/<path>', methods=['DELETE'])
 def deleteRepo(path):
 
-    response, code = delete_repo(path)
-    return jsonify(response), code
+    code = delete_repo(path)
+    return jsonify({"message":"done"}), code
 
 
 @application.route('/api/sync', methods=['GET'])

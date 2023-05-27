@@ -55,7 +55,7 @@ def list_repos():
 
 def delete_repo(Full_path):
     if Full_path is None or Full_path.strip() == "":
-        return ({"message": "Invalid directory name."}), 400
+        return 400
     repo_name = Full_path.split('/')[-1]
     if os.path.exists(repo_name):
         shutil.rmtree(repo_name)
@@ -84,4 +84,4 @@ def delete_repo(Full_path):
             f.truncate()
             json.dump(info, f)
 
-        return {"message": f"{repo_name} has been deleted."}, 200
+        return 200
