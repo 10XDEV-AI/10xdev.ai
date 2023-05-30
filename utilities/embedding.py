@@ -1,22 +1,29 @@
 import queue
 import threading
-import time,math
+import time, math
 import openai
+from utilities.keyutils import get_key
 from utilities.rates import get_rates
 
-chat_limit,embedding_limit = get_rates().split(",")
+MAX_BATCH_SIZE = 55
+RATE_LIMIT = 60
 
-MAX_BATCH_SIZE = math.floor(0.95*int(embedding_limit))  # maximum number of requests to make in a batch
-RATE_LIMIT = int(embedding_limit)  # interval in seconds for rate limiting
 
 def split_sent(s1):
     words = s1.split()  # split string into words
     n = 8  # split every n words
-    chunks = [words[i:i+n] for i in range(0, len(words), n)]  # split into chunks of size n
+    chunks = [words[i:i + n] for i in range(0, len(words), n)]  # split into chunks of size n
     result = [' '.join(chunk) for chunk in chunks]  # join chunks into strings
     return result
 
-def get_embedding(task):
+
+def get_embedding(task, userid):
+    openai.api_key = get_key(userid)
+    chat_limit, embedding_limit = get_rates(userid).split(",")
+    global MAX_BATCH_SIZE, RATE_LIMIT
+    MAX_BATCH_SIZE = math.floor(0.95 * int(embedding_limit))  # maximum number of requests to make in a batch
+    RATE_LIMIT = int(embedding_limit)  # interval in seconds for rate limiting
+
     task = str(task)
     try:
         response = openai.Embedding.create(
@@ -26,18 +33,21 @@ def get_embedding(task):
     except Exception as e:
         print(f"Error: {e}")
         print("Retrying")
-        time.sleep(60/RATE_LIMIT)
-        return get_embedding(task)  # Retry after 5 second s
+        time.sleep(60 / RATE_LIMIT)
+        return get_embedding(task,userid)  # Retry after 5 second s
 
-def process_batch(batch, results_queue):
+
+def process_batch(batch, results_queue, userid):
     embeddings = []
     for task in batch:
-        embedding = get_embedding(task)
+        embedding = get_embedding(task, userid)
         if embedding is not None:
             embeddings.append(embedding)
     results_queue.put(embeddings)
 
-def split_embed(summary):
+
+def split_embed(summary, userid):
+    global MAX_BATCH_SIZE
     if summary == "Ignore":
         summary = ""
     sentences = split_sent(summary)
@@ -72,7 +82,7 @@ def split_embed(summary):
         # Make API calls in parallel
         threads = []
         for i in range(len(batch)):
-            thread = threading.Thread(target=process_batch, args=([batch[i:i+1]], results_queue))
+            thread = threading.Thread(target=process_batch, args=([batch[i:i + 1]], results_queue, userid))
             threads.append(thread)
             thread.start()
         for thread in threads:
@@ -85,8 +95,6 @@ def split_embed(summary):
         while not results_queue.empty():
             sentence_embeddings += results_queue.get()
 
-        print("Combined results for batch of  size "+str(num_requests_made))
+        print("Combined results for batch of  size " + str(num_requests_made))
 
     return sentence_embeddings
-
-

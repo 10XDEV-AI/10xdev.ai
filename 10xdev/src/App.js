@@ -11,11 +11,14 @@ import Branch from "./Branch/Branch";
 import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
-import  User from "./User";
+import User from "./User";
+import Wait from "./Wait";
 import Cookies from 'js-cookie';
+import { callAPI } from './api';
 
 function App () {
     useEffect(() => {
+      const fetchData = async () => {
         // Extract the code from the URL
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
         const code = urlParams.get('access_token');
@@ -24,10 +27,26 @@ function App () {
           // Store the code in an HTTP-only cookie
           Cookies.set('cognitoCode', code, { path: '/', secure: true, sameSite: 'strict' });
 
+          try {
+            // Make an API call to the backend
+            const response = await callAPI(`/api/login`, {
+              method: 'GET',
+            });
+
+            // Handle the response
+            // Process the data as needed
+          } catch (error) {
+            // Handle the error
+          }
+
           // Remove the code from the URL
           window.history.replaceState({}, document.title, window.location.pathname);
+
         }
-      }, []);
+      };
+
+      fetchData();
+    }, []);
 
   return (
     <div className="App">
@@ -44,6 +63,7 @@ function App () {
                 <Route path="/logs" element={<LoadingRing/>} />
                 <Route path="/branch" element={<Branch/>} />
                 <Route path="/test" element={<User/>} />
+                <Route path="/wait" element={<Wait/>} />
             </Routes>
         </Router>
     </SearchState>

@@ -1,6 +1,7 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchContext from './SearchContext';
 import Cookies from 'js-cookie';
+import { callAPI } from '../api'; // Import the callAPI function from the '../api' module
 
 const SearchState = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,6 +20,7 @@ const SearchState = ({ children }) => {
       const index = Math.floor(Math.random() * emojiList.length);
       return emojiList[index];
   }
+
 
     useEffect(() => {
       const getResults = async () => {
@@ -45,8 +47,8 @@ const SearchState = ({ children }) => {
         }
       };
 
-      getResults();
-    }, [searchTerm]);
+    getResults();
+  }, [searchTerm]);
 
   return (
     <SearchContext.Provider
@@ -62,7 +64,7 @@ const SearchState = ({ children }) => {
         referenced_code,
         userPic,
         path,
-        setPath
+        setPath,
       }}
     >
       {children}

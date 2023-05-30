@@ -3,24 +3,22 @@ from utilities.projectInfo import read_info
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
-from utilities.logger import log, clear_logs
 from utilities.AskGPT import AskGPT
 from utilities.keyutils import get_key
 from utilities.files2analyze import files2analyze
 
-openai.api_key = get_key()
 
 fs = pd.DataFrame()
 def get_diff(old_file_path, new_file_path):
     result = subprocess.run(["diff", old_file_path, new_file_path], capture_output=True, text=True)
     return result.stdout
 
-def summarize_str(filename, file_contents):
+def summarize_str(filename, file_contents,userid):
     prompt = "File " + filename + " has " + file_contents
     system_message = "Summarize what this file in the codebase does, assume context when neccessary."
-    return AskGPT(model="gpt-3.5-turbo", system_message=system_message, prompt=prompt, temperature=0, max_tokens=256)
+    return AskGPT(userid,model="gpt-3.5-turbo", system_message=system_message, prompt=prompt, temperature=0, max_tokens=256)
 
-def sumarize(filename):
+def sumarize(filename,userid):
     root = read_info()
     with open(os.path.join(root, filename), 'rb') as f:
         result = chardet.detect(f.read())
@@ -30,9 +28,9 @@ def sumarize(filename):
     full_file_path = os.path.join(root, filename)
     with open(full_file_path, 'r') as f:
         file_contents = f.read()
-    return summarize_str(filename, file_contents)
+    return summarize_str(filename, file_contents,userid)
 
-def syncAI(sync_flag):
+def syncAI(sync_flag,user_logger,userid):
     print("Syncing AI")
     path = read_info()
     global fs
@@ -41,11 +39,11 @@ def syncAI(sync_flag):
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     file_paths_details = files2analyze(path)
     for file in file_paths_details:
-        clone_path = get_clone_filepath(path, file)
+        clone_path = get_clone_filepath(userid, path, file)
         if get_diff(os.path.join(path, file), clone_path) != "":
             print("File " + file + " has changed")
-            log("File " + file + " has changed. Syncing AI...")
-            summary = sumarize(file)
+            user_logger.log("File " + file + " has changed. Syncing AI...")
+            summary = sumarize(file,userid)
             if summary == "Ignore":
                 continue
             fs.loc[fs["file_path"] == file, "summary"] = summary
@@ -57,9 +55,9 @@ def syncAI(sync_flag):
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
     if len(new_file_paths) > 0:
         print("New Files : " + str(len(new_file_paths)))
-        log("New Files : " + str(len(new_file_paths)))
+        user_logger.log("New Files : " + str(len(new_file_paths)))
         if (sync_flag == 0):
-            clear_logs()
+            user_logger.clear_logs()
             return "NEW", list(new_file_paths)
 
     # Iterate over the new_file_paths set and create a new row for each file path
@@ -86,7 +84,7 @@ def syncAI(sync_flag):
     new_fs['embedding'] = ''
     new_fs['summary'] = ''
     for ind in new_fs.index:
-        log("Analyzing New File : " + new_fs['file_path'][ind])
+        user_logger.log("Analyzing New File : " + new_fs['file_path'][ind])
         new_fs['summary'][ind] = sumarize(new_fs['file_path'][ind])
         time.sleep(20)
         if (new_fs['summary'][ind] != "Ignore"):
@@ -96,5 +94,5 @@ def syncAI(sync_flag):
 
     fs.to_csv(fsfilename, index=False)
     create_clone(read_info())
-    clear_logs()
+    user_logger.clear_logs()
     return "DONE", list(new_file_paths)

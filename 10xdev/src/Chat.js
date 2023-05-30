@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import ResponseContainer from "./ResponseContainer/ResponseContainer";
@@ -6,81 +6,85 @@ import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
 import Navbar from "./Navbar";
-import { useState, useEffect} from "react";
+import { callAPI } from "./api";
 
 export const Chat = () => {
-  const { searchTerm, isLoading, results, setIsLoading, files ,referenced_code} = useContext(SearchContext);
-  const [ sideContainerOpen, setSideContainerOpen] = useState(false);
-  const [ chatMessages, setChatMessages] = useState([]);
+  const { searchTerm, isLoading, results, setIsLoading, files, referenced_code } = useContext(SearchContext);
+  const [sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
 
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
   };
 
-  const handleSearch = async(input) => {
+  const handleSearch = async (input) => {
     console.log("searching for");
     console.log(input);
     setIsLoading(true);
-    const response = await fetch(`/api/data?prompt=${input}`);
-        const data = await response.json();
-        console.log(data);
-        const results = JSON.stringify(data.response);
-        const files  = (data.files);
-        const code = (data.referenced_code);
-        console.log(results);
-        console.log(files);
-        console.log(code);
-        setChatMessages((prevState) => [
-          ...prevState,
-          {
-            prompt:
-              {
-              searchTerm: input,
-              }
-              ,
-              response: {
-                searchResults: data.response,
-                files: data.files,
-                referenced_code: data.referenced_code
-              }
-          }
-          ]);
-         setIsLoading(false);
-         console.log("chatmessages");
-         console.log(chatMessages);
-     };
+    try {
+      const data = await callAPI(`/api/data?prompt=${input}`);
+      console.log(data);
+      const results = JSON.stringify(data.response);
+      const files = data.files;
+      const code = data.referenced_code;
+      console.log(results);
+      console.log(files);
+      console.log(code);
+      setChatMessages((prevState) => [
+        ...prevState,
+        {
+          prompt: {
+            searchTerm: input,
+          },
+          response: {
+            searchResults: data.response,
+            files: data.files,
+            referenced_code: data.referenced_code,
+          },
+        },
+      ]);
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+    setIsLoading(false);
+    console.log("chatmessages");
+    console.log(chatMessages);
+  };
 
   const handleReprompt = async (input, index) => {
     console.log("searching for");
     console.log(input);
     setIsLoading(true);
-    const response = await fetch(`/api/data?prompt=${input}`);
-    const data = await response.json();
-    console.log(data);
-    const results = JSON.stringify(data.response);
-    const files = data.files;
-    const code = data.referenced_code;
-    console.log(results);
-    console.log(files);
-    console.log(code);
-    console.log("index");
-    console.log(index);
-    setChatMessages((prevState) => {
-      const updatedMessages = [...prevState];
-      updatedMessages[index] = {
-        prompt: {
-          searchTerm: input,
-        },
-        response: {
-          searchResults: data.response,
-          files: data.files,
-          referenced_code: data.referenced_code,
-        },
-      };
-      return updatedMessages;
-    });
-    console.log("Updated chat messages");
-    console.log(chatMessages);
+    try {
+      const data = await callAPI(`/api/data?prompt=${input}`);
+      console.log(data);
+      const results = JSON.stringify(data.response);
+      const files = data.files;
+      const code = data.referenced_code;
+      console.log(results);
+      console.log(files);
+      console.log(code);
+      console.log("index");
+      console.log(index);
+      setChatMessages((prevState) => {
+        const updatedMessages = [...prevState];
+        updatedMessages[index] = {
+          prompt: {
+            searchTerm: input,
+          },
+          response: {
+            searchResults: data.response,
+            files: data.files,
+            referenced_code: data.referenced_code,
+          },
+        };
+        return updatedMessages;
+      });
+      console.log("Updated chat messages");
+      console.log(chatMessages);
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
     setIsLoading(false);
   };
 
@@ -99,7 +103,6 @@ export const Chat = () => {
       },
     ]);
   }, [results, searchTerm, files, referenced_code]);
-
 
 return (
     <>

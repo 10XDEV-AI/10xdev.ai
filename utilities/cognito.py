@@ -10,11 +10,12 @@ def get_user_attributes(access_token):
 
         # Extract the email from the response
         email = None
-        print(response)
-        print(response['UserAttributes'])
+        print("caaling amazon for info")
+        #print(response['UserAttributes'])
         for attribute in response['UserAttributes']:
             if attribute['Name'] == 'email':
                 email = attribute['Value']
+
 
         return email
     except Exception as e:
