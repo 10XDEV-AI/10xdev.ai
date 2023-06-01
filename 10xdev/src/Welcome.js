@@ -13,32 +13,6 @@ export const Welcome = () => {
   const [input, setInput] = useState('');
   const navigate = useNavigate();   //for redirecting to search page
 
-    useEffect(() => {
-      const fetchData = async () => {
-        // Extract the code from the URL
-        console.log("Fetching data")
-        const urlParams = new URLSearchParams(window.location.hash.substring(1));
-        console.log("got the url")
-        const code = urlParams.get('access_token');
-
-        if (code) {
-          // Store the code in an HTTP-only cookie
-          Cookies.set('cognitoCode', code, { path: '/', secure: true, sameSite: 'strict' });
-           console.log("Got the code")
-          try {
-            // Make an API call to the backend
-              await callAPI(`/api/login`, {
-              method: 'GET',
-            });
-
-          } catch (error) {
-            // Handle the error
-          }
-        }
-      };
-
-      fetchData();
-    }, [navigate]);
 
 
 
