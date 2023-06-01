@@ -49,8 +49,7 @@ def before_request():
 
         g.user_loggers = user_loggers
 
-    else:
-        return 'Error No Authentication Header', 401
+    return
 
 @application.route('/')
 def index():
