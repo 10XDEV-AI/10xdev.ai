@@ -34,8 +34,6 @@ export const Welcome = () => {
             // Remove the code from the URL
             window.history.replaceState({}, document.title, window.location.pathname);
             console.log("Replaced")
-            window.location.reload();
-            console.log("Reloaded")
 
           } catch (error) {
             // Handle the error
