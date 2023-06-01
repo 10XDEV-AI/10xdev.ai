@@ -16,7 +16,9 @@ export const Welcome = () => {
     useEffect(() => {
       const fetchData = async () => {
         // Extract the code from the URL
+        console.log("Fetching data")
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        console.log("got the url")
         const code = urlParams.get('access_token');
 
         if (code) {
@@ -28,12 +30,6 @@ export const Welcome = () => {
               await callAPI(`/api/login`, {
               method: 'GET',
             });
-
-            console.log("Logged in")
-
-            // Remove the code from the URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            console.log("Replaced")
 
           } catch (error) {
             // Handle the error
