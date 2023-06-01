@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SearchContext from './SearchContext';
 import Cookies from 'js-cookie';
-import { callAPI } from '../api'; // Import the callAPI function from the '../api' module
 
 const SearchState = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');

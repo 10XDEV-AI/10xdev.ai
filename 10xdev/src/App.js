@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Train from "./Train";
 import Repos from "./Repos";
@@ -17,6 +18,8 @@ import Cookies from 'js-cookie';
 import { callAPI } from './api';
 
 function App () {
+    const navigate = useNavigate();
+
     useEffect(() => {
       const fetchData = async () => {
         // Extract the code from the URL
@@ -33,19 +36,17 @@ function App () {
               method: 'GET',
             });
 
+            // Remove the code from the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            navigate('/welcome');
           } catch (error) {
             // Handle the error
           }
-
-          // Remove the code from the URL
-          window.history.replaceState({}, document.title, window.location.pathname);
-          window.location.reload();
-
         }
       };
 
       fetchData();
-    }, []);
+    }, [navigate]);
 
   return (
     <div className="App">
