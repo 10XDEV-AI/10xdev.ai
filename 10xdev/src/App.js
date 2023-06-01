@@ -1,6 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Train from "./Train";
 import Repos from "./Repos";
@@ -14,40 +12,8 @@ import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
 import User from "./User";
 import Wait from "./Wait";
-import Cookies from 'js-cookie';
-import { callAPI } from './api';
 
 function App () {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      const fetchData = async () => {
-        // Extract the code from the URL
-        const urlParams = new URLSearchParams(window.location.hash.substring(1));
-        const code = urlParams.get('access_token');
-
-        if (code) {
-          // Store the code in an HTTP-only cookie
-          Cookies.set('cognitoCode', code, { path: '/', secure: true, sameSite: 'strict' });
-
-          try {
-            // Make an API call to the backend
-              callAPI(`/api/login`, {
-              method: 'GET',
-            });
-
-            // Remove the code from the URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            navigate('/welcome');
-          } catch (error) {
-            // Handle the error
-          }
-        }
-      };
-
-      fetchData();
-    }, [navigate]);
-
   return (
     <div className="App">
     <SearchState>

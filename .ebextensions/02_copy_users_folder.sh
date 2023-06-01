@@ -5,5 +5,11 @@ files:
     group: root
     content: |
       if [ ! -d "/var/app/current/users" ]; then
-        cp -R /var/backup/users /var/app/current/
+        if [ -f "/var/backup/users.zip" ]; then
+          unzip /var/backup/users.zip -d /var/app/current/
+        else
+          echo "Error: The users.zip backup file does not exist. Please create it"
+        fi
       fi
+
+
