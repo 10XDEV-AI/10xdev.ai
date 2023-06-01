@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask, jsonify, request, render_template, session, g, redirect, url_for
+from flask import Flask, jsonify, request, render_template, session, g
 from AskAI import Ask_AI
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
@@ -54,11 +54,6 @@ def before_request():
 @application.route('/')
 def index():
     return render_template('index.html')
-
-@application.route('/welcome', methods=['GET'])
-def welcome():
-    return redirect(url_for('welcome'))
-
 
 @application.route('/api/projectInfo', methods=['GET'])
 def get_projectInfo():
