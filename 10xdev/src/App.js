@@ -9,6 +9,9 @@ import Apis from "./Apis/Apis";
 import Branch from "./Branch/Branch";
 import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
+import LandingPage from "./landing page/landing";
+import User from "./User";
+import Wait from "./Wait";
 
 function App () {
   return (
@@ -16,7 +19,8 @@ function App () {
     <SearchState>
         <Router>
             <Routes>
-                <Route path="/" element={<Welcome/>} />
+                <Route path="/" element={<LandingPage/>} />
+                <Route path="/welcome" element={<Welcome/>} />
                 <Route path="/chat" element={<Chat/>} />
                 <Route path="/train" element={<Train/>} />
                 <Route path="/repos" element={<Repos/>} />
@@ -24,6 +28,8 @@ function App () {
                 <Route path="/clone" element={<Clone/>} />
                 <Route path="/logs" element={<LoadingRing/>} />
                 <Route path="/branch" element={<Branch/>} />
+                <Route path="/test" element={<User/>} />
+                <Route path="/wait" element={<Wait/>} />
             </Routes>
         </Router>
     </SearchState>

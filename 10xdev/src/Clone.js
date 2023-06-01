@@ -4,6 +4,7 @@ import './Clone.css';
 import Navbar from './Navbar';
 import SearchContext from './context/SearchContext';
 import LoadingRing from './Loader/Loader';
+import { callAPI } from './api';
 
 const Clone = () => {
   const { isLoading, setIsLoading } = useContext(SearchContext);
@@ -11,11 +12,12 @@ const Clone = () => {
   const [input, setInput] = useState('');
   const navigate = useNavigate();
 
-  const handleClone = async (branch) => {
+  const handleClone = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/clone?path=${input}`);
-      const data = await response.json();
+      const data = await callAPI(`/api/clone?path=${input}`,{
+      method: 'GET',
+      });
       console.log(data);
       setBranches(data);
     } catch (error) {
@@ -28,15 +30,15 @@ const Clone = () => {
     setInput(event.target.value);
   };
 
-  const handleselect = async(branch) => {
+  const handleselect = async (branch) => {
     try {
       console.log(branch);
-      const response = await fetch(`/api/setBranch?path=${input}&branch=${branch}`);
-      const data = await response.json();
+      const data = await callAPI(`/api/setBranch?path=${input}&branch=${branch}`,{
+      method: 'GET',
+      });
       console.log(data);
       navigate(`/repos`);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };

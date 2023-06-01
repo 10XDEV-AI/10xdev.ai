@@ -1,12 +1,13 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import './Train.css';
 import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
+import { callAPI } from './api'; // Import the callAPI function
 
 const Train = () => {
-  const {isLoading,setIsLoading,path}  = useContext(SearchContext);
+  const { isLoading, setIsLoading, path } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [filesToIgnore, setFilesToIgnore] = useState([]);
@@ -19,42 +20,39 @@ const Train = () => {
     setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
-    };
+  };
 
   const handleGetGitIgnore = async () => {
-      try {
-        setIsLoading(true)
-        const response = await fetch(`/api/Ignore?path=${input}`);
-        const data = await response.json();
-        setFilesToAnalyze(data.files2analyze);
-        setFilesToIgnore(data.files2ignore);
-        setShowTrainButton(true);
-        setShowFilesToIgnore(true);
-        setShowFilesToAnalyze(true);
-        setIsLoading(false)
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    try {
+      setIsLoading(true);
+      const data = await callAPI(`/api/Ignore?path=${input}`); // Make API call using callAPI
+      setFilesToAnalyze(data.files2analyze);
+      setFilesToIgnore(data.files2ignore);
+      setShowTrainButton(true);
+      setShowFilesToIgnore(true);
+      setShowFilesToAnalyze(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleTrain = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/train?path=${input}`);
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
+    setIsLoading(true);
+    try {
+      const data = await callAPI(`/api/train?path=${input}`); // Make API call using callAPI
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 
   return (
   <div>
-    
     {isLoading? (
         <LoadingRing />
-         ):(
+    ):(
     <div>
     <Navbar />
         <div className="GetIgnorecontainer">

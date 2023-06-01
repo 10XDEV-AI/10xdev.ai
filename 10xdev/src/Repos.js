@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
 import './Repos.css';
 import Navbar from './Navbar';
+import { callAPI } from './api';
 
 export default function Repos() {
   const {setPath} = useContext(SearchContext);
@@ -10,48 +11,48 @@ export default function Repos() {
   const [repos, setRepos] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/Repos`)
-      .then(response => response.json())
+    callAPI('/api/Repos')
       .then(data => setRepos(data))
-      .then(() => console.log(repos))
       .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = useCallback((Full_Path) => {
-    fetch(`/api/Repos/${Full_Path}`, {
-      method: 'DELETE',
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .then(navigate('/repos'))
-      .catch(error => console.error(error));
-  }, []);
+    const handleDelete = useCallback(async (Directory) => {
+      try {
+        const response = await callAPI(`/api/Repos/${Directory}`, {
+          method: 'DELETE',
+        });
+        console.log(response);
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    }, []);
 
-  const handleSelect = useCallback((Full_Path) => {
-    fetch(`/api/SelectRepo?Full_Path=${Full_Path}`, {
-      method: 'GET',
-    })
-      .catch(error => console.error(error));
-
+    const handleSelect = useCallback(async (Directory) => {
+      try {
+        await callAPI(`/api/SelectRepo?Directory=${Directory}`, {
+          method: 'GET',
+        });
+        navigate('/welcome');
+      } catch (error) {
+        console.error(error);
+      }
     }, [navigate]);
 
-    const handleTrain = useCallback(async (Full_Path) => {
-        setPath(Full_Path);
-        navigate('/train');
-    }, [navigate]);
 
-  const handleChangeBranch = useCallback(async(Full_Path) => {
-    setPath(Full_Path);
+  const handleTrain = useCallback(async (Directory) => {
+    setPath(Directory);
+    navigate('/train');
+  }, [navigate,setPath]);
+
+  const handleChangeBranch = useCallback(async(Directory) => {
+    setPath(Directory);
     navigate('/branch');
-    }, [navigate]);
-
-    const handleSync = useCallback(async (Full_Path) => {
-        setPath(Full_Path);
-    }, [navigate]);
+  }, [navigate,setPath]);
 
   return (
     <div>
-      <Navbar LoadProjectInfo = "True"/>
+      <Navbar  LoadSync="True"  LoadProjectInfo = "True"/>
       <div className="repos-container">
         <h1 className="repos-title">Repositories Trained</h1>
         <div className="repos-cards">
@@ -60,21 +61,21 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2>{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Full_Path)}> Branch:  {repo.Branch} 🖋️</button>
+                <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} 🖋️</button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
               <div className="repo-card-buttons">
                 {repo.Trained !== true ? (
-                  <button className="repo-card-button" onClick={() => handleTrain(repo.Full_Path)}>Train 🧠</button>
+                  <button className="repo-card-button" onClick={() => handleTrain(repo.Directory)}>Train 🧠</button>
                 ) : (
                   <>
                     {repo.Selected ? (
                     <>
-                      <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Selected ✅</button>
+                      <button className="repo-card-button" onClick={() => handleSelect(repo.Directory)}>Selected ✅</button>
                     </>
                     ) : (
-                      <button className="repo-card-button" onClick={() => handleSelect(repo.Full_Path)}>Select ✋️</button>
+                      <button className="repo-card-button" onClick={() => handleSelect(repo.Directory)}>Select ✋️</button>
                     )}
                   </>
                 )}
@@ -85,7 +86,7 @@ export default function Repos() {
           ))}
         </div>
         <div className="repos-button-container">
-          <button className="repos-button" onClick={() => navigate('/')}>Ask AI</button>
+          <button className="repos-button" onClick={() => navigate('/clone')}>Setup a Repo</button>
         </div>
       </div>
     </div>
