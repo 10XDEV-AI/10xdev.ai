@@ -30,7 +30,8 @@ export const Welcome = () => {
               await callAPI(`/api/login`, {
               method: 'GET',
             });
-
+          window.history.replaceState({}, document.title, window.location.pathname);
+          window.location.reload();
           } catch (error) {
             // Handle the error
           }
