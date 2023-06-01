@@ -1,12 +1,14 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchContext from './SearchContext';
+import Cookies from 'js-cookie';
+import { callAPI } from '../api'; // Import the callAPI function from the '../api' module
 
 const SearchState = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
-  const [referenced_code, setreferenced_code] = useState(''); //this is the reference code of the project
+  const [referenced_code, setreferenced_code] = useState('');
   const [files, setFiles] = useState('');
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
@@ -19,28 +21,33 @@ const SearchState = ({ children }) => {
       return emojiList[index];
   }
 
-  useEffect(() => {
-    //find errors in this useEffect which causing api call to be made twice
 
-    const getResults = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `/api/data?prompt=${searchTerm}`
-        );
-        const data = await response.json();
-        //console.log(data);
-        setFiles(data.files);
-        setResults(data.response);
-        setreferenced_code(data.referenced_code);
-        setIsLoading(false);
-      } catch (error) {
-        //console.log(error);
-        setIsLoading(false);
-      }
-    };
+    useEffect(() => {
+      const getResults = async () => {
+        try {
+          setIsLoading(true);
+          const code = Cookies.get('cognitoCode');
+
+          if (code) {
+            const response = await fetch(`/api/data?prompt=${searchTerm}`, {
+              headers: {
+                Authorization: `Bearer ${code}`,
+                'Content-Type': 'application/json',
+              },
+            });
+            const data = await response.json();
+            setFiles(data.files);
+            setResults(data.response);
+            setreferenced_code(data.referenced_code);
+            setIsLoading(false);
+          }
+        } catch (error) {
+          setIsLoading(false);
+          console.error(error);
+        }
+      };
+
     getResults();
-
   }, [searchTerm]);
 
   return (
@@ -57,7 +64,7 @@ const SearchState = ({ children }) => {
         referenced_code,
         userPic,
         path,
-        setPath
+        setPath,
       }}
     >
       {children}
