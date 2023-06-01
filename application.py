@@ -51,8 +51,9 @@ def before_request():
 
     return
 
-@application.route('/')
-def index():
+@application.route('/', defaults={'path': ''})
+@application.route('/<path:path>')
+def catch_all(path):
     return render_template('index.html')
 
 @application.route('/api/projectInfo', methods=['GET'])
