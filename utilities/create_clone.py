@@ -3,7 +3,7 @@ import os
 
 def create_clone(path, email):
     folder_name = path.split('/')[-1]
-    destination = email+"/AIFiles"
+    destination = "user" + '/' +email+"/AIFiles"
     # Check if destination folder exists, delete if it does
     if os.path.exists(os.path.join(destination, folder_name)):
         shutil.rmtree(os.path.join(destination, folder_name))
@@ -14,7 +14,7 @@ def create_clone(path, email):
 
 def get_clone_path(path,email):
     folder_name = path.split('/')[-1]
-    return os.path.join(email,"AIFiles", folder_name)
+    return os.path.join("user",email,"AIFiles", folder_name)
 
 
 def get_clone_filepath(email, path, filename):

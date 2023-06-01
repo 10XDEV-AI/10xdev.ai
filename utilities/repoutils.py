@@ -3,17 +3,17 @@ from utilities.projectInfo import read_info
 
 def select_repo(Full_Path,email):
     try:
-        with open(os.path.join(email, 'AIFiles', 'info.json'), 'r') as f:
+        with open(os.path.join("user", email, 'AIFiles', 'info.json'), 'r') as f:
             info = json.load(f)
             info['current_repo'] = Full_Path
-        with open(os.path.join(email, 'AIFiles', 'info.json'), 'w') as f:
+        with open(os.path.join("user", email, 'AIFiles', 'info.json'), 'w') as f:
             json.dump(info, f)
         return 'Success'
     except Exception as e:
          return f'Error: {e}'
 
 def list_repos(email):
-    with open(os.path.join(email,'AIFiles', 'info.json'), 'r') as f:
+    with open(os.path.join("user", email,'AIFiles', 'info.json'), 'r') as f:
         info = json.load(f)
 
     directories = []
@@ -25,7 +25,7 @@ def list_repos(email):
         current_repo = str(read_info(email)).split('/')[-1]
         for repo in info_repos:
             repo_name = repo.split('/')[-1]
-            repo_path = os.path.join(email,'AIFiles', repo_name)
+            repo_path = os.path.join("user", email,'AIFiles', repo_name)
             if os.path.exists(repo_path):
                 output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_path)
                 branch_name = output.decode('utf-8').strip()
@@ -36,7 +36,7 @@ def list_repos(email):
                     directories.append({"Directory": repo_name, "Trained": True, "Branch": branch_name, "Selected": False})
             else:
                 try:
-                    output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=os.path.join(email, repo_name))
+                    output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=os.path.join("user", email, repo_name))
                     branch_name = output.decode('utf-8').strip()
                     directories.append(
                         {"Directory": repo_name, "Trained": False, "Branch": branch_name, "Selected": False})
@@ -55,17 +55,17 @@ def delete_repo(Full_path,email):
     if Full_path is None or Full_path.strip() == "":
         return ({"message": "Invalid directory name."}), 400
     repo_name = Full_path
-    if os.path.exists(email+"/"+repo_name):
-        shutil.rmtree(email+"/"+repo_name)
-    repo_path = os.path.join(email, 'AIFiles', repo_name)
+    if os.path.exists("user/" + email+"/"+repo_name):
+        shutil.rmtree("user/" + email+"/"+repo_name)
+    repo_path = os.path.join("user", email, 'AIFiles', repo_name)
     if os.path.exists(repo_path):
         shutil.rmtree(repo_path)
 
-        filename = email+ "/AIFiles/"+ repo_path.split('/')[-1] + ".csv"
+        filename = "user/" + email+ "/AIFiles/"+ repo_path.split('/')[-1] + ".csv"
         if os.path.exists(filename):
             os.remove(filename)
 
-        with open(email+'/AIFiles/info.json', 'r+') as f:
+        with open("user/" + email+'/AIFiles/info.json', 'r+') as f:
             info = json.load(f)
             f.seek(0)
 

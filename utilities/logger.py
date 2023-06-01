@@ -9,7 +9,7 @@ class UserLogger:
         self.MAX_LOGS = 100
 
         # Create a file handler and set the level to INFO
-        handler = logging.FileHandler(os.path.join(user_id,'AIFiles', 'AI.log'))
+        handler = logging.FileHandler(os.path.join("user", user_id,'AIFiles', 'AI.log'))
         handler.setLevel(logging.INFO)
 
         # Create a formatter and add it to the handler

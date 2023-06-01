@@ -106,7 +106,7 @@ export const Chat = () => {
 
 return (
     <>
-    <Navbar LoadSync="" LoadProjectInfo="True" />
+    <Navbar LoadSync="True" LoadProjectInfo="True" />
     <div className="spacer-top"></div>
     <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
       {isLoading ? (<LoadingRing />) : (

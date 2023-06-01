@@ -4,13 +4,13 @@ import simplejson as json
 
 def getprojectInfo(email, repo_name=True, branch_name=True, full_path=False):
     # Open info.json and read the path
-    with open(os.path.join(email, 'AIFiles', 'info.json'), 'r') as f:
+    with open(os.path.join("user", email, 'AIFiles', 'info.json'), 'r') as f:
         data = json.load(f)
 
     if data['current_repo'] == "" or data['current_repo'] == None:
         return {"repo_name": "No Repos selected", "branch_name": "No branch selected"}
 
-    repo_path = email+"/"+data['current_repo']
+    repo_path = "user/"+email+"/"+data['current_repo']
 
 
     repo_name = repo_path.split('/')[-1]
@@ -31,7 +31,7 @@ def getprojectInfo(email, repo_name=True, branch_name=True, full_path=False):
 
 def read_info(email):
     # Open the info.json file and load its contents into a Python dictionary
-    with open(os.path.join(email, 'AIFiles', 'info.json')) as f:
+    with open(os.path.join("user", email, 'AIFiles', 'info.json')) as f:
         data = json.load(f)
 
     # Get the home_path value from the dictionary
@@ -39,5 +39,5 @@ def read_info(email):
     if path == "" or path == None:
         return None
 
-    path = email+"/"+path
+    path = "user/" + email + "/" + path
     return path

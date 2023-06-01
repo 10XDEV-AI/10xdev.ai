@@ -13,7 +13,6 @@ export default function Repos() {
   useEffect(() => {
     callAPI('/api/Repos')
       .then(data => setRepos(data))
-      .then(() => console.log(repos))
       .catch(error => console.error(error));
   }, []);
 
@@ -44,20 +43,16 @@ export default function Repos() {
   const handleTrain = useCallback(async (Directory) => {
     setPath(Directory);
     navigate('/train');
-  }, [navigate]);
+  }, [navigate,setPath]);
 
   const handleChangeBranch = useCallback(async(Directory) => {
     setPath(Directory);
     navigate('/branch');
-  }, [navigate]);
-
-  const handleSync = useCallback(async (Directory) => {
-    setPath(Directory);
-  }, [navigate]);
+  }, [navigate,setPath]);
 
   return (
     <div>
-      <Navbar LoadProjectInfo = "True"/>
+      <Navbar  LoadSync="True"  LoadProjectInfo = "True"/>
       <div className="repos-container">
         <h1 className="repos-title">Repositories Trained</h1>
         <div className="repos-cards">
@@ -91,7 +86,7 @@ export default function Repos() {
           ))}
         </div>
         <div className="repos-button-container">
-          <button className="repos-button" onClick={() => navigate('/')}>Ask AI</button>
+          <button className="repos-button" onClick={() => navigate('/clone')}>Setup a Repo</button>
         </div>
       </div>
     </div>

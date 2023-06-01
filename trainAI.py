@@ -56,7 +56,7 @@ def summarize_file(path, file, i, userlogger, email):
 
 def train_AI(path, userlogger, email):
 
-    fsfilename = email+'/AIFiles/'+ path.split('/')[-1] + ".csv"
+    fsfilename = "user/" + email+'/AIFiles/'+ path.split('/')[-1] + ".csv"
 
     file_paths_details = files2analyze(path)
 

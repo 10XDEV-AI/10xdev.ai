@@ -33,14 +33,14 @@ def before_request():
         else:
             email = get_user_attributes(code)
             if email is None:
-                return 'Error No Authentication Header', 401
+                return render_template('index.html'), 401
             print("EMAIL: " + str(email))
             session[code] = email
-            if not os.path.exists(email):
-                os.makedirs(email)
-                os.makedirs(email + "/AIFiles")
-                os.system("cp info.json " + email + "/AIFiles")
-                os.system("cp AI.log " + email + "/AIFiles")
+            if not os.path.exists("user/" + email):
+                os.makedirs("user/" + email)
+                os.makedirs("user/" + email + "/AIFiles")
+                os.system("cp info.json " + "user/" + email + "/AIFiles")
+                os.system("cp AI.log " + "user/" + email + "/AIFiles")
 
         g.email = email  # Save email in the 'g' object for later access
 
@@ -72,7 +72,7 @@ def get_trainAI():
     email = getattr(g, 'email', None)
     user_loggers =  getattr(g, 'user_loggers', None)
     user_logger =  user_loggers[email]
-    path = email+"/"+request.args.get('path')
+    path = "user/" + email+"/"+request.args.get('path')
     t = threading.Thread(target=train_AI, args=(path,user_logger,email))
     t.start()
     return jsonify('Training started'), 200
@@ -100,12 +100,14 @@ def deleteRepo(path):
 @application.route('/api/sync', methods=['GET'])
 def get_syncAI():
     email = getattr(g, 'email', None)
+    user_loggers = getattr(g, 'user_loggers', None)
+    user_logger = user_loggers[email]
     sync_new_flag = request.args.get('sync_new')
     if sync_new_flag == 'true':
-        message, files = syncAI(True,email)
+        message, files = syncAI(True, user_logger, email)
 
     else:
-        message, files = syncAI(False,email)
+        message, files = syncAI(False, user_logger, email)
     return jsonify({"message": message, "files": files})
 
 
@@ -128,7 +130,7 @@ def get_AIIgnore():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     path = request.args.get('path')
-    files2ignore, files2analyze = IgnoreAI(email+"/"+path,user_logger)
+    files2ignore, files2analyze = IgnoreAI("user/" + email+"/"+path,user_logger)
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyze})
 
 
@@ -136,7 +138,7 @@ def get_AIIgnore():
 def get_CheckAIIgnore():
     email = getattr(g, 'email', None)
     path = request.args.get('path')
-    if os.path.exists(email + "/" +path + "/.AIIgnore"):
+    if os.path.exists("user/" + email + "/" +path + "/.AIIgnore"):
         return jsonify({"AIIgnore": True})
     else:
         return jsonify({"AIIgnore": False})

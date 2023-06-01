@@ -29,18 +29,17 @@ function App () {
 
           try {
             // Make an API call to the backend
-            const response = await callAPI(`/api/login`, {
+              callAPI(`/api/login`, {
               method: 'GET',
             });
 
-            // Handle the response
-            // Process the data as needed
           } catch (error) {
             // Handle the error
           }
 
           // Remove the code from the URL
           window.history.replaceState({}, document.title, window.location.pathname);
+          window.location.reload();
 
         }
       };
