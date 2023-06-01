@@ -47,6 +47,9 @@ def IgnoreAI(path,user_logger):
 
     with ThreadPoolExecutor() as executor:
         futures = []
+        total_files = sum(len(files) for _, _, files in os.walk(path))
+        processed_files = 0
+
         for root, directories, files in os.walk(path):
             if any(d.startswith(".") for d in root.split(os.path.sep)):
                 directories[:] = []  # Don't traverse this directory further
@@ -59,6 +62,14 @@ def IgnoreAI(path,user_logger):
                     continue
                 else:
                     futures.append(executor.submit(process_file, root, filename, path,user_logger))
+                    print("Processing file:", os.path.join(root, filename))
+                    processed_files += 1
+                    remaining_files = total_files - processed_files
+                    print("Remaining files:", remaining_files)
+                    # Estimate time remaining based on average processing time per file
+                    average_processing_time = 2.5  # Adjust this value based on your actual processing time
+                    estimated_time_remaining = remaining_files * average_processing_time
+                    print("Estimated time remaining:", estimated_time_remaining, "seconds")
 
         for future in futures:
             result = future.result()
