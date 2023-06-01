@@ -22,16 +22,20 @@ export const Welcome = () => {
         if (code) {
           // Store the code in an HTTP-only cookie
           Cookies.set('cognitoCode', code, { path: '/', secure: true, sameSite: 'strict' });
-
+           console.log("Got the code")
           try {
             // Make an API call to the backend
               await callAPI(`/api/login`, {
               method: 'GET',
             });
 
+            console.log("Logged in")
+
             // Remove the code from the URL
             window.history.replaceState({}, document.title, window.location.pathname);
+            console.log("Replaced")
             window.location.reload();
+            console.log("Reloaded")
 
           } catch (error) {
             // Handle the error
