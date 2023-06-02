@@ -6,11 +6,11 @@ const LandingPage = () => {
   let redirectUri;
 
   if (hostname === 'localhost') {
-    redirectUri = 'http://localhost:3000/welcome';
+    redirectUri = 'http%3A%2F%2Flocalhost%3A3000%2Fwelcome';
   } else if (hostname === 'test.10xdevai.com') {
-    redirectUri = 'https://test.10xdevai.com/welcome';
+    redirectUri = 'https%3A%2F%2Ftest.10xdevai.com%2Fwelcome';
   } else if (hostname === '10xdevai.com') {
-    redirectUri = 'https://10xdevai.com/welcome';
+    redirectUri = 'https%3A%2F%2F10xdevai.com%2Fwelcome';
   }
 
   return (
