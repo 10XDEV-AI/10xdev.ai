@@ -116,7 +116,7 @@ def Ask_AI(prompt, userlogger, email):
     estimated_tokens = 0
     for i in files:
         path = read_info(email)
-        j = os.path.join(path, i)
+        j = os.path.join(path, i.split('/')[-1])
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
             if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
@@ -136,7 +136,7 @@ def Ask_AI(prompt, userlogger, email):
             final_prompt += "\nFile path " + i + ":\n"
             path = read_info(email)
 
-            j = os.path.join(path, i)
+            j = os.path.join(path, i.split('/')[-1])
             with open(j, 'rb') as f:
                 result = chardet.detect(f.read())
                 if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
