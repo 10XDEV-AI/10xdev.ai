@@ -1,27 +1,29 @@
-import os,json
+import os, json
 import shutil
 
 
-def get_clones(url):
+def get_clones(url, email):
     # Check the URL has a real git repository
     try:
         # Delete existing repository if it exists
-        if os.path.exists(os.path.splitext(os.path.basename(url))[0]):
-            shutil.rmtree(os.path.splitext(os.path.basename(url))[0])
+        path = os.path.join("user/" + email, str(os.path.splitext(os.path.basename(url))[0]))
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
-        # Clone the repository
+        #cd into email folder
+        os.chdir("user/" + email)
+
+        # Clone the repository into email folder
         subprocess.run(['git', 'clone', url])
-
+        print("Cloned " + url)
         # Get the path of the cloned repository
         repo_path = os.path.splitext(os.path.basename(url))[0]
-
-        # Change to the cloned repository directory
-        os.chdir(repo_path)
-
+        print(repo_path)
         # Get the list of branches
-        branches = subprocess.check_output(['git', 'branch','-r']).decode('utf-8').splitlines()
+        branches = subprocess.check_output(['git', '-C', repo_path, 'branch', '-r']).decode('utf-8').splitlines()
 
-        # Filter the branch names
+        os.chdir('../..')
+
         filtered_branches = [branch.replace('*', '').strip() for branch in branches]
         filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
         filtered_branches = [branch.replace('origin/', '').strip() for branch in filtered_branches]
@@ -32,10 +34,7 @@ def get_clones(url):
         # Print the filtered branch names
         print(filtered_branches)
 
-        # Change back to the previous directory
-        os.chdir('..')
-
-        with open('AIFiles/info.json', 'r') as f:
+        with open("user/" + email + '/AIFiles/info.json', 'r') as f:
             data = json.load(f)
         # check if the key 'repos' exists
         if 'repos' not in data:
@@ -44,9 +43,9 @@ def get_clones(url):
         if data['repos'] == [""]:
             data['repos'] = []
         if repo_path not in data['repos']:
-            data['repos'].append(repo_path)
+            data['repos'].append(os.path.splitext(os.path.basename(url))[0])
 
-        with open(os.path.join('AIFiles', 'info.json'), 'w') as outfile:
+        with open(os.path.join("user/" + email, 'AIFiles', 'info.json'), 'w') as outfile:
             json.dump(data, outfile)
 
         return filtered_branches, 200
@@ -54,27 +53,30 @@ def get_clones(url):
     except subprocess.CalledProcessError:
         return [], 404
 
+
 import subprocess
 
-def select_branch(path, branch):
+
+def select_branch(path, branch, email):
     # set the branch for repo at path
     path = path.split('/')[-1]
     path = path.replace('.git', '')
-    result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=path, capture_output=True)
+    result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd="user/" + email + '/' + path, capture_output=True)
     current_branch = result.stdout.decode().strip()
     if str(current_branch) == str(branch):
         print("Already on that branch!")
         return
     else:
-        subprocess.run(['git', 'checkout', branch], cwd=path)
+        subprocess.run(['git', 'checkout', branch], cwd="user/" + email + '/' + path)
         return
 
-def get_branches(path):
-    #get the latest pull
-    path = path.split('/')[-1]
-    subprocess.run(['git', 'pull'], cwd=path)
 
-    result = subprocess.run(['git', 'branch','-r'], cwd=path, capture_output=True)
+def get_branches(path, email):
+    # get the latest pull
+    path = path.split('/')[-1]
+    subprocess.run(['git', 'pull'], cwd="user/" + email + '/' + path)
+
+    result = subprocess.run(['git', 'branch', '-r'], cwd=email + '/' + path, capture_output=True)
     branches = result.stdout.decode().splitlines()
     filtered_branches = [branch.replace('*', '').strip() for branch in branches]
     filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
@@ -84,5 +86,4 @@ def get_branches(path):
 
     # Print the filtered branch names
     print(filtered_branches)
-    return filtered_branches,200
-
+    return filtered_branches, 200

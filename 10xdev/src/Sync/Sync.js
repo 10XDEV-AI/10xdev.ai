@@ -1,6 +1,8 @@
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Sync.css";
-import LogViewer from "../Loader/LogViewer/LogViewer.js"
+import LogViewer from "../Loader/LogViewer/LogViewer.js";
+import { callAPI } from "../api";
+
 function Sync() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
@@ -9,49 +11,45 @@ function Sync() {
   const [isRequestInProgress, setIsRequestInProgress] = useState(false);
   const [showPopup, setShowPopup] = useState(false); // State variable to track whether to show the popup
 
+  // Event handler for when the user hovers over an item
+  const handleMouseOver = () => {
+    setShowPopup(true);
+  };
 
-   // Event handler for when the user hovers over an item
-    const handleMouseOver = () => {
-      setShowPopup(true);
-    };
+  // Event handler for when the user stops hovering over an item
+  const handleMouseLeave = () => {
+    setShowPopup(false);
+  };
 
-    // Event handler for when the user stops hovering over an item
-    const handleMouseLeave = () => {
-      setShowPopup(false);
-    };
   const syncData = useCallback(async () => {
-      if (isRequestInProgress) {
-        return; // Do not make API call if isRequestInProgress is true
-      }
+    if (isRequestInProgress) {
+      return; // Do not make API call if isRequestInProgress is true
+    }
 
-      setIsSyncing(true);
-      setShowWarning(false);
+    setIsSyncing(true);
+    setShowWarning(false);
 
-      // make API call to /api/sync and wait for response
-      console.log("syncing with false");
-      const response = await fetch("/api/sync?sync_new=false");
-
-      if (response.status === 200) {
-        const result = await response.json();
-        console.log("synced with false");
-        console.log(result.message);
-        if (result.message === "NEW") {
+    try {
+        const data = await callAPI("/api/sync?sync_new=true", {
+        method: "GET",
+        });
+        console.log(data);
+        if (data.message === "NEW") {
           setShowTick(false);
           setIsSyncing(false);
           setShowWarning(true);
-          setNewFiles(result.files);
-        } else if (result.message === "DONE") {
+          setNewFiles(data.files);
+        } else if (data.message === "DONE") {
           setIsSyncing(false);
           setShowTick(true);
           setNewFiles([]);
         }
-      } else {
-        setShowWarning(true);
-      }
-    },[isRequestInProgress]);
+    } catch (error) {
+      setShowWarning(true);
+    }
+  }, [isRequestInProgress]);
 
   useEffect(() => {
-
     // call syncData initially
     syncData();
 
@@ -62,44 +60,38 @@ function Sync() {
     return () => clearInterval(intervalId);
   }, [isRequestInProgress, syncData]); // Include isRequestInProgress as a dependency in the dependency array
 
+  const handleSyncNewClick = async () => {
+    if (!isRequestInProgress) {
+      setIsRequestInProgress(true);
+      setIsSyncing(true);
+      setShowWarning(false);
 
+      try {
+        const data = await callAPI("/api/sync?sync_new=true", {
+          method: "GET",
+        });
 
+        console.log(data);
 
-const handleSyncNewClick = async () => {
-  if (!isRequestInProgress) {
-    setIsRequestInProgress(true);
-    setIsSyncing(true);
-    setShowWarning(false);
+          if (data.message === "DONE") {
+            setShowWarning(false);
+            setShowTick(true);
+            setNewFiles([]);
+          } else if (data.message === "NEW") {
+            setShowTick(false);
+            setIsSyncing(false);
+            setShowWarning(true);
+            setNewFiles(data.files);
+          }
 
-    try {
-      // Make API call to /api/sync and wait for response
-      console.log("syncing with true");
-      const response = await fetch("/api/sync?sync_new=true");
-      const result = await response.json();
-      console.log("synced with true");
-      console.log(result.message);
-      console.log(result.files);
-
-      if (response.status === 200 && result.message === "DONE") {
-        setShowWarning(false);
-        setShowTick(true);
-        setNewFiles([]);
-      } else if (result.message === "NEW") {
-        setShowTick(false);
-        setIsSyncing(false);
-        setShowWarning(true);
-        setNewFiles(result.files);
-      } else {
+      } catch (error) {
         setShowWarning(true);
       }
-    } catch (error) {
-      setShowWarning(true);
-    }
 
-    setIsRequestInProgress(false);
-    setIsSyncing(false);
-  }
-};
+      setIsRequestInProgress(false);
+      setIsSyncing(false);
+    }
+  };
 
   return (
   <div>

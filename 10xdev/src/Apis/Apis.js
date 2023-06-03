@@ -2,56 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Apis.css';
 import Navbar from '../Navbar';
+import { callAPI } from '../api';
 
 export default function Apis() {
   const navigate = useNavigate();
   const [api, setApi] = useState(null);
   const [apikey, setApikey] = useState('');
-  const [message,setMessage] = useState('');
+  const [message, setMessage] = useState('');
   const [newRates, setNewRates] = useState([3, 60]);
 
-useEffect(() => {
-  (async function() {
-    try {
-      const response = await fetch(`/api/getKey`);
-      const data = await response.json();
-      setApi(data);
-      console.log(data);
-      const response2 = await fetch(`/api/getRates`);
-      const data2 = await response2.json();
-      console.log(data2);
-    } catch (error) {
-      console.error(error);
-    }
-    setMessage('');
-  })();
-}, [newRates]);
-
+  useEffect(() => {
+    (async function() {
+      try {
+        const data = await callAPI('/api/getKey');
+        setApi(data);
+        console.log(data);
+        const data2 = await callAPI('/api/getRates');
+        console.log(data2);
+      } catch (error) {
+        console.error(error);
+      }
+      setMessage('');
+    })();
+  }, [newRates]);
 
   const deleteKey = () => {
-    fetch(`/api/deleteKey`)
-      .then(() => {window.location.reload();})
+    callAPI('/api/deleteKey', { method: 'GET' })
+      .then(() => {
+        window.location.reload();
+      })
       .catch(error => console.error(error));
   };
 
   const testKey = () => {
-    fetch(`/api/testKey?apikey=${apikey}`, {
-      method: 'GET',
-    })
-    .then(response => response.json())
-    .then(data => {
-            console.log(data);
-            setMessage(data.message);
-          })
-    .catch(error => console.error(error));
-  }
-
+    callAPI(`/api/testKey?apikey=${apikey}`, { method: 'GET' })
+      .then(data => {
+        console.log(data);
+        setMessage(data.message);
+      })
+      .catch(error => console.error(error));
+  };
 
   const setKey = () => {
-    fetch(`/api/setKey?apikey=${apikey}`,{
-     method:'GET',
-     })
-      .then(response => response.json())
+    callAPI(`/api/setKey?apikey=${apikey}`, { method: 'GET' })
       .then(data => {
         console.log(data);
         setMessage(data.message);
@@ -61,16 +54,16 @@ useEffect(() => {
 
   const handleApikeyChange = event => {
     setApikey(event.target.value);
-  }
+  };
 
-const handleSetRates = () => {
+  const handleSetRates = () => {
     // Send new rates to Flask backend
-    fetch(`/api/setRates?rates=${newRates}`)
-      .then(response => response.json())
+    callAPI(`/api/setRates?rates=${newRates}`)
       .then(data => {
-                    console.log(data);
-                    setMessage(data.message);
-                  });
+        console.log(data);
+        setMessage(data.message);
+      })
+      .catch(error => console.error(error));
   };
 
   const handleNewRate1Change = (event) => {
