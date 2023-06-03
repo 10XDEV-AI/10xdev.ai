@@ -28,8 +28,6 @@ font-size: 15px;
 
 .ignorecontainer{
   display : flex;
-  position: absolute;
-  top: 24%;
   width: 100%;
 }
 
@@ -45,6 +43,7 @@ border: 1px dashed #D3D3D3;
 
 .ignoretext{
 font: 15px "Roboto", Helvetica;
+height: 100%;
 }
 .ignoretext tbody{
 width: 50px;
@@ -55,16 +54,18 @@ width: 50px;
   margin: 0;
   padding: 5;
 }
-
-.ignoretable{
-max-width: 100%;
+.ignoretable {
+  width: 100%;
+  max-width: 100%;
 }
+
 .ignoretable th{
 text-align: left;
 }
 .ignoretext table tr td{
 padding-left: 10px;
 }
+
 .pathsearchrow{
 display: flex;
 width: 65%;
@@ -149,3 +150,20 @@ font: 15px "Roboto", Helvetica;
 text-align: center;
 }
 
+.ignoretextarea{
+resize: none;
+width: 100%;
+font-family: inherit;
+font-size: inherit;
+border-radius: 7px;
+height: 90%;
+border: 1px dashed #D3D3D3;
+padding : 10px 2px;
+}
+
+.saveIgnoreButton{
+float : right;
+margin : 0 10px;
+text-align: center;
+display: inline-block;
+}

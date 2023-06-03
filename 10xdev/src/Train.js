@@ -4,7 +4,8 @@ import Navbar from './Navbar';
 import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
-import { callAPI } from './api'; // Import the callAPI function
+import {callAPI} from './api';
+import {useEffect} from "react";
 
 const Train = () => {
   const { isLoading, setIsLoading, path } = useContext(SearchContext);
@@ -25,7 +26,7 @@ const Train = () => {
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
-      const data = await callAPI(`/api/Ignore?path=${input}`); // Make API call using callAPI
+      const data = await callAPI(`/api/Ignore?path=${input}`);
       setFilesToAnalyze(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
       setShowTrainButton(true);
@@ -37,11 +38,35 @@ const Train = () => {
     }
   };
 
+
   const handleTrain = async () => {
     setIsLoading(true);
     try {
       const data = await callAPI(`/api/train?path=${input}`); // Make API call using callAPI
       console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSaveFilesToIgnore = async () => {
+    setIsLoading(true);
+    console.log(filesToIgnore);
+    try {
+      const data = await callAPI('/api/saveFilesToIgnore', {
+        method: 'POST',
+        body: JSON.stringify({
+          path: input,
+          filesToIgnore: filesToIgnore
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(data);
+      handleGetGitIgnore();
+      setIsLoading(false);
+
     } catch (error) {
       console.error(error);
     }
@@ -68,25 +93,16 @@ const Train = () => {
             />
           </label>
           <div className="gitIgnorebuttoncontainer">
-            {showTrainButton ? (
+
             <div>
               <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
-                Refresh .AIIgnore
+                Analyze Files
               </button>
               <button onClick={handleTrain} className="gitIgnorebutton">
                 Start Training
               </button>
             </div>
-            )
-              : (
-              <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
-                Get .AIIgnore
-              </button>
-              )}
           </div>
-        </div>
-        <div className="IgnoreCheckcontainer">
-           {input && < CheckAIIgnore path={input} />}
         </div>
         <div className="filesdiff">
               {
@@ -115,16 +131,27 @@ const Train = () => {
                                 </table>
                         </div>
                       </div>
-                      <div className="ignorebox">
-                        <div className="ignoretext">
-                          <h2>Files to Ignore:</h2>
-                          {filesToIgnore.map((file, index) => (
-                            <ul key={index}>
-                                <li>{file}</li>
-                            </ul>
-                            ))}
-                        </div>
-                      </div>
+                       <div className="ignorebox">
+                            <div className="ignoretext">
+                                <div className="ignoretitle">
+                                    <h2>Files to Ignore:
+                                    <div className="saveIgnoreButton">
+                                    <button onClick={handleSaveFilesToIgnore} className="saveIgnoreButton">
+                                        Save
+                                    </button>
+                                    </div>
+                                    </h2>
+                                </div>
+                           {
+                              <textarea
+                                className="ignoretextarea"
+                                placeholder="Type files you want the AI to ignore here"
+                                value={filesToIgnore.join('\n')}
+                                onChange={(event) => setFilesToIgnore(event.target.value.split('\n'))}
+                              />
+                           }
+                         </div>
+                       </div>
                     </div>
                     ):
                     (
