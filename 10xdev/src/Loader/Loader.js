@@ -6,7 +6,7 @@ import LogViewer from './LogViewer/LogViewer';
 const LoadingRing = () => {
   const navigate =useNavigate();
   const handleRunInBackGround = () => {
-    navigate("/")
+    navigate("/welcome")
   }
 
   return (

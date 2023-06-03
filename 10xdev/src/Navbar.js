@@ -9,7 +9,7 @@ function Navbar({LoadProjectInfo, LoadSync}) {
   return (
     <nav>
       <div className="logo">
-        <Link to="/">
+        <Link to="/welcome">
           10XDEV.AI
         </Link>
       </div>

@@ -3,7 +3,6 @@ import chardet
 import re
 from gitignore_parser import parse_gitignore
 from utilities.tokenCount import tokenCount
-from utilities.logger import log, clear_logs
 from concurrent.futures import ThreadPoolExecutor
 
 def results(file_contents):
@@ -11,29 +10,20 @@ def results(file_contents):
     tick_or_cross = '✅' if token_count < 4096 else '⚠️'
     return token_count, tick_or_cross
 
-def process_file(root, filename, path):
-    log("Analysing : "+str(filename))
+def process_file(root, filename, path,user_logger):
     with open(os.path.join(root, filename), 'rb') as f:
         result = chardet.detect(f.read())
-        log("Analysed the file type "+ filename)
 
     if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
-        log(filename + " is " + result['encoding'])
+        user_logger.log("Analysing : "+str(filename))
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
-        if len(re.split(r'[:,()\[\]{}"\n\s]+', file_contents)) > 4096 or ".pynb" in filename:
-            log("Analysed the lenghth "+ filename)
-            return {
-                "Path": os.path.relpath(os.path.join(root, filename), path),
-                "Tokens": '❌',
-                "Sign": '❌'
-            }
+        if len(re.split(r'[.,;\n\s]+',file_contents)) > 4096:
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '❌', "Sign": '❌'}
         else:
-            log("Analysed the lenghth "+ filename)
             tokens, sign = results(file_contents)
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
 
-
-def IgnoreAI(path):
+def IgnoreAI(path,user_logger):
     files2analyse = []
     if not os.path.exists(os.path.join(path, '.AIIgnore')):
         with ThreadPoolExecutor() as executor:
@@ -43,15 +33,14 @@ def IgnoreAI(path):
                     directories[:] = []  # Don't traverse this directory further
                     continue
                 for filename in files:
-                    futures.append(executor.submit(process_file, root, filename, path))
-                    print("Processing file:", os.path.join(root, filename))
+                    futures.append(executor.submit(process_file, root, filename, path,user_logger))
 
             for future in futures:
                 result = future.result()
                 if result:
                     files2analyse.append(result)
 
-        clear_logs()
+        user_logger.clear_logs()
         return [], files2analyse
 
     AIignore = parse_gitignore(os.path.join(path, '.AIIgnore'))
@@ -72,7 +61,7 @@ def IgnoreAI(path):
                 if AIignore(os.path.join(root, filename)):
                     continue
                 else:
-                    futures.append(executor.submit(process_file, root, filename, path))
+                    futures.append(executor.submit(process_file, root, filename, path,user_logger))
                     print("Processing file:", os.path.join(root, filename))
                     processed_files += 1
                     remaining_files = total_files - processed_files
@@ -87,9 +76,8 @@ def IgnoreAI(path):
             if result:
                 files2analyse.append(result)
 
-    # print("Files to analyse: " + str(files2analyse))
+    # print("Files to analyse : "+str((files2analyse)))
     files2ignore = open(os.path.join(path, '.AIIgnore'), 'r').read().splitlines()
-    # print("Files to ignore: " + str(files2ignore))
-    clear_logs()
+    # print("Files to ignore : "+str(files2ignore))
+    user_logger.clear_logs()
     return files2ignore, files2analyse
-
