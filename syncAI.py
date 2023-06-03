@@ -23,13 +23,12 @@ def summarize_str(filename, file_contents, userid):
 
 def sumarize(filename, userid):
     root = read_info(userid)
-    with open(os.path.join(root, filename), 'rb') as f:
+    with open(filename, 'rb') as f:
         result = chardet.detect(f.read())
     if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
         print("File " + filename + " was not summarised as it is not a text file with ASCII or ISO-8859-1 encoding")
         return "Ignore"
-    full_file_path = os.path.join(root, filename)
-    with open(full_file_path, 'r') as f:
+    with open(filename, 'r') as f:
         file_contents = f.read()
     return summarize_str(filename, file_contents, userid)
 
@@ -50,10 +49,11 @@ def syncAI(sync_flag, user_logger, userid):
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
 
-    file_paths_details = files2analyze(path)
+    file_paths_details = files2analyze(path.split('/')[-1],  userid)
+
     for file in file_paths_details:
-        clone_path = get_clone_filepath(userid, path, file)
-        if get_diff(os.path.join(path, file), clone_path) != "":
+        clone_path = get_clone_filepath(userid, path.split('/')[-1], file.split('/')[-1])
+        if get_diff(file, clone_path) != "":
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
             summary = sumarize(file, userid)
@@ -66,11 +66,9 @@ def syncAI(sync_flag, user_logger, userid):
         if fs['embedding'][ind] is None:
             fs['embedding'][ind] = split_embed(fs['summary'][ind], userid)
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
+
     if len(new_file_paths) > 0:
-        print("New Files : " + str(len(new_file_paths)))
-        user_logger.log("New Files : " + str(len(new_file_paths)))
         if sync_flag == 0:
-            user_logger.clear_logs()
             return "NEW", list(new_file_paths)
 
     # Iterate over the new_file_paths set and create a new row for each file path
@@ -101,6 +99,7 @@ def syncAI(sync_flag, user_logger, userid):
         new_fs['summary'][ind] = sumarize(new_fs['file_path'][ind], userid)
         time.sleep(20)
         if new_fs['summary'][ind] != "Ignore":
+            print(new_fs['file_path'][ind] + " is beeng embedded")
             new_fs['embedding'][ind] = split_embed(new_fs['summary'][ind], userid)
 
     fs = pd.concat([fs, new_fs], ignore_index=True)

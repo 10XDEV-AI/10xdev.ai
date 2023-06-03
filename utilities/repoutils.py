@@ -61,24 +61,24 @@ def delete_repo(Full_path,email):
     if os.path.exists(repo_path):
         shutil.rmtree(repo_path)
 
-        filename = "user/" + email+ "/AIFiles/"+ repo_path.split('/')[-1] + ".csv"
-        if os.path.exists(filename):
-            os.remove(filename)
+    filename = "user/" + email+ "/AIFiles/"+ repo_path.split('/')[-1] + ".csv"
+    if os.path.exists(filename):
+        os.remove(filename)
 
-        with open("user/" + email+'/AIFiles/info.json', 'r+') as f:
-            info = json.load(f)
-            f.seek(0)
+    with open("user/" + email+'/AIFiles/info.json', 'r+') as f:
+        info = json.load(f)
+        f.seek(0)
 
-            repos = info['repos']
-            repos = [repo for repo in repos if repo != Full_path]
+        repos = info['repos']
+        repos = [repo for repo in repos if repo != Full_path]
 
-            info['repos'] = repos
+        info['repos'] = repos
 
-            if info['current_repo'] == Full_path:
-                info['current_repo'] = ""
+        if info['current_repo'] == Full_path:
+            info['current_repo'] = ""
 
-            f.seek(0)
-            f.truncate()
-            json.dump(info, f)
+        f.seek(0)
+        f.truncate()
+        json.dump(info, f)
 
-        return {"message": 'f"{repo_name} has been deleted.'}, 200
+    return {"message": 'f"{repo_name} has been deleted.'}, 200
