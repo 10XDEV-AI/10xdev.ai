@@ -50,6 +50,11 @@ export default function Repos() {
     navigate('/branch');
   }, [navigate,setPath]);
 
+  const handleFiles = useCallback(async (Directory) => {
+    setPath(Directory);
+    navigate('/train');
+  }, [navigate,setPath]);
+
   return (
     <div>
       <Navbar  LoadSync="True"  LoadProjectInfo = "True"/>
@@ -80,7 +85,8 @@ export default function Repos() {
                   </>
                 )}
                 <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>
-              </div>
+                <button className="repo-card-button" onClick={() => handleFiles(repo.Directory)}>Files 📂️</button>
+                </div>
 
             </div>
           ))}

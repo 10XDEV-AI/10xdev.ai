@@ -59,7 +59,6 @@ def split_embed(summary, userid):
     for sentence in sentences:
         requests_queue.put(sentence)
 
-    print("Created a requets queue of size", requests_queue.qsize())
 
     # Create a queue to store results
     results_queue = queue.Queue()
