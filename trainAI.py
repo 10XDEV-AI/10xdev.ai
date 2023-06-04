@@ -1,11 +1,10 @@
-import pandas as pd, json, os, chardet, openai
+import pandas as pd, json, os, chardet, openai, time
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
 from utilities.files2analyze import files2analyze
 from utilities.tokenCount import tokenCount
 from utilities.keyutils import get_key
 from utilities.rates import get_rates
-import time
 
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
@@ -25,20 +24,17 @@ def summarize_str(filename, string, email, userlogger):
             userlogger.log("Retrying in 20 seconds...")
             time.sleep(20)
 
-
-def summarize_file(path, file, i, userlogger, email):
-    with open(os.path.join(path, file), 'rb') as f:
+def summarize_file(file, i, userlogger, email):
+    with open(file, 'rb') as f:
         result = chardet.detect(f.read())
     if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
         p = ("File " + file + " was not Analyzed as it is not a text file")
         userlogger.log(p)
-        # print(result['encoding'])
         return i, "Ignore"
     i += 1
     p = ("Analyzing " + file)
     userlogger.log(p)
-    full_file_path = os.path.join(path, file)
-    with open(full_file_path, 'r') as f:
+    with open(file, 'r') as f:
         try:
             file_contents = f.read()
         except UnicodeDecodeError:
@@ -58,7 +54,7 @@ def train_AI(path, userlogger, email):
 
     fsfilename = "user/" + email+'/AIFiles/'+ path.split('/')[-1] + ".csv"
 
-    file_paths_details = files2analyze(path)
+    file_paths_details = files2analyze(path.split('/')[-1], email)
 
     if len(file_paths_details) == 0:
         userlogger.log("No files detected")
@@ -78,7 +74,7 @@ def train_AI(path, userlogger, email):
     userlogger.log("Starting analysis")
 
     for ind in fs.index:
-        i_new, fs['summary'][ind] = summarize_file(path, fs['file_path'][ind], i,userlogger,email)
+        i_new, fs['summary'][ind] = summarize_file(fs['file_path'][ind], i,userlogger,email)
         if fs['summary'][ind] != "Ignore":
             fs['embedding'][ind] = split_embed(fs['summary'][ind],email)
         if i_new != i:

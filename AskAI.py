@@ -80,14 +80,13 @@ def get_referenced_code(path, files):
     referenced_code = []
 
     for file in files:
-        file_path = os.path.join(path, file)
         try:
-            with open(file_path, 'r') as f:
+            with open(file, 'r') as f:
                 code = f.read()
                 code_block = f"{file}\n{code}"
                 referenced_code.append(code_block)
         except Exception as e:
-            print("Error opening file:", file_path)
+            print("Error opening file:", file)
             print("Error message:", str(e))
 
     return referenced_code
@@ -116,7 +115,7 @@ def Ask_AI(prompt, userlogger, email):
     estimated_tokens = 0
     for i in files:
         path = read_info(email)
-        j = os.path.join(path, i)
+        j = os.path.join(path, i.split('/')[-1])
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
             if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
@@ -136,7 +135,7 @@ def Ask_AI(prompt, userlogger, email):
             final_prompt += "\nFile path " + i + ":\n"
             path = read_info(email)
 
-            j = os.path.join(path, i)
+            j = os.path.join(path, i.split('/')[-1])
             with open(j, 'rb') as f:
                 result = chardet.detect(f.read())
                 if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
