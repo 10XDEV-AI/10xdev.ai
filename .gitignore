@@ -5,4 +5,6 @@ API_key.txt
 AIFiles
 __pycache__
 node_modules
+.vscode
 /user/
+.env
