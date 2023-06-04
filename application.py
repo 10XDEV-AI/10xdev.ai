@@ -125,9 +125,24 @@ def get_AIIgnore():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     path = request.args.get('path')
-    files2ignore, files2analyze = IgnoreAI("user/" + email+"/"+path,user_logger)
+    files2ignore, files2analyze = IgnoreAI(email,user_logger,path)
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyze})
 
+@application.route('/api/saveFilesToIgnore', methods=['POST'])
+def save_files_to_ignore():
+    email = getattr(g, 'email', None)
+    try:
+        data = request.get_json()
+        path = data['path']
+        files_to_ignore = data['filesToIgnore']
+
+        with open("user/" + email + "/.AIIgnore"+path, "w") as f:
+            for file in files_to_ignore:
+                f.write(file + "\n")
+        return {'message': 'Files to analyze saved successfully'}
+    except Exception as e:
+        # Handle any exceptions or errors
+        return {'error': str(e)}, 500
 
 @application.route('/api/CheckAIIgnore', methods=['GET'])
 def get_CheckAIIgnore():
