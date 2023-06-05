@@ -30,7 +30,7 @@ function Sync() {
     setShowWarning(false);
 
     try {
-        const data = await callAPI("/api/sync?sync_new=true", {
+        const data = await callAPI("/api/sync?sync_new=false", {
         method: "GET",
         });
         console.log(data);

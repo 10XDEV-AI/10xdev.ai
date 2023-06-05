@@ -1,10 +1,10 @@
-import time, chardet, openai, subprocess, os, pandas as pd
+import time, chardet, subprocess, os, pandas as pd
 from utilities.projectInfo import read_info
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
-from utilities.files2analyze import files2analyze
+from utilities.files2analyse import files2analyse
 
 fs = pd.DataFrame()
 
@@ -23,18 +23,18 @@ def summarize_str(filename, file_contents, userid):
 
 def sumarize(filename, userid):
     root = read_info(userid)
-    with open(filename, 'rb') as f:
+    with open(os.path.join(root,filename), 'rb') as f:
         result = chardet.detect(f.read())
-    if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
+    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
         print("File " + filename + " was not summarised as it is not a text file with ASCII or ISO-8859-1 encoding")
         return "Ignore"
-    with open(filename, 'r') as f:
+    with open(os.path.join(root,filename), 'r') as f:
         file_contents = f.read()
     return summarize_str(filename, file_contents, userid)
 
 
 def syncAI(sync_flag, user_logger, userid):
-    print("Syncing AI "+userid)
+
     path = read_info(userid)
     if path == "" or path == None:
         print("No path for user " + userid)
@@ -49,11 +49,11 @@ def syncAI(sync_flag, user_logger, userid):
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
 
-    file_paths_details = files2analyze(path.split('/')[-1],  userid)
+    file_paths_details = files2analyse(path.split('/')[-1],  userid)
 
     for file in file_paths_details:
-        clone_path = get_clone_filepath(userid, path.split('/')[-1], file.split('/')[-1])
-        if get_diff(file, clone_path) != "":
+        clone_path = get_clone_filepath(userid, path.split('/')[-1], file)
+        if get_diff(os.path.join(path, file), clone_path) != "":
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
             summary = sumarize(file, userid)
@@ -105,6 +105,6 @@ def syncAI(sync_flag, user_logger, userid):
     fs = pd.concat([fs, new_fs], ignore_index=True)
 
     fs.to_csv(fsfilename, index=False)
-    create_clone(read_info(userid), userid)
+    create_clone(read_info(userid).split('/')[-1], userid)
     user_logger.clear_logs()
     return "DONE", list(new_file_paths)
