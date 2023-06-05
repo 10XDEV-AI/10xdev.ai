@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 import React from 'react';
 import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
+import SearchContext from "../context/SearchContext";
 
 const LoadingRing = () => {
+
+  const {setIsLoading } = useContext(SearchContext);
   const navigate =useNavigate();
   const handleRunInBackGround = () => {
+    setIsLoading(false);
     navigate("/welcome")
   }
 

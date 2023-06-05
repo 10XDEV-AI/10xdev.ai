@@ -1,9 +1,8 @@
-import os
 import chardet
 import re
-from gitignore_parser import parse_gitignore
 from utilities.tokenCount import tokenCount
 from concurrent.futures import ThreadPoolExecutor
+import fnmatch
 
 def results(file_contents):
     token_count = tokenCount(file_contents)
@@ -35,21 +34,16 @@ def process_file(root, filename, path, user_logger):
 def IgnoreAI(email, user_logger, path):
     files2analyse = []
 
-    if not os.path.exists(os.path.join("user", email, '.AIIgnore' + path)):
-        open(os.path.join("user", email, '.AIIgnore' + path), 'w').close()
-
-    AIignore = parse_gitignore(os.path.join("user", email, '.AIIgnore' + path))
+    ignore_file_path = os.path.join("user", email, '.AIIgnore' + path)
+    AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
 
     with ThreadPoolExecutor() as executor:
         futures = []
 
         for root, directories, files in os.walk(os.path.join("user", email, path)):
-            if any(d.startswith(".") for d in root.split(os.path.sep)):
-                directories[:] = []  # Don't traverse this directory further
-                continue
-
-            print(root)
-            if AIignore(root):
+            relpath = os.path.relpath(root, os.path.join("user", email, path))
+            if AIignore(relpath) or any(d.startswith(".") for d in root.split(os.path.sep)):
+                print("Ignoring directory " + relpath)
                 directories[:] = []  # Don't traverse this directory further
                 continue
 
@@ -57,8 +51,9 @@ def IgnoreAI(email, user_logger, path):
                 if AIignore(os.path.join(root, filename)):
                     continue
                 else:
-                    futures.append(executor.submit(process_file, root, filename, os.path.join("user",email,path), user_logger))
-                    print("Processing file:", os.path.join(root, filename))
+                    if not is_file_ignored(filename):
+                        futures.append(executor.submit(process_file, root, filename, os.path.join("user",email,path), user_logger))
+                        print("Processing file:", os.path.join(root, filename))
 
         for future in futures:
             result = future.result()
@@ -66,5 +61,19 @@ def IgnoreAI(email, user_logger, path):
                 files2analyse.append(result)
 
     files2ignore = open(os.path.join("user", email, '.AIIgnore' + path), 'r').read().splitlines()
-    user_logger.clear_logs()
     return files2ignore, files2analyse
+
+
+
+def parse_ignore_file(file_path):
+    with open(file_path, 'r') as f:
+        patterns = [line.strip() for line in f if line.strip() and not line.strip().startswith('#')]
+    return lambda x: any(fnmatch.fnmatch(x, pattern) for pattern in patterns)
+
+
+def is_file_ignored(filename):
+    ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
+                          '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv',
+                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf')
+    return filename.endswith(ignored_extensions)
+
