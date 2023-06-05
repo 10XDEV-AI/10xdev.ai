@@ -30,7 +30,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
     full_file_path = os.path.join("user", email, repo_name, filepath)
     with open(full_file_path, 'rb') as f:
         result = chardet.detect(f.read())
-    if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
+    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
         p = ("File " + filepath + " was not Analyzed as it is not a text file")
         userlogger.log(p)
         return i, "Ignore"

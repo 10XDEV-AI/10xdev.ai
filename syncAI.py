@@ -25,7 +25,7 @@ def sumarize(filename, userid):
     root = read_info(userid)
     with open(os.path.join(root,filename), 'rb') as f:
         result = chardet.detect(f.read())
-    if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
+    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
         print("File " + filename + " was not summarised as it is not a text file with ASCII or ISO-8859-1 encoding")
         return "Ignore"
     with open(os.path.join(root,filename), 'r') as f:

@@ -18,7 +18,16 @@ def process_file(root, filename, path, user_logger):
     with open(os.path.join(root, filename), 'rb') as f:
         result = chardet.detect(f.read())
 
-    if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
+    if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+        user_logger.log("Analysing: " + str(filename))
+
+        file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
+        if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '⚠：', "Sign": '⚠：'}
+        else:
+            tokens, sign = results(file_contents)
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
+
         user_logger.log("Analysing: " + str(filename))
 
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
@@ -61,6 +70,7 @@ def IgnoreAI(email, user_logger, path):
                 files2analyse.append(result)
 
     files2ignore = open(os.path.join("user", email, '.AIIgnore' + path), 'r').read().splitlines()
+    user_logger.clear_logs()
     return files2ignore, files2analyse
 
 
