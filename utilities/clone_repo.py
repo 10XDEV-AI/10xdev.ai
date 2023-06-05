@@ -48,6 +48,10 @@ def get_clones(url, email):
         with open(os.path.join("user/" + email, 'AIFiles', 'info.json'), 'w') as outfile:
             json.dump(data, outfile)
 
+        #create an empty file names AIignore
+        with open(os.path.join("user/" + email, '.AIIgnore'+repo_path), 'w') as outfile:
+            outfile.write("")
+
         return filtered_branches, 200
 
     except subprocess.CalledProcessError:

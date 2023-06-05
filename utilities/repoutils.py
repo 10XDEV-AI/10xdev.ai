@@ -65,6 +65,10 @@ def delete_repo(Full_path,email):
     if os.path.exists(filename):
         os.remove(filename)
 
+    filename = "user/" + email+ "/.AIIgnore"+ repo_path.split('/')[-1]
+    if os.path.exists(filename):
+        os.remove(filename)
+
     with open("user/" + email+'/AIFiles/info.json', 'r+') as f:
         info = json.load(f)
         f.seek(0)
@@ -80,5 +84,7 @@ def delete_repo(Full_path,email):
         f.seek(0)
         f.truncate()
         json.dump(info, f)
+
+
 
     return {"message": 'f"{repo_name} has been deleted.'}, 200
