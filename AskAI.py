@@ -140,7 +140,8 @@ def Ask_AI(prompt, userlogger, email):
                     final_contents = open(j).read()
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents
-        system_message = "Act like you are a coding assistant with access to the codebase."
+
+    system_message = "Act like you are a coding assistant with access to the codebase."
 
     final_prompt += "\n" + prompt
     tokens = tokenCount(final_prompt)
