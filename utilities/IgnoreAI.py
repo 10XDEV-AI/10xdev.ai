@@ -28,6 +28,18 @@ def process_file(root, filename, path, user_logger):
             tokens, sign = results(file_contents)
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
 
+        user_logger.log("Analysing: " + str(filename))
+
+        file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
+        if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '❌', "Sign": '❌'}
+        else:
+            tokens, sign = results(file_contents)
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
+    else:
+        return None
+
+
 def IgnoreAI(email, user_logger, path):
     files2analyse = []
 
