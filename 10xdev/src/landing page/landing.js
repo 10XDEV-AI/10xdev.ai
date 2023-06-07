@@ -1,9 +1,17 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './landing.css';
+import Cookies from 'js-cookie';
 import Typewriter from 'typewriter-effect';
 const LandingPage = () => {
   const hostname = window.location.hostname;
   let redirectUri;
+  useEffect(() => {
+    //if cookies are there remove and set it to null
+    const code = Cookies.get('cognitoCode');
+    if (code) {
+      Cookies.remove('cognitoCode');
+    }
+  }, []);
 
   if (hostname === 'localhost') {
     redirectUri = 'http%3A%2F%2Flocalhost%3A3000%2Fwelcome';
