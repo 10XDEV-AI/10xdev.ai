@@ -27,12 +27,10 @@ const LandingPage = () => {
         </div>
       </h1>
       <h1 className="landing-text">Use the power of Auto GPT to become a 10X developer</h1>
-      <p className="landing-text">Click on the button below to get started!</p>
-      
+      <p className="landing-text">Click on the button below to get started!</p>  
       <a
         className="landing-link"
-      
-        href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=email+openid+phone&redirect_uri=${redirectUri}`}
+        href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/login?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=code&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`}
       >
         <button className="landing-button">Get Started</button>
       </a>
