@@ -1,5 +1,7 @@
 import React from 'react';
 import './landing.css';
+import Typewriter from 'typewriter-effect';
+
 const LandingPage = () => {
   const hostname = window.location.hostname;
   let redirectUri;
@@ -32,7 +34,7 @@ const LandingPage = () => {
       
       <a
         className="landing-link"
-        href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/login?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`}
+        href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`}
       >
         <button className="landing-button">Get Started</button>
       </a>
