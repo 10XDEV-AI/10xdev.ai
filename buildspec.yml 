@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - mkdir -p /var/backup
-      - zip -r /var/backup/users.zip /var/current/users
+      - zip -r /var/backup/users.zip /var/app/current/user
 
   build:
     commands:

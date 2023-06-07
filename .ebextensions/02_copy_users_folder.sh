@@ -4,7 +4,7 @@ files:
     owner: root
     group: root
     content: |
-      if [ ! -d "/var/app/current/users" ]; then
+      if [ ! -d "/var/app/current/user" ]; then
         if [ -f "/var/backup/users.zip" ]; then
           unzip /var/backup/users.zip -d /var/app/current/
         else
