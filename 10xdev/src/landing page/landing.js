@@ -15,7 +15,17 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       <h1>
-        Welcome to <div className="logoLanding">10XDEV.AI</div>
+        Welcome to <div className="logoLanding">
+          <Typewriter
+          options={{
+            strings: ['10XDEV.AI'],
+            autoStart: true,
+            loop: false,
+            cursor: '',
+            pauseFor: 9000000,
+          }}
+          />
+        </div>
       </h1>
       <h1 className="landing-text">Use the power of Auto GPT to become a 10X developer</h1>
       <p className="landing-text">Click on the button below to get started!</p>
