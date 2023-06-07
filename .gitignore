@@ -6,3 +6,5 @@ AIFiles
 __pycache__
 node_modules
 /user/
+.vscode
+.env
