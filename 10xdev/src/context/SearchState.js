@@ -42,6 +42,7 @@ const SearchState = ({ children }) => {
           }
         } catch (error) {
           setIsLoading(false);
+          console.error(error);
         }
       };
 
