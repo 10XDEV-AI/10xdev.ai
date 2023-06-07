@@ -29,7 +29,9 @@ const LandingPage = () => {
   options={{
     strings: ['10XDEV.AI'],
     autoStart: true,
-    loop: true,
+    loop: false,
+    cursor: '',
+    pauseFor: 9000000,
   }}
 />
         </div>
