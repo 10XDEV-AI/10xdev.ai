@@ -33,6 +33,7 @@ const Train = () => {
       setShowFilesToIgnore(true);
       setShowFilesToAnalyze(true);
       setIsLoading(false);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
