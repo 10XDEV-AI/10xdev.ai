@@ -67,7 +67,7 @@ def get_trainAI():
     email = getattr(g, 'email', None)
     user_loggers =  getattr(g, 'user_loggers', None)
     user_logger =  user_loggers[email]
-    path = "user/" + email+"/"+request.args.get('path')
+    path = request.args.get('path')
     t = threading.Thread(target=train_AI, args=(path,user_logger,email))
     t.start()
     return jsonify('Training started'), 200
@@ -95,8 +95,7 @@ def deleteRepo(path):
 @application.route('/api/sync', methods=['GET'])
 def get_syncAI():
     email = getattr(g, 'email', None)
-    user_loggers = getattr(g, 'user_loggers', None)
-    user_logger = user_loggers[email]
+    user_logger = getattr(g, 'user_loggers', None)[email]
     sync_new_flag = request.args.get('sync_new')
     if sync_new_flag == 'true':
         message, files = syncAI(True, user_logger, email)
@@ -125,8 +124,9 @@ def get_AIIgnore():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     path = request.args.get('path')
-    files2ignore, files2analyze = IgnoreAI(email,user_logger,path)
-    return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyze})
+    files2ignore, files2analyse = IgnoreAI(email,user_logger,path)
+    print(len(files2analyse))
+    return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
 @application.route('/api/saveFilesToIgnore', methods=['POST'])
 def save_files_to_ignore():

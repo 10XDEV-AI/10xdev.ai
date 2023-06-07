@@ -1,10 +1,11 @@
-import pandas as pd, json, os, chardet, openai, time
+import pandas as pd, os, chardet, openai, time
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
-from utilities.files2analyze import files2analyze
+from utilities.files2analyse import files2analyse
 from utilities.tokenCount import tokenCount
 from utilities.keyutils import get_key
 from utilities.rates import get_rates
+
 
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
@@ -24,37 +25,38 @@ def summarize_str(filename, string, email, userlogger):
             userlogger.log("Retrying in 20 seconds...")
             time.sleep(20)
 
-def summarize_file(file, i, userlogger, email):
-    with open(file, 'rb') as f:
+
+def summarize_file(repo_name, filepath, i, userlogger, email):
+    full_file_path = os.path.join("user", email, repo_name, filepath)
+    with open(full_file_path, 'rb') as f:
         result = chardet.detect(f.read())
-    if not (result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1'):
-        p = ("File " + file + " was not Analyzed as it is not a text file")
+    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+        p = ("File " + filepath + " was not Analyzed as it is not a text file")
         userlogger.log(p)
         return i, "Ignore"
     i += 1
-    p = ("Analyzing " + file)
+    p = ("Analyzing " + filepath)
     userlogger.log(p)
-    with open(file, 'r') as f:
+    with open(full_file_path, 'r') as f:
         try:
             file_contents = f.read()
         except UnicodeDecodeError:
-            p = ("File " + file + " was not Analyzed as it is not a text file")
+            p = ("File " + filepath + " was not Analyzed as it is not a text file")
             userlogger.log(p)
             return i, "Ignore"
 
     if tokenCount(file_contents) > 3400:
-        p = ("File " + file + " was not analyzed as it is too long")
+        p = ("File " + filepath + " was not analyzed as it is too long")
         userlogger.log(p)
 
         return i, "File content too long"
-    return i, summarize_str(file, file_contents, email, userlogger)
+    return i, summarize_str(filepath, file_contents, email, userlogger)
 
 
-def train_AI(path, userlogger, email):
+def train_AI(repo_name, userlogger, email):
+    fsfilename = "user/" + email + '/AIFiles/' + repo_name + ".csv"
 
-    fsfilename = "user/" + email+'/AIFiles/'+ path.split('/')[-1] + ".csv"
-
-    file_paths_details = files2analyze(path.split('/')[-1], email)
+    file_paths_details = files2analyse(repo_name, email)
 
     if len(file_paths_details) == 0:
         userlogger.log("No files detected")
@@ -74,9 +76,9 @@ def train_AI(path, userlogger, email):
     userlogger.log("Starting analysis")
 
     for ind in fs.index:
-        i_new, fs['summary'][ind] = summarize_file(fs['file_path'][ind], i,userlogger,email)
+        i_new, fs['summary'][ind] = summarize_file(repo_name, fs['file_path'][ind], i, userlogger, email)
         if fs['summary'][ind] != "Ignore":
-            fs['embedding'][ind] = split_embed(fs['summary'][ind],email)
+            fs['embedding'][ind] = split_embed(fs['summary'][ind], email)
         if i_new != i:
             time.sleep(delay)
             i = i_new
@@ -98,12 +100,11 @@ def train_AI(path, userlogger, email):
 
     userlogger.log("Analyzed all files successfully")
 
-
     fs.to_csv(fsfilename, index=False)
 
     print("100% Done")
     userlogger.clear_logs()
-    create_clone(path, email)
+    create_clone(repo_name, email)
     userlogger.log("-----------------------------------------------------")
     userlogger.log("***")
     userlogger.log("Your repo was trained into the AI successfully")

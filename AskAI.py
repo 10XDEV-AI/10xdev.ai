@@ -1,6 +1,6 @@
 import pandas as pd
 import regex as re
-import os, openai, time
+import os
 import chardet
 from utilities.embedding import get_embedding
 from openai.embeddings_utils import cosine_similarity
@@ -8,7 +8,6 @@ from utilities.projectInfo import read_info
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
-from utilities.keyutils import get_key
 
 fs = pd.DataFrame()
 
@@ -40,7 +39,7 @@ def filter_functions(result_string, code_query, filepaths, email):
 def search_functions(code_query, email):
     prompt_embedding = get_embedding(code_query, email)
 
-    fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding))
+    fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
 
     res.index = range(1, len(res) + 1)
@@ -81,7 +80,7 @@ def get_referenced_code(path, files):
 
     for file in files:
         try:
-            with open(file, 'r') as f:
+            with open(os.path.join(path,file), 'r') as f:
                 code = f.read()
                 code_block = f"{file}\n{code}"
                 referenced_code.append(code_block)
@@ -114,11 +113,10 @@ def Ask_AI(prompt, userlogger, email):
 
     estimated_tokens = 0
     for i in files:
-        path = read_info(email)
-        j = os.path.join(path, i.split('/')[-1])
+        j = os.path.join(path, i)
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
-            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
+            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8':
                 final_contents = open(j).read()
                 final_contents = re.sub(r'\s+', ' ', final_contents)
                 estimated_tokens += tokenCount(final_contents)
@@ -135,14 +133,15 @@ def Ask_AI(prompt, userlogger, email):
             final_prompt += "\nFile path " + i + ":\n"
             path = read_info(email)
 
-            j = os.path.join(path, i.split('/')[-1])
+            j = os.path.join(path, i)
             with open(j, 'rb') as f:
                 result = chardet.detect(f.read())
                 if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
                     final_contents = open(j).read()
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents
-        system_message = "Act like you are a coding assistant with access to the codebase."
+
+    system_message = "Act like you are a coding assistant with access to the codebase."
 
     final_prompt += "\n" + prompt
     tokens = tokenCount(final_prompt)
