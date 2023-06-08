@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - mkdir -p /var/backup
+      - zip -r /var/backup/users.zip /var/app/current/user
+
+  build:
+    commands:
+      - echo "Build phase commands go here"
+
+  post_build:
+    commands:
+      - echo "Post-build phase commands go here"
+
+artifacts:
+  files:
+    - '**/*'
