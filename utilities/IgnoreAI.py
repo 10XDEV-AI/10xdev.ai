@@ -51,8 +51,7 @@ def IgnoreAI(email, user_logger, path):
 
         for root, directories, files in os.walk(os.path.join("../user", email, path)):
             relpath = os.path.relpath(root, os.path.join("../user", email, path))
-            if AIignore(relpath) or (any(d.startswith(".") for d in root.split(os.path.sep)) and relpath != "."):
-                continue
+            if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
                 print("Ignoring directory " + relpath)
                 directories[:] = []  # Don't traverse this directory further
                 continue
