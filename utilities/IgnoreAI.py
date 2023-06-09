@@ -23,7 +23,7 @@ def process_file(root, filename, path, user_logger):
 
         file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
         if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '⚠：', "Sign": '⚠：'}
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '⚠️', "Sign": '⚠️'}
         else:
             tokens, sign = results(file_contents)
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
@@ -43,33 +43,34 @@ def process_file(root, filename, path, user_logger):
 def IgnoreAI(email, user_logger, path):
     files2analyse = []
 
-    ignore_file_path = os.path.join("user", email, '.AIIgnore' + path)
+    ignore_file_path = os.path.join("../user", email, '.AIIgnore' + path)
     AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
 
     with ThreadPoolExecutor() as executor:
         futures = []
 
-        for root, directories, files in os.walk(os.path.join("user", email, path)):
-            relpath = os.path.relpath(root, os.path.join("user", email, path))
-            if AIignore(relpath) or any(d.startswith(".") for d in root.split(os.path.sep)):
+        for root, directories, files in os.walk(os.path.join("../user", email, path)):
+            relpath = os.path.relpath(root, os.path.join("../user", email, path))
+            if AIignore(relpath) or (any(d.startswith(".") for d in root.split(os.path.sep)) and relpath != "."):
+                continue
                 print("Ignoring directory " + relpath)
                 directories[:] = []  # Don't traverse this directory further
                 continue
 
             for filename in files:
-                if AIignore(os.path.join(root, filename)):
+                relfilepath = os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, path))
+                if AIignore(relfilepath):
                     continue
                 else:
                     if not is_file_ignored(filename):
-                        futures.append(executor.submit(process_file, root, filename, os.path.join("user",email,path), user_logger))
+                        futures.append(executor.submit(process_file, root, filename, os.path.join("../user",email,path), user_logger))
                         print("Processing file:", os.path.join(root, filename))
 
         for future in futures:
             result = future.result()
             if result:
                 files2analyse.append(result)
-
-    files2ignore = open(os.path.join("user", email, '.AIIgnore' + path), 'r').read().splitlines()
+    files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
     user_logger.clear_logs()
     return files2ignore, files2analyse
 
