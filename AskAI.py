@@ -99,7 +99,7 @@ def Ask_AI(prompt, userlogger, email):
     path = read_info(email)
     if path == "":
         return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
-    filename = "user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
+    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     userlogger.log("Analyzing your query...")

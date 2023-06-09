@@ -42,7 +42,7 @@ def syncAI(sync_flag, user_logger, userid):
     subprocess.run(["git", "pull"], cwd=path)
 
     global fs
-    fsfilename = "user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
+    fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
     fs = pd.read_csv(fsfilename)
     fs["embedding"] = fs.embedding.apply(lambda x: str2float(str(x)))
 
