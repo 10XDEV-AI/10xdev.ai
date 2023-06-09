@@ -27,7 +27,7 @@ def summarize_str(filename, string, email, userlogger):
 
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
-    full_file_path = os.path.join("user", email, repo_name, filepath)
+    full_file_path = os.path.join("../user", email, repo_name, filepath)
     with open(full_file_path, 'rb') as f:
         result = chardet.detect(f.read())
     if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
@@ -54,7 +54,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
 
 
 def train_AI(repo_name, userlogger, email):
-    fsfilename = "user/" + email + '/AIFiles/' + repo_name + ".csv"
+    fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
 
     file_paths_details = files2analyse(repo_name, email)
 

@@ -3,20 +3,21 @@ import os, fnmatch, chardet
 def files2analyse(repo_name, email):
     file_paths_details = []
 
-    ignore_file_path = os.path.join("user", email, '.AIIgnore' + repo_name)
+    ignore_file_path = os.path.join("../user", email, '.AIIgnore' + repo_name)
     AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
 
-    for root, directories, files in os.walk(os.path.join("user", email, repo_name)):
+    for root, directories, files in os.walk(os.path.join("../user", email, repo_name)):
         # Check if the current directory should be ignored
 
-        relpath = os.path.relpath(root, os.path.join("user", email, repo_name))
-        if AIignore(relpath) or any(d.startswith(".") for d in root.split(os.path.sep)):
+        relpath = os.path.relpath(root, os.path.join("../user", email, repo_name))
+        if AIignore(relpath) or (any(d.startswith(".") for d in root.split(os.path.sep)) and relpath != "."):
             directories[:] = []  # Don't traverse this directory further
             continue
 
         # Process all non-ignored files in the directory
         for filename in files:
-            if AIignore(os.path.join(root, filename)):
+            relfilepath = os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name))
+            if AIignore(relfilepath):
                 continue  # Ignore this file
             else:
                 if not is_file_ignored(filename):
@@ -24,7 +25,7 @@ def files2analyse(repo_name, email):
                     encoding = get_file_encoding(os.path.join(root, filename))
                     if encoding in ['ascii', 'ISO-8859-1', 'utf-8', 'utf-16']:
                         # Append the file path relative to the root of the repo
-                        file_paths_details.append(os.path.relpath(os.path.join(root, filename), os.path.join("user", email, repo_name)))
+                        file_paths_details.append(os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name)))
 
     return file_paths_details
 
