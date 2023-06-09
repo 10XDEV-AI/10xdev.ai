@@ -10,7 +10,7 @@ def files2analyse(repo_name, email):
         # Check if the current directory should be ignored
 
         relpath = os.path.relpath(root, os.path.join("../user", email, repo_name))
-        if AIignore(relpath) or (any(d.startswith(".") for d in root.split(os.path.sep)) and relpath != "."):
+        if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
             directories[:] = []  # Don't traverse this directory further
             continue
 
