@@ -31,13 +31,24 @@ const LandingPage = () => {
       </h1>
       <h1 className="landing-text">Use the power of Auto GPT to become a 10X developer</h1>
       <p className="landing-text">Click on the button below to get started!</p>
-      
-      <a
-        className="landing-link"
-        href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`}
-      >
-        <button className="landing-button">Get Started</button>
-      </a>
+
+      <div>
+        <a
+            className="landing-link"
+            href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`}
+        >
+            <button className="landing-button">Get Started</button>
+        </a>
+
+        <a
+            className="landing-link"
+            href={`https://docs.google.com/forms/d/e/1FAIpQLSfuSBcAXtMe0CXVfQmX8gRF82zC-uCl_IZVMwk0AmwPJEksKQ/viewform?usp=sf_link`}
+        >
+            <button className="landing-button">Book a Demo</button>
+        </a>
+      </div>
+
+
     </div>
   );
 };
