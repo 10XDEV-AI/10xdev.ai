@@ -151,12 +151,11 @@ text-align: center;
 }
 
 .ignoretextarea{
-resize: none;
 width: 100%;
 font-family: inherit;
 font-size: inherit;
 border-radius: 7px;
-height: 90%;
+height: 75%;
 border: 1px dashed #D3D3D3;
 padding : 10px 2px;
 }
