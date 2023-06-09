@@ -6,7 +6,7 @@ import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import {callAPI} from './api';
 import {useEffect} from "react";
-
+import FilesTree from "./FileTree";
 const Train = () => {
   const { isLoading, setIsLoading, path } = useContext(SearchContext);
   const [input, setInput] = useState(path);
@@ -15,14 +15,31 @@ const Train = () => {
   const [showTrainButton, setShowTrainButton] = useState(false);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
-
+  const [Treedata, setTreedata] = useState([]);
   const handleInputChange = (event) => {
     setInput(event.target.value);
     setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
   };
-
+  const convertToTree = (files) => {
+    const root = { id: 'root', name: 'root', children: [], toggled: true };
+    const nodeMap = { root };
+    files.forEach((file) => {
+      const path = file.Path.split('/');
+      let parent = root;
+      for (let i = 0; i < path.length; i++) {
+        const nodeName = path[i];
+        if (!nodeMap[nodeName]) {
+          const newNode = { id: nodeName, name: nodeName, children: [], toggled: true };
+          nodeMap[nodeName] = newNode;
+          parent.children.push(newNode);
+        }
+        parent = nodeMap[nodeName];
+      }
+    });
+    return root.children;
+  };
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
@@ -31,6 +48,8 @@ const Train = () => {
       setFilesToIgnore(data.files2ignore);
       setShowTrainButton(true);
       setShowFilesToIgnore(true);
+      const tree = convertToTree(data.files2analyze);
+      setTreedata(tree);
       setShowFilesToAnalyze(true);
       setIsLoading(false);
       console.log(data);
@@ -38,6 +57,9 @@ const Train = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    console.log(Treedata);  
+  }, [Treedata]);
 
 
   const handleTrain = async () => {
@@ -97,7 +119,7 @@ const Train = () => {
 
             <div>
               <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
-                Analyze Files
+                List Files
               </button>
               <button onClick={handleTrain} className="gitIgnorebutton">
                 Start Training
@@ -112,7 +134,8 @@ const Train = () => {
                       <div className="ignorebox">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
-                            <table className = "ignoretable">
+                           <FilesTree data={Treedata} />
+                            {/* <table className = "ignoretable">
                                   <thead>
                                     <tr>
                                       <th>File Path</th>
@@ -121,6 +144,7 @@ const Train = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
+
                                     {filesToAnalyze.map((file, index) => (
                                       <tr key={index}>
                                         <td className="tdp">{file.Path}</td>
@@ -129,7 +153,7 @@ const Train = () => {
                                       </tr>
                                     ))}
                                   </tbody>
-                                </table>
+                                </table> */}
                         </div>
                       </div>
                        <div className="ignorebox">
