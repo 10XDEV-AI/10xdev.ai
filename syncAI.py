@@ -27,7 +27,11 @@ def sumarize(filename, userid):
         print("File " + filename + " was not summarised as it is not a text file")
         return "Ignore"
     with open(os.path.join(root,filename), 'r') as f:
-        file_contents = f.read()
+        try:
+            file_contents = f.read()
+        except UnicodeDecodeError:
+            print("File " + filename + " was not summarised as it is not a text file")
+            return "Ignore"
     return summarize_str(filename, file_contents, userid)
 
 def syncAI(sync_flag, user_logger, userid):
