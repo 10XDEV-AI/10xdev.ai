@@ -35,16 +35,22 @@ def parse_ignore_file(file_path):
 def check_file_type(file_path):
     ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
                           '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv',
-                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp')
+                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp', '.ipynb')
     if file_path.endswith(ignored_extensions):
         return False
-    if not file_path.endswith(('.py', '.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml',
+    if not file_path.endswith(('.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml',
                                '.json', '.sql', '.md', '.yml', '.yaml', '.sh', '.bat', '.jsx', '.txt',
                                '.php', '.rb', '.pl', '.swift', '.go', '.cs', '.vb', '.lua', '.scala',
                                '.rust', '.ts', '.scss', '.sass', '.less', '.coffee', '.asm', '.r', '.pyc',
                                '.class', '.dll', '.exe', '.bat', '.ps1')):
         with open(file_path, 'rb') as f:
-            result = chardet.detect(f.read())
+            if os.path.getsize(file_path) > 400:
+                data = f.read(400)  # Read only the first 100 bytes of the file
+            else:
+                data = f.read()  # Read the entire file
+
+            result = chardet.detect(data)
+
             if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
                 return True
     else:

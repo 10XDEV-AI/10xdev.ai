@@ -104,7 +104,7 @@ const Train = () => {
               {
               (showFilesToIgnore && showFilesToAnalyze) ? (
                     <div className="ignorecontainer">
-                      <div className="ignorebox">
+                      <div className="ignorebox1">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
                             <table className = "ignoretable">
@@ -136,7 +136,7 @@ const Train = () => {
                                  </h4>
                         </div>
                       </div>
-                       <div className="ignorebox">
+                       <div className="ignorebox2">
                             <div className="ignoretext">
                                 <div className="ignoretitle">
                                     <h2>Files to Ignore:
