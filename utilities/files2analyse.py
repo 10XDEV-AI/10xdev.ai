@@ -20,12 +20,9 @@ def files2analyse(repo_name, email):
             if AIignore(relfilepath):
                 continue  # Ignore this file
             else:
-                if not is_file_ignored(filename):
-                    # Check file encoding
-                    encoding = get_file_encoding(os.path.join(root, filename))
-                    if encoding in ['ascii', 'ISO-8859-1', 'utf-8', 'utf-16']:
-                        # Append the file path relative to the root of the repo
-                        file_paths_details.append(os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name)))
+                if check_file_type(os.path.join(root, filename)):
+                    # Append the file path relative to the root of the repo
+                    file_paths_details.append(os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name)))
 
     return file_paths_details
 
@@ -35,17 +32,26 @@ def parse_ignore_file(file_path):
         patterns = [line.strip() for line in f if line.strip() and not line.strip().startswith('#')]
     return lambda x: any(fnmatch.fnmatch(x, pattern) for pattern in patterns)
 
-
-def is_file_ignored(filename):
+def check_file_type(file_path):
     ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
                           '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv',
-                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp')
-    return filename.endswith(ignored_extensions)
-
-def get_file_encoding(file_path):
-    try:
+                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp', '.ipynb')
+    if file_path.endswith(ignored_extensions):
+        return False
+    if not file_path.endswith(('.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml',
+                               '.json', '.sql', '.md', '.yml', '.yaml', '.sh', '.bat', '.jsx', '.txt',
+                               '.php', '.rb', '.pl', '.swift', '.go', '.cs', '.vb', '.lua', '.scala',
+                               '.rust', '.ts', '.scss', '.sass', '.less', '.coffee', '.asm', '.r', '.pyc',
+                               '.class', '.dll', '.exe', '.bat', '.ps1')):
         with open(file_path, 'rb') as f:
-            result = chardet.detect(f.read())
-        return result['encoding']
-    except:
-        return None
+            if os.path.getsize(file_path) > 400:
+                data = f.read(400)  # Read only the first 100 bytes of the file
+            else:
+                data = f.read()  # Read the entire file
+
+            result = chardet.detect(data)
+
+            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+                return True
+    else:
+        return True

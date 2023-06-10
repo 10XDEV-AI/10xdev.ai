@@ -1,10 +1,10 @@
-import time, chardet, subprocess, os, pandas as pd
+import time, subprocess, os, pandas as pd
 from utilities.projectInfo import read_info
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
-from utilities.files2analyse import files2analyse
+from utilities.files2analyse import check_file_type, files2analyse
 
 fs = pd.DataFrame()
 
@@ -23,13 +23,15 @@ def summarize_str(filename, file_contents, userid):
 
 def sumarize(filename, userid):
     root = read_info(userid)
-    with open(os.path.join(root,filename), 'rb') as f:
-        result = chardet.detect(f.read())
-    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
-        print("File " + filename + " was not summarised as it is not a text file with ASCII or ISO-8859-1 encoding")
+    if not check_file_type(os.path.join(root,filename)):
+        print("File " + filename + " was not summarised as it is not a text file")
         return "Ignore"
     with open(os.path.join(root,filename), 'r') as f:
-        file_contents = f.read()
+        try:
+            file_contents = f.read()
+        except UnicodeDecodeError:
+            print("File " + filename + " was not summarised as it is not a text file")
+            return "Ignore"
     return summarize_str(filename, file_contents, userid)
 
 def syncAI(sync_flag, user_logger, userid):

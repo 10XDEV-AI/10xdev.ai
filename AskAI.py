@@ -151,7 +151,7 @@ def Ask_AI(prompt, userlogger, email):
 
     userlogger.log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
-    FinalAnswer = AskGPT(email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,temperature=0, max_tokens=max_t)
+    FinalAnswer = AskGPT(email=email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,temperature=0, max_tokens=max_t)
 
     userlogger.clear_logs()
 
