@@ -1,7 +1,7 @@
-import pandas as pd, os, chardet, openai, time
+import pandas as pd, os, openai, time
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
-from utilities.files2analyse import files2analyse
+from utilities.files2analyse import files2analyse, check_file_type
 from utilities.tokenCount import tokenCount
 from utilities.keyutils import get_key
 from utilities.rates import get_rates
@@ -27,10 +27,9 @@ def summarize_str(filename, string, email, userlogger):
 
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
-    full_file_path = os.path.join("user", email, repo_name, filepath)
-    with open(full_file_path, 'rb') as f:
-        result = chardet.detect(f.read())
-    if not result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+    full_file_path = os.path.join("../user", email, repo_name, filepath)
+    if not check_file_type(full_file_path):
+        print("File " + filepath + " was not summarised as it is not a text file")
         p = ("File " + filepath + " was not Analyzed as it is not a text file")
         userlogger.log(p)
         return i, "Ignore"
@@ -54,7 +53,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
 
 
 def train_AI(repo_name, userlogger, email):
-    fsfilename = "user/" + email + '/AIFiles/' + repo_name + ".csv"
+    fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
 
     file_paths_details = files2analyse(repo_name, email)
 
@@ -90,7 +89,7 @@ def train_AI(repo_name, userlogger, email):
             print(p)
             userlogger.log(p)
             if rate > int(chat_limit):
-                delay = delay + 0.2
+                delay = delay + 0.3
                 # print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
             if rate < 0.9 * int(chat_limit):
                 delay = delay * 0.8
