@@ -26,7 +26,7 @@ const Train = () => {
     const root = { id: 'root', name: 'root', children: [], toggled: true };
     const nodeMap = { root };
     files.forEach((file) => {
-      const path = file.Path.split('/');
+      const path = file.Path.split('\\');
       let parent = root;
       for (let i = 0; i < path.length; i++) {
         const nodeName = path[i];
@@ -57,9 +57,19 @@ const Train = () => {
       console.log(error);
     }
   };
+  const getTreedata = async () => {
+    try {
+      const data = await callAPI(`/api/Ignore?path=${input}`);
+      const tree = convertToTree(data.files2analyze);
+      setTreedata(tree);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    console.log(Treedata);  
-  }, [Treedata]);
+    getTreedata();
+  }, []);
 
 
   const handleTrain = async () => {
@@ -97,7 +107,7 @@ const Train = () => {
 
 
   return (
-  <div>
+    <div>
     {isLoading? (
         <LoadingRing />
     ):(
@@ -119,7 +129,7 @@ const Train = () => {
 
             <div>
               <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
-                List Files
+                Analyze Files
               </button>
               <button onClick={handleTrain} className="gitIgnorebutton">
                 Start Training
@@ -131,11 +141,10 @@ const Train = () => {
               {
               (showFilesToIgnore && showFilesToAnalyze) ? (
                     <div className="ignorecontainer">
-                      <div className="ignorebox">
+                      <div className="ignorebox1">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
-                           <FilesTree data={Treedata} />
-                            {/* <table className = "ignoretable">
+                            <table className = "ignoretable">
                                   <thead>
                                     <tr>
                                       <th>File Path</th>
@@ -144,7 +153,6 @@ const Train = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-
                                     {filesToAnalyze.map((file, index) => (
                                       <tr key={index}>
                                         <td className="tdp">{file.Path}</td>
@@ -153,10 +161,19 @@ const Train = () => {
                                       </tr>
                                     ))}
                                   </tbody>
-                                </table> */}
+                                </table>
+                                 <h4>
+                                    ✅ : All good
+                                 </h4>
+                                 <h4>
+                                    ⚠️ : File too long
+                                 </h4>
+                                 <h4>
+                                    ℹ️ : File is not text
+                                 </h4>
                         </div>
                       </div>
-                       <div className="ignorebox">
+                       <div className="ignorebox2">
                             <div className="ignoretext">
                                 <div className="ignoretitle">
                                     <h2>Files to Ignore:
@@ -181,17 +198,34 @@ const Train = () => {
                     ):
                     (
                         <div className="ignorecontainer">
-                            <div className="ignoretips">
-                            <h2> 💡Tips on training Repository</h2>
-                            <ul>
-                                <li> Add folders like node_modules, .git, .vscode, etc. to .AIIgnore file </li>
-                                <li> Add files like .DS_Store, .gitignore, etc. to .AIIgnore file </li>
-                                <li> Add any other files that are not required for training </li>
-                                <li> Break down big files to smaller files </li>
-                                <li> Works well with small files </li>
-                                <li> Works well for files with comments </li>
-                            </ul>
+                            <div className="ignoretips" style={{
+                              marginTop: '10px',
+                            }}>
+                            <h2>All Files</h2>
+                            <FilesTree data={Treedata} />
+                            
                             </div>
+                            <div className="ignorebox2">
+                            <div className="ignoretext">
+                                <div className="ignoretitle">
+                                    <h2>Files to Ignore:
+                                    <div className="saveIgnoreButton">
+                                    <button onClick={handleSaveFilesToIgnore} className="saveIgnoreButton">
+                                        Save
+                                    </button>
+                                    </div>
+                                    </h2>
+                                </div>
+                           {
+                              <textarea
+                                className="ignoretextarea"
+                                placeholder="Type files you want the AI to ignore here"
+                                value={filesToIgnore.join('\n')}
+                                onChange={(event) => setFilesToIgnore(event.target.value.split('\n'))}
+                              />
+                           }
+                         </div>
+                       </div>
                         </div>
                     )
               }
@@ -199,6 +233,7 @@ const Train = () => {
     </div>
     )}
   </div>
+   
     );
 };
 
