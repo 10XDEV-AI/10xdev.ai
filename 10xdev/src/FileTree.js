@@ -1,40 +1,15 @@
 import React from "react";
-import { DiCss3, DiJavascript, DiNpm } from "react-icons/di";
-import { FaList, FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
+import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
+import { FaList, FaPython, FaReadme ,FaRegFolderOpen,FaRegFolder} from "react-icons/fa";
+import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
+import { RiFileCodeLine } from "react-icons/ri"; // Example of using a different react-icons package
 import TreeView, { flattenTree } from "react-accessible-treeview";
+import "./FileTree.css";
 
-const folder = {
-  name: "",
-  children: [
-    {
-      name: "src",
-      children: [{ name: "index.js" }, { name: "styles.css" }],
-    },
-    {
-      name: "node_modules",
-      children: [
-        {
-          name: "react-accessible-treeview",
-          children: [{ name: "index.js" }],
-        },
-        { name: "react", children: [{ name: "index.js" }] },
-      ],
-    },
-    {
-      name: ".npmignore",
-    },
-    {
-      name: "package.json",
-    },
-    {
-      name: "webpack.config.js",
-    },
-  ],
-};
 
-const data = flattenTree(folder);
-
-function DirectoryTreeView() {
+function DirectoryTreeView(props) {
+  console.log(props.data);
+  const data = flattenTree(props.data);
   return (
     <div>
       <div className="directory">
@@ -82,6 +57,18 @@ const FileIcon = ({ filename }) => {
       return <FaList color="yellow" className="icon" />;
     case "npmignore":
       return <DiNpm color="red" className="icon" />;
+    case "jsx":
+      return <BsFiletypeJsx color="blue" className="icon" />;
+    case "scss":
+      return <BsFiletypeScss color="green" className="icon" />;
+    case "py":
+      return <FaPython color="cyan" className="icon" />;
+    case "md":
+      return <FaReadme color="black" className="icon" />;
+    case "ts":
+        return <RiFileCodeLine color="teal" className="icon" />;
+    case "yml":
+        return <RiFileCodeLine color="purple" className="icon" />;
     default:
       return null;
   }

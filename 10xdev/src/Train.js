@@ -20,23 +20,29 @@ const Train = () => {
     setShowFilesToAnalyze(false);
   };
   const convertToTree = (files) => {
-    const root = { id: 'root', name: 'root', children: [], toggled: true };
+    const root = { name: "", children: [] };
     const nodeMap = { root };
+    
     files.forEach((file) => {
-      const path = file.Path.split('\\');
+      const path = file.Path.split("\\");
       let parent = root;
+      
       for (let i = 0; i < path.length; i++) {
         const nodeName = path[i];
+        
         if (!nodeMap[nodeName]) {
-          const newNode = { id: nodeName, name: nodeName, children: [], toggled: true };
+          const newNode = { name: nodeName, children: [] };
           nodeMap[nodeName] = newNode;
           parent.children.push(newNode);
         }
+        
         parent = nodeMap[nodeName];
       }
     });
-    return root.children;
+    
+    return root;
   };
+  
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
@@ -140,7 +146,6 @@ const Train = () => {
                       <div className="ignorebox1">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
-                           <FilesTree data={Treedata} />
                             <table className = "ignoretable">
                                   <thead>
                                     <tr>
@@ -197,6 +202,8 @@ const Train = () => {
                         <div className="ignorecontainer">
                             <div className="ignoretips" style={{
                               marginTop: '10px',
+                              marginLeft: '10%',
+                              width: '35%',
                             }}>
                             <h2>All Files</h2>
                             <FilesTree data={Treedata} />

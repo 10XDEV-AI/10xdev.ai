@@ -49,6 +49,7 @@ background-color: #f3fafe ;
 margin: 10px;
 border-radius: 10px;
 padding: 10px;
+margin-bottom: 0px;
 border: 1px dashed #D3D3D3;
 }
 .ignoretext{
@@ -160,26 +161,37 @@ font: 15px "Roboto", Helvetica;
 text-align: center;
 }
 
-.ignoretextarea{
-width: 100%;
-font-family: inherit;
-font-size: inherit;
-border-radius: 7px;
-height: 75%;
-border: 1px dashed #D3D3D3;
-padding : 10px 2px;
+.ignoretextarea {
+  width: 100%;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border-radius: 7px;
+  height: auto;
+  border: 1px dashed #D3D3D3;
+  line-height: 1.5;
+  resize: vertical;
 }
+
+.ignoretextarea::placeholder {
+  color: #888888;
+}
+
+.ignoretextarea:focus {
+  outline: none;
+  border-color: #7c7c7c;
+  box-shadow: 0 0 5px #7c7c7c;
+}
+
+
 
 .saveIgnoreButton{
 background-color: #2455C5;
 border: none;
 color: white;
-height: 20px;
+height: 25px;
 float: right;
-border-radius: 10px;
+border-radius: 6px;
 font-size: 18px;
-margin-left: 10px;
-padding: 5px;
 
 text-align: center;
 }
