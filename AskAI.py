@@ -91,7 +91,8 @@ def get_referenced_code(path, files):
     return referenced_code
 
 
-def Ask_AI(prompt, userlogger, email):
+def Ask_AI(prompt, userlogger, email, chatmessages):
+    print(chatmessages)
     if prompt.strip() == "":
         return {'files': "", 'response': "Please enter a query", 'referenced_code': None}
 
@@ -144,6 +145,7 @@ def Ask_AI(prompt, userlogger, email):
     system_message = "Act like you are a coding assistant with access to the codebase."
 
     final_prompt += "\n" + prompt
+    print(final_prompt)
     tokens = tokenCount(final_prompt)
     max_t = 4000 - tokens
     userlogger.log("Total Tokens in the query: " + str(tokens))
