@@ -131,7 +131,7 @@ const Train = () => {
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
                            <FilesTree data={Treedata} />
-                            {/* <table className = "ignoretable">
+                            <table className = "ignoretable">
                                   <thead>
                                     <tr>
                                       <th>File Path</th>
@@ -149,7 +149,7 @@ const Train = () => {
                                       </tr>
                                     ))}
                                   </tbody>
-                                </table> */}
+                                </table>
                                  <h4>
                                     ✅ : All good
                                  </h4>
