@@ -140,6 +140,7 @@ const Train = () => {
                       <div className="ignorebox1">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
+                           <FilesTree data={Treedata} />
                             <table className = "ignoretable">
                                   <thead>
                                     <tr>

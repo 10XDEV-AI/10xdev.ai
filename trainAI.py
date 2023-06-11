@@ -89,7 +89,7 @@ def train_AI(repo_name, userlogger, email):
             print(p)
             userlogger.log(p)
             if rate > int(chat_limit):
-                delay = delay + 0.2
+                delay = delay + 0.3
                 # print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
             if rate < 0.9 * int(chat_limit):
                 delay = delay * 0.8
