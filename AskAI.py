@@ -99,7 +99,7 @@ def Ask_AI(prompt, userlogger, email):
     path = read_info(email)
     if path == "":
         return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
-    filename = "user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
+    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     userlogger.log("Analyzing your query...")
@@ -151,7 +151,7 @@ def Ask_AI(prompt, userlogger, email):
 
     userlogger.log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
-    FinalAnswer = AskGPT(email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,temperature=0, max_tokens=max_t)
+    FinalAnswer = AskGPT(email=email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,temperature=0, max_tokens=max_t)
 
     userlogger.clear_logs()
 

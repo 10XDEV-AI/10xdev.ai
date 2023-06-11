@@ -1,75 +1,70 @@
-import chardet
-import re
+import chardet, os, fnmatch, re
 from utilities.tokenCount import tokenCount
 from concurrent.futures import ThreadPoolExecutor
-import fnmatch
-
-def results(file_contents):
-    token_count = tokenCount(file_contents)
-    tick_or_cross = '✅' if token_count < 4096 else '⚠️'
-    return token_count, tick_or_cross
-import os
 
 def process_file(root, filename, path, user_logger):
     # Skip file types like jpg, svg, gif, etc.
-    if filename.endswith(('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv', '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', '.ttf', '.bmp' )):
-        return None
+    if filename.endswith(('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv', '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', '.ttf', '.bmp', '.ipynb' )):
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
 
-    with open(os.path.join(root, filename), 'rb') as f:
-        result = chardet.detect(f.read())
-
-    if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
-        user_logger.log("Analysing: " + str(filename))
-
-        file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
-        if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '⚠：', "Sign": '⚠：'}
+    if not filename.endswith(('.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml', '.json', '.sql', '.md', '.yml', '.yaml', '.sh', '.bat', '.jsx', '.txt', '.php', '.rb', '.pl', '.swift', '.go', '.cs', '.vb', '.lua', '.scala', '.rust', '.ts', '.scss', '.sass', '.less', '.coffee', '.asm', '.r', '.pyc', '.class', '.dll', '.exe', '.bat', '.ps1')):
+        # Code to handle the file with the supported extensions
+        user_logger.log("Analysing new data type: " + str(filename))
+        with open(os.path.join(root, filename), 'rb') as f:
+            if os.path.getsize(os.path.join(root, filename)) > 400:
+                data = f.read(400)  # Read only the first 100 bytes of the file
+            else:
+                data = f.read()  # Read the entire file
+        result = chardet.detect(data)
+        if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+            pass
         else:
-            tokens, sign = results(file_contents)
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
 
-        user_logger.log("Analysing: " + str(filename))
+    try:
+        file_contents = open(os.path.join(root, filename), 'r').read()
+    except UnicodeDecodeError:
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
 
-        file_contents = open(os.path.join(root, filename), 'r', encoding=result['encoding']).read()
-        if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": '❌', "Sign": '❌'}
-        else:
-            tokens, sign = results(file_contents)
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokens, "Sign": sign}
+    if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": '⚠️'}
     else:
-        return None
+        token_count = tokenCount(file_contents)
+        tick_or_cross = '✅' if token_count < 4096 else '⚠️'
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": token_count, "Sign": tick_or_cross}
+
 
 
 def IgnoreAI(email, user_logger, path):
     files2analyse = []
 
-    ignore_file_path = os.path.join("user", email, '.AIIgnore' + path)
+    ignore_file_path = os.path.join("../user", email, '.AIIgnore' + path)
     AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
 
     with ThreadPoolExecutor() as executor:
         futures = []
 
-        for root, directories, files in os.walk(os.path.join("user", email, path)):
-            relpath = os.path.relpath(root, os.path.join("user", email, path))
-            if AIignore(relpath) or any(d.startswith(".") for d in root.split(os.path.sep)):
+        for root, directories, files in os.walk(os.path.join("../user", email, path)):
+            relpath = os.path.relpath(root, os.path.join("../user", email, path))
+            if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
                 print("Ignoring directory " + relpath)
                 directories[:] = []  # Don't traverse this directory further
                 continue
 
             for filename in files:
-                if AIignore(os.path.join(root, filename)):
+                relfilepath = os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, path))
+                if AIignore(relfilepath):
                     continue
                 else:
                     if not is_file_ignored(filename):
-                        futures.append(executor.submit(process_file, root, filename, os.path.join("user",email,path), user_logger))
+                        futures.append(executor.submit(process_file, root, filename, os.path.join("../user",email,path), user_logger))
                         print("Processing file:", os.path.join(root, filename))
 
         for future in futures:
             result = future.result()
             if result:
                 files2analyse.append(result)
-
-    files2ignore = open(os.path.join("user", email, '.AIIgnore' + path), 'r').read().splitlines()
+    files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
     user_logger.clear_logs()
     return files2ignore, files2analyse
 
@@ -84,6 +79,6 @@ def parse_ignore_file(file_path):
 def is_file_ignored(filename):
     ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
                           '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv',
-                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf')
+                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf' '.ipynb')
     return filename.endswith(ignored_extensions)
 

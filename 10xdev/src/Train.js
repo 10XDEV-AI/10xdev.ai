@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import './Train.css';
 import Navbar from './Navbar';
-import CheckAIIgnore from './CheckAIIgnore/CheckAIIgnore';
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import {callAPI} from './api';
@@ -12,13 +11,11 @@ const Train = () => {
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [filesToIgnore, setFilesToIgnore] = useState([]);
-  const [showTrainButton, setShowTrainButton] = useState(false);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
   const handleInputChange = (event) => {
     setInput(event.target.value);
-    setShowTrainButton(false);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
   };
@@ -46,7 +43,6 @@ const Train = () => {
       const data = await callAPI(`/api/Ignore?path=${input}`);
       setFilesToAnalyze(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
-      setShowTrainButton(true);
       setShowFilesToIgnore(true);
       const tree = convertToTree(data.files2analyze);
       setTreedata(tree);

@@ -36,11 +36,11 @@ def before_request():
                 return render_template('index.html'), 401
             print("EMAIL: " + str(email))
             session[code] = email
-            if not os.path.exists("user/" + email):
-                os.makedirs("user/" + email)
-                os.makedirs("user/" + email + "/AIFiles")
-                os.system("cp info.json " + "user/" + email + "/AIFiles")
-                os.system("cp AI.log " + "user/" + email + "/AIFiles")
+            if not os.path.exists("../user/" + email):
+                os.makedirs("../user/" + email)
+                os.makedirs("../user/" + email + "/AIFiles")
+                os.system("cp info.json " + "../user/" + email + "/AIFiles")
+                os.system("cp AI.log " + "../user/" + email + "/AIFiles")
 
         g.email = email  # Save email in the 'g' object for later access
 
@@ -136,7 +136,7 @@ def save_files_to_ignore():
         path = data['path']
         files_to_ignore = data['filesToIgnore']
 
-        with open("user/" + email + "/.AIIgnore"+path, "w") as f:
+        with open("../user/" + email + "/.AIIgnore"+path, "w") as f:
             for file in files_to_ignore:
                 f.write(file + "\n")
         return {'message': 'Files to analyze saved successfully'}
@@ -148,7 +148,7 @@ def save_files_to_ignore():
 def get_CheckAIIgnore():
     email = getattr(g, 'email', None)
     path = request.args.get('path')
-    if os.path.exists("user/" + email + "/" +path + "/.AIIgnore"):
+    if os.path.exists("../user/" + email + "/" +path + "/.AIIgnore"):
         return jsonify({"AIIgnore": True})
     else:
         return jsonify({"AIIgnore": False})

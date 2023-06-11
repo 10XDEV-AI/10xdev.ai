@@ -2,11 +2,11 @@ import json,os,time
 import openai
 from utilities.tokenCount import tokenCount
 def set_key(key,userid):
-    with open(os.path.join("user", userid,'AIFiles', 'info.json'), 'r') as f:
+    with open(os.path.join("../user", userid,'AIFiles', 'info.json'), 'r') as f:
         data = json.load(f)
         data['api_key'] = key
 
-    with open(os.path.join("user", userid,'AIFiles', 'info.json'), 'w') as outfile:
+    with open(os.path.join("../user", userid,'AIFiles', 'info.json'), 'w') as outfile:
         json.dump(data, outfile)
 
     openai.api_key = data.get('key', None)
@@ -14,24 +14,24 @@ def set_key(key,userid):
     return 'API key set successfully', 200
 
 def delete_key(userid):
-    with open(os.path.join("user", userid,'AIFiles', 'info.json'), 'r') as f:
+    with open(os.path.join("../user", userid,'AIFiles', 'info.json'), 'r') as f:
         data = json.load(f)
         data['api_key'] = ''
 
-    with open(os.path.join("user", userid,'AIFiles', 'info.json'), 'w') as outfile:
+    with open(os.path.join("../user", userid,'AIFiles', 'info.json'), 'w') as outfile:
         json.dump(data, outfile)
 
     return 'API key deleted successfully', 200
 
 
 def get_key(userid):
-    with open(os.path.join("user", userid,'AIFiles','info.json'), 'r') as f:
+    with open(os.path.join("../user", userid,'AIFiles','info.json'), 'r') as f:
         data = json.load(f)
         return data.get('api_key', None)
 
 
 def test_key(key,userid):
-    with open(os.path.join("user", userid,'AIFiles','info.json'), 'r') as f:
+    with open(os.path.join("../user", userid,'AIFiles','info.json'), 'r') as f:
         data = json.load(f)
         old_key = data.get('api_key', None)
         print(old_key)
