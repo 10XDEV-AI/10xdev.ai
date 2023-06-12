@@ -110,8 +110,6 @@ def get_data():
     user_logger = getattr(g, 'user_loggers', None)[email]
     prompt = request.args.get('prompt')
     chat_messages = request.json.get('chatMessages')
-    if prompt == "":
-        return jsonify({"files": [], "response": "", "referenced_code": ""})
     response = Ask_AI(prompt, user_logger, email, chat_messages)
     return jsonify( {"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
 

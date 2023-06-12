@@ -80,7 +80,7 @@ def get_referenced_code(path, files):
 
     for file in files:
         try:
-            with open(os.path.join(path,file), 'r') as f:
+            with open(os.path.join(path, file), 'r') as f:
                 code = f.read()
                 code_block = f"{file}\n{code}"
                 referenced_code.append(code_block)
@@ -91,10 +91,57 @@ def get_referenced_code(path, files):
     return referenced_code
 
 
+def consolidate_prompt_creation(chatmessages, current_prompt):
+    if chatmessages is not None:
+        previous_user_prompts = []
+        previous_search_results = []
+        previous_files = []
+
+        if len(chatmessages) > 3:
+            chatmessages = chatmessages[-3:]
+
+        for message in chatmessages:
+            prompt = message['prompt']['searchTerm']
+            search_results = message['response']['searchResults']
+            files = message['response']['files']
+
+            previous_user_prompts.append(prompt)
+            previous_search_results.append(search_results)
+            previous_files.extend(files)  # Use extend to add all files in the list
+
+        history = ""
+
+        # Add previous user prompts to the consolidated prompt
+        for i, user_prompt in enumerate(previous_user_prompts):
+            history += f" User Prompt {i + 1}: {user_prompt}\n"
+
+        # Add previous search results to the consolidated prompt
+        for search_result in previous_search_results:
+            history += f"Search results: {search_result}\n"
+
+        history += "Referenced Files: "
+
+        # Add previous files to the consolidated prompt
+        for file in previous_files:
+            history += file + ", "
+
+        history += "User Prompt " + str(len(previous_user_prompts)) + current_prompt + "\n"
+
+        history += "Write a consolidated prompt based on previous user prompts and AI responses to best answer the latest " \
+                   "user prompt " + str(
+            len(previous_user_prompts)) + ". Return only the consolidated prompt, nothing else"
+
+        return history
+
+    return ""
+
+
 def Ask_AI(prompt, userlogger, email, chatmessages):
-    print(chatmessages)
-    if prompt.strip() == "":
-        return {'files': "", 'response': "Please enter a query", 'referenced_code': None}
+    consolidated_prompt = consolidate_prompt_creation(chatmessages, prompt)
+    if consolidated_prompt:
+        prompt = AskGPT(email, model="gpt-3.5-turbo", system_message="", prompt=consolidated_prompt, temperature=0.5,
+                        max_tokens=4000 - len(consolidated_prompt))
+        userlogger.log(prompt)
 
     global fs
     path = read_info(email)
@@ -128,7 +175,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
 
         print("Estimated tokens: " + str(estimated_tokens))
-        print("Final Prompt : " + final_prompt)
+        # print("Final Prompt : " + final_prompt)
     else:
         for i in files:
             final_prompt += "\nFile path " + i + ":\n"
@@ -145,7 +192,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     system_message = "Act like you are a coding assistant with access to the codebase."
 
     final_prompt += "\n" + prompt
-    print(final_prompt)
+    # print(final_prompt)
     tokens = tokenCount(final_prompt)
     max_t = 4000 - tokens
     userlogger.log("Total Tokens in the query: " + str(tokens))
@@ -153,8 +200,9 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
 
     userlogger.log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
-    FinalAnswer = AskGPT(email=email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,temperature=0.7, max_tokens=max_t)
+    FinalAnswer = AskGPT(email=email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,
+                         temperature=0.7, max_tokens=max_t)
 
     userlogger.clear_logs()
 
-    return {'files': files2str(files), 'response': FinalAnswer, 'referenced_code': referenced_code}
+    return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}

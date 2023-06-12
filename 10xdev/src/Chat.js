@@ -68,7 +68,7 @@ export const Chat = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ chatMessages: chatMessages.slice(index) }),
+        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -119,7 +119,7 @@ export const Chat = () => {
 
 return (
     <>
-    <Navbar LoadSync="True" LoadProjectInfo="True" />
+    <Navbar LoadProjectInfo="True" />
     <div className="spacer-top"></div>
     <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
       {isLoading ? (<LoadingRing />) : (
