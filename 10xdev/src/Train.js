@@ -24,7 +24,7 @@ const Train = () => {
     const nodeMap = { root };
     
     files.forEach((file) => {
-      const path = file.Path.split("\\");
+      const path = file.Path.split("/");
       let parent = root;
       
       for (let i = 0; i < path.length; i++) {
