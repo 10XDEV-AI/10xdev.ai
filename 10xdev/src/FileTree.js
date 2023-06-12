@@ -72,7 +72,7 @@ const FileIcon = ({ filename }) => {
     case "html":
         return <RiFileCodeLine color="orange" className="icon" />;
     default:
-      return null;
+      return <RiFileCodeLine color="black" className="icon" />;
   }
 };
 
