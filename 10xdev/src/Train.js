@@ -22,26 +22,30 @@ const Train = () => {
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
     const nodeMap = { root };
-    
+  
+    const pathRegex = /[\\/]/; // Matches either forward slash or backslash
+  
     files.forEach((file) => {
-      const path = file.Path.split("/");
+      const pathComponents = file.Path.split(pathRegex);
+  
       let parent = root;
-      
-      for (let i = 0; i < path.length; i++) {
-        const nodeName = path[i];
-        
+  
+      for (let i = 0; i < pathComponents.length; i++) {
+        const nodeName = pathComponents[i];
+  
         if (!nodeMap[nodeName]) {
           const newNode = { name: nodeName, children: [] };
           nodeMap[nodeName] = newNode;
           parent.children.push(newNode);
         }
-        
+  
         parent = nodeMap[nodeName];
       }
     });
-    
+  
     return root;
   };
+  
   
   const handleGetGitIgnore = async () => {
     try {
