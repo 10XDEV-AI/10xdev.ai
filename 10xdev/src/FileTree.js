@@ -69,6 +69,8 @@ const FileIcon = ({ filename }) => {
         return <RiFileCodeLine color="teal" className="icon" />;
     case "yml":
         return <RiFileCodeLine color="purple" className="icon" />;
+    case "html":
+        return <RiFileCodeLine color="orange" className="icon" />;
     default:
       return null;
   }

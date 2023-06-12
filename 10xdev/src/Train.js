@@ -61,7 +61,7 @@ const Train = () => {
   };
   const getTreedata = async () => {
     try {
-      const data = await callAPI(`/api/Ignore?path=${input}`);
+      const data = await callAPI(`/api/FilesToAnalyzedata?path=${input}`);
       const tree = convertToTree(data.files2analyze);
       setTreedata(tree);
     } catch (error) {
