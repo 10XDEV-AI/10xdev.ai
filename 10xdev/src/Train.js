@@ -4,7 +4,8 @@ import Navbar from './Navbar';
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import {callAPI} from './api';
-
+import {useEffect} from "react";
+import FilesTree from "./FileTree";
 const Train = () => {
   const { isLoading, setIsLoading, path } = useContext(SearchContext);
   const [input, setInput] = useState(path);
@@ -12,13 +13,40 @@ const Train = () => {
   const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
-
+  const [Treedata, setTreedata] = useState([]);
   const handleInputChange = (event) => {
     setInput(event.target.value);
     setShowFilesToIgnore(false);
     setShowFilesToAnalyze(false);
   };
-
+  const convertToTree = (files) => {
+    const root = { name: "", children: [] };
+    const nodeMap = { root };
+  
+    const pathRegex = /[\\/]/; // Matches either forward slash or backslash
+  
+    files.forEach((file) => {
+      const pathComponents = file.Path.split(pathRegex);
+  
+      let parent = root;
+  
+      for (let i = 0; i < pathComponents.length; i++) {
+        const nodeName = pathComponents[i];
+  
+        if (!nodeMap[nodeName]) {
+          const newNode = { name: nodeName, children: [] };
+          nodeMap[nodeName] = newNode;
+          parent.children.push(newNode);
+        }
+  
+        parent = nodeMap[nodeName];
+      }
+    });
+  
+    return root;
+  };
+  
+  
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
@@ -26,6 +54,8 @@ const Train = () => {
       setFilesToAnalyze(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
       setShowFilesToIgnore(true);
+      const tree = convertToTree(data.files2analyze);
+      setTreedata(tree);
       setShowFilesToAnalyze(true);
       setIsLoading(false);
       console.log(data);
@@ -33,6 +63,19 @@ const Train = () => {
       console.log(error);
     }
   };
+  const getTreedata = async () => {
+    try {
+      const data = await callAPI(`/api/FilesToAnalyzedata?path=${input}`);
+      const tree = convertToTree(data.files2analyze);
+      setTreedata(tree);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTreedata();
+  }, []);
 
 
   const handleTrain = async () => {
@@ -70,7 +113,7 @@ const Train = () => {
 
 
   return (
-  <div>
+    <div>
     {isLoading? (
         <LoadingRing />
     ):(
@@ -161,17 +204,36 @@ const Train = () => {
                     ):
                     (
                         <div className="ignorecontainer">
-                            <div className="ignoretips">
-                            <h2> 💡Tips on training Repository</h2>
-                            <ul>
-                                <li> Add folders like node_modules, .git, .vscode, etc. to .AIIgnore file </li>
-                                <li> Add files like .DS_Store, .gitignore, etc. to .AIIgnore file </li>
-                                <li> Add any other files that are not required for training </li>
-                                <li> Break down big files to smaller files </li>
-                                <li> Works well with small files </li>
-                                <li> Works well for files with comments </li>
-                            </ul>
+                            <div className="ignoretips" style={{
+                              marginTop: '10px',
+                              marginLeft: '10%',
+                              width: '35%',
+                            }}>
+                            <h2>All Files</h2>
+                            <FilesTree data={Treedata} />
+                            
                             </div>
+                            <div className="ignorebox2">
+                            <div className="ignoretext">
+                                <div className="ignoretitle">
+                                    <h2>Files to Ignore:
+                                    <div className="saveIgnoreButton">
+                                    <button onClick={handleSaveFilesToIgnore} className="saveIgnoreButton">
+                                        Save
+                                    </button>
+                                    </div>
+                                    </h2>
+                                </div>
+                           {
+                              <textarea
+                                className="ignoretextarea"
+                                placeholder="Type files you want the AI to ignore here"
+                                value={filesToIgnore.join('\n')}
+                                onChange={(event) => setFilesToIgnore(event.target.value.split('\n'))}
+                              />
+                           }
+                         </div>
+                       </div>
                         </div>
                     )
               }
@@ -179,6 +241,7 @@ const Train = () => {
     </div>
     )}
   </div>
+   
     );
 };
 
