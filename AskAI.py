@@ -90,7 +90,6 @@ def get_referenced_code(path, files):
 
     return referenced_code
 
-
 def consolidate_prompt_creation(chatmessages, current_prompt):
     if chatmessages is not None:
         previous_user_prompts = []
@@ -109,31 +108,25 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
             previous_search_results.append(search_results)
             previous_files.extend(files)  # Use extend to add all files in the list
 
-        history = ""
+        history_prompt = ""
 
-        # Add previous user prompts to the consolidated prompt
+        # Add previous user prompts, AI responses, and file references to the consolidated prompt
         for i, user_prompt in enumerate(previous_user_prompts):
-            history += f" User Prompt {i + 1}: {user_prompt}\n"
+            ai_response = previous_search_results[i]
+            file_references = files2str(previous_files[i * 10: (i + 1) * 10])  # Assuming each search returns 10 files
 
-        # Add previous search results to the consolidated prompt
-        for search_result in previous_search_results:
-            history += f"Search results: {search_result}\n"
+            consolidated_prompt = f"User Prompt {i + 1}: {user_prompt}\n" \
+                                  f"AI Response: {ai_response}\n" \
+                                  f"File References: {file_references}\n\n"
+            history_prompt += consolidated_prompt
 
-        history += "Referenced Files: "
+        # Add the current prompt to the consolidated prompt
+        history_prompt += f"User Prompt {len(previous_user_prompts) + 1}: {current_prompt}\n"
 
-        # Add previous files to the consolidated prompt
-        for file in previous_files:
-            history += file + ", "
-
-        history += "User Prompt " + str(len(previous_user_prompts)) + current_prompt + "\n"
-
-        history += "Write a consolidated prompt based on previous user prompts and AI responses to best answer the latest " \
-                   "user prompt " + str(
-            len(previous_user_prompts)) + ". Return only the consolidated prompt, nothing else"
-
-        return history
+        return history_prompt.strip()
 
     return ""
+
 
 
 def Ask_AI(prompt, userlogger, email, chatmessages):
