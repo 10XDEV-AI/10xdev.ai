@@ -6,25 +6,32 @@ from utilities.tokenCount import tokenCount
 from utilities.keyutils import get_key
 from utilities.rates import get_rates
 
-
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
-    while True:
+    max_attempts = 3
+    attempt_count = 0
+
+    while attempt_count < max_attempts:
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
-                messages=[{"role": "system",
-                           "content": "Summarize what this file in the codebase does, assume context when neccessary."},
-                          {"role": "user", "content": "File " + filename + " has " + string}],
+                messages=[
+                    {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary."},
+                    {"role": "user", "content": "File " + filename + " has " + string}
+                ],
                 temperature=0,
                 max_tokens=256
             )
-            return response["choices"][0]["message"]['content']
+            return response["choices"][0]["message"]["content"]
+
         except Exception as e:
             userlogger.log(f"Encountered error: {e}")
             userlogger.log("Retrying in 20 seconds...")
             time.sleep(20)
+            attempt_count += 1
 
+    userlogger.log("Exceeded maximum retry attempts.")
+    return None
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
     full_file_path = os.path.join("../user", email, repo_name, filepath)
@@ -89,7 +96,7 @@ def train_AI(repo_name, userlogger, email):
             print(p)
             userlogger.log(p)
             if rate > int(chat_limit):
-                delay = delay + 0.2
+                delay = delay + 0.3
                 # print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
             if rate < 0.9 * int(chat_limit):
                 delay = delay * 0.8

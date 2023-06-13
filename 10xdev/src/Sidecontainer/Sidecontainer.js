@@ -11,15 +11,15 @@ const Sidecontainer = (props) => {
 
   const renderUpdated = () => {
     return (
-      <>
+      <div style={{ marginBottom:'120px' }}>
         {props.referenced_code && props.referenced_code.map((block, index) => {
           const lines = block.split('\n');
           const firstLine = lines[0];
           return (
-            <div key={index} style={{ marginTop: '10px', margin: "15px" }}>
+            <div key={index} style={{ marginTop: '10px', margin: "15px"}}>
               <div className="filename" style={{ margin: "2px" }}>{firstLine}</div>
               <CopyBlock
-                style={{ overflowX: 'hidden' }}
+                style={{ overflowX: 'hidden', marginBottom: "50px",paddingBottom: "50px"}}
                 text={block.replace(/^.+\n/, '')}
                 language="jsx"
                 showLineNumbers={true}
@@ -30,7 +30,7 @@ const Sidecontainer = (props) => {
             </div>
           );
         })}
-      </>
+      </div>
     );
   }
 
@@ -46,7 +46,7 @@ const Sidecontainer = (props) => {
         toggleSideContaine();}}>
           ⏩
         </button>
-        <div style={{ textAlign: 'start', fontSize: '12px' }}>
+        <div style={{ textAlign: 'start', fontSize: '12px'}}>
           {renderUpdated()}
         </div>
       </div>
