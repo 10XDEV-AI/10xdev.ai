@@ -19,7 +19,9 @@ def AskGPT(email, model="gpt-3.5-turbo", system_message="", prompt="Hi", tempera
         return response["choices"][0]["message"]['content']
     except Exception as e:
         print(f"Encountered error: {e}")
-        if retrys > 0:
+        if retrys >= 0:
             print("Retrying in %f seconds...",delay)
             time.sleep(delay)
-            return AskGPT(model, system_message, prompt, temperature, max_tokens, retrys - 1, delay)
+            return AskGPT(email, model, system_message, prompt, temperature, max_tokens, retrys - 1, delay)
+        else:
+            return "Sorry, there was an error. Please try again later."

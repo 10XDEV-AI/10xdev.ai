@@ -17,7 +17,7 @@ def split_sent(s1):
     return result
 
 
-def get_embedding(task, userid):
+def get_embedding(task, userid, retrys=3):
     openai.api_key = get_key(userid)
     chat_limit, embedding_limit = get_rates(userid).split(",")
     global MAX_BATCH_SIZE, RATE_LIMIT
@@ -34,7 +34,9 @@ def get_embedding(task, userid):
         print(f"Error: {e}")
         print("Retrying")
         time.sleep(60 / RATE_LIMIT)
-        return get_embedding(task,userid)  # Retry after 5 second s
+        if  retrys <= 0:
+            return None
+        return get_embedding(task,userid, retrys-1)  # Retry after 5 second s
 
 
 def process_batch(batch, results_queue, userid):

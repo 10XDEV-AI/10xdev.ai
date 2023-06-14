@@ -54,7 +54,7 @@ function Sync() {
     syncData();
 
     // call syncData every 60 seconds
-    const intervalId = setInterval(syncData, 600000);
+    const intervalId = setInterval(syncData, 6000000);
 
     // cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
