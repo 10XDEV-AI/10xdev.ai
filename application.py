@@ -190,7 +190,9 @@ def setkey():
 @application.route('/api/getKey', methods=['GET'])
 def getkey():
     email = getattr(g, 'email', None)
-    return jsonify(get_key(email))
+    key = get_key(email)
+    key = key.replace(key[5:15], "*" * 10)
+    return jsonify(key)
 
 
 @application.route('/api/deleteKey', methods=['GET'])
