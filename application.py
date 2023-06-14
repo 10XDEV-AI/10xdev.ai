@@ -185,7 +185,8 @@ def setkey():
 def getkey():
     email = getattr(g, 'email', None)
     key = get_key(email)
-    key = key.replace(key[5:15], "*" * 10)
+    if key.strip() != "":
+        key = key.replace(key[5:15], "*" * 10)
     return jsonify(key)
 
 
