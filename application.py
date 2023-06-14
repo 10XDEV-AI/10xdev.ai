@@ -10,13 +10,14 @@ from utilities.rates import set_rates, get_rates
 from utilities.clone_repo import get_clones, get_branches, select_branch
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
+from utilities.FilesToAnalyzedata import FilesToAnalyzedata
 from syncAI import syncAI
 import os, threading
 
 application = Flask(__name__, static_folder='./10xdev/build/static', template_folder='./10xdev/build')
 application.secret_key = os.urandom(24)
 user_loggers = {}  # Dictionary to store UserLogger instances
-
+ 
 @application.before_request
 def before_request():
     session.permanent = True
@@ -122,6 +123,15 @@ def get_AIIgnore():
     print(len(files2analyse))
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
+@application.route('/api/FilesToAnalyzedata', methods=['GET'])
+def get_FilesToAnalyze():
+    email = getattr(g, 'email', None)
+    user_logger = getattr(g, 'user_loggers', None)[email]
+    path = request.args.get('path')
+    files2analyze = FilesToAnalyzedata(email,user_logger,path)
+    return jsonify({"files2analyze": files2analyze})
+
+
 @application.route('/api/saveFilesToIgnore', methods=['POST'])
 def save_files_to_ignore():
     email = getattr(g, 'email', None)
@@ -174,7 +184,9 @@ def setkey():
 @application.route('/api/getKey', methods=['GET'])
 def getkey():
     email = getattr(g, 'email', None)
-    return jsonify(get_key(email))
+    key = get_key(email)
+    key = key.replace(key[5:15], "*" * 10)
+    return jsonify(key)
 
 
 @application.route('/api/deleteKey', methods=['GET'])
