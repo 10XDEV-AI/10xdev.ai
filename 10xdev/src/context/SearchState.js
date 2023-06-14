@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchContext from './SearchContext';
 import Cookies from 'js-cookie';
+import { callAPI } from '../api';
 
 const SearchState = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,14 +28,15 @@ const SearchState = ({ children }) => {
           setIsLoading(true);
           const code = Cookies.get('cognitoCode');
 
-          if (code) {
-            const response = await fetch(`/api/data?prompt=${searchTerm}`, {
+          if (code && searchTerm.length > 0) {
+            const data = await callAPI(`/api/data?prompt=${searchTerm}`, {
+              method: "POST",
               headers: {
                 Authorization: `Bearer ${code}`,
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({}),
             });
-            const data = await response.json();
             setFiles(data.files);
             setResults(data.response);
             setreferenced_code(data.referenced_code);
@@ -44,6 +46,7 @@ const SearchState = ({ children }) => {
           setIsLoading(false);
           console.error(error);
         }
+
       };
 
     getResults();
