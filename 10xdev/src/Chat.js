@@ -25,9 +25,6 @@ export const Chat = () => {
     try {
       const data = await callAPI(`/api/data?prompt=${input}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ chatMessages }),
       });
       console.log(data);
@@ -65,9 +62,6 @@ export const Chat = () => {
     try {
       const data = await callAPI(`/api/data?prompt=${input}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) }),
       });
       console.log(data);

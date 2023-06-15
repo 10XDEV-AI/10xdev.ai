@@ -31,10 +31,6 @@ const SearchState = ({ children }) => {
           if (code && searchTerm.length > 0) {
             const data = await callAPI(`/api/data?prompt=${searchTerm}`, {
               method: "POST",
-              headers: {
-                Authorization: `Bearer ${code}`,
-                "Content-Type": "application/json",
-              },
               body: JSON.stringify({}),
             });
             setFiles(data.files);
