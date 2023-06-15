@@ -33,8 +33,8 @@ function LogViewer() {
   const splitRows = (logs) => {
     const lines = logs.split('\n');
     const result = lines.map((line) => {
-      if (line.length > 200) {
-        const chunks = line.match(/.{1,200}/g); // split line into chunks of 200 characters
+      if (line.length > 100) {
+        const chunks = line.match(/.{1,100}/g); // split line into chunks of 200 characters
         return chunks.join('\n');
       }
       return line;

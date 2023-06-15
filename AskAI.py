@@ -108,7 +108,7 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
             previous_search_results.append(search_results)
             previous_files.append(files)  # Use extend to add all files in the list
 
-        history_prompt = ""
+        history_prompt = "Here is a conversation between a human and an AI code assistant\n-------\n"
 
         # Add previous user prompts, AI responses, and file references to the consolidated prompt
         for i, user_prompt in enumerate(previous_user_prompts):
@@ -122,9 +122,13 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
             history_prompt += "------\n"
 
         # Add the current prompt to the consolidated prompt
-        history_prompt += f"User prompt {len(previous_user_prompts) + 1}: {current_prompt}\n-----\n"
+        history_prompt += f"Current user prompt : {current_prompt}\n-----\n"
 
-        history_prompt += f"Task for you : Come up with a consolidated prompt to best answer user prompt {len(previous_user_prompts) + 1}. Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the user query"
+        history_prompt_old = f"Task for you : Come up with a consolidated prompt to best answer user prompt {len(previous_user_prompts) + 1}. Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the user query"
+
+        history_prompt += f"Task for you : \n" \
+                            f"1. Return 'Context': This should include exact code blocks and parts of conversation history exactly as they are, to best answer the Current user prompt.\n"\
+                            f"2. Return a consolidated user prompt:  to best answer current user prompt . Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the consolidated user prompt "
         return history_prompt.strip()
 
     return ""
