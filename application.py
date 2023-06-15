@@ -105,20 +105,14 @@ def get_syncAI():
         message, files = syncAI(False, user_logger, email)
     return jsonify({"message": message, "files": files})
 
-
-@application.route('/api/data', methods=['GET'])
+@application.route('/api/data', methods=['POST', 'GET'])
 def get_data():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     prompt = request.args.get('prompt')
-    if prompt == "":
-        return jsonify({"files": [], "response": "", "referenced_code": ""})
-
-    response = Ask_AI(prompt, user_logger, email)
-
-    return jsonify(
-        {"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
-
+    chat_messages = request.json.get('chatMessages')
+    response = Ask_AI(prompt, user_logger, email, chat_messages)
+    return jsonify( {"files": response["files"], "response": response["response"], "referenced_code": response["referenced_code"]})
 
 @application.route('/api/Ignore', methods=['GET'])
 def get_AIIgnore():
@@ -190,7 +184,10 @@ def setkey():
 @application.route('/api/getKey', methods=['GET'])
 def getkey():
     email = getattr(g, 'email', None)
-    return jsonify(get_key(email))
+    key = get_key(email)
+    if key.strip() != "":
+        key = key.replace(key[5:15], "*" * 10)
+    return jsonify(key)
 
 
 @application.route('/api/deleteKey', methods=['GET'])

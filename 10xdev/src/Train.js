@@ -204,14 +204,11 @@ const Train = () => {
                     ):
                     (
                         <div className="ignorecontainer">
-                            <div className="ignoretips" style={{
-                              marginTop: '10px',
-                              marginLeft: '10%',
-                              width: '35%',
-                            }}>
-                            <h2>All Files</h2>
-                            <FilesTree data={Treedata} />
-                            
+                            <div className="ignorebox1" >
+                             <div className="ignoretext">
+                                <h2>All Files</h2>
+                                <FilesTree data={Treedata} />
+                             </div>
                             </div>
                             <div className="ignorebox2">
                             <div className="ignoretext">

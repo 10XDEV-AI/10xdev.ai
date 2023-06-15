@@ -13,8 +13,9 @@ function LogViewer() {
 
         if (Array.isArray(response)) {
           let result = response.join(',\n');
-          result = result.replace(/,/g, ''); // add newline after each comma
+          result = result.replace(/,/g, ''); // remove commas
           result = result.replace(/"/g, ''); // remove double quotes
+          result = splitRows(result); // split rows longer than 200 characters
           setLogs(result);
         } else {
           console.error('Invalid response format or missing body property');
@@ -28,6 +29,18 @@ function LogViewer() {
 
     return () => clearInterval(interval);
   }, []);
+
+  const splitRows = (logs) => {
+    const lines = logs.split('\n');
+    const result = lines.map((line) => {
+      if (line.length > 100) {
+        const chunks = line.match(/.{1,100}/g); // split line into chunks of 200 characters
+        return chunks.join('\n');
+      }
+      return line;
+    });
+    return result.join('\n');
+  };
 
   return (
     <div className="logs">
