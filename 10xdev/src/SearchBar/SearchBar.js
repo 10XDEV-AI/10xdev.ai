@@ -15,18 +15,15 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="flex w-full">
-      <div className="flex items-center pl-7 pr-2 rounded-md bg-white w-3/5 ml-56 mr-24">
+      <div className="flex items-center pl-7 pr-2 rounded-md bg-white flex-1 ml-[25%] mr-[10%]">
         <input
-          className="w-full text-base bg-white rounded-md border-none outline-none mr-2"
+          className="flex-1 text-base bg-white rounded-md border-none outline-none mr-2"
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         />
-        <button
-          className="text-2xl bg-white"
-          onClick={handleClick}
-        >
+        <button className="text-2xl bg-white" onClick={handleClick}>
           🔍
         </button>
       </div>
