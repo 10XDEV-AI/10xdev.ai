@@ -92,6 +92,8 @@ def get_referenced_code(path, files):
 
 def consolidate_prompt_creation(chatmessages, current_prompt):
     if chatmessages is not None:
+        if len(chatmessages) == 0:
+            return ""
         previous_user_prompts = []
         previous_search_results = []
         previous_files = []
