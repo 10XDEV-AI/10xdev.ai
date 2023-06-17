@@ -24,7 +24,7 @@ def filter_functions(result_string, code_query, filepaths, email):
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
 
-    response_functions = AskGPT(email, model="gpt-3.5-turbo", system_message="", prompt=filter_prompt, temperature=0,
+    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0,
                                 max_tokens=200)
 
     files = []
@@ -171,7 +171,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
                 final_contents = re.sub(r'\s+', ' ', final_contents)
                 estimated_tokens += tokenCount(final_contents)
 
-    if estimated_tokens > 3000:
+    if estimated_tokens > 15000:
         for file in files:
             final_prompt += "\nFile path " + file + ":\n"
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
@@ -196,13 +196,17 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     final_prompt += "\n" + prompt
     # print(final_prompt)
     tokens = tokenCount(final_prompt)
-    max_t = 4000 - tokens
+    if tokens > 3000:
+        max_t = 16000-tokens
+    else:
+        max_t = 4096-tokens
+
     userlogger.log("Total Tokens in the query: " + str(tokens))
     print("Total Tokens in the query: " + str(tokens))
 
     userlogger.log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
-    FinalAnswer = AskGPT(email=email, model="gpt-3.5-turbo", system_message=system_message, prompt=final_prompt,
+    FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
                          temperature=0.7, max_tokens=max_t)
 
     userlogger.clear_logs()
