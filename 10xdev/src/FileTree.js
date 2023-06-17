@@ -9,6 +9,11 @@ function DirectoryTreeView(props) {
   console.log(props.data);
   const data = flattenTree(props.data);
 
+  const calculateIndentation = (level) => {
+    const percentage = 5 * (level - 1);
+    return `${percentage}%`;
+  };
+
   return (
     <div>
       <div className="p-4 bg-white font-mono text-base text-gray-800 select-none rounded-md">
@@ -16,7 +21,7 @@ function DirectoryTreeView(props) {
           data={data}
           aria-label="directory tree"
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
-            <div {...getNodeProps()} className={`pl-${20 * (level - 1)}`}>
+            <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
               {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
               {element.name}
             </div>

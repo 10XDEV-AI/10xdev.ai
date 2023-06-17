@@ -7,36 +7,32 @@ import Cookies from 'js-cookie';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
 import DropDownButton from './DropDownButton/DropDownButton';
 import Typewriter from 'typewriter-effect';
+import LoadingRing from "./Loader/Loader";
 
 export const Welcome = () => {
-  const { setSearchTerm } = useContext(SearchContext);
+  const { setSearchTerm,isLoading, setIsLoading} = useContext(SearchContext);
   const [input, setInput] = useState('');
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();   //for redirecting to search page
 
   useEffect(() => {
     const fetchData = async () => {
-      // Extract the code from the URL
-      console.log("Fetching data")
-      const urlParams = new URLSearchParams(window.location.hash.substring(1));
-      console.log("got the url")
-      const code = urlParams.get('access_token');
-
-      if (code) {
-        // Store the code in an HTTP-only cookie
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        const code = urlParams.get('access_token');
+        if (code) {
         Cookies.set('cognitoCode', code, { path: '/', secure: true, sameSite: 'strict' });
         console.log("Got the code")
         try {
-          // Make an API call to the backend
+            setIsLoading(true);
           await callAPI(`/api/login`, {
             method: 'GET',
           });
           window.history.replaceState({}, document.title, window.location.pathname);
-          window.location.reload();
         } catch (error) {
           // Handle the error
         }
       }
+        setIsLoading(false);
     };
 
     fetchData();
@@ -89,53 +85,60 @@ export const Welcome = () => {
   const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
 
   return (
-    <div className='container'>
-      <div className="logoContainer">
-        10XDEV.AI
-      </div>
-      <div className="bottomText">
-        🦾Train AI on code  ❓ Explain Code  ⚠️ Fix Bugs   🔬 Create Testcases   📖  Write Documentation  🕹️Generate commands ＆ More 🪄
-      </div>
-      <div className='welcomesearchrow'>
-        <div className="searchbarcol" onChange={handleInputChange}>
-          {typingStarted ? null : (
-            <Typewriter
-              options={{
-                strings: shuffledStrings,
-                autoStart: true,
-                loop: true,
-                cursor: '',
-                delay: 50,
-              }}
-              onInit={(typewriter) => {
-                typewriter.pauseFor(2000).start();
-              }}
-            />
-          )}
-          <textarea
-            className="mainsearchinput resize-none"
-            value={input}
-            placeholder=""
-            onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
-            onChange={handleInputChange} // Keep the onChange handler for input changes
-          />
-
-        </div>
-
-        <div className="gobuttoncol flex items-end">
-            <button className="GoButton mb-2" onClick={search}>
-              🔍
-            </button>
-          </div>
-      </div>
-      <div className="projectinfo">
-        <ProjectInfo />
-      </div>
-      <div className="userProfileContainer">
-        <DropDownButton/>
-      </div>
+    <div>
+    <>
+            {isLoading ? (
+              <LoadingRing />
+            ) : (
+              <div className='container'>
+                <div className="logoContainer">
+                  10XDEV.AI
+                </div>
+                <div className="bottomText">
+                  🦾Train AI on code  ❓ Explain Code  ⚠️ Fix Bugs   🔬 Create Testcases   📖  Write Documentation  🕹️Generate commands ＆ More 🪄
+                </div>
+                <div className='welcomesearchrow'>
+                  <div className="searchbarcol" onChange={handleInputChange}>
+                    {typingStarted ? null : (
+                      <Typewriter
+                        options={{
+                          strings: shuffledStrings,
+                          autoStart: true,
+                          loop: true,
+                          cursor: '',
+                          delay: 50,
+                        }}
+                        onInit={(typewriter) => {
+                          typewriter.pauseFor(2000).start();
+                        }}
+                      />
+                    )}
+                    <textarea
+                      className="mainsearchinput resize-none"
+                      value={input}
+                      placeholder=""
+                      onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
+                      onChange={handleInputChange} // Keep the onChange handler for input changes
+                    />
+                  </div>
+                  <div className="gobuttoncol flex items-end">
+                    <button className="GoButton mb-2" onClick={search}>
+                      🔍
+                    </button>
+                  </div>
+                </div>
+                <div className="projectinfo">
+                  <ProjectInfo />
+                </div>
+                <div className="userProfileContainer">
+                  <DropDownButton/>
+                </div>
+              </div>
+            )}
+          </>
     </div>
-  );
+    )
 }
+
 
 export default Welcome;

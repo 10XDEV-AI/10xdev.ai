@@ -18,10 +18,10 @@ const LandingPage = () => {
     <div>
     <body>
     <header class="fixed w-full">
-        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
+        <nav class="bg-gray-50 border-gray-200 py-2.5 dark:bg-gray-900">
             <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
                <button class="flex items-center">
-                   <span class="self-center text-4xl font-extrabold italic whitespace-nowrap dark:text-blue-500">10XDEV.AI</span>
+                   <span class="self-center text-4xl font-extrabold italic whitespace-nowrap text-blue-500">10XDEV.AI</span>
                </button>
 
                 <div class="flex items-center lg:order-2">
