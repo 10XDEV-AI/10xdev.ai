@@ -20,60 +20,60 @@ const ResponseContainer = ({
       }
     }
     const mapped_blocks = blocks.map((block, index) => {
-      if (flag === 0) {
-        if (index % 2 === 0) {
-          return (
-            <div key={index}>
-              {block.split("\n").map((sentence, i) => (
-                <p key={i}>{sentence}</p>
-              ))}
-            </div>
-          );
+        if (flag === 0) {
+          if (index % 2 === 0) {
+            return (
+              <div key={index}>
+                {block.split("\n").map((sentence, i) => (
+                  <p key={i} className="mb-4">{sentence}</p>
+                ))}
+              </div>
+            );
+          } else {
+            return (
+              <div key={index}>
+                <CopyBlock
+                  text={block}
+                  language="jsx"
+                  showLineNumbers={true}
+                  startingLineNumber={1}
+                  theme={dracula}
+                  codeBlock
+                />
+              </div>
+            );
+          }
         } else {
-          return (
-            <div key={index}>
-              <CopyBlock
-                text={block}
-                language="jsx"
-                showLineNumbers={true}
-                startingLineNumber={1}
-                theme={dracula}
-                codeBlock
-              />
-            </div>
-          );
+          if (index % 2 === 0) {
+            return (
+              <div key={index}>
+                <CopyBlock
+                  text={block}
+                  language="jsx"
+                  showLineNumbers={true}
+                  startingLineNumber={1}
+                  theme={dracula}
+                  codeBlock
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={index}>
+                {block.split("\n").map((sentence, i) => (
+                  <p key={i} className="mb-4">{sentence}</p>
+                ))}
+              </div>
+            );
+          }
         }
-      } else {
-        if (index % 2 === 0) {
-          return (
-            <div key={index}>
-              <CopyBlock
-                text={block}
-                language="jsx"
-                showLineNumbers={true}
-                startingLineNumber={1}
-                theme={dracula}
-                codeBlock
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div key={index}>
-              {block.split("\n").map((sentence, i) => (
-                <p key={i}>{sentence}</p>
-              ))}
-            </div>
-          );
-        }
-      }
-    });
+      });
 
     return mapped_blocks;
   }
 
   return (
-    <div className={`ResponseContainer `}>
+    <div className={"ResponseContainer max-w-full"}>
       <div className={`responsePicContainer }`}>
         <b> AI </b>
       </div>

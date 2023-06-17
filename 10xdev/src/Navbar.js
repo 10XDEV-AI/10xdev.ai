@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 function Navbar({LoadProjectInfo, LoadSync}) {
   return (
-    <nav>
+    <nav className="navbar-chat">
       <div className="logo">
         <Link to="/welcome">
           10XDEV.AI

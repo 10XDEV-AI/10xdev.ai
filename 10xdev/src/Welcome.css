@@ -1,35 +1,32 @@
 
-
 .container{
 width: 100%;
 }
-.logoContainer{
-    width: 100%;
-    position: absolute;
-    top: 25%;
-    text-align: center;
-    font-size: 90px;
-    font-family: "Roboto", Helvetica;
-    font-style: italic;
-    font-weight: 700;
-    color:#2455C5;
+
+.logoContainer {
+  width: 100%;
+  position: absolute;
+  top: 15%;
+  text-align: center;
+  font-family: "Roboto", Helvetica;
+  font-style: italic;
+  font-weight: 700;
+  color: #2455C5;
+  margin-bottom: 30px;
+  font-size: 60px;
 }
 
-@media only screen and (max-width: 768px) {
-  .logoContainer {
-    font-size: 70px;
-  }
-}
 
-.welcomesearchrow{
-display: flex;
-position:absolute;
-top: 50%;
-width:60%;
-margin-left:20%;
-margin-right:20%;
-border-radius: 30px;
-border: 1px solid #D3D3D3;
+.welcomesearchrow {
+  display: flex;
+  position: absolute;
+  top: 30%; /* Adjust the value to position the form as desired */
+  width: 60%;
+  height: 30vh; /* Set the height to 20% of the viewport height */
+  margin-left: 20%;
+  margin-right: 20%;
+  border-radius: 10px;
+  border: 1px solid #D3D3D3;
 }
 
 .welcomesearchrow:focus-within{
@@ -51,6 +48,7 @@ width: 100%;
 position: absolute;
 top:70%;
 text-align: center;
+font-size: 15px;
 font-size: 15px;
 font-family: "Roboto", Helvetica;
 }
@@ -78,25 +76,28 @@ white-space: pre;
 }
 
 .mainsearchinput {
-   padding-left: 10px;
-   width: 100%;
-   height:30px;
-   font-size: 16px;
-   background: none;
-   outline: none;
-   border: none;
-   border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  background: none;
+  outline: none;
+  border: none;
+  border-radius: 6px;
 }
 
+
 .mainsearchinput::placeholder {
-  text-align: center;
+  text-align: center; /* Align the placeholder text to the center */
+  vertical-align: middle; /* Align vertically within the text box */
+  line-height: 30px; /* Set the line height equal to the height of the text box */
 }
+
 
 .searchbarcol{
 display: flex;
 flex-direction: column;
 width: 100%;
-padding: 5px;
+padding: 20px;
 }
 
 .gobuttoncol{
@@ -111,7 +112,6 @@ flex-direction: column;
 }
 
 .GoButton {
-  justify-content: center;
   border: none;
   background: #FFFFFF;
   font-size: 20px;

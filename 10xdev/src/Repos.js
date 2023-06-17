@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback ,useContext} from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
 import './Repos.css';
@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import { callAPI } from './api';
 
 export default function Repos() {
-  const {setPath} = useContext(SearchContext);
+  const { setPath } = useContext(SearchContext);
   const navigate = useNavigate();
   const [repos, setRepos] = useState([]);
 
@@ -16,55 +16,54 @@ export default function Repos() {
       .catch(error => console.error(error));
   }, []);
 
-    const handleDelete = useCallback(async (Directory) => {
-      try {
-        const response = await callAPI(`/api/Repos/${Directory}`, {
-          method: 'DELETE',
-        });
-        console.log(response);
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
-    }, []);
+  const handleDelete = useCallback(async (Directory) => {
+    try {
+      const response = await callAPI(`/api/Repos/${Directory}`, {
+        method: 'DELETE',
+      });
+      console.log(response);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
-    const handleSelect = useCallback(async (Directory) => {
-      try {
-        await callAPI(`/api/SelectRepo?Directory=${Directory}`, {
-          method: 'GET',
-        });
-        navigate('/welcome');
-      } catch (error) {
-        console.error(error);
-      }
-    }, [navigate]);
-
+  const handleSelect = useCallback(async (Directory) => {
+    try {
+      await callAPI(`/api/SelectRepo?Directory=${Directory}`, {
+        method: 'GET',
+      });
+      navigate('/welcome');
+    } catch (error) {
+      console.error(error);
+    }
+  }, [navigate]);
 
   const handleTrain = useCallback(async (Directory) => {
     setPath(Directory);
     navigate('/train');
-  }, [navigate,setPath]);
+  }, [navigate, setPath]);
 
-  const handleChangeBranch = useCallback(async(Directory) => {
+  const handleChangeBranch = useCallback(async (Directory) => {
     setPath(Directory);
     navigate('/branch');
-  }, [navigate,setPath]);
+  }, [navigate, setPath]);
 
   const handleFiles = useCallback(async (Directory) => {
     setPath(Directory);
     navigate('/train');
-  }, [navigate,setPath]);
+  }, [navigate, setPath]);
 
   return (
     <div>
-      <Navbar  LoadSync="True"  LoadProjectInfo = "True"/>
+      <Navbar LoadSync="True" LoadProjectInfo="True" />
       <div className="repos-container">
-        <h1 className="repos-title">Repositories Trained</h1>
+        <h1 className="repos-title font-bold">Repositories Trained</h1>
         <div className="repos-cards">
           {repos.map(repo => (
             <div className="repo-card" key={repo.Directory}>
               <div className="repo-card-info">
-                <h2>{repo.Directory}</h2>
+                <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
                 <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} 🖋️</button>
                 </p>
