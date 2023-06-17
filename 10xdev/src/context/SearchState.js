@@ -25,10 +25,12 @@ const SearchState = ({ children }) => {
     useEffect(() => {
       const getResults = async () => {
         try {
-          setIsLoading(true);
+
           const code = Cookies.get('cognitoCode');
 
           if (code && searchTerm.length > 0) {
+            setIsLoading(true);
+            console.log("is loading set true by context provider", isLoading)
             const data = await callAPI(`/api/data?prompt=${searchTerm}`, {
               method: "POST",
               body: JSON.stringify({}),
