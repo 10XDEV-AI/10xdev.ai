@@ -20,7 +20,7 @@ def summarize_str(filename, string, email, userlogger):
                     {"role": "user", "content": "File " + filename + " has " + string}
                 ],
                 temperature=0,
-                max_tokens=256
+                max_tokens=380,
             )
             return response["choices"][0]["message"]["content"]
 
@@ -91,7 +91,7 @@ def train_AI(repo_name, userlogger, email):
         if i != 0:
             rate = 60 * i / (time.time() - start_time)
             time_elapsed = time.time() - start_time
-            p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate: " + str(
+            p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate:
                 round(rate, 2)) + " requests/min. Time Elapsed: " + str(round(time_elapsed / 60, 2)))
             print(p)
             userlogger.log(p)

@@ -126,11 +126,13 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
         # Add the current prompt to the consolidated prompt
         history_prompt += f"Current user prompt : {current_prompt}\n-----\n"
 
-        history_prompt_old = f"Task for you : Come up with a consolidated prompt to best answer user prompt {len(previous_user_prompts) + 1}. Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the user query"
+        history_prompt_old_1 = f"Task for you : Come up with a consolidated prompt to best answer user prompt {len(previous_user_prompts) + 1}. Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the user query"
 
-        history_prompt += f"Task for you : \n" \
+        history_prompt_old_2 = f"Task for you : \n" \
                             f"1. Return 'Context': This should include exact code blocks and parts of conversation history exactly as they are, to best answer the Current user prompt.\n"\
                             f"2. Return a consolidated user prompt:  to best answer current user prompt . Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the consolidated user prompt "
+
+
         return history_prompt.strip()
 
     return ""
@@ -140,7 +142,7 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
 def Ask_AI(prompt, userlogger, email, chatmessages):
     consolidated_prompt = consolidate_prompt_creation(chatmessages, prompt)
     if consolidated_prompt:
-        prompt = AskGPT(email, model="gpt-3.5-turbo", system_message="", prompt=consolidated_prompt, temperature=0,max_tokens=2000)
+        prompt = consolidated_prompt
         userlogger.log(prompt)
 
     global fs
@@ -189,7 +191,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents
 
-    system_message = "Act like you are a coding assistant with access to the codebase."
+    system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
 
     final_prompt += "\n" + prompt
     # print(final_prompt)
