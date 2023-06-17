@@ -26,11 +26,11 @@ def process_file(root, filename, path, user_logger):
     except UnicodeDecodeError:
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
 
-    if len(re.split(r'[.,;\n\s]+', file_contents)) > 4096:
+    if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": '⚠️'}
     else:
         token_count = tokenCount(file_contents)
-        tick_or_cross = '✅' if token_count < 4096 else '⚠️'
+        tick_or_cross = '✅' if token_count < 15000 else '⚠️'
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": token_count, "Sign": tick_or_cross}
 
 

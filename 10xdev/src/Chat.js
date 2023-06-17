@@ -59,6 +59,7 @@ export const Chat = () => {
     console.log("searching for");
     console.log(input);
     setIsLoading(true);
+    setSideContainerOpen(false);
     try {
       const data = await callAPI(`/api/data?prompt=${input}`, {
         method: "POST",

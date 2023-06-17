@@ -10,17 +10,21 @@ def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
     max_attempts = 3
     attempt_count = 0
+    if tokenCount(str(string)) > 3500:
+        model = "gpt-3.5-turbo-16k"
+    else:
+        model = "gpt-3.5-turbo"
 
     while attempt_count < max_attempts:
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model=model,
                 messages=[
                     {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary."},
                     {"role": "user", "content": "File " + filename + " has " + string}
                 ],
                 temperature=0,
-                max_tokens=256
+                max_tokens=380,
             )
             return response["choices"][0]["message"]["content"]
 
@@ -51,7 +55,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
             userlogger.log(p)
             return i, "Ignore"
 
-    if tokenCount(file_contents) > 3400:
+    if tokenCount(file_contents) > 15000:
         p = ("File " + filepath + " was not analyzed as it is too long")
         userlogger.log(p)
 
@@ -91,8 +95,7 @@ def train_AI(repo_name, userlogger, email):
         if i != 0:
             rate = 60 * i / (time.time() - start_time)
             time_elapsed = time.time() - start_time
-            p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate: " + str(
-                round(rate, 2)) + " requests/min. Time Elapsed: " + str(round(time_elapsed / 60, 2)))
+            p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate:"+ str(round(rate, 2)) + " requests/min. Time Elapsed: " + str(round(time_elapsed / 60, 2)))
             print(p)
             userlogger.log(p)
             if rate > int(chat_limit):

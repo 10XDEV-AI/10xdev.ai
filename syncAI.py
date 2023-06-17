@@ -17,8 +17,7 @@ def get_diff(old_file_path, new_file_path):
 def summarize_str(filename, file_contents, userid):
     prompt = "File " + filename + " has " + file_contents
     system_message = "Summarize what this file in the codebase does, assume context when neccessary."
-    return AskGPT(userid, model="gpt-3.5-turbo", system_message=system_message, prompt=prompt, temperature=0,
-                  max_tokens=256)
+    return AskGPT(userid, system_message=system_message, prompt=prompt, temperature=0,max_tokens=380)
 
 
 def sumarize(filename, userid):
