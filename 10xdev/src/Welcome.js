@@ -120,70 +120,90 @@ export const Welcome = () => {
       console.log(error);
     }
   };
+
   return (
     <div className="flex flex-wrap">
-      <div className="w-1/2 p-4 pt-[6%]">
+      <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
         <div className="flex items-center text-blue-900 justify-center py-2">
           <h1 className="text-2xl">
             <ProjectInfo />
           </h1>
-          <button className="bg-blue-500 text-white px-4 rounded ml-auto">
-            Change Repo
+          <button className="px-4 rounded ml-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+            </svg>
           </button>
         </div>
-        <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden">
-            <h2 className="text-xl font-bold mb-2">
-              Codebase:
-            </h2>
-            <FileTree data={treeData} />
-          </div>
-      </div>
-
-          <div className="shadow-xl w-1/2 h-screen">
-            <div className="text-centre">
-              <div className="text-6xl font-bold italic text-blue-900 mt-[10%] mb-4 text-center">
-                10XDEV.AI
-              </div>
-
-              <div className="p-4">
-                <div className="text-xl font-bold mt-2 mb-4">Describe a task, query, or a bug:</div>
-                <div className="border border-gray-400 rounded-lg">
-                  <div className="flex text-sm p-1">
-                    {typingStarted ? null : (
-                      <Typewriter
-                        options={{
-                          strings: shuffledStrings,
-                          autoStart: true,
-                          loop: true,
-                          cursor: '',
-                          delay: 50,
-                        }}
-                        onInit={(typewriter) => {
-                          typewriter.pauseFor(2000).start();
-                        }}
-                      />
-                    )}
-                    <textarea
-                      className="resize-none flex-grow m-2 h-[50vh]"
-                      value={input}
-                      placeholder=""
-                      onClick={() => setTypingStarted(true)}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-end justify-end">
-                  <button className="bg-blue-500 text-white mt-3 py-1 px-4 rounded" onClick={search}>Go</button>
-                </div>
-              </div>
-              <div className="absolute top-3 right-2">
-                <DropDownButton />
-              </div>
-            </div>
+        <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden shadow-md">
+          <h2 className="text-xl font-bold mb-2">Codebase:</h2>
+          <div className="bg-white h-[50vh] overflow-y-auto rounded-lg">
+          <FileTree data={treeData} />
           </div>
         </div>
-      );
-    };
+        <div className="flex items-center text-blue-900 justify-center py-5">
+          <div className="">
+              <h1 className="font-bold">
+                Last synced : {new Date().toLocaleString()}
+              </h1>
+              <h1 className="font-bold ml-auto">
+                Latest commit : #e3o4u3o
+              </h1>
+          </div>
+          <button className="bg-blue-900 text-white p-2 rounded ml-auto">
+            Sync Now
+          </button>
+        </div>
+      </div>
 
-    export default Welcome;
+      <div className="shadow-xl w-1/2 h-screen p-6">
+        <div className="text-centre">
+          <div className="text-6xl font-bold italic text-blue-900 mt-[7%] mb-[5%] text-center">
+            10XDEV.AI
+          </div>
+
+          <div className="">
+            <div className="text-xl font-bold mt-6 mb-3">Describe a task, query, or a bug:</div>
+            <div className="border border-gray-400 rounded-lg shadow-md">
+              <div className="flex text-base pt-2 pl-2">
+                {typingStarted ? null : (
+                  <Typewriter
+                    options={{
+                      strings: shuffledStrings,
+                      autoStart: true,
+                      loop: true,
+                      cursor: "",
+                      delay: 30,
+                    }}
+                    onInit={(typewriter) => {
+                      typewriter.pauseFor(1000).start();
+                    }}
+                  />
+                )}
+                <textarea
+                  className="flex-grow h-[50vh] m-3 focus:outline-none"
+                  value={input}
+                  placeholder=""
+                  onClick={() => setTypingStarted(true)}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-end justify-end">
+              <button className="bg-blue-900 text-white mt-3 py-1 px-4 rounded" onClick={search}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                  <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="absolute top-3 right-2">
+            <DropDownButton />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Welcome;

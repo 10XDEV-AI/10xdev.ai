@@ -14,11 +14,16 @@ function DirectoryTreeView(props) {
     return `${percentage}%`;
   };
 
+  const modifiedData = data.map((node) => ({
+    ...node,
+    defaultExpanded: true, // Set defaultExpanded to true for each node
+  }));
+
   return (
-    <div>
-      <div className="p-4 bg-white font-mono text-base text-gray-800 select-none rounded-md">
+    <div className="">
+      <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
         <TreeView
-          data={data}
+          data={modifiedData}
           aria-label="directory tree"
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
