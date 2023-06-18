@@ -119,26 +119,74 @@ export const Welcome = () => {
       console.log(error);
     }
   };
-return (
-  <div className="flex flex-wrap">
-    <div className="w-1/2 p-4 pt-[10%]">
-      <div className="flex items-center justify-center"> {/* Center the content */}
-        <h1 className="text-3xl text-blue-900 mb-4 font-bold">Files in this Project</h1> {/* Added font-bold */}
-        <button className="bg-blue-500 text-white px-4 rounded ml-auto"> {/* Use ml-auto to push the button to the left */}
-          Change Repo
-        </button>
+  return (
+    <div className="flex flex-wrap">
+      <div className="w-1/2 p-4 pt-[10%]">
+        <div className="flex items-center justify-center">
+          {/* Center the content */}
+          <h1 className="text-3xl text-blue-900 mb-4 font-bold">Files in this Project</h1>
+          {/* Added font-bold */}
+          <button className="bg-blue-500 text-white px-4 rounded ml-auto">
+            {/* Use ml-auto to push the button to the left */}
+            Change Repo
+          </button>
+        </div>
+        <div className="bg-blue-100 border border-dashed border-gray-400 p-4 rounded-lg">
+          <h2 className="text-xl">All Files</h2>
+          <FileTree data={treeData} />
+        </div>
       </div>
-      <div className="bg-blue-100 border border-dashed border-gray-400 p-4 rounded-lg">
-        <h2 className="text-xl">All Files</h2>
-        <FileTree data={treeData} />
-      </div>
-    </div>
 
-    <div className="w-1/2">
-      Yo
+      <div className="w-1/2">
+        <div className="">
+          <div className="text-4xl font-bold text-blue-900 mb-4">
+            10XDEV.AI
+          </div>
+          <div className="text-xl">
+            🦾Train AI on code ❓ Explain Code ⚠️ Fix Bugs 🔬 Create Testcases 📖 Write Documentation 🕹️Generate commands ＆ More 🪄
+          </div>
+          <div className="">
+            <div className="" onChange={handleInputChange}>
+              {typingStarted ? null : (
+                <Typewriter
+                  options={{
+                    strings: shuffledStrings,
+                    autoStart: true,
+                    loop: true,
+                    cursor: '',
+                    delay: 50,
+                  }}
+                  onInit={(typewriter) => {
+                    typewriter.pauseFor(2000).start();
+                  }}
+                />
+              )}
+              <textarea
+                className="resize-none"
+                value={input}
+                placeholder=""
+                onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
+                onChange={handleInputChange} // Keep the onChange handler for input changes
+              />
+            </div>
+            <div className=" flex items-end">
+              <button className="mb-2" onClick={search}>
+                🔍
+              </button>
+            </div>
+          </div>
+          <div className="">
+            <ProjectInfo />
+          </div>
+          <div className="">
+            <DropDownButton />
+          </div>
+        </div>
+      </div>
+
+
     </div>
-  </div>
-);
+  );
 };
 
 export default Welcome;
