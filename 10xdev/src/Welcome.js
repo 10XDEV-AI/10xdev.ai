@@ -122,69 +122,68 @@ export const Welcome = () => {
   };
   return (
     <div className="flex flex-wrap">
-      <div className="w-1/2 p-4 pt-[7%]">
-        <div className="flex items-center justify-center py-2">
-          <h1 className="text-xl">
+      <div className="w-1/2 p-4 pt-[6%]">
+        <div className="flex items-center text-blue-900 justify-center py-2">
+          <h1 className="text-2xl">
             <ProjectInfo />
           </h1>
           <button className="bg-blue-500 text-white px-4 rounded ml-auto">
             Change Repo
           </button>
         </div>
-        <div className="bg-sky-50 border border-gray-400 mt-12 p-4 rounded-lg h-[60vh]  overflow-y-auto">
-          <h2 className="text-base font-bold mb-2" >
-            Codebase :
-          </h2>
-          <FileTree data={treeData} />
-        </div>
-
+        <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden">
+            <h2 className="text-xl font-bold mb-2">
+              Codebase:
+            </h2>
+            <FileTree data={treeData} />
+          </div>
       </div>
 
-      <div className="shadow-xl  w-1/2 h-screen">
-        <div className="text-centre">
-          <div className="text-5xl font-bold italic text-blue-900 mt-[15%] mb-4 text-center">
-            10XDEV.AI
-          </div>
+          <div className="shadow-xl w-1/2 h-screen">
+            <div className="text-centre">
+              <div className="text-6xl font-bold italic text-blue-900 mt-[10%] mb-4 text-center">
+                10XDEV.AI
+              </div>
 
-          <div className="p-4">
-            <div className="text-xl font-bold mt-2 mb-4">Describe a task, query, or a bug :</div>
-            <div className="border border-gray-400 rounded-lg">
-              <div className="flex text-sm p-1">
-                {typingStarted ? null : (
-                  <Typewriter
-                    options={{
-                      strings: shuffledStrings,
-                      autoStart: true,
-                      loop: true,
-                      cursor: '',
-                      delay: 50,
-                    }}
-                    onInit={(typewriter) => {
-                      typewriter.pauseFor(2000).start();
-                    }}
-                  />
-                )}
-                <textarea
-                  className="resize-none flex-grow m-2 h-[40vh]"
-                  value={input}
-                  placeholder=""
-                  onClick={() => setTypingStarted(true)}
-                  onChange={handleInputChange}
-                />
+              <div className="p-4">
+                <div className="text-xl font-bold mt-2 mb-4">Describe a task, query, or a bug:</div>
+                <div className="border border-gray-400 rounded-lg">
+                  <div className="flex text-sm p-1">
+                    {typingStarted ? null : (
+                      <Typewriter
+                        options={{
+                          strings: shuffledStrings,
+                          autoStart: true,
+                          loop: true,
+                          cursor: '',
+                          delay: 50,
+                        }}
+                        onInit={(typewriter) => {
+                          typewriter.pauseFor(2000).start();
+                        }}
+                      />
+                    )}
+                    <textarea
+                      className="resize-none flex-grow m-2 h-[50vh]"
+                      value={input}
+                      placeholder=""
+                      onClick={() => setTypingStarted(true)}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-end justify-end">
+                  <button className="bg-blue-500 text-white mt-3 py-1 px-4 rounded" onClick={search}>Go</button>
+                </div>
+              </div>
+              <div className="absolute top-3 right-2">
+                <DropDownButton />
               </div>
             </div>
-
-            <div className="flex items-end justify-end">
-              <button className="bg-blue-500 text-white mt-3 py-1 px-4 rounded" onClick={search}>Go</button>
-            </div>
-          </div>
-          <div className="absolute top-3 right-2">
-            <DropDownButton />
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
+      );
+    };
 
-export default Welcome;
+    export default Welcome;
