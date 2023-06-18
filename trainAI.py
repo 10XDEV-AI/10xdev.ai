@@ -69,10 +69,10 @@ def train_AI(repo_name, userlogger, email):
     file_paths_details = files2analyse(repo_name, email)
 
     if len(file_paths_details) == 0:
-        userlogger.log("No files detected")
-        userlogger.log("Please Add files in the project and train again")
-        userlogger.log("Tip : Start with a ReadME.md")
-        time.sleep(5)
+        #create an empty dataframe with filepath, embedding and summary columns
+        fs = pd.DataFrame(columns=['file_path', 'embedding', 'summary'])
+        fs.to_csv(fsfilename, index=False)
+        userlogger.log("This repo is empty, nothing to train")
         return
 
     fs = pd.DataFrame(file_paths_details)
