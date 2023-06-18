@@ -145,40 +145,42 @@ export const Welcome = () => {
     <div className="text-4xl font-bold text-blue-900 mb-4">
       10XDEV.AI
     </div>
-    <div className="text-xl">
+    <div className="p-4">
+      <div className="border border-gray-400 rounded-lg">
+        <div className="flex items-center">
+          {typingStarted ? null : (
+            <Typewriter
+              options={{
+                strings: shuffledStrings,
+                autoStart: true,
+                loop: true,
+                cursor: '',
+                delay: 50,
+              }}
+              onInit={(typewriter) => {
+                typewriter.pauseFor(2000).start();
+              }}
+            />
+          )}
+          <textarea
+            className="resize-none flex-grow m-2"
+            value={input}
+            placeholder=""
+            onClick={() => setTypingStarted(true)}
+            onChange={handleInputChange}
+          />
+        </div>
+        </div>
+
+        <div className="bg-gray-100 flex items-end justify-end">
+          <button className="mr-2">
+            Go
+          </button>
+      </div>
+
+    <div className="">
       🦾Train AI on code ❓ Explain Code ⚠️ Fix Bugs 🔬 Create Testcases 📖 Write Documentation 🕹️Generate commands ＆ More 🪄
     </div>
-    <div className="border border-gray-400 rounded-lg p-4">
-      <div className="" onChange={handleInputChange}>
-        {typingStarted ? null : (
-          <Typewriter
-            options={{
-              strings: shuffledStrings,
-              autoStart: true,
-              loop: true,
-              cursor: '',
-              delay: 50,
-            }}
-            onInit={(typewriter) => {
-              typewriter.pauseFor(2000).start();
-            }}
-          />
-        )}
-        <textarea
-          className="resize-none"
-          value={input}
-          placeholder=""
-          onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
-          onChange={handleInputChange} // Keep the onChange handler for input changes
-        />
-      </div>
-      <div className="flex items-end">
-        <button className="mb-2">
-          <span className="">
-            🔍
-          </span>
-        </button>
-      </div>
     </div>
     <div className="">
       <DropDownButton />
