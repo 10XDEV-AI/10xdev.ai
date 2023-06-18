@@ -3,7 +3,7 @@ import openai
 from utilities.keyutils import get_key
 from utilities.tokenCount import tokenCount
 
-def AskGPT(email, system_message="", prompt="Hi", temperature=0, max_tokens=256, retrys=3, delay=20,model = "gpt-3.5-turbo"):
+def AskGPT(email, system_message="", prompt="Hi", temperature=0, max_tokens=-1, retrys=3, delay=20,model = "gpt-3.5-turbo"):
     if tokenCount(str(prompt) + str(system_message)) > 2500:
         if tokenCount(str(prompt) + str(system_message)) > 15000:
             return "There was an error with token limits. Please try again with another prompt."
@@ -11,13 +11,27 @@ def AskGPT(email, system_message="", prompt="Hi", temperature=0, max_tokens=256,
 
     openai.api_key = get_key(email)
     try:
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=[{"role": "system", "content": system_message},
-                      {"role": "user", "content": prompt}],
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
+        if max_tokens == -1:
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=[{"role": "system", "content": system_message},
+                          {"role": "user", "content": prompt}],
+                temperature=temperature
+            )
+            if tokenCount(system_message+prompt+response["choices"][0]["message"]['content'])>4090 and model == "gpt-3.5-turbo":
+                time.sleep(delay)
+                print("Retrying in %f seconds with larger model", delay)
+                return AskGPT(email, system_message, prompt, temperature, max_tokens, retrys, delay, model = "gpt-3.5-turbo-16k")
+            else:
+                return response["choices"][0]["message"]['content']
+        else:
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=[{"role": "system", "content": system_message},
+                          {"role": "user", "content": prompt}],
+                temperature=temperature,
+                max_tokens=max_tokens
+            )
         return response["choices"][0]["message"]['content']
     except Exception as e:
         print(f"Encountered error: {e}")

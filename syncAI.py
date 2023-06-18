@@ -5,13 +5,30 @@ from utilities.create_clone import create_clone, get_clone_filepath
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.files2analyse import check_file_type, files2analyse
+from utilities.rates import get_rates
+import difflib
 
 fs = pd.DataFrame()
+def get_diff(old_file_path, new_file_path, threshold=0.1):
+    old_size = os.path.getsize(old_file_path)
+    new_size = os.path.getsize(new_file_path)
 
+    with open(old_file_path, 'r') as old_file, open(new_file_path, 'r') as new_file:
+        old_lines = old_file.readlines()
+        new_lines = new_file.readlines()
 
-def get_diff(old_file_path, new_file_path):
-    result = subprocess.run(["diff", old_file_path, new_file_path], capture_output=True, text=True)
-    return result.stdout
+    differ = difflib.ndiff(old_lines, new_lines)
+    diff_output = differ
+
+    # Calculate the percentage of non-space/tab changes
+    num_changes = len(differ)
+    total_lines = max(old_size, new_size)
+    change_ratio = num_changes / total_lines
+
+    if change_ratio > threshold:
+        return diff_output
+    else:
+        return None
 
 
 def summarize_str(filename, file_contents, userid):
@@ -44,6 +61,8 @@ def syncAI(sync_flag, user_logger, userid):
 
     global fs
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
+    chat_limit = get_rates(userid).split(",")[0]
+    delay = 60 / int(chat_limit)
     fs = pd.read_csv(fsfilename)
     fs["embedding"] = fs.embedding.apply(lambda x: str2float(str(x)))
 
@@ -51,19 +70,15 @@ def syncAI(sync_flag, user_logger, userid):
 
     for file in file_paths_details:
         clone_path = get_clone_filepath(userid, path.split("/")[-1], file)
-        if get_diff(os.path.join(path, file), clone_path) != "":
+        if get_diff(os.path.join(path, file), clone_path) is not None:
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
             summary = sumarize(file, userid)
             if summary == "Ignore":
                 continue
-            fs.loc[fs["file_path"] == file, "summary"] = summary
-            time.sleep(20)
-            fs.loc[fs["file_path"] == file, "embedding"] = None
-
-    for ind in fs.index:
-        if fs["embedding"][ind] is None:
-            fs["embedding"][ind] = split_embed(fs["summary"][ind], userid)
+            fs["summary"][fs["file_path"] == file] = summary
+            fs["embedding"][fs["file_path"] == file] = pd.Series(split_embed(summary, userid))
+            time.sleep(delay)
 
     new_file_paths = set(file_paths_details) - set(fs["file_path"])
 
@@ -95,10 +110,10 @@ def syncAI(sync_flag, user_logger, userid):
         for ind in new_fs.index:
             user_logger.log("Analyzing New File: " + new_fs["file_path"][ind])
             new_fs["summary"][ind] = sumarize(new_fs["file_path"][ind], userid)
-            time.sleep(20)
             if new_fs["summary"][ind] != "Ignore":
                 print(new_fs["file_path"][ind] + " is being embedded")
                 new_fs["embedding"][ind] = split_embed(new_fs["summary"][ind], userid)
+            time.sleep(delay)
 
         fs = pd.concat([fs, new_fs], ignore_index=True)
 

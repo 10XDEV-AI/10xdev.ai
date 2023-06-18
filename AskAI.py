@@ -196,10 +196,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     final_prompt += "\n" + prompt
     # print(final_prompt)
     tokens = tokenCount(final_prompt)
-    if tokens > 3000:
-        max_t = 16000-tokens
-    else:
-        max_t = 4096-tokens
+
 
     userlogger.log("Total Tokens in the query: " + str(tokens))
     print("Total Tokens in the query: " + str(tokens))
@@ -207,7 +204,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     userlogger.log("Asking ChatGPT-3...")
     print("Asking ChatGPT-3...")
     FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
-                         temperature=0.7, max_tokens=max_t)
+                         temperature=0.7)
 
     userlogger.clear_logs()
 

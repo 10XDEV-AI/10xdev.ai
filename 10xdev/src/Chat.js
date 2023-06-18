@@ -111,13 +111,12 @@ export const Chat = () => {
       },
     ]);
   }, [results, searchTerm, files, referenced_code]);
-
 return (
     <>
     <Navbar LoadProjectInfo="True" />
     <div className="spacer-top"></div>
-    <div  className={`container ${sideContainerOpen ? 'open' : ''}`}>
-      {isLoading ? (<LoadingRing />) : (
+    <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
+                  {isLoading ? (<LoadingRing />) : (
       <div >
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
@@ -146,7 +145,6 @@ return (
     </div>
     </>
   );
-
 };
 
 export default Chat;
