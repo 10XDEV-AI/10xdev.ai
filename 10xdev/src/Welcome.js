@@ -35,6 +35,7 @@ export const Welcome = () => {
     };
 
     fetchData();
+    getTreeData();
   }, [navigate]);
 
   const search = (e) => {
@@ -112,7 +113,7 @@ export const Welcome = () => {
 
   const getTreeData = async () => {
     try {
-      const data = await callAPI(`/api/FilesToAnalyze?path=${input}`);
+      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
     } catch (error) {
@@ -121,75 +122,67 @@ export const Welcome = () => {
   };
   return (
     <div className="flex flex-wrap">
-      <div className="w-1/2 p-4 pt-[10%]">
-        <div className="flex items-center justify-center">
-          {/* Center the content */}
-          <h1 className="text-3xl text-blue-900 mb-4 font-bold">Files in this Project</h1>
-          {/* Added font-bold */}
+      <div className="w-1/2 p-4 pt-[7%]">
+        <div className="flex items-center justify-center py-2">
+          <h1 className="text-xl">
+            <ProjectInfo />
+          </h1>
           <button className="bg-blue-500 text-white px-4 rounded ml-auto">
-            {/* Use ml-auto to push the button to the left */}
             Change Repo
           </button>
         </div>
-        <div className="bg-blue-100 border border-dashed border-gray-400 p-4 rounded-lg">
-          <h2 className="text-xl">All Files</h2>
+        <div className="bg-sky-50 border border-gray-400 mt-12 p-4 rounded-lg h-[60vh]  overflow-y-auto">
+          <h2 className="text-base font-bold mb-2" >
+            Codebase :
+          </h2>
           <FileTree data={treeData} />
         </div>
 
-        <div className="">
-          <ProjectInfo />
-        </div>
-      </div>
-<div className="w-1/2 border-gray-300 rounded-lg p-4">
-  <div className="">
-    <div className="text-4xl font-bold text-blue-900 mb-4">
-      10XDEV.AI
-    </div>
-    <div className="p-4">
-      <div className="border border-gray-400 rounded-lg">
-        <div className="flex items-center">
-          {typingStarted ? null : (
-            <Typewriter
-              options={{
-                strings: shuffledStrings,
-                autoStart: true,
-                loop: true,
-                cursor: '',
-                delay: 50,
-              }}
-              onInit={(typewriter) => {
-                typewriter.pauseFor(2000).start();
-              }}
-            />
-          )}
-          <textarea
-            className="resize-none flex-grow m-2"
-            value={input}
-            placeholder=""
-            onClick={() => setTypingStarted(true)}
-            onChange={handleInputChange}
-          />
-        </div>
-        </div>
-
-        <div className="bg-gray-100 flex items-end justify-end">
-          <button className="mr-2">
-            Go
-          </button>
       </div>
 
-    <div className="">
-      🦾Train AI on code ❓ Explain Code ⚠️ Fix Bugs 🔬 Create Testcases 📖 Write Documentation 🕹️Generate commands ＆ More 🪄
-    </div>
-    </div>
-    <div className="">
-      <DropDownButton />
-    </div>
-  </div>
-</div>
+      <div className="shadow-xl  w-1/2 h-screen">
+        <div className="text-centre">
+          <div className="text-5xl font-bold italic text-blue-900 mt-[15%] mb-4 text-center">
+            10XDEV.AI
+          </div>
 
+          <div className="p-4">
+            <div className="text-xl font-bold mt-2 mb-4">Describe a task, query, or a bug :</div>
+            <div className="border border-gray-400 rounded-lg">
+              <div className="flex text-sm p-1">
+                {typingStarted ? null : (
+                  <Typewriter
+                    options={{
+                      strings: shuffledStrings,
+                      autoStart: true,
+                      loop: true,
+                      cursor: '',
+                      delay: 50,
+                    }}
+                    onInit={(typewriter) => {
+                      typewriter.pauseFor(2000).start();
+                    }}
+                  />
+                )}
+                <textarea
+                  className="resize-none flex-grow m-2 h-[40vh]"
+                  value={input}
+                  placeholder=""
+                  onClick={() => setTypingStarted(true)}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
 
-
+            <div className="flex items-end justify-end">
+              <button className="bg-blue-500 text-white mt-3 py-1 px-4 rounded" onClick={search}>Go</button>
+            </div>
+          </div>
+          <div className="absolute top-3 right-2">
+            <DropDownButton />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

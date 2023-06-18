@@ -119,6 +119,7 @@ def get_AIIgnore():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     path = request.args.get('path')
+    print("Dude WTF")
     files2ignore, files2analyse = IgnoreAI(email,user_logger,path)
     print(len(files2analyse))
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
@@ -128,6 +129,7 @@ def get_FilesToAnalyze():
     email = getattr(g, 'email', None)
     user_logger = getattr(g, 'user_loggers', None)[email]
     path = request.args.get('path')
+    print("WWHY GOD WHY")
     files2analyze = FilesToAnalyzedata(email,user_logger,path)
     return jsonify({"files2analyze": files2analyze})
 
