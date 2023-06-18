@@ -119,27 +119,26 @@ export const Welcome = () => {
       console.log(error);
     }
   };
+return (
+  <div className="flex flex-wrap">
+    <div className="w-1/2 p-4 pt-[10%]">
+      <div className="flex items-center justify-center"> {/* Center the content */}
+        <h1 className="text-3xl text-blue-900 mb-4 font-bold">Files in this Project</h1> {/* Added font-bold */}
+        <button className="bg-blue-500 text-white px-4 rounded ml-auto"> {/* Use ml-auto to push the button to the left */}
+          Change Repo
+        </button>
+      </div>
+      <div className="bg-blue-100 border border-dashed border-gray-400 p-4 rounded-lg">
+        <h2 className="text-xl">All Files</h2>
+        <FileTree data={treeData} />
+      </div>
+    </div>
 
-  return (<div className="flex flex-wrap">
-            <div className="w-1/2 p-4 pt-[10%]">
-              <div className="flex items-center justify-between"> {/* Added justify-between */}
-                <h1 className="text-3xl text-blue-900 mb-4">Files in this Project</h1>
-                <button className="bg-blue-500 text-white  px-4 rounded ml-4">
-                  Change Repo
-                </button>
-              </div>
-              <div className="bg-blue-100 border border-dashed border-gray-400 p-4 rounded-lg">
-                <h2 className="text-xl">All Files</h2>
-                <FileTree data={treeData} />
-              </div>
-            </div>
-
-            <div className="w-1/2">
-              Yo
-            </div>
-          </div>
-
-  );
+    <div className="w-1/2">
+      Yo
+    </div>
+  </div>
+);
 };
 
 export default Welcome;
