@@ -135,54 +135,57 @@ export const Welcome = () => {
           <h2 className="text-xl">All Files</h2>
           <FileTree data={treeData} />
         </div>
-      </div>
 
-      <div className="w-1/2">
         <div className="">
-          <div className="text-4xl font-bold text-blue-900 mb-4">
-            10XDEV.AI
-          </div>
-          <div className="text-xl">
-            🦾Train AI on code ❓ Explain Code ⚠️ Fix Bugs 🔬 Create Testcases 📖 Write Documentation 🕹️Generate commands ＆ More 🪄
-          </div>
-          <div className="">
-            <div className="" onChange={handleInputChange}>
-              {typingStarted ? null : (
-                <Typewriter
-                  options={{
-                    strings: shuffledStrings,
-                    autoStart: true,
-                    loop: true,
-                    cursor: '',
-                    delay: 50,
-                  }}
-                  onInit={(typewriter) => {
-                    typewriter.pauseFor(2000).start();
-                  }}
-                />
-              )}
-              <textarea
-                className="resize-none"
-                value={input}
-                placeholder=""
-                onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
-                onChange={handleInputChange} // Keep the onChange handler for input changes
-              />
-            </div>
-            <div className=" flex items-end">
-              <button className="mb-2" onClick={search}>
-                🔍
-              </button>
-            </div>
-          </div>
-          <div className="">
-            <ProjectInfo />
-          </div>
-          <div className="">
-            <DropDownButton />
-          </div>
+          <ProjectInfo />
         </div>
       </div>
+<div className="w-1/2 border-gray-300 rounded-lg p-4">
+  <div className="">
+    <div className="text-4xl font-bold text-blue-900 mb-4">
+      10XDEV.AI
+    </div>
+    <div className="text-xl">
+      🦾Train AI on code ❓ Explain Code ⚠️ Fix Bugs 🔬 Create Testcases 📖 Write Documentation 🕹️Generate commands ＆ More 🪄
+    </div>
+    <div className="border border-gray-400 rounded-lg p-4">
+      <div className="" onChange={handleInputChange}>
+        {typingStarted ? null : (
+          <Typewriter
+            options={{
+              strings: shuffledStrings,
+              autoStart: true,
+              loop: true,
+              cursor: '',
+              delay: 50,
+            }}
+            onInit={(typewriter) => {
+              typewriter.pauseFor(2000).start();
+            }}
+          />
+        )}
+        <textarea
+          className="resize-none"
+          value={input}
+          placeholder=""
+          onClick={() => setTypingStarted(true)} // Trigger handleInputChange on click
+          onChange={handleInputChange} // Keep the onChange handler for input changes
+        />
+      </div>
+      <div className="flex items-end">
+        <button className="mb-2">
+          <span className="">
+            🔍
+          </span>
+        </button>
+      </div>
+    </div>
+    <div className="">
+      <DropDownButton />
+    </div>
+  </div>
+</div>
+
 
 
     </div>
