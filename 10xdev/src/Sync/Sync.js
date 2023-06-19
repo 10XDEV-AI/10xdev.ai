@@ -101,12 +101,12 @@ function Sync() {
         <div>
         <div className="sync-container">
             <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
-                Sync ⌛️
+                Sync <span role="img" aria-label="Description of the emoji"> ⌛️</span>
               </button>
         </div>
           {showPopup &&(
             <div className="popup-container">
-            <h1> ⚒️</h1>
+            <h1> <span role="img" aria-label="Description of the emoji"> ⚒️</span> </h1>
             Syncing...
             <LogViewer />
             </div>
@@ -116,12 +116,14 @@ function Sync() {
         <div>
           <div className="sync-container">
             <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
-                Sync ✅
+                Sync <span role="img" aria-label="Description of the emoji">  ✅</span>
             </button>
           </div>
           {showPopup &&
               <div className="popup-container">
-              <h1>👍🏻</h1>
+              <h1>
+                <span role="img" aria-label="Description of the emoji">👍🏻</span>
+              </h1>
                  All files synced successfully
               </div>
           }
@@ -130,13 +132,14 @@ function Sync() {
         <div>
             <div className="sync-container">
              <button className="sync-button" onClick={syncData} disabled={isSyncing} onMouseOver={handleMouseOver} >
-              Sync ⚠️
+              Sync <span role="img" aria-label="Description of the emoji"> ⚠️</span>
+
              </button>
             </div>
         {newFiles.length > 0 && showPopup && (
         <div className="popup-container">
             <div >
-                <h1>📁</h1>
+                <h1><span role="img" aria-label="Description of the emoji">📁</span></h1>
                 <h2>
                 New files found
                 </h2>

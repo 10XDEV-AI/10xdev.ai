@@ -169,13 +169,13 @@ const Train = () => {
                                   </tbody>
                                 </table>
                                  <h4>
-                                    ✅ : All good
+                                 <span role="img" aria-label="Description of the emoji"> ✅</span>  : All good
                                  </h4>
                                  <h4>
-                                    ⚠️ : File too long
+                                 <span role="img" aria-label="emoji"> ⚠️</span> : File too long
                                  </h4>
                                  <h4>
-                                    ℹ️ : File is not text
+                                 <span role="img" aria-label="emoji">ℹ️ </span>  : File is not text
                                  </h4>
                         </div>
                       </div>

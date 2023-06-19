@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import React, { useState,useContext } from 'react';
+import React from 'react';
 import Cookies from 'js-cookie';
 
 const User = () => {
@@ -15,7 +15,9 @@ const User = () => {
             'Content-Type': 'application/json',
           },
         });
+
         const data = await response.json();
+        console.log(data);
       }
       }
       ,[]);

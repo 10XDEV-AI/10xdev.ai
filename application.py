@@ -266,7 +266,6 @@ def getBranches():
 def login():
     return jsonify({"loggedIn": True, "message": "Logged In"}), 200
 
-
 @application.route("/api/github", methods=["GET"])
 def github_api():
     code = request.args.get("code")
@@ -292,6 +291,20 @@ def get_user():
         except ValueError:
             return jsonify({'error': 'Failed to parse JSON response'})
     else:
-        return jsonify({'error': 'Failed to retrieve user data'})  
+        return jsonify({'error': 'Failed to retrieve user data'}) @application.route("/api/github/getuser", methods=["GET"])
+
+@application.route("/api/github/getallrepos", methods=["GET"])
+def get_alluserrepos():
+    access_token = request.args.get('access_token')
+    headers = {'Authorization': f'token {access_token}'}
+    params={'visibility': 'private'}
+    response = requests.get('https://api.github.com/user/repos', headers=headers, params=params)
+    
+    if response.status_code == 200:
+        try:
+            user_data = response.json()
+            return jsonify(user_data)
+        except ValueError:
+            return jsonify({'error': 'Failed to parse JSON response'})
 if __name__ == "__main__":
     application.run(debug=True, port=8000)
