@@ -121,6 +121,11 @@ export const Welcome = () => {
     }
   };
 
+  if (isLoading) {
+  return (
+  <LoadingRing />
+  )}
+  else{
   return (
     <div className="flex flex-wrap">
       <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
@@ -128,8 +133,8 @@ export const Welcome = () => {
           <h1 className="text-2xl">
             <ProjectInfo />
           </h1>
-          <button className="px-4 rounded ml-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <button className="px-4 rounded ml-auto hover:text-blue-600" onClick={() => navigate("/repos")}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
             </svg>
           </button>
@@ -149,7 +154,7 @@ export const Welcome = () => {
                 Latest commit : #e3o4u3o
               </h1>
           </div>
-          <button className="bg-blue-900 text-white p-2 rounded ml-auto">
+          <button className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md ">
             Sync Now
           </button>
         </div>
@@ -164,40 +169,40 @@ export const Welcome = () => {
           <div className="">
             <div className="text-xl font-bold mt-6 mb-3">Describe a task, query, or a bug:</div>
             <div className="border border-gray-400 rounded-lg shadow-md">
-              <div className="flex text-base pt-2 pl-2">
-                {typingStarted ? null : (
-                  <Typewriter
+              <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
+                {typingStarted ? <textarea
+                                                   className="flex-grow h-[48vh] focus:outline-none"
+                                                   value={input}
+                                                   placeholder=""
+                                                   onClick={() => setTypingStarted(true)}
+                                                   onChange={handleInputChange}
+                                                 /> : (
+                  <Typewriter className = "h-[50vh]"
                     options={{
                       strings: shuffledStrings,
                       autoStart: true,
                       loop: true,
-                      cursor: "",
+                      cursor: " |",
                       delay: 30,
                     }}
                     onInit={(typewriter) => {
-                      typewriter.pauseFor(1000).start();
+                      typewriter.pauseFor(3000).start();
                     }}
                   />
                 )}
-                <textarea
-                  className="flex-grow h-[50vh] m-3 focus:outline-none"
-                  value={input}
-                  placeholder=""
-                  onClick={() => setTypingStarted(true)}
-                  onChange={handleInputChange}
-                />
+
               </div>
             </div>
 
             <div className="flex items-end justify-end">
-              <button className="bg-blue-900 text-white mt-3 py-1 px-4 rounded" onClick={search}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <button className="bg-blue-900 text-white mt-3 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
                   <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
               </button>
             </div>
           </div>
-          <div className="absolute top-3 right-2">
+          <div className="absolute top-3 right-5">
             <DropDownButton />
           </div>
         </div>
@@ -205,5 +210,5 @@ export const Welcome = () => {
     </div>
   );
 };
-
+}
 export default Welcome;

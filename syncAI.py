@@ -20,7 +20,8 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
     differ = difflib.ndiff(old_lines, new_lines)
     diff_output = differ
 
-    # Calculate the percentage of non-space/tab changes
+    if old_lines == new_lines:
+        return None
     num_changes = len(differ)
     total_lines = max(old_size, new_size)
     change_ratio = num_changes / total_lines

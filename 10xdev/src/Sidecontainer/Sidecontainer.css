@@ -1,9 +1,9 @@
 .sidenav {
-    margin-top:2.75rem;
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
+    margin-top:48px;
+    height: 100%;
+    width: 0;
     position: fixed; /* Stay in place */
-    z-index: 9999; /* Stay on top */
+    z-index: 9999;
     top: 0;
     background-color: #fffefe; 
     overflow-x: hidden; /* Disable horizontal scroll */
@@ -28,7 +28,8 @@
     font-size: 12px;
     text-align: center;
     padding:5px;
-    width: 40%;
+    width: 80%;
+    word-wrap: break-word;
 }
 ::-webkit-scrollbar {
     display: none;
@@ -64,4 +65,8 @@
     display: flex;
     justify-content: center;
 
+}
+
+.side-spacer{
+height: 48px;
 }

@@ -72,6 +72,9 @@ const Sidecontainer = (props) => {
         <div style={{ textAlign: 'start', fontSize: '12px' }}>
           {renderUpdated()}
         </div>
+
+          <div className="side-spacer">
+          </div>
       </div>
       {props.files.length > 0 && (
         <div onClick={() => {
