@@ -269,8 +269,16 @@ def login():
 @application.route("/api/github", methods=["GET"])
 def github_api():
     code = request.args.get("code")
-    client_id="eaae8a43278892ed15e1"
-    client_secret= "613f61d82e9dae784ee76bb85dbf11eaf24d2766"
+    client_id = request.args.get("client_id")
+    if client_id == "eaae8a43278892ed15e1":
+        client_secret = "613f61d82e9dae784ee76bb85dbf11eaf24d2766"
+    elif client_id == "7de77ae768aa62b79e09":
+        client_secret = "bb481efea8c764dd02af801d783ff61f3954b43d"
+    elif  client_id == "PRDCLID":
+        client_secret = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    else:
+        return jsonify({"error": "Invalid client_id"}), 400
+
     params = '?client_id=' + client_id + '&client_secret=' + client_secret + '&code=' + code
     response = requests.post(
         'https://github.com/login/oauth/access_token' + params,
@@ -291,7 +299,7 @@ def get_user():
         except ValueError:
             return jsonify({'error': 'Failed to parse JSON response'})
     else:
-        return jsonify({'error': 'Failed to retrieve user data'}) @application.route("/api/github/getuser", methods=["GET"])
+        return jsonify({'error': 'Failed to retrieve user data'})
 
 @application.route("/api/github/getallrepos", methods=["GET"])
 def get_alluserrepos():

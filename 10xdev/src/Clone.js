@@ -13,8 +13,16 @@ const Clone = () => {
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
   const [input, setInput] = useState("");
+  const hostname = window.location.hostname;
   const navigate = useNavigate();
-  const client_id = "eaae8a43278892ed15e1";
+  let client_id;
+    if (hostname === 'localhost') {
+        const client_id = "eaae8a43278892ed15e1";
+    } else if (hostname === 'test.10xdevai.com') {
+        const client_id = "7de77ae768aa62b79e09";
+    } else if (hostname === '10xdevai.com') {
+        const client_id = "eaae8a43278892ed15e1";
+    }
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
@@ -50,7 +58,7 @@ const Clone = () => {
     const code = urlParams.get("code");
     if (code) {
       const fetchToken = async () => {
-        const response = await callAPI(`/api/github?code=${code}`, {
+        const response = await callAPI(`/api/github?code=${code}&client_id=${client_id}`, {
           method: "GET",
         });
         if (response.access_token) {
@@ -311,7 +319,7 @@ const Clone = () => {
                     <h2>💡 Tips on training Repository</h2>
                     <ul>
                       <li>
-                        Add big folders and packages not in use to .AIIgnore
+                        Add big folders and packages not in use to Ignore
                         file
                       </li>
                       <li>
