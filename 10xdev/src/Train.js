@@ -134,10 +134,10 @@ const Train = () => {
           <div className="gitIgnorebuttoncontainer">
 
             <div>
-              <button onClick={handleGetGitIgnore} className="gitIgnorebutton">
+              <button onClick={handleGetGitIgnore} className="bg-blue-900 text-white p-2 m-2 rounded-full hover:bg-blue-700">
                 Analyze Files
               </button>
-              <button onClick={handleTrain} className="gitIgnorebutton">
+              <button onClick={handleTrain} className="bg-blue-900 text-white p-2  rounded-full hover:bg-blue-700">
                 Start Training
               </button>
             </div>
@@ -184,7 +184,7 @@ const Train = () => {
                                 <div className="ignoretitle">
                                     <h2>Files to Ignore:
                                     <div className="saveIgnoreButton">
-                                    <button onClick={handleSaveFilesToIgnore} className="saveIgnoreButton">
+                                    <button onClick={handleSaveFilesToIgnore} className="bg-blue-900 text-white p-2 m-2 hover:bg-blue-700">
                                         Save
                                     </button>
                                     </div>
@@ -215,7 +215,7 @@ const Train = () => {
                                 <div className="ignoretitle">
                                     <h2>Files to Ignore:
                                     <div className="saveIgnoreButton">
-                                    <button onClick={handleSaveFilesToIgnore} className="saveIgnoreButton">
+                                    <button onClick={handleSaveFilesToIgnore} className="">
                                         Save
                                     </button>
                                     </div>
