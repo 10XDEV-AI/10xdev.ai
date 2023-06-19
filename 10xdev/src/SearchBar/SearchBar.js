@@ -24,7 +24,7 @@ const SearchBar = ({ onSearch }) => {
           onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         />
         <button className="text-2xl bg-white" onClick={handleClick}>
-          🔍
+        <span role="img" aria-label="Description of the emoji"> 🔍</span> 
         </button>
       </div>
       <div className="w-180">

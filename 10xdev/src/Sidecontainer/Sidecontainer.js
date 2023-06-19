@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Sidecontainer.css';
 import { CopyBlock, dracula } from 'react-code-blocks';
 
@@ -67,7 +67,7 @@ const Sidecontainer = (props) => {
             toggleSideContainer();
           }}
         >
-          ⏩
+           <span className="closebtn">⏩</span> 
         </button>
         <div style={{ textAlign: 'start', fontSize: '12px' }}>
           {renderUpdated()}
