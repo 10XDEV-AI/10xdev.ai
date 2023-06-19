@@ -183,7 +183,7 @@ const Train = () => {
                             <div className="ignoretext">
                                 <div className="ignoretitle">
                                     <h2>Files to Ignore:
-                                    <div className="saveIgnoreButton">
+                                    <div className="">
                                     <button onClick={handleSaveFilesToIgnore} className="bg-blue-900 text-white p-2 m-2 hover:bg-blue-700">
                                         Save
                                     </button>

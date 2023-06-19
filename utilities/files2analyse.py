@@ -51,7 +51,7 @@ def check_file_type(file_path):
 
             result = chardet.detect(data)
 
-            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
+            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16' or result['encoding'] == 'Windows-1252':
                 return True
     else:
         return True

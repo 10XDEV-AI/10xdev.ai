@@ -166,7 +166,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
         j = os.path.join(path, i)
         with open(j, 'rb') as f:
             result = chardet.detect(f.read())
-            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8':
+            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252':
                 final_contents = open(j).read()
                 final_contents = re.sub(r'\s+', ' ', final_contents)
                 estimated_tokens += tokenCount(final_contents)
@@ -186,7 +186,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
             j = os.path.join(path, i)
             with open(j, 'rb') as f:
                 result = chardet.detect(f.read())
-                if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1':
+                if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252':
                     final_contents = open(j).read()
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents

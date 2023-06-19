@@ -22,7 +22,15 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
 
     if old_lines == new_lines:
         return None
-    num_changes = len(differ)
+    num_changes = 0
+    for line in differ:
+        if line.startswith("+"):
+            num_changes += 1
+        elif line.startswith("-"):
+            num_changes += 1
+        elif line.startswith("?"):
+            num_changes += 1
+
     total_lines = max(old_size, new_size)
     change_ratio = num_changes / total_lines
 
