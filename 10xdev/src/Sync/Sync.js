@@ -3,7 +3,7 @@ import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
 
-function Sync() {
+function Sync(setShowSync){
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -78,20 +78,22 @@ function Sync() {
   };
 
   return (
-    <div>
-      <div className="">
-        <div className="" >
+      <div className="h-full">
+        <div className="text-2xl" >
           {isSyncing ? (
             <div>
               Syncing... <span role="img" aria-label="Description of the emoji">⌛️</span>
             </div>
           ) : showTick ? (
-            <div>
+            <div className="right-0 bottom-0">
               All files synced successfully <span role="img" aria-label="Description of the emoji">✅</span>
+              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => setShowSync(false)}>
+                  Ok
+              </button>
             </div>
           ) : showWarning ? (
             <div>
-              <span role="img" aria-label="Description of the emoji">⚠️</span> Warning: Error syncing files
+              <span role="img" aria-label="Description of the emoji">⚠️</span> Warning:
             </div>
           ) : (
             <div>Sync status unknown <span role="img" aria-label="Description of the emoji">❌</span></div>
@@ -101,18 +103,22 @@ function Sync() {
           </div>
         </div>
         {newFiles.length > 0 && (
-          <div className="new-files-container">
-            <h2>New files found:</h2>
-            <ul>
-              {newFiles.map((file, index) => (
-                <li key={index}>{file}</li>
-              ))}
-            </ul>
-            <button onClick={handleSyncNewClick}>Sync New Files</button>
-          </div>
+          <div className="h-full">
+                      <h2 className="text-xl py-4">New files found:</h2>
+                                           <ul className="list-disc pl-8">
+                                                                                        {newFiles.map((file, index) => (
+                                                                                          <li key={index}>{file}</li>
+                                                                                        ))}
+                                                                                      </ul>
+                                                                                      <div className="flex">
+                                                                                          <button onClick={handleSyncNewClick}
+                                                                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0" >
+                                                                                            Sync New Files
+                                                                                          </button>
+                                                                                      </div>
+                    </div>
         )}
       </div>
-    </div>
   );
 }
 

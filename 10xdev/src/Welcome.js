@@ -134,13 +134,10 @@ export const Welcome = () => {
   else{
   return (
     <div className="flex flex-wrap">
-      <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
+      <div className="w-1/2 p-6 pt-[6%] bg-slate-50 ">
         {showSync ? (
-          <div className="flex items-center text-blue-900 justify-center py-2">
-            <Sync />
-            <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => setShowSync(false)}>
-                Ok
-            </button>
+          <div className="py-2 h-[90vh]">
+            <Sync setShowSync={setShowSync} />
           </div>
         ) : (
             <>
