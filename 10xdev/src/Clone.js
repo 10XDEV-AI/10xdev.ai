@@ -16,13 +16,13 @@ const Clone = () => {
   const hostname = window.location.hostname;
   const navigate = useNavigate();
   const client_id =
-      hostname === "localhost"
-        ? "eaae8a43278892ed15e1"
-        : hostname === "test.10xdevai.com"
-        ? "7de77ae768aa62b79e09"
-        : hostname === "10xdevai.com"
-        ? "eaae8a43278892ed15e1"
-        : "YoYOHS";
+    hostname === "localhost"
+      ? "eaae8a43278892ed15e1"
+      : hostname === "test.10xdevai.com"
+      ? "7de77ae768aa62b79e09"
+      : hostname === "10xdevai.com"
+      ? "eaae8a43278892ed15e1"
+      : "YoYOHS";
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
@@ -34,6 +34,22 @@ const Clone = () => {
     setIsLoading(true);
     try {
       const data = await callAPI(`/api/clone?path=${repo}`, {
+        method: "GET",
+      });
+      console.log(data);
+      setBranches(data);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleClonePrivate = async (repo_url) => {
+    setIsLoading(true);
+    const accessToken = cookies.get("accesstoken");
+    console.log(accessToken);
+    try {
+      const data = await callAPI(`/api/clone-private?path=${repo_url}&access_token=${accessToken}`, {
         method: "GET",
       });
       console.log(data);
@@ -80,12 +96,9 @@ const Clone = () => {
     const accessToken = cookies.get("accesstoken");
     console.log(accessToken);
     try {
-      const response = await callAPI(
-        `/api/github/getuser?access_token=${accessToken}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await callAPI(`/api/github/getuser?access_token=${accessToken}`, {
+        method: "GET",
+      });
       console.log(response);
       setUserData(response);
       return response;
@@ -99,12 +112,9 @@ const Clone = () => {
     const accessToken = cookies.get("accesstoken");
     console.log(accessToken);
     try {
-      const response = await callAPI(
-        `/api/github/getallrepos?access_token=${accessToken}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await callAPI(`/api/github/getallrepos?access_token=${accessToken}`, {
+        method: "GET",
+      });
       console.log(response);
       setRepos(response);
       return response;
@@ -121,12 +131,9 @@ const Clone = () => {
   const handleSelect = async (branch) => {
     try {
       console.log(branch);
-      const data = await callAPI(
-        `/api/setBranch?path=${input}&branch=${branch}`,
-        {
-          method: "GET",
-        }
-      );
+      const data = await callAPI(`/api/setBranch?path=${input}&branch=${branch}`, {
+        method: "GET",
+      });
       console.log(data);
       navigate(`/repos`);
     } catch (error) {
@@ -169,8 +176,7 @@ const Clone = () => {
       ) : (
         <div>
           <div className="GetIgnorecontainer">
-            <div className="font-bold text-xl m-3">
-                Your Public Repository URL:</div>
+            <div className="font-bold text-xl m-3">Your Public Repository URL:</div>
             <label className="pathsearchrow">
               <input
                 type="text"
@@ -184,8 +190,17 @@ const Clone = () => {
               className="bg-blue-900 text-white p-2 m-2 rounded-full flex hover:bg-blue-700"
             >
               Clone Repo
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                <path d="M12 1.5a.75.75 0 01.75.75V7.5h-1.5V2.25A.75.75 0 0112 1.5zM11.25 7.5v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V7.5h3.75a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9a3 3 0 013-3h3.75z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="mx-2 w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+                  clipRule="evenodd"
+                />
               </svg>
             </button>
           </div>
@@ -205,15 +220,15 @@ const Clone = () => {
             {isauthenticated ? (
               <div></div>
             ) : (
-              <div className= "flex">
+              <div className="flex">
                 <button
                   onClick={loginWithGithub}
                   className="bg-blue-900 text-white p-2 m-2 rounded-md flex hover:bg-blue-700"
                 >
-                  Connect with Github <BsGithub className="m-1"/>
+                  Connect with Github <BsGithub className="ml-3 mr-1 m-1" />
                 </button>
                 <button className="bg-blue-900 text-white p-2 m-2 rounded-md flex hover:bg-blue-700">
-                  Connect with Gitlab <FaGitlab className="m-1"/>
+                  Connect with Gitlab <FaGitlab className="ml-3 mr-1 m-1" />
                 </button>
               </div>
             )}
@@ -229,19 +244,17 @@ const Clone = () => {
                 backgroundColor: "#f5f5f5",
               }}
             >
+              {/* HTML JSX for userdata */}
             </div>
           )}
           <div className="branch-container">
             {branches.length > 0 ? (
-              <div >
+              <div>
                 <h2 className="font-bold text-2xl">Select your desired branch</h2>
                 {branches.map((branch) => (
                   <ul key={branch} className="branch-list">
                     <li>
-                      <button
-                        className="branch-buttons"
-                        onClick={() => handleSelect(branch)}
-                      >
+                      <button className="branch-buttons" onClick={() => handleSelect(branch)}>
                         {branch}
                       </button>
                     </li>
@@ -257,7 +270,7 @@ const Clone = () => {
                       <ul key={branch.name} className="branch-list">
                         <li>
                           <button
-                            className="branch-buttons"
+                            className="branch-buttons "
                             onClick={() => {
                               setInput(privateRepolink);
                               handleSelect(branch.name);
@@ -276,21 +289,18 @@ const Clone = () => {
                     {repos.map(
                       (repo) =>
                         repo.private && (
-                          <ul
-                            key={repo.id}
-                            className = ""
-                          >
+                          <ul key={repo.id} className="">
                             <li>
                               <button
-                                className="w-full bg-white border-2 rounded-lg p-2 m-1 "
+                                className="repo-buttons"
                                 onClick={() => {
-                                  setPrivateRepolink(repo.clone_url);
-                                  getPrivateBranches(repo.branches_url);
-                                  handleClone(repo.clone_url)
-                                  setRepos([]);
+                                  console.log(repo);
+                                  console.log("User wants to clone " + repo.url);
+                                  handleClonePrivate(repo.url);
+                                  setPrivateRepolink(repo.ssh_url);
                                 }}
                               >
-                                {repo.name}
+                                {repo.full_name}
                               </button>
                             </li>
                           </ul>
@@ -299,19 +309,7 @@ const Clone = () => {
                   </div>
                 ) : (
                   <div>
-                    <h2>💡 Tips on training Repository</h2>
-                    <ul>
-                      <li>
-                        Add big folders and packages not in use to Ignore
-                        file
-                      </li>
-                      <li>
-                        Add any other files that are not required for training
-                      </li>
-                      <li>Break down big files into smaller files</li>
-                      <li>Works well with small files</li>
-                      <li>Works well for files with comments</li>
-                    </ul>
+                    <h3>No private repositories found</h3>
                   </div>
                 )}
               </div>

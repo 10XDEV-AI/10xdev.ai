@@ -7,7 +7,7 @@ from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import UserLogger
 from utilities.keyutils import set_key, delete_key, test_key, get_key
 from utilities.rates import set_rates, get_rates
-from utilities.clone_repo import get_clones, get_branches, select_branch
+from utilities.clone_repo import get_clones, get_branches, select_branch, get_private_clones
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
@@ -242,6 +242,15 @@ def getClones():
     email = getattr(g, "email", None)
     path = request.args.get("path")
     branches, code = get_clones(path, email)
+    return jsonify(branches), code
+
+
+@application.route("/api/clone-private", methods=["GET"])
+def getPrivateClones():
+    email = getattr(g, "email", None)
+    path = request.args.get("path")
+    access_token = request.args.get("access_token")
+    branches, code = get_private_clones(path, email, access_token)
     return jsonify(branches), code
 
 
