@@ -5,7 +5,7 @@ import ProjectInfo from './ProjectInfo/ProjectInfo';
 import DropdownButton from './DropDownButton/DropDownButton';
 import { Link } from 'react-router-dom';
 
-function Navbar({LoadProjectInfo, LoadSync}) {
+function Navbar({LoadProjectInfo}) {
   return (
     <nav className="navbar-chat">
       <div className="logo">
@@ -21,11 +21,6 @@ function Navbar({LoadProjectInfo, LoadSync}) {
       <div className="linkscontainer">
       <div className="linkColumn">
         <DropdownButton />
-        {LoadSync ? (
-          <div className="sync">
-            <Sync />
-          </div>
-        ) : null}
       </div>
       </div>
     </nav>

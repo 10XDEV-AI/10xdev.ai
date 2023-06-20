@@ -79,8 +79,8 @@ function Sync() {
 
   return (
     <div>
-      <div className="sync-container ">
-        <div className="sync-status-container" >
+      <div className="">
+        <div className="" >
           {isSyncing ? (
             <div>
               Syncing... <span role="img" aria-label="Description of the emoji">⌛️</span>
@@ -96,7 +96,9 @@ function Sync() {
           ) : (
             <div>Sync status unknown <span role="img" aria-label="Description of the emoji">❌</span></div>
           )}
+          <div className="text-center">
           <LogViewer />
+          </div>
         </div>
         {newFiles.length > 0 && (
           <div className="new-files-container">
