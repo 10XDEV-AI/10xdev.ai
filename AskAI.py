@@ -2,8 +2,10 @@ import pandas as pd
 import regex as re
 import os
 import chardet
-from utilities.embedding import get_embedding
+from utilities.embedding import split_embed
 from openai.embeddings_utils import cosine_similarity
+
+from utilities.logger import UserLogger
 from utilities.projectInfo import read_info
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
@@ -14,8 +16,9 @@ fs = pd.DataFrame()
 
 def max_cosine_sim(embeddings, prompt_embedding):
     y = 0
-    for x in embeddings:
-        y = max(y, cosine_similarity(x, prompt_embedding))
+    for i in prompt_embedding:
+        for x in embeddings:
+            y = max(y, cosine_similarity(x, i))
     return y
 
 
@@ -37,7 +40,7 @@ def filter_functions(result_string, code_query, filepaths, email):
 
 
 def search_functions(code_query, email):
-    prompt_embedding = get_embedding(code_query, email)
+    prompt_embedding = split_embed(code_query, email)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
@@ -209,3 +212,8 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     userlogger.clear_logs()
 
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
+
+#run if main
+if __name__ == "__main__":
+    question = "In the 10xdev/src/Clone.js file write a new handle clone function that will handle call to backend when the user tried to clone a private repo, take the access token from there and pass it to backend, in the backend (application.py file) write a new endpoint to clone private repos just like the utilities/clone_repo.py functions"
+    Ask_AI(question, userlogger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com", chatmessages=None)

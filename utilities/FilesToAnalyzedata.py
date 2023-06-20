@@ -54,6 +54,7 @@ def FilesToAnalyzedata(email, user_logger, path):
     with ThreadPoolExecutor() as executor:
         futures = []
 
+
         for root, _, files in os.walk(os.path.join("../user", email, path)):
             for filename in files:
                 futures.append(executor.submit(process_file, root, filename, os.path.join("../user", email, path), user_logger))
@@ -62,5 +63,7 @@ def FilesToAnalyzedata(email, user_logger, path):
             result = future.result()
             if result:
                 files_paths.append(result)
+
+    user_logger.clear_logs()
 
     return files_paths
