@@ -146,7 +146,6 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     consolidated_prompt = consolidate_prompt_creation(chatmessages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
-        userlogger.log(prompt)
 
     global fs
     path = read_info(email)
@@ -189,14 +188,14 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
             j = os.path.join(path, i)
             with open(j, 'rb') as f:
                 result = chardet.detect(f.read())
-                if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252':
+                if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252' or result['encoding'] == 'utf-16' or result['encoding'] == 'utf-16-le' or result['encoding'] == 'utf-16-be' or result['encoding'] == 'MacRoman':
                     final_contents = open(j).read()
                     final_contents = re.sub(r'\s+', ' ', final_contents)
                     final_prompt += final_contents
 
     system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
 
-    final_prompt += "\n" + prompt
+    final_prompt += "\n" + "Current User Prompt: "+ prompt
     # print(final_prompt)
     tokens = tokenCount(final_prompt)
 

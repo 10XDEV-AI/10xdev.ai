@@ -11,6 +11,8 @@ import difflib
 fs = pd.DataFrame()
 def get_diff(old_file_path, new_file_path, threshold=0.1):
     old_size = os.path.getsize(old_file_path)
+    if not os.path.exists(new_file_path):
+        return None
     new_size = os.path.getsize(new_file_path)
 
     with open(old_file_path, 'r') as old_file, open(new_file_path, 'r') as new_file:

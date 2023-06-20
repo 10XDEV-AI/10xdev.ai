@@ -9,12 +9,18 @@ import DropDownButton from "./DropDownButton/DropDownButton";
 import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
+import Sync from "./Sync/Sync";
 
 export const Welcome = () => {
   const { setSearchTerm, isLoading, setIsLoading } = useContext(SearchContext);
   const [input, setInput] = useState("");
+  const [showSync, setShowSync] = useState(false);
   const [typingStarted, setTypingStarted] = useState(false);
-  const navigate = useNavigate(); // for redirecting to search page
+  const navigate = useNavigate();
+
+  const handleSyncClick = () => {
+    setShowSync(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,36 +135,46 @@ export const Welcome = () => {
   return (
     <div className="flex flex-wrap">
       <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
-        <div className="flex items-center text-blue-900 justify-center py-2">
-          <h1 className="text-2xl">
-            <ProjectInfo />
-          </h1>
-          <button className="px-4 rounded ml-auto hover:text-blue-600" onClick={() => navigate("/repos")}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-            </svg>
-          </button>
-        </div>
-        <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden shadow-md">
-          <h2 className="text-xl font-bold mb-2">Codebase:</h2>
-          <div className="bg-white h-[50vh] overflow-y-auto rounded-lg">
-          <FileTree data={treeData} />
-          </div>
-        </div>
-        <div className="flex items-center text-blue-900 justify-center py-5">
-          <div className="">
-              <h1 className="font-bold">
-                Last synced : {new Date().toLocaleString()}
+        {showSync ? (
+          <Sync />
+        ) : (
+            <>
+            <div className="flex items-center text-blue-900 justify-center py-2">
+              <h1 className="text-2xl">
+                <ProjectInfo />
               </h1>
-              <h1 className="font-bold ml-auto">
-                Latest commit : #e3o4u3o
-              </h1>
-          </div>
-          <button className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md ">
-            Sync Now
-          </button>
-        </div>
+              <button className="px-4 rounded ml-auto hover:text-blue-600" onClick={() => navigate("/repos")}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+              </button>
+            </div>
+            <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden shadow-md">
+              <h2 className="text-xl font-bold mb-2">Codebase:</h2>
+              <div className="bg-white h-[50vh] overflow-y-auto rounded-lg">
+              <FileTree data={treeData} />
+              </div>
+            </div>
+            <div className="flex items-center text-blue-900 justify-center py-5">
+              <div className="">
+                  <h1 className="font-bold">
+                    Last synced : {new Date().toLocaleString()}
+                  </h1>
+                  <h1 className="font-bold ml-auto">
+                    Latest commit : #e3o4u3o
+                  </h1>
+              </div>
+              <button
+                className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md "
+                onClick={handleSyncClick}>
+                Sync Now
+              </button>
+            </div>
+            </>
+        )
+        }
       </div>
+
 
       <div className="shadow-xl w-1/2 h-screen p-6">
         <div className="text-centre">

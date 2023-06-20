@@ -25,7 +25,7 @@ user_loggers = {}  # Dictionary to store UserLogger instances
 @application.before_request
 def before_request():
     session.permanent = True
-    application.permanent_session_lifetime = timedelta(minutes=30)
+    application.permanent_session_lifetime = timedelta(minutes=720)
     # Retrieve the Authorization header from the request
     auth_header = request.headers.get("Authorization")
 
