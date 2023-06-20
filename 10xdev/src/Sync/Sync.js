@@ -104,19 +104,19 @@ function Sync(setShowSync){
         </div>
         {newFiles.length > 0 && (
           <div className="h-full">
-                      <h2 className="text-xl py-4">New files found:</h2>
-                                           <ul className="list-disc pl-8">
-                                                                                        {newFiles.map((file, index) => (
-                                                                                          <li key={index}>{file}</li>
-                                                                                        ))}
-                                                                                      </ul>
-                                                                                      <div className="flex">
-                                                                                          <button onClick={handleSyncNewClick}
-                                                                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0" >
-                                                                                            Sync New Files
-                                                                                          </button>
-                                                                                      </div>
-                    </div>
+              <h2 className="text-xl py-4">New files found:</h2>
+               <ul className="list-disc pl-8">
+                {newFiles.map((file, index) => (
+                  <li key={index}>{file}</li>
+                ))}
+              </ul>
+              <div className="flex">
+                  <button onClick={handleSyncNewClick}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0 " >
+                    Sync New Files
+                  </button>
+              </div>
+            </div>
         )}
       </div>
   );
