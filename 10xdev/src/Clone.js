@@ -309,7 +309,7 @@ const Clone = () => {
                   </div>
                 ) : (
                   <div>
-                    <h3>No private repositories found</h3>
+                    <h3>Connect your Github to see private repositories</h3>
                   </div>
                 )}
               </div>
