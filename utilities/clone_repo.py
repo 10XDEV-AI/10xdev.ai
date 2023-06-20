@@ -59,8 +59,11 @@ def get_clones(url, email):
     except subprocess.CalledProcessError:
         return [], 404
 
-
+import os
+import json
+import shutil
 import subprocess
+
 def get_private_clones(url, email, access_token):
     # Check the URL has a real git repository
     try:
@@ -72,8 +75,12 @@ def get_private_clones(url, email, access_token):
         current_path = os.getcwd()
         # cd into email folder
         os.chdir("../user/" + email)
+        # Split the URL to get the username and repository name
+        username, repo_name = url.split("/")[-2], url.split("/")[-1].replace(".git", "")
+        # Construct the clone URL with the access token
+        clone_url = f"https://oauth2:{access_token}@github.com/{username}/{repo_name}.git"
         # Clone the repository into email folder
-        subprocess.run(['git', 'clone', url], env={"ACCESS_TOKEN": access_token})
+        subprocess.run(['git', 'clone', clone_url])
         print("Cloned " + url)
 
         # Get the path of the cloned repository
@@ -89,7 +96,7 @@ def get_private_clones(url, email, access_token):
         filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
         filtered_branches = [branch.replace('origin/', '').strip() for branch in filtered_branches]
 
-        # remove duplicates
+        # Remove duplicates
         filtered_branches = list(set(filtered_branches))
 
         # Print the filtered branch names
@@ -98,11 +105,11 @@ def get_private_clones(url, email, access_token):
         with open("../user/" + email + '/AIFiles/info.json', 'r') as f:
             data = json.load(f)
 
-        # check if the key 'repos' exists
+        # Check if the key 'repos' exists
         if 'repos' not in data:
             data['repos'] = []
 
-        # check if the value of the key 'path' is not in the list of repos
+        # Check if the value of the key 'path' is not in the list of repos
         if data['repos'] == [""]:
             data['repos'] = []
 
@@ -112,7 +119,7 @@ def get_private_clones(url, email, access_token):
         with open(os.path.join("../user/" + email, 'AIFiles', 'info.json'), 'w') as outfile:
             json.dump(data, outfile)
 
-        # create an empty file named .AIIgnore
+        # Create an empty file named .AIIgnore
         with open(os.path.join("../user/" + email, '.AIIgnore'+repo_path), 'w') as outfile:
             outfile.write("")
 
@@ -122,7 +129,6 @@ def get_private_clones(url, email, access_token):
 
     except subprocess.CalledProcessError:
         return [], 404
-
 
 
 def select_branch(path, branch, email):
