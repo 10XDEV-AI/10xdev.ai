@@ -165,9 +165,6 @@ export const Welcome = () => {
                   <h1 className="font-bold">
                     Last synced : {new Date().toLocaleString()}
                   </h1>
-                  <h1 className="font-bold ml-auto">
-                    Latest commit : #e3o4u3o
-                  </h1>
               </div>
               <button
                 className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md "
