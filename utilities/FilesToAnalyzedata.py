@@ -3,7 +3,7 @@ import os
 import re
 from utilities.tokenCount import tokenCount
 from concurrent.futures import ThreadPoolExecutor
-
+from utilities.projectInfo import read_info
 
 
 
@@ -46,10 +46,14 @@ def process_file(root, filename, path, user_logger):
 
 
 def FilesToAnalyzedata(email, user_logger, path):
+    if path == "":
+        path = read_info(email).split('/')[-1]
+        print(path)
     files_paths = []
 
     with ThreadPoolExecutor() as executor:
         futures = []
+
 
         for root, _, files in os.walk(os.path.join("../user", email, path)):
             for filename in files:
@@ -59,5 +63,7 @@ def FilesToAnalyzedata(email, user_logger, path):
             result = future.result()
             if result:
                 files_paths.append(result)
+
+    user_logger.clear_logs()
 
     return files_paths

@@ -11,6 +11,10 @@ import difflib
 fs = pd.DataFrame()
 def get_diff(old_file_path, new_file_path, threshold=0.1):
     old_size = os.path.getsize(old_file_path)
+
+    if not os.path.exists(new_file_path):
+        return None
+
     new_size = os.path.getsize(new_file_path)
 
     with open(old_file_path, 'r') as old_file, open(new_file_path, 'r') as new_file:
@@ -19,9 +23,17 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
 
     differ = difflib.ndiff(old_lines, new_lines)
     diff_output = differ
-
-    # Calculate the percentage of non-space/tab changes
-    num_changes = len(differ)
+    
+    if old_lines == new_lines:
+        return None
+    num_changes = 0
+    for line in differ:
+        if line.startswith("+"):
+            num_changes += 1
+        elif line.startswith("-"):
+            num_changes += 1
+        elif line.startswith("?"):
+            num_changes += 1
     total_lines = max(old_size, new_size)
     change_ratio = num_changes / total_lines
 

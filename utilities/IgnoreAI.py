@@ -47,7 +47,7 @@ def IgnoreAI(email, user_logger, path):
         for root, directories, files in os.walk(os.path.join("../user", email, path)):
             relpath = os.path.relpath(root, os.path.join("../user", email, path))
             if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
-                print("Ignoring directory " + relpath)
+                #print("Ignoring directory " + relpath)
                 directories[:] = []  # Don't traverse this directory further
                 continue
 
@@ -58,7 +58,7 @@ def IgnoreAI(email, user_logger, path):
                 else:
                     if not is_file_ignored(filename):
                         futures.append(executor.submit(process_file, root, filename, os.path.join("../user",email,path), user_logger))
-                        print("Processing file:", os.path.join(root, filename))
+                        #print("Processing file:", os.path.join(root, filename))
 
         for future in futures:
             result = future.result()

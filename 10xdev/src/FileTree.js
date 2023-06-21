@@ -14,11 +14,16 @@ function DirectoryTreeView(props) {
     return `${percentage}%`;
   };
 
+  const modifiedData = data.map((node) => ({
+    ...node,
+    defaultExpanded: true, // Set defaultExpanded to true for each node
+  }));
+
   return (
-    <div>
-      <div className="p-4 bg-white font-mono text-base text-gray-800 select-none rounded-md">
+    <div className="">
+      <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
         <TreeView
-          data={data}
+          data={modifiedData}
           aria-label="directory tree"
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
@@ -39,19 +44,19 @@ const FileIcon = ({ filename }) => {
   const extension = filename.slice(filename.lastIndexOf(".") + 1);
   switch (extension) {
     case "js":
-      return <DiJavascript color="yellow" className="inline-block align-middle mr-1" />;
+      return <DiJavascript color="rgb(217 119 6)" className="inline-block align-middle mr-1" />;
     case "css":
-      return <DiCss3 color="turquoise" className="inline-block align-middle mr-1" />;
+      return <DiCss3 color="rgb(22 163 74)" className="inline-block align-middle mr-1" />;
     case "json":
-      return <FaList color="turquoise" className="inline-block align-middle mr-1" />;
+      return <FaList color="rgb(3 105 161)" className="inline-block align-middle mr-1" />;
     case "npmignore":
       return <DiNpm color="red" className="inline-block align-middle mr-1" />;
     case "jsx":
       return <BsFiletypeJsx color="blue" className="inline-block align-middle mr-1" />;
     case "scss":
-      return <BsFiletypeScss color="green" className="inline-block align-middle mr-1" />;
+      return <BsFiletypeScss color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
     case "py":
-      return <FaPython color="cyan" className="inline-block align-middle mr-1" />;
+      return <FaPython color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
     case "md":
       return <FaReadme color="black" className="inline-block align-middle mr-1" />;
     case "ts":
