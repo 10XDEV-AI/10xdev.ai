@@ -114,7 +114,6 @@ export const Chat = () => {
 return (
     <>
     <Navbar LoadProjectInfo="True" />
-    <div className="spacer-top"></div>
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
                   {isLoading ? (<LoadingRing />) : (
       <div >

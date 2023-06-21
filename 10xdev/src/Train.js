@@ -45,7 +45,10 @@ const Train = () => {
   
     return root;
   };
-  
+
+  const handleSync = async () => {
+
+  }
   
   const handleGetGitIgnore = async () => {
     try {
@@ -135,11 +138,14 @@ const Train = () => {
           <div className="gitIgnorebuttoncontainer">
 
             <div>
-              <button onClick={handleGetGitIgnore} className="bg-blue-900 text-white p-2 m-2 rounded-full hover:bg-blue-700">
+              <button onClick={handleGetGitIgnore} className="bg-blue-900 text-white p-2 ml-2 rounded-full hover:bg-blue-700">
                 Analyze Files
               </button>
-              <button onClick={handleTrain} className="bg-blue-900 text-white p-2  rounded-full hover:bg-blue-700">
+              <button onClick={handleTrain} className="bg-blue-900 text-white p-2 m-2 rounded-full hover:bg-blue-700">
                 Start Training
+              </button>
+              <button onClick={handleSync} className="bg-blue-900 text-white p-2  rounded-full hover:bg-blue-700">
+                Sync Changes
               </button>
             </div>
           </div>
@@ -148,11 +154,11 @@ const Train = () => {
               {
               (showFilesToIgnore && showFilesToAnalyze) ? (
                     <div className="w-full flex justify-center">
-                      <div className="ignorebox1">
-                        <div className="ignoretext">
-                          <h2>Files to Analyze:</h2>
-                            <table className = "ignoretable">
-                                  <thead>
+                      <div className="ignorebox1 ">
+                        <div className="ignoretext ">
+                          <h2 className="text-xl font-bold">Files to Ignore:</h2>
+                            <table className = "ignoretable bg-white rounded-lg shadow-md  ">
+                                  <thead className = "h-3" >
                                     <tr>
                                       <th>File Path</th>
                                       <th>Tokens</th>

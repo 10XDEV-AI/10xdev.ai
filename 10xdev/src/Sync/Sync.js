@@ -117,9 +117,6 @@ function Sync(handleSyncClick) {
             </span>
           </div>
         )}
-        <div className="text-center">
-          <LogViewer />
-        </div>
       </div>
       {newFiles.length > 0 && (
         <div className="h-full">
@@ -143,13 +140,16 @@ function Sync(handleSyncClick) {
                     </div>
                 )}
               </div>
-          <ul className="list-disc pl-8">
+          <ul className="list-disc pl-8 ">
             {newFiles.map((file, index) => (
-              <li key={index}>
-                <FaFile /> {file}
+              <li key={index} className="flex">
+                <FaFile className="m-1" size={20} color="black" /> {file}
               </li>
             ))}
           </ul>
+        <div className="text-center text-sm">
+          <LogViewer />
+        </div>
         </div>
       )}
     </div>
