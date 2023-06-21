@@ -183,15 +183,15 @@ export const Welcome = () => {
           <div className="">
             <div className="text-xl font-bold mt-6 mb-3">Describe a task, query, or a bug:</div>
             <div className="border border-gray-400 rounded-lg shadow-md">
-              <div className="flex text-base  h-[55vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
+              <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
                 {typingStarted ? <textarea
-                                                   className="flex-grow h-[52vh] focus:outline-none"
+                                                   className="flex-grow h-[48vh] focus:outline-none"
                                                    value={input}
                                                    placeholder=""
                                                    onClick={() => setTypingStarted(true)}
                                                    onChange={handleInputChange}
                                                  /> : (
-                  <Typewriter className = "h-[50vh]"
+                  <Typewriter className = "h-[48vh]"
                     options={{
                       strings: shuffledStrings,
                       autoStart: true,
@@ -214,6 +214,15 @@ export const Welcome = () => {
                   <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
               </button>
+            </div>
+            <div className="text-center mt-2 flex">
+                  <div classname = ""><div>❓</div>Explain Code</div>
+                  <div classname = ""><div>📖</div>Write Documentation</div>
+                  <div classname = ""><div>🐞️</div>Fix Bugs ️</div>
+                  <div classname = ""><div>⭐️</div>Implement New Features </div>
+                  <div classname = ""><div>🔬</div>Create Testcases</div>
+                  <div classname = ""><div>🕹️</div>Generate commands </div>
+                  <div classname = ""><div>🪄 </div>and More </div>
             </div>
           </div>
           <div className="absolute top-3 right-5">

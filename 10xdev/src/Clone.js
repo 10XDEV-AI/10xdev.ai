@@ -8,7 +8,6 @@ import { callAPI } from "./api";
 import { BsGithub } from "react-icons/bs";
 import { FaGitlab } from "react-icons/fa";
 import cookies from "js-cookie";
-
 const Clone = () => {
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
@@ -21,14 +20,13 @@ const Clone = () => {
       : hostname === "test.10xdevai.com"
       ? "7de77ae768aa62b79e09"
       : hostname === "10xdevai.com"
-      ? "40acda1a937125d9193b"
+      ? "eaae8a43278892ed15e1"
       : "YoYOHS";
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
   const [privateRepolink, setPrivateRepolink] = useState([]);
   const [privateBranch, setPrivateBranch] = useState([]);
-  const [currentRepo, setCurrentRepo] = useState(null);
 
   const handleClone = async (repo) => {
     setIsLoading(true);
@@ -39,7 +37,7 @@ const Clone = () => {
       console.log(data);
       setBranches(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     setIsLoading(false);
   };
@@ -55,7 +53,7 @@ const Clone = () => {
       console.log(data);
       setBranches(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     setIsLoading(false);
   };
