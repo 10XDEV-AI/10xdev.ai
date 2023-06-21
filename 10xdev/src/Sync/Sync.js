@@ -1,17 +1,16 @@
-import React, { useState, useEffect,useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
 import SearchContext from "../context/SearchContext";
 
-function Sync(handleSyncClick){
-  const {showSync, setShowSync} = useContext(SearchContext);
+function Sync(handleSyncClick) {
+  const { showSync, setShowSync } = useContext(SearchContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [newFiles, setNewFiles] = useState([]);
   const [isRequestInProgress, setIsRequestInProgress] = useState(false);
-
 
   const syncData = useCallback(async () => {
     if (isRequestInProgress) {
@@ -33,24 +32,19 @@ function Sync(handleSyncClick){
         setIsSyncing(false);
         setShowTick(true);
         setNewFiles([]);
+        setTimeout(() => {
+          setShowSync(false);
+        }, 1000); // Set showSync to false after 5 seconds
       }
     } catch (error) {
       setShowWarning(true);
     }
-  }, [isRequestInProgress]);
+  }, [isRequestInProgress, setShowSync]);
 
   useEffect(() => {
-    // call syncData initially
     syncData();
-
-    // call syncData every 60 seconds
-    const intervalId = setInterval(syncData, 6000000);
-
-    // cleanup function to clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
   }, [isRequestInProgress, syncData]);
 
-  // Include isRequestInProgress as a dependency in the dependency array
   const handleSyncNewClick = async () => {
     if (!isRequestInProgress) {
       setIsRequestInProgress(true);
@@ -65,6 +59,9 @@ function Sync(handleSyncClick){
           setShowWarning(false);
           setShowTick(true);
           setNewFiles([]);
+          setTimeout(() => {
+            setShowSync(false);
+          }, 5000); // Set showSync to false after 5 seconds
         } else if (data.message === "NEW") {
           setShowTick(false);
           setIsSyncing(false);
@@ -80,47 +77,63 @@ function Sync(handleSyncClick){
   };
 
   return (
-      <div className="h-full">
-        <div className="text-2xl" >
-          {isSyncing ? (
-            <div>
-              Syncing... <span role="img" aria-label="Description of the emoji">⌛️</span>
+    <div className="h-full">
+      <div className="text-2xl h-full">
+        {isSyncing ? (
+          <div>
+            Syncing...{" "}
+            <span role="img" aria-label="Description of the emoji">
+              ⌛️
+            </span>
+          </div>
+        ) : showTick ? (
+          <div className="h-full">
+            <div className="flex">
+                  All files synced successfully {" "}
+                  <span role="img" aria-label="Description of the emoji">
+                    ✅
+                  </span>
+
             </div>
-          ) : showTick ? (
-            <div className="right-0 bottom-0">
-              All files synced successfully <span role="img" aria-label="Description of the emoji">✅</span>
-              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => setShowSync(false)}>
-                  Ok
-              </button>
-            </div>
-          ) : showWarning ? (
-            <div>
-              <span role="img" aria-label="Description of the emoji">⚠️</span> Warning:
-            </div>
-          ) : (
-            <div>Sync status unknown <span role="img" aria-label="Description of the emoji">❌</span></div>
-          )}
-          <div className="text-center">
+          </div>
+        ) : showWarning ? (
+          <div>
+            <span role="img" aria-label="Description of the emoji">
+              ⚠️
+            </span>{" "}
+            Warning:
+          </div>
+        ) : (
+          <div>
+            Sync status unknown{" "}
+            <span role="img" aria-label="Description of the emoji">
+              ❌
+            </span>
+          </div>
+        )}
+        <div className="text-center">
           <LogViewer />
+        </div>
+      </div>
+      {newFiles.length > 0 && (
+        <div className="h-full">
+          <h2 className="text-xl py-4">New files found:</h2>
+          <ul className="list-disc pl-8">
+            {newFiles.map((file, index) => (
+              <li key={index}>{file}</li>
+            ))}
+          </ul>
+          <div className="flex">
+            <button
+              onClick={handleSyncNewClick}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0 "
+            >
+              Sync New Files
+            </button>
           </div>
         </div>
-        {newFiles.length > 0 && (
-          <div className="h-full">
-              <h2 className="text-xl py-4">New files found:</h2>
-               <ul className="list-disc pl-8">
-                {newFiles.map((file, index) => (
-                  <li key={index}>{file}</li>
-                ))}
-              </ul>
-              <div className="flex">
-                  <button onClick={handleSyncNewClick}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0 " >
-                    Sync New Files
-                  </button>
-              </div>
-            </div>
-        )}
-      </div>
+      )}
+    </div>
   );
 }
 

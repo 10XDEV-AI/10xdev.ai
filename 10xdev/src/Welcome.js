@@ -176,7 +176,7 @@ export const Welcome = () => {
 
       <div className="shadow-xl w-1/2 h-screen p-6">
         <div className="text-centre">
-          <div className="text-6xl font-bold italic text-blue-900 mt-[7%] mb-[5%] text-center">
+          <div className="lg:text-6xl font-bold italic text-blue-900 mt-[7%] mb-[5%] text-center sm:text-xl">
             10XDEV.AI
           </div>
 
