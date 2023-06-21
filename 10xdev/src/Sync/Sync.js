@@ -35,7 +35,7 @@ function Sync(handleSyncClick) {
         setNewFiles([]);
         setTimeout(() => {
           setShowSync(false);
-        }, 1000); // Set showSync to false after 5 seconds
+        }, 2000);
       }
     } catch (error) {
       setShowWarning(true);
