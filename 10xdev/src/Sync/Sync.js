@@ -3,7 +3,7 @@ import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
 
-function Sync(setShowSync){
+function Sync(handleSyncClick){
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -87,7 +87,7 @@ function Sync(setShowSync){
           ) : showTick ? (
             <div className="right-0 bottom-0">
               All files synced successfully <span role="img" aria-label="Description of the emoji">✅</span>
-              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => setShowSync(false)}>
+              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => handleSyncClick}>
                   Ok
               </button>
             </div>
