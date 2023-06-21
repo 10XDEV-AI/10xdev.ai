@@ -17,7 +17,7 @@ const Alert = (props) => {
       case 400:
         return 'Error 400: Bad Request';
       case 401:
-        return 'Error 401: Unauthorized';
+        return 'Error 401: Unauthorized Please login Again';
       case 403:
         return 'Error 403: Forbidden';
       case 404:
@@ -46,7 +46,7 @@ const Alert = (props) => {
           className={`error-modal fixed px-4 flex bottom-4 right-4 bg-red-700 text-white p-4 rounded-md animate-fade-out`}
           style={{ animationDelay: '4s', width: '32rem', zIndex: '100' }}
         >
-          <MdErrorOutline className="mt-1" />
+          <MdErrorOutline className="p-2 m-1" />
           <p> {getErrorMessage(props.type)}</p>
         </div>
       )}
