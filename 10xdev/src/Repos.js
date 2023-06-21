@@ -58,7 +58,7 @@ export default function Repos() {
     <div>
       <Navbar LoadSync="True" LoadProjectInfo="True" />
       <div className="repos-container">
-        <h1 className="repos-title font-bold">Repositories Trained</h1>
+        <h1 className="w-full text-center text-3xl font-bold py-10 text-blue-900">Repositories Trained</h1>
         <div className="repos-cards">
           {repos.map(repo => (
             <div className="repo-card" key={repo.Directory}>
@@ -91,7 +91,7 @@ export default function Repos() {
           ))}
         </div>
         <div className="repos-button-container">
-          <button className="repos-button" onClick={() => navigate('/clone')}>Setup a Repo</button>
+          <button className="bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md w-full m-20 w-full m-20" onClick={() => navigate('/clone')}>Setup a Repository</button>
         </div>
       </div>
     </div>

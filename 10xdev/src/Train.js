@@ -128,7 +128,7 @@ const Train = () => {
               type="text"
               value={input}
               onChange={handleInputChange}
-              className="pathsearchbar"
+              className=""
             />
           </label>
           <div className="gitIgnorebuttoncontainer">
@@ -146,7 +146,7 @@ const Train = () => {
         <div className="filesdiff">
               {
               (showFilesToIgnore && showFilesToAnalyze) ? (
-                    <div className="ignorecontainer">
+                    <div className="w-full flex justify-center">
                       <div className="ignorebox1">
                         <div className="ignoretext">
                           <h2>Files to Analyze:</h2>
@@ -168,31 +168,34 @@ const Train = () => {
                                     ))}
                                   </tbody>
                                 </table>
-                                 <h4>
-                                 <span role="img" aria-label="Description of the emoji"> ✅</span>  : All good
-                                 </h4>
-                                 <h4>
-                                 <span role="img" aria-label="emoji"> ⚠️</span> : File too long
-                                 </h4>
-                                 <h4>
-                                 <span role="img" aria-label="emoji">ℹ️ </span>  : File is not text
-                                 </h4>
+                                <div className="flex justify-center text-base font-bold">
+                                     <h4 className="p-2 m-2 rounded-md bg-green-300">
+                                     <span role="img" aria-label="Description of the emoji"> ✅</span>  : All good
+                                     </h4>
+                                     <h4 className="p-2 m-2 rounded-md bg-red-300">
+                                     <span role="img" aria-label="emoji"> ⚠️</span> : File too long
+                                     </h4>
+                                     <h4 className="p-2 m-2 rounded-md bg-blue-300">
+                                     <span role="img" aria-label="emoji">ℹ️ </span>  : File is not text
+                                     </h4>
+                                 </div>
                         </div>
                       </div>
                        <div className="ignorebox2">
                             <div className="ignoretext">
-                                <div className="ignoretitle">
-                                    <h2>Files to Ignore:
-                                    <div className="">
-                                    <button onClick={handleSaveFilesToIgnore} className="bg-blue-900 text-white p-2 m-2 hover:bg-blue-700">
+                                <div className="">
+                                    <div className="flex mb-2">
+                                        <h2 className="text-xl font-bold">Files to Ignore:</h2>
+                                    <div className="ml-auto bg-blue-900 text-white px-2 mb-2 mx-2 rounded-md hover:bg-blue-700">
+                                    <button onClick={handleSaveFilesToIgnore} className="">
                                         Save
                                     </button>
                                     </div>
-                                    </h2>
+                                    </div>
                                 </div>
                            {
                               <textarea
-                                className="ignoretextarea"
+                                className="w-full h-[80%] p-2 rounded-md text-black"
                                 placeholder="Type files you want the AI to ignore here"
                                 value={filesToIgnore.join('\n')}
                                 onChange={(event) => setFilesToIgnore(event.target.value.split('\n'))}
@@ -205,26 +208,27 @@ const Train = () => {
                     (
                         <div className="ignorecontainer">
                             <div className="ignorebox1" >
-                             <div className="ignoretext">
-                                <h2>All Files</h2>
+                             <div className="">
+                                <h2 className="text-xl font-bold">All Files</h2>
                                 <FilesTree data={Treedata} />
                              </div>
                             </div>
                             <div className="ignorebox2">
                             <div className="ignoretext">
-                                <div className="ignoretitle">
-                                    <h2>Files to Ignore:
-                                    <div className="saveIgnoreButton">
+                                <div className="">
+                                    <div className="flex">
+                                        <h2 className="text-xl font-bold">Files to Ignore:</h2>
+                                    <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 rounded-md hover:bg-blue-700">
                                     <button onClick={handleSaveFilesToIgnore} className="">
                                         Save
                                     </button>
                                     </div>
-                                    </h2>
+                                    </div>
                                 </div>
                            {
                               <textarea
-                                className="ignoretextarea"
-                                placeholder="Type files you want the AI to ignore here"
+                                className="w-full h-[80%] p-2 rounded-md text-black  mb-2"
+                                placeholder="Type files and folders you want the AI to ignore here."
                                 value={filesToIgnore.join('\n')}
                                 onChange={(event) => setFilesToIgnore(event.target.value.split('\n'))}
                               />
