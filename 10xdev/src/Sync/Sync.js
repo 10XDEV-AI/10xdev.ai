@@ -3,6 +3,7 @@ import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
 import SearchContext from "../context/SearchContext";
+import { FaFile } from 'react-icons/fa';
 
 function Sync(handleSyncClick) {
   const { showSync, setShowSync } = useContext(SearchContext);
@@ -34,7 +35,7 @@ function Sync(handleSyncClick) {
         setNewFiles([]);
         setTimeout(() => {
           setShowSync(false);
-        }, 1000); // Set showSync to false after 5 seconds
+        }, 2000);
       }
     } catch (error) {
       setShowWarning(true);
@@ -129,7 +130,9 @@ function Sync(handleSyncClick) {
               </div>
           <ul className="list-disc pl-8">
             {newFiles.map((file, index) => (
-              <li key={index}>{file}</li>
+              <li key={index}>
+                <FaFile /> {file}
+              </li>
             ))}
           </ul>
         </div>

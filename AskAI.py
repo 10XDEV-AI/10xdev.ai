@@ -43,7 +43,7 @@ def search_functions(code_query, email):
     prompt_embedding = split_embed(code_query, email)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
-    res = fs.sort_values('similarities', ascending=False).head(10)
+    res = fs.sort_values('similarities', ascending=False).head(15)
 
     res.index = range(1, len(res) + 1)
     # Concatenate filenames, summary columns

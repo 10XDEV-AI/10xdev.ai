@@ -21,7 +21,7 @@ const Clone = () => {
       : hostname === "test.10xdevai.com"
       ? "7de77ae768aa62b79e09"
       : hostname === "10xdevai.com"
-      ? "eaae8a43278892ed15e1"
+      ? "40acda1a937125d9193b"
       : "YoYOHS";
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);

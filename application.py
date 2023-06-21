@@ -283,8 +283,8 @@ def github_api():
         client_secret = "613f61d82e9dae784ee76bb85dbf11eaf24d2766"
     elif client_id == "7de77ae768aa62b79e09":
         client_secret = "bb481efea8c764dd02af801d783ff61f3954b43d"
-    elif  client_id == "PRDCLID":
-        client_secret = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    elif  client_id == "40acda1a937125d9193b":
+        client_secret = "d5f903e15c64c6ffb7fbf011fac15045cc2f0758"
     else:
         return jsonify({"error": "Invalid client_id"}), 400
 
