@@ -16,6 +16,7 @@ import Wait from "./Wait";
 function App () {
   return (
     <div className="App">
+    <div id="alert-container"></div>
     <SearchState>
         <Router>
             <Routes>
