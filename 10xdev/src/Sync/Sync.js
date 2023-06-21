@@ -78,7 +78,7 @@ function Sync(handleSyncClick) {
 
   return (
     <div className="h-full">
-      <div className="text-2xl h-full">
+      <div className="text-2xl font-bold">
         {isSyncing ? (
           <div>
             Syncing...{" "}
@@ -87,13 +87,12 @@ function Sync(handleSyncClick) {
             </span>
           </div>
         ) : showTick ? (
-          <div className="h-full">
+          <div className="">
             <div className="flex">
                   All files synced successfully {" "}
                   <span role="img" aria-label="Description of the emoji">
                     ✅
                   </span>
-
             </div>
           </div>
         ) : showWarning ? (
@@ -117,20 +116,22 @@ function Sync(handleSyncClick) {
       </div>
       {newFiles.length > 0 && (
         <div className="h-full">
-          <h2 className="text-xl py-4">New files found:</h2>
+          <div className="text-xl flex items-center justify-between">
+                <h2 className="py-4">New files found:</h2>
+                {newFiles.length > 0 && (
+                  <button
+                    onClick={handleSyncNewClick}
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 rounded"
+                  >
+                    Sync New Files
+                  </button>
+                )}
+              </div>
           <ul className="list-disc pl-8">
             {newFiles.map((file, index) => (
               <li key={index}>{file}</li>
             ))}
           </ul>
-          <div className="flex">
-            <button
-              onClick={handleSyncNewClick}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 bottom-0 "
-            >
-              Sync New Files
-            </button>
-          </div>
         </div>
       )}
     </div>
