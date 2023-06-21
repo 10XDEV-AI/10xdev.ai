@@ -12,6 +12,12 @@ const Alert = (props) => {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    if (props.type === 401) {
+      window.location.href = 'https://10xdevai.com';
+    }
+  }, [props.type]);
+
   const getErrorMessage = (errorCode) => {
     switch (errorCode) {
       case 400:

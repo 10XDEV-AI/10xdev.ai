@@ -1,34 +1,69 @@
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import React from 'react';
+import { Audio, Dna, InfinitySpin, Oval, RevolvingDot, Rings } from 'react-loader-spinner';
 import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
-import SearchContext from "../context/SearchContext";
+import SearchContext from '../context/SearchContext';
 
 const LoadingRing = () => {
+  const { setIsLoading } = useContext(SearchContext);
+  const navigate = useNavigate();
 
-  const {setIsLoading } = useContext(SearchContext);
-  const navigate =useNavigate();
-  const handleRunInBackGround = () => {
+  const handleRunInBackground = () => {
     setIsLoading(false);
-    navigate("/welcome")
-  }
+    navigate('/welcome');
+  };
+
+  const loaders = [
+    <Dna
+      visible={true}
+      height={80}
+      width={80}
+      ariaLabel="dna-loading"
+      wrapperStyle={{}}
+      wrapperClass="dna-wrapper"
+      key="dna-loader"
+    />,
+    <Oval
+          height={80}
+          width={80}
+          color="#87CEEB"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="#000066"
+          strokeWidth={2}
+          strokeWidthSecondary={2}
+          key="oval-loader"
+        />,
+        <Rings
+          height={80}
+          width={80}
+          color="#000066"
+          radius={6}
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="rings-loading"
+          key="rings-loader"
+        />,
+
+  ];
+
+  // Randomly select a loader
+  const randomLoader = loaders[Math.floor(Math.random() * loaders.length)];
 
   return (
-  <div>
-    <div className="loading-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-    <div className ='logbox'>
-        <LogViewer/>
-    </div>
-    <button className='loading-cancel' onClick={handleRunInBackGround} >
+    <div>
+      <div className="loading-ring">{randomLoader}</div>
+      <div className="logbox">
+        <LogViewer />
+      </div>
+      <button className="loading-cancel" onClick={handleRunInBackground}>
         Go Back / Run in Background
-    </button>
-  </div>
+      </button>
+    </div>
   );
 };
 

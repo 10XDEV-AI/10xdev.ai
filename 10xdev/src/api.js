@@ -15,11 +15,11 @@ export const callAPI = async (url, options = {}) => {
       showAlert( response.status );
   }
   const data = await response.json();
- 
+
   return data;
 };
 
-function showAlert( type) {
+function showAlert(type) {
   const alertContainer = document.getElementById('alert-container');
   ReactDOM.render(
     <Alert  type={type} />,
@@ -28,6 +28,5 @@ function showAlert( type) {
 
   setTimeout(() => {
     ReactDOM.unmountComponentAtNode(alertContainer);
-  }, 5000); 
+  }, 5000);
 }
-

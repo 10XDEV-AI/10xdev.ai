@@ -8,6 +8,7 @@ import { callAPI } from './api';
 import { useEffect } from "react";
 import FilesTree from "./FileTree";
 import Sync from './Sync/Sync';
+import {useNavigate} from 'react-router-dom';
 
 const Train = () => {
   const { isLoading, setIsLoading, path } = useContext(SearchContext);
@@ -17,6 +18,7 @@ const Train = () => {
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -47,7 +49,7 @@ const Train = () => {
   };
 
   const handleSync = async () => {
-    // Start syncing changes
+    navigate('/welcome');
   };
 
   const handleGetGitIgnore = async () => {
@@ -260,11 +262,8 @@ const Train = () => {
           </div>
         </div>
       )}
-      <div className=" ">
-      <Sync />
-      </div>
-    </div>
-  );
+  </div>
+);
 };
 
 export default Train;
