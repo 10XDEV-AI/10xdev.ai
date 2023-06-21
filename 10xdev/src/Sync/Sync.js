@@ -4,6 +4,7 @@ import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
 import SearchContext from "../context/SearchContext";
 import { FaFile } from 'react-icons/fa';
+import {useNavigate} from 'react-router-dom';
 
 function Sync(handleSyncClick) {
   const { showSync, setShowSync } = useContext(SearchContext);
@@ -12,6 +13,7 @@ function Sync(handleSyncClick) {
   const [showWarning, setShowWarning] = useState(false);
   const [newFiles, setNewFiles] = useState([]);
   const [isRequestInProgress, setIsRequestInProgress] = useState(false);
+  const navigate = useNavigate();
 
   const syncData = useCallback(async () => {
     if (isRequestInProgress) {
@@ -77,6 +79,10 @@ function Sync(handleSyncClick) {
     }
   };
 
+  const handleSelectClick = async () => {
+    navigate("/train")
+  }
+
   return (
     <div className="h-full">
       <div className="text-2xl font-bold">
@@ -120,12 +126,21 @@ function Sync(handleSyncClick) {
           <div className="text-xl flex items-center justify-between">
                 <h2 className="py-4">New files found:</h2>
                 {newFiles.length > 0 && (
+                <div className="flex">
                   <button
                     onClick={handleSyncNewClick}
-                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 rounded"
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-2 mx-2 rounded"
                   >
                     Sync New Files
                   </button>
+
+                  <button
+                    onClick={handleSelectClick}
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded"
+                    >
+                    Select Files to Ignore
+                    </button>
+                    </div>
                 )}
               </div>
           <ul className="list-disc pl-8">

@@ -133,14 +133,14 @@ export const Welcome = () => {
   else{
   return (
     <div className="flex ">
-      <div className="w-1/2 p-6 pt-[6%] bg-slate-50 h-screen">
+      <div className="w-1/2 p-6 bg-slate-50 h-screen">
         {showSync ? (
           <div className="py-2 h-[90vh]">
             <Sync/>
           </div>
         ) : (
             <>
-            <div className="flex items-center text-blue-900 justify-center py-2">
+            <div className="flex items-center text-blue-900 justify-center h-[16vh]">
               <h1 className="text-2xl">
                 <ProjectInfo />
               </h1>
@@ -150,13 +150,13 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-            <div className="mt-5 h-[60vh] overflow-y-auto overflow-x-hidden ">
+            <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
               <h2 className="text-xl font-bold mb-2">Your code:</h2>
               <div className="bg-white border border-gray-400 h-[50vh] overflow-y-auto rounded-lg shadow-md">
               <FileTree data={treeData} />
               </div>
             </div>
-            <div className="flex items-center text-blue-900 justify-center py-5">
+            <div className="flex items-center text-blue-900 justify-center">
               <div className="">
                   <h1 className="font-bold">
                     Last synced : {new Date().toLocaleString()}
@@ -178,14 +178,16 @@ export const Welcome = () => {
       </div>
 
 
-      <div className="shadow-xl w-1/2 px-6 pt-3">
+      <div className="shadow-xl w-1/2 p-6">
         <div className="text-centre">
-          <div className="lg:text-6xl font-bold italic text-blue-900 mt-[7%] mb-[5%] text-center sm:text-xl">
-            10XDEV.AI
+          <div className="h-[16vh] ">
+            <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-xl">
+                10XDEV.AI
+            </div>
           </div>
 
           <div className="">
-            <div className="text-xl font-bold mt-6 mb-3">Describe a task, query, or a bug:</div>
+            <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
             <div className="border border-gray-400 rounded-lg shadow-md">
               <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
                 {typingStarted ? <textarea
@@ -213,13 +215,13 @@ export const Welcome = () => {
             </div>
 
             <div className="flex items-end justify-end">
-              <button className="bg-blue-900 text-white mt-3 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
+              <button className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
                   <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
               </button>
             </div>
-            <div className="text-center mt-2 flex text-sm font-bold">
+            <div className="text-center mt-5 flex text-sm">
                   <div classname = ""><div>❓</div>Explain Code</div>
                   <div classname = ""><div>📖</div>Write Documentation {" "} </div>
                   <div classname = ""><div>⭐️</div>Implement New Features </div>
