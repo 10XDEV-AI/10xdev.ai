@@ -133,7 +133,7 @@ export const Welcome = () => {
   else{
   return (
     <div className="flex ">
-      <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
+      <div className="w-1/2 p-6 pt-[6%] bg-slate-50 h-screen">
         {showSync ? (
           <div className="py-2 h-[90vh]">
             <Sync/>
