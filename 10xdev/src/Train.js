@@ -67,6 +67,7 @@ const Train = () => {
     try {
       const data = await callAPI(`/api/FilesToAnalyzedata?path=${input}`);
       const tree = convertToTree(data.files2analyze);
+      setFilesToIgnore(data.files2ignore);
       setTreedata(tree);
     } catch (error) {
       console.log(error);

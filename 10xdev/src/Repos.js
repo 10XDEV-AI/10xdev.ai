@@ -58,7 +58,7 @@ export default function Repos() {
     <div>
       <Navbar LoadSync="True" LoadProjectInfo="True" />
       <div className="repos-container">
-        <h1 className="w-full text-center text-3xl font-bold py-10 text-blue-900">Repositories Trained</h1>
+        <h1 className="w-full text-center text-3xl font-bold pb-10 text-blue-900">Repositories Trained</h1>
         <div className="repos-cards">
           {repos.map(repo => (
             <div className="repo-card" key={repo.Directory}>

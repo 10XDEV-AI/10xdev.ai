@@ -80,7 +80,7 @@ export default function Apis() {
     <div>
       <Navbar LoadSync=""/>
       <div className="keys-container">
-        <h1 className="keys-title">OpenAI API Key Details</h1>
+        <h1 className="text-blue-900 text-center text-2xl font-bold pb-2">OpenAI API Key Details</h1>
         <div className="key-card">
           {!api &&
             <div>

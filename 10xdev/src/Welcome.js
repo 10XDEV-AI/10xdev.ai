@@ -132,8 +132,8 @@ export const Welcome = () => {
   )}
   else{
   return (
-    <div className="flex flex-wrap">
-      <div className="w-1/2 p-6 pt-[6%] bg-slate-50 ">
+    <div className="flex ">
+      <div className="w-1/2 p-6 pt-[6%] bg-slate-50">
         {showSync ? (
           <div className="py-2 h-[90vh]">
             <Sync/>
@@ -150,9 +150,9 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-            <div className="bg-sky-50 border border-gray-400 mt-10 p-4 rounded-lg h-[60vh] overflow-y-auto overflow-x-hidden shadow-md">
-              <h2 className="text-xl font-bold mb-2">Codebase:</h2>
-              <div className="bg-white h-[50vh] overflow-y-auto rounded-lg">
+            <div className="mt-5 h-[60vh] overflow-y-auto overflow-x-hidden ">
+              <h2 className="text-xl font-bold mb-2">Your code:</h2>
+              <div className="bg-white border border-gray-400 h-[50vh] overflow-y-auto rounded-lg shadow-md">
               <FileTree data={treeData} />
               </div>
             </div>
@@ -163,9 +163,13 @@ export const Welcome = () => {
                   </h1>
               </div>
               <button
-                className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md "
+                className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex"
                 onClick={handleSyncClick}>
                 Sync Now
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 m-1">
+                  <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clipRule="evenodd" />
+                </svg>
+
               </button>
             </div>
             </>
@@ -174,7 +178,7 @@ export const Welcome = () => {
       </div>
 
 
-      <div className="shadow-xl w-1/2 h-screen p-6">
+      <div className="shadow-xl w-1/2 px-6 pt-3">
         <div className="text-centre">
           <div className="lg:text-6xl font-bold italic text-blue-900 mt-[7%] mb-[5%] text-center sm:text-xl">
             10XDEV.AI
@@ -215,11 +219,11 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-            <div className="text-center mt-2 flex">
+            <div className="text-center mt-2 flex text-sm font-bold">
                   <div classname = ""><div>❓</div>Explain Code</div>
-                  <div classname = ""><div>📖</div>Write Documentation</div>
-                  <div classname = ""><div>🐞️</div>Fix Bugs ️</div>
+                  <div classname = ""><div>📖</div>Write Documentation {" "} </div>
                   <div classname = ""><div>⭐️</div>Implement New Features </div>
+                  <div classname = ""><div>🐞️</div>Fix Bugs</div>
                   <div classname = ""><div>🔬</div>Create Testcases</div>
                   <div classname = ""><div>🕹️</div>Generate commands </div>
                   <div classname = ""><div>🪄 </div>and More </div>
