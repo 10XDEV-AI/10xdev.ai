@@ -13,6 +13,7 @@ const SearchState = ({ children }) => {
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
+  const [showSync, setShowSync] = useState(false);
   const userPic = defaultUserPic;
 
   function getRandomEmoji(emojiList) {
@@ -65,6 +66,7 @@ const SearchState = ({ children }) => {
         userPic,
         path,
         setPath,
+        showSync, setShowSync,
       }}
     >
       {children}

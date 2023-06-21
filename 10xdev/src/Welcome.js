@@ -12,9 +12,8 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync } = useContext(SearchContext);
   const [input, setInput] = useState("");
-  const [showSync, setShowSync] = useState(false);
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
 

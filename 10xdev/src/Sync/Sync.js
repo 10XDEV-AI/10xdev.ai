@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect,useContext, useCallback } from "react";
 import "./Sync.css";
 import LogViewer from "../Loader/LogViewer/LogViewer.js";
 import { callAPI } from "../api";
+import SearchContext from "../context/SearchContext";
 
 function Sync(handleSyncClick){
+  const {showSync, setShowSync} = useContext(SearchContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -87,7 +89,7 @@ function Sync(handleSyncClick){
           ) : showTick ? (
             <div className="right-0 bottom-0">
               All files synced successfully <span role="img" aria-label="Description of the emoji">✅</span>
-              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => handleSyncClick}>
+              <button className="px-4 bg-blue-900 text-white rounded ml-auto hover:bg-blue-600" onClick={() => setShowSync(false)}>
                   Ok
               </button>
             </div>
