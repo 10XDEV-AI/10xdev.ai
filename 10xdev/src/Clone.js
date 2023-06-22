@@ -20,7 +20,7 @@ const Clone = () => {
       : hostname === "test.10xdevai.com"
       ? "7de77ae768aa62b79e09"
       : hostname === "10xdevai.com"
-      ? "eaae8a43278892ed15e1"
+      ? "40acda1a937125d9193b"
       : "YoYOHS";
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);
@@ -245,14 +245,14 @@ const Clone = () => {
               {/* HTML JSX for userdata */}
             </div>
           )}
-          <div className="branch-container">
+          <div className="w-full items-center justify-center">
             {branches.length > 0 ? (
-              <div>
+              <div  className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
                 <h2 className="font-bold text-2xl">Select your desired branch</h2>
                 {branches.map((branch) => (
-                  <ul key={branch} className="branch-list">
+                  <ul key={branch} className="">
                     <li>
-                      <button className="branch-buttons" onClick={() => handleSelect(branch)}>
+                      <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring" onClick={() => handleSelect(branch)}>
                         {branch}
                       </button>
                     </li>
@@ -282,7 +282,7 @@ const Clone = () => {
                   </div>
                 )}
                 {repos.length > 0 ? (
-                  <div>
+                  <div className="branch-container">
                     <h2 className="font-bold text-2xl">Select your desired repository</h2>
                     {repos.map(
                       (repo) =>
@@ -290,7 +290,7 @@ const Clone = () => {
                           <ul key={repo.id} className="">
                             <li>
                               <button
-                                className="repo-buttons"
+                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
                                 onClick={() => {
                                   console.log(repo);
                                   console.log("User wants to clone " + repo.url);

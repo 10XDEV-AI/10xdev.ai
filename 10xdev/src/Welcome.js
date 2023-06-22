@@ -32,15 +32,25 @@ export const Welcome = () => {
           setIsLoading(true);
           await callAPI(`/api/login`, { method: "GET" });
           window.history.replaceState({}, document.title, window.location.pathname);
+          getTreeData();
         } catch (error) {
           // Handle the error
         }
       }
-      setIsLoading(false);
+      const cognitoCode = Cookies.get("cognitoCode");
+      if  (cognitoCode) {
+        try {
+          setIsLoading(true);
+          getTreeData();
+          setIsLoading(false);
+        } catch (error) {
+          // Handle the error
+        }
+      }
+
     };
 
     fetchData();
-    getTreeData();
   }, [navigate]);
 
   const search = (e) => {
@@ -148,7 +158,6 @@ export const Welcome = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                   <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
                 </svg>
-
               </button>
             </div>
             <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
@@ -222,14 +231,16 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-            <div className="text-center mt-5 flex text-sm">
+
+            <div className="text-center mt-5 grid grid-cols-8  text-sm">
+                  <div classname = ""><div>⭐️</div>Implement Features </div>
                   <div classname = ""><div>❓</div>Explain Code</div>
-                  <div classname = ""><div>📖</div>Write Documentation {" "} </div>
-                  <div classname = ""><div>⭐️</div>Implement New Features </div>
-                  <div classname = ""><div>🐞️</div>Fix Bugs</div>
+                  <div classname = ""><div>📖</div>Create Documents</div>
+                  <div classname = ""><div>🐞️</div>Fix Bugs & Erorrs</div>
+                  <div classname = ""><div>⚡️️</div> Optimse Code </div>
                   <div classname = ""><div>🔬</div>Create Testcases</div>
                   <div classname = ""><div>🕹️</div>Generate commands </div>
-                  <div classname = ""><div>🪄 </div>and More </div>
+                  <div classname = ""><div>🪄</div>and More </div>
             </div>
           </div>
           <div className="absolute top-3 right-5">

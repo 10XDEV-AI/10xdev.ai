@@ -88,7 +88,7 @@ def train_AI(repo_name, userlogger, email):
     for ind in fs.index:
         i_new, fs['summary'][ind] = summarize_file(repo_name, fs['file_path'][ind], i, userlogger, email)
         if fs['summary'][ind] != "Ignore":
-            fs['embedding'][ind] = split_embed(fs['summary'][ind], email)
+            fs['embedding'][ind] = split_embed(fs['file_path'][ind]+" "+fs['summary'][ind], email)
         if i_new != i:
             time.sleep(delay)
             i = i_new
@@ -112,13 +112,13 @@ def train_AI(repo_name, userlogger, email):
     fs.to_csv(fsfilename, index=False)
 
     print("100% Done")
-    userlogger.clear_logs()
     create_clone(repo_name, email)
+    userlogger.clear_logs()
     userlogger.log("-----------------------------------------------------")
     userlogger.log("***")
     userlogger.log("Your repo was trained into the AI successfully")
     userlogger.log("***")
     userlogger.log("-----------------------------------------------------")
-    time.sleep(200)
+    time.sleep(10)
     userlogger.clear_logs()
     return
