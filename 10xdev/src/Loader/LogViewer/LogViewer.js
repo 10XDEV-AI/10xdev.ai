@@ -1,9 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './LogViewer.css';
 import { callAPI } from '../../api';
+import { useContext } from 'react';
+import SearchContext from '../../context/SearchContext';
+import { navigate } from 'react-router-dom';
 
-function LogViewer() {
+function LogViewer(props) {
   const [logs, setLogs] = useState('');
+  const { isLoading, setIsLoading } = useContext(SearchContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -11,14 +17,21 @@ function LogViewer() {
         const response = await callAPI('/api/logs');
         console.log(response);
 
-        if (Array.isArray(response)) {
+        if (Array.isArray(response)&& response.length > 0) {
           let result = response.join(',\n');
+          if (result === '' && props.RedirectTo) {
+            setIsLoading(false);
+            navigate(props.RedirectTo);
+          }
           result = result.replace(/,/g, ''); // remove commas
           result = result.replace(/"/g, ''); // remove double quotes
           result = splitRows(result); // split rows longer than 200 characters
           setLogs(result);
         } else {
           console.error('Invalid response format or missing body property');
+          console.log(props.RedirectTo)
+          navigate(props.RedirectTo);
+          setIsLoading(false)
         }
       } catch (error) {
         console.error('Error fetching logs:', error);
