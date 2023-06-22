@@ -4,8 +4,10 @@ import SearchContext from './context/SearchContext';
 import './Repos.css';
 import Navbar from './Navbar';
 import { callAPI } from './api';
+import LoadingRing from "./Loader/Loader";
 
 export default function Repos() {
+  const {isLoading, setIsLoading } = useContext(SearchContext);
   const { setPath } = useContext(SearchContext);
   const navigate = useNavigate();
   const [repos, setRepos] = useState([]);
@@ -57,6 +59,7 @@ export default function Repos() {
   return (
     <div>
       <Navbar LoadSync="True" LoadProjectInfo="True" />
+      {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container">
         <h1 className="w-full text-center text-3xl font-bold pb-10 text-blue-900">Repositories Trained</h1>
         <div className="repos-cards">
@@ -93,7 +96,7 @@ export default function Repos() {
         <div className="repos-button-container">
           <button className="bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md w-full m-20 w-full m-20" onClick={() => navigate('/clone')}>Setup a Repository</button>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 }
