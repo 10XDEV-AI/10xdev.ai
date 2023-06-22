@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import SearchContext from '../context/SearchContext';
 import { callAPI } from '../api';
+import LoadingRing from "../Loader/Loader";
 
 const Branch = () => {
   const { path, isLoading, setIsLoading } = useContext(SearchContext);
@@ -39,6 +40,7 @@ const Branch = () => {
   return (
     <div>
       <Navbar />
+      {isLoading ? (<LoadingRing />) : (
       <div className="min-h-screen flex items-center justify-center">
         <div className="max-w-md  w-full bg-white border-dashed border-gray-300 border-2 rounded-lg p-6">
           {branches.length > 0 ? (
@@ -59,7 +61,9 @@ const Branch = () => {
             </div>
           ) : null}
         </div>
-      </div>
+       </div>)
+
+           }
     </div>
   );
 };

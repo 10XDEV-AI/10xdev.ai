@@ -22,14 +22,13 @@ def max_cosine_sim(embeddings, prompt_embedding):
     return y
 
 
-def filter_functions(result_string, code_query, filepaths, email):
-    task = "List the file paths that will be required to answer the user query based on above given file summaries. if user is talking about specific file paths, only return those"
+def filter_functions(result_string, code_query, filepaths, email,userlogger):
+    task = "List the file paths that will be required to answer the current user prompt based on above given file summaries. if user is talking about specific file paths, only return those"
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
 
-    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0,
-                                max_tokens=200)
-
+    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0,max_tokens=200)
+    userlogger.log(response_functions)
     files = []
     for i in filepaths:
         # find i in response_functions using regex
@@ -39,7 +38,7 @@ def filter_functions(result_string, code_query, filepaths, email):
     return files
 
 
-def search_functions(code_query, email):
+def search_functions(code_query, email, userlogger):
     prompt_embedding = split_embed(code_query, email)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
@@ -60,7 +59,7 @@ def search_functions(code_query, email):
     result_string = '\n\n'.join(file_summary_string)
     # print(result_string)
     filepaths = res['file_path'].tolist()
-    return filter_functions(result_string, code_query, filepaths, email)
+    return filter_functions(result_string, code_query, filepaths, email, userlogger)
 
 
 def files2str(files):
@@ -155,7 +154,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     userlogger.log("Analyzing your query...")
-    files = search_functions(prompt, email)
+    files = search_functions(prompt, email, userlogger)
 
     referenced_code = get_referenced_code(path, files)
     # print("Referenced code: ", referenced_code)

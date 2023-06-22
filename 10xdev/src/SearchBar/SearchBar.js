@@ -9,7 +9,7 @@ const SearchBar = ({ onSearch }) => {
 
   const newTab = async () => {
     const currentUrl = window.location.href;
-    const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+    const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/welcome';
     window.open(newUrl, '_blank');
   };
 
@@ -24,15 +24,19 @@ const SearchBar = ({ onSearch }) => {
           onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         />
         <button className="text-2xl bg-white" onClick={handleClick}>
-        <span role="img" aria-label="Description of the emoji"> 🔍</span> 
+        <span role="img" aria-label="Description of the emoji" className="text-blue-900">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+              <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+            </svg>
+        </span>
         </button>
       </div>
       <div className="w-180">
         <button
-          className="border border-blue-500 bg-transparent text-blue-500 hover:bg-blue-500 hover:text-white rounded-md text-base w-full py-2 px-4"
+          className="border border-blue-900 bg-transparent text-blue-900 hover:bg-blue-900 hover:text-white rounded-md text-base w-full py-2 px-4"
           onClick={newTab}
         >
-          Start New Topic
+          New Topic
         </button>
       </div>
     </div>

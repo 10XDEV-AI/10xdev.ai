@@ -60,9 +60,6 @@ const LoadingRing = (RedirectTo) => {
       <div className="logbox">
         <LogViewer RedirectTo={RedirectTo} />
       </div>
-      <button className="loading-cancel" onClick={handleRunInBackground}>
-        Go Back / Run in Background
-      </button>
     </div>
   );
 };
