@@ -14,7 +14,9 @@ const Alert = (props) => {
 
   useEffect(() => {
     if (props.type === 401) {
-      window.location.href = 'https://10xdevai.com';
+      setTimeout(() => {
+        window.location.href = '/'; // Redirect to the home page
+      }, 4000);
     }
   }, [props.type]);
 
@@ -28,7 +30,7 @@ const Alert = (props) => {
         return 'Error 403: Forbidden';
       case 404:
         return 'Error 404: Not Found';
-        case 405:
+      case 405:
         return 'Error 405: Method Not Allowed';
       case 408:
         return 'Error 408: Request Timeout';
@@ -41,14 +43,14 @@ const Alert = (props) => {
       case 504:
         return 'Error 504: Gateway Timeout';
       default:
-        return 'Error : Something went wrong';
+        return 'Error: Something went wrong';
     }
   };
 
   return (
     <>
       {showModal && (
-        <div 
+        <div
           className={`error-modal fixed px-4 flex bottom-4 right-4 bg-red-700 text-white p-4 rounded-md animate-fade-out`}
           style={{ animationDelay: '4s', width: '32rem', zIndex: '100' }}
         >
