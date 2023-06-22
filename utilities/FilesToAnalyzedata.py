@@ -65,5 +65,5 @@ def FilesToAnalyzedata(email, user_logger, path):
                 files_paths.append(result)
 
     user_logger.clear_logs()
-
-    return files_paths
+    files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
+    return files2ignore, files_paths

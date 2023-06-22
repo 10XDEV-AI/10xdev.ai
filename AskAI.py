@@ -203,8 +203,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     userlogger.log("Total Tokens in the query: " + str(tokens))
     print("Total Tokens in the query: " + str(tokens))
 
-    userlogger.log("Asking ChatGPT-3...")
-    print("Asking ChatGPT-3...")
+    userlogger.log("Thinking of an answer...")
     FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
                          temperature=0.7)
 
