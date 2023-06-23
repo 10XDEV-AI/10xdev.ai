@@ -6,12 +6,12 @@ import Cookies from 'js-cookie';
 const ProjectInfo = () => {
   const [repository, setRepository] = useState('');
   const [branch, setBranch] = useState('');
-  const { isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const {isLoading, isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
 
   useEffect(() => {
     const fetchData = async () => {
     const cognitoCode = Cookies.get("cognitoCode");
-    if(cognitoCode) {
+    if(cognitoCode  && !isLoading) {
            setIsLoadingProjectInfo(true);
            const data = await callAPI('/api/projectInfo');
            setRepository(data.repo_name);
