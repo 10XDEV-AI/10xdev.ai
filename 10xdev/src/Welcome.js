@@ -10,7 +10,7 @@ import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
-
+import NewWelcome from "./NewWelcome";
 export const Welcome = () => {
   const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync } = useContext(SearchContext);
   const [input, setInput] = useState("");
@@ -31,8 +31,7 @@ export const Welcome = () => {
         try {
           setIsLoading(true);
           await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState({}, document.title, window.location.pathname);
-          getTreeData();
+          window.history.replaceState({}, document.title, window.location.pathname); 
         } catch (error) {
           // Handle the error
         }
@@ -41,7 +40,6 @@ export const Welcome = () => {
       if  (cognitoCode) {
         try {
           setIsLoading(true);
-          getTreeData();
           setIsLoading(false);
         } catch (error) {
           // Handle the error
@@ -136,12 +134,37 @@ export const Welcome = () => {
     }
   };
 
+  const [repository, setRepository] = useState('');
+  const [branch, setBranch] = useState('');
+  const { isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const [isRepoAvailable, setIsRepoAvailable] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+    const cognitoCode = Cookies.get("cognitoCode");
+    if(cognitoCode) {
+           setIsLoadingProjectInfo(true);
+           const data = await callAPI('/api/projectInfo');
+            if(data.repo_name==='No Repos selected') {
+              setIsRepoAvailable(false);
+            }else{
+              setIsRepoAvailable(true);
+              getTreeData();
+            }
+           setRepository(data.repo_name);
+           setBranch(data.branch_name);
+           setIsLoadingProjectInfo(false);
+           }
+    };
+    fetchData();
+  }, [setIsLoadingProjectInfo]);
+
   if (isLoading) {
   return (
   <LoadingRing />
   )}
   else{
-  return (
+  return (<>
+    {isRepoAvailable ? (
     <div className="flex ">
       <div className="w-1/2 p-6 bg-slate-50 h-screen">
         {showSync ? (
@@ -152,7 +175,7 @@ export const Welcome = () => {
             <>
             <div className="flex items-center text-blue-900 justify-center h-[16vh]">
               <h1 className="text-2xl">
-                <ProjectInfo />
+                <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository}  branch={branch} />
               </h1>
               <button className="px-4 rounded ml-auto hover:text-blue-600" onClick={() => navigate("/repos")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -249,7 +272,9 @@ export const Welcome = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>):(<NewWelcome/>)
+    }
+    </>
   );
 };
 }
