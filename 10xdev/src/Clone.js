@@ -8,6 +8,7 @@ import { callAPI } from "./api";
 import { BsGithub } from "react-icons/bs";
 import { FaGitlab } from "react-icons/fa";
 import cookies from "js-cookie";
+
 const Clone = () => {
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
@@ -121,7 +122,6 @@ const Clone = () => {
       return null;
     }
   };
-
   const handleInputChange = (event) => {
     setInput(event.target.value);
   };
@@ -139,33 +139,6 @@ const Clone = () => {
     }
   };
 
-  const getPrivateBranches = async (repo) => {
-    const sub = repo.substring(0, repo.length - 9);
-    console.log(sub);
-    const accessToken = cookies.get("accesstoken");
-    try {
-      // Fetch repo branches using repo URL
-      const response = await fetch(sub, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: "application/vnd.github.v3+json",
-        },
-      });
-
-      if (response.ok) {
-        const branches = await response.json(); // Parse response as JSON
-        console.log(branches); // Print branches data
-        setPrivateBranch(branches);
-      } else {
-        console.error("Failed to retrieve branches:", response.status);
-      }
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };
-
   return (
     <div>
       <Navbar />
@@ -173,35 +146,37 @@ const Clone = () => {
         <LoadingRing />
       ) : (
         <div>
-          <div className="GetIgnorecontainer">
-            <div className="font-bold text-xl m-3">Your Public Repository URL:</div>
-            <label className="pathsearchrow">
-              <input
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                className="w-full focus:outline-none focus:shadow-outline mx-5 my-2"
-              />
-            </label>
-            <button
-              onClick={() => handleClone(input)}
-              className="bg-blue-900 text-white p-2 m-2 rounded-full flex hover:bg-blue-700"
-            >
-              Clone Repo
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="mx-2 w-6 h-6"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
-                  clipRule="evenodd"
+          {!isauthenticated && (
+            <div className="GetIgnorecontainer">
+              <div className="font-bold text-xl m-3">Your Public Repository URL:</div>
+              <label className="pathsearchrow">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={handleInputChange}
+                  className="w-full focus:outline-none focus:shadow-outline mx-5 my-2"
                 />
-              </svg>
-            </button>
-          </div>
+              </label>
+              <button
+                onClick={() => handleClone(input)}
+                className="bg-blue-900 text-white p-2 m-2 rounded-full flex hover:bg-blue-700"
+              >
+                Clone Repo
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="mx-2 w-6 h-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
           <br />
           <div
             style={{
@@ -231,28 +206,17 @@ const Clone = () => {
               </div>
             )}
           </div>
-          {userdata && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                margin: "20px",
-                backgroundColor: "#f5f5f5",
-              }}
-            >
-              {/* HTML JSX for userdata */}
-            </div>
-          )}
           <div className="w-full items-center justify-center">
             {branches.length > 0 ? (
-              <div  className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
+              <div className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
                 <h2 className="font-bold text-2xl">Select your desired branch</h2>
                 {branches.map((branch) => (
                   <ul key={branch} className="">
                     <li>
-                      <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring" onClick={() => handleSelect(branch)}>
+                      <button
+                        className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
+                        onClick={() => handleSelect(branch)}
+                      >
                         {branch}
                       </button>
                     </li>
@@ -260,15 +224,14 @@ const Clone = () => {
                 ))}
               </div>
             ) : (
-              <div className="ignoretips">
+              <div>
                 {privateBranch.length > 0 && (
-                  <div>
-                    <h2>Select your desired branch</h2>
+                  <div className="ignoretips">
                     {privateBranch.map((branch) => (
-                      <ul key={branch.name} className="branch-list">
+                      <ul key={branch.name} className="branch-list w-40">
                         <li>
                           <button
-                            className="branch-buttons "
+                            className="branch-buttons text-start"
                             onClick={() => {
                               setInput(privateRepolink);
                               handleSelect(branch.name);
@@ -283,14 +246,13 @@ const Clone = () => {
                 )}
                 {repos.length > 0 ? (
                   <div className="branch-container">
-                    <h2 className="font-bold text-2xl">Select your desired repository</h2>
                     {repos.map(
                       (repo) =>
                         repo.private && (
-                          <ul key={repo.id} className="">
-                            <li>
+                          <ul key={repo.id} className="px-10 mx-10 flex justify-center">
+                            <li className="w-1/2">
                               <button
-                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
+                                className="w-full text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
                                 onClick={() => {
                                   console.log(repo);
                                   console.log("User wants to clone " + repo.url);
@@ -305,11 +267,7 @@ const Clone = () => {
                         )
                     )}
                   </div>
-                ) : (
-                  <div>
-                    <h3>Connect your Github to see private repositories</h3>
-                  </div>
-                )}
+                ) : null}
               </div>
             )}
           </div>
