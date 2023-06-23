@@ -24,11 +24,14 @@ function DirectoryTreeView(props) {
       <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
         <TreeView
           data={modifiedData}
-          aria-label="directory tree"
+          aria-label="directory tree "
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
-              {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
-              {element.name}
+              <label className="flex items-center cursor-pointer" onClick={() => console.log(element.name)}>
+                <input type="checkbox" onChange={(e) => console.log(e.target.checked)}  className="m-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"/>
+                {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
+                {element.name}
+              </label>
             </div>
           )}
         />
