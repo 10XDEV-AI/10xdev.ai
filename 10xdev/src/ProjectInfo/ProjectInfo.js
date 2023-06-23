@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import SearchContext from '../context/SearchContext';
 import { callAPI } from '../api';
+import Cookies from 'js-cookie';
 
 const ProjectInfo = () => {
   const [repository, setRepository] = useState('');
@@ -9,13 +10,14 @@ const ProjectInfo = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoadingProjectInfo(true);
-
-      const data = await callAPI('/api/projectInfo');
-      setRepository(data.repo_name);
-      setBranch(data.branch_name);
-
-      setIsLoadingProjectInfo(false);
+    const cognitoCode = Cookies.get("cognitoCode");
+    if(cognitoCode) {
+           setIsLoadingProjectInfo(true);
+           const data = await callAPI('/api/projectInfo');
+           setRepository(data.repo_name);
+           setBranch(data.branch_name);
+           setIsLoadingProjectInfo(false);
+           }
     };
 
     fetchData();
