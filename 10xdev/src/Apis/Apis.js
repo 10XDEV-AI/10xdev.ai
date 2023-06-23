@@ -101,7 +101,7 @@ export default function Apis() {
               <button className='keys-cards-button' onClick={deleteKey}>Delete API Key</button>
 
                <div>
-                     <h3>Current API Rates  Limits</h3>
+                     <h3 className="text-blue-900 text-center text-xl font-bold pb-2">API Rates Limits</h3>
                      <p>
                        Rate for ChatGPT-3.5 API:
                        <input type="number"  className="ratesinput" value={newRates[0]} onChange={handleNewRate1Change} />
@@ -117,11 +117,18 @@ export default function Apis() {
                         </>
                      }
                    </div>
+                   <div>
+
+                     Know More about the API Usage here:
+                     <a className="text-blue-900 font-bold p-2 underline" href="https://platform.openai.com/docs/guides/rate-limits/what-are-the-rate-limits-for-our-api" target="_blank" rel="noreferrer">
+                        OpenAI API Guide
+                    </a>
+                   </div>
             </div>
           }
         </div>
-        <div className="repos-button-container">
-          <button className="repos-button" onClick={() => navigate('/')}>Ask AI</button>
+        <div className="">
+          <button className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex" onClick={() => navigate('/welcome')}>Continue to Ask AI</button>
         </div>
       </div>
     </div>

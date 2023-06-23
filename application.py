@@ -205,7 +205,7 @@ def getkey():
     email = getattr(g, "email", None)
     key = get_key(email)
     if key.strip() != "":
-        key = key.replace(key[5:15], "*" * 10)
+        key = key.replace(key[5:45], "*" * 40)
     return jsonify(key)
 
 

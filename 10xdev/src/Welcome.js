@@ -173,7 +173,7 @@ export const Welcome = () => {
                   </h1>
               </div>
               <button
-                className="bg-blue-900 text-white p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex"
+                className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex"
                 onClick={handleSyncClick}>
                 Sync
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 m-1">
@@ -206,6 +206,7 @@ export const Welcome = () => {
                                                    placeholder=""
                                                    onClick={() => setTypingStarted(true)}
                                                    onChange={handleInputChange}
+                                                   onKeyDown={(e) => e.key === 'Enter' && search(e)}
                                                  /> : (
                   <Typewriter className = "h-[48vh]"
                     options={{
