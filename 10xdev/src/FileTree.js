@@ -24,11 +24,37 @@ function DirectoryTreeView(props) {
       <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
         <TreeView
           data={modifiedData}
-          aria-label="directory tree"
+          aria-label="directory tree "
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
-              {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
-              {element.name}
+              <label className="flex items-center cursor-pointer" onClick={() => console.log(element.name)}>
+                {props.showCheckboxes && (
+                  <input type="checkbox" className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                  onChange={(e) => {
+                                         const isChecked = e.target.checked;
+                                         const { id, isBranch, children } = element;
+                                         if (isBranch) {
+                                           // If the clicked node is a folder, update all files in that folder
+                                           const flattenedChildren = flattenTree(children);
+                                           flattenedChildren.forEach((child) => {
+                                             const { id, isBranch } = child;
+                                             if (!isBranch) {
+                                               const { checked } = getNodeProps({ nodeId: id });
+                                               if (checked !== isChecked) {
+                                                 getNodeProps({ nodeId: id, checked: isChecked });
+                                               }
+                                             }
+                                           });
+                                         } else {
+                                           // If the clicked node is a file, update its checked status
+                                           getNodeProps({ nodeId: id, checked: isChecked });
+                                         }
+                                       }}
+                  />
+                  )}
+                {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
+                {element.name}
+              </label>
             </div>
           )}
         />
