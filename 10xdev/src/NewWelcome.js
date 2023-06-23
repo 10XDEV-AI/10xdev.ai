@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import DropDownButton from "./DropDownButton/DropDownButton";
 const NewWelcome = () => {
     const navigate = useNavigate();
-    const handleSetupClick = () => {
+    const handleSetupClick = (e) => {
+      e.preventDefault();
         navigate("/repos");
     }
   return (
