@@ -1,6 +1,6 @@
 import React from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
-import { FaList, FaPython, FaReadme, FaRegFolderOpen, FaRegFolder } from "react-icons/fa";
+import { FaList, FaPython, FaReadme, FaFolderOpen, FaFolder } from "react-icons/fa";
 import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
 import { RiFileCodeLine } from "react-icons/ri";
 import TreeView, { flattenTree } from "react-accessible-treeview";
@@ -64,7 +64,7 @@ function DirectoryTreeView(props) {
 }
 
 const FolderIcon = ({ isOpen }) =>
-  isOpen ? <FaRegFolderOpen color="e8a87c" className="inline-block align-middle mr-1" /> : <FaRegFolder color="e8a87c" className="inline-block align-middle mr-1" />;
+  isOpen ? <FaFolderOpen  className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder  className="inline-block align-middle mr-1 text-blue-900 " />;
 
 const FileIcon = ({ filename }) => {
   const extension = filename.slice(filename.lastIndexOf(".") + 1);
