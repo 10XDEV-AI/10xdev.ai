@@ -5,7 +5,7 @@ const NewWelcome = () => {
     const navigate = useNavigate();
     const handleSetupClick = (e) => {
       e.preventDefault();
-        navigate("/repos");
+        navigate("/clone");
     }
   return (
     <div className="flex justify-center">
