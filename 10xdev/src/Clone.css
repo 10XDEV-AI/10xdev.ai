@@ -76,6 +76,16 @@ padding: 10px;
 border: 1px dashed #D3D3D3;
 font: 15px "Roboto", Helvetica;
 }
+.ignoretips1{
+width: 50%;
+background-color: #f3fafe ;
+margin-left: 25%;
+margin-top: 5%;
+border-radius: 10px;
+padding: 10px;
+border: 1px dashed #D3D3D3;
+font: 15px "Roboto", Helvetica;
+}
 
 .ignoretips h2{
 text-align: center;
