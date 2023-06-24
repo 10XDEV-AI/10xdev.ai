@@ -33,9 +33,11 @@ function LogViewer(props) {
           console.error('Invalid response format or missing body property');
           setIsLoading(false)
           console.log(props.RedirectTo)
+          if (props.RedirectTo) {
           const currentUrl = window.location.href;
           const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/repos';
           window.location.href = newUrl;
+          }
         }
       } catch (error) {
         console.error('Error fetching logs:', error);
