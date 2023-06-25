@@ -23,9 +23,7 @@ function Navbar({LoadProjectInfo}) {
         </Link>
       </div>
       <div className="navbar-projectInfo">
-        {LoadProjectInfo?(
-        <ProjectInfo />
-        ):null}
+
       </div>
       <div className="linkscontainer">
       <div className="text-white linkColumn">
