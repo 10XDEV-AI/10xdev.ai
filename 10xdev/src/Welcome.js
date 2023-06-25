@@ -12,7 +12,7 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
@@ -143,7 +143,6 @@ export const Welcome = () => {
   const [repository, setRepository] = useState('');
   const [branch, setBranch] = useState('');
   const { isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
-  const [isRepoAvailable, setIsRepoAvailable] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
     const cognitoCode = Cookies.get("cognitoCode");
@@ -151,9 +150,9 @@ export const Welcome = () => {
            setIsLoadingProjectInfo(true);
            const data = await callAPI('/api/projectInfo');
             if(data.repo_name==='No Repos selected') {
-              setIsRepoAvailable(false);
+              setIsNewUser(false);
             }else{
-              setIsRepoAvailable(true);
+              setIsNewUser(true);
               getTreeData();
             }
            setRepository(data.repo_name);
@@ -170,7 +169,7 @@ export const Welcome = () => {
   )}
   else{
   return (<>
-    {isRepoAvailable ? (
+    {isnewuser ? (
     <div className="flex ">
       <div className="w-1/2 p-6 bg-slate-50 h-screen">
         {showSync ? (
