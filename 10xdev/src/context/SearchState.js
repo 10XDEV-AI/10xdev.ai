@@ -10,6 +10,7 @@ const SearchState = ({ children }) => {
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
   const [files, setFiles] = useState('');
+  const [isnewuser, setIsNewUser] = useState(false);
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
@@ -67,6 +68,7 @@ const SearchState = ({ children }) => {
         path,
         setPath,
         showSync, setShowSync,
+        isnewuser, setIsNewUser
       }}
     >
       {children}
