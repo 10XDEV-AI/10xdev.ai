@@ -71,6 +71,17 @@ def syncAI(sync_flag, user_logger, userid):
     # git pull at path
     subprocess.run(["git", "pull"], cwd=path)
 
+    branches_output = subprocess.check_output(["git", "branch"], cwd=path).decode("utf-8")
+    branches = branches_output.split("\n")
+    current_branch = subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"], cwd=path).decode("utf-8").strip()
+
+    for branch in branches:
+        branch_name = branch.strip()
+        if branch_name != "" and branch_name != current_branch:
+            subprocess.run(["git", "branch", "-D", branch_name], cwd=path)
+            print(f"Deleted local branch: {branch_name}")
+
+
     global fs
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
     chat_limit = get_rates(userid).split(",")[0]
