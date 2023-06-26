@@ -8,6 +8,7 @@ import LoadingRing from "./Loader/Loader";
 
 export default function Repos() {
   const {isLoading, setIsLoading } = useContext(SearchContext);
+  const { setShowRepos } = useContext(SearchContext);
   const { setPath } = useContext(SearchContext);
   const navigate = useNavigate();
   const [repos, setRepos] = useState([]);
@@ -60,6 +61,9 @@ export default function Repos() {
     <div>
       {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container">
+      <button className="back-button" onClick={() => setShowRepos(false)}>
+        Back
+      </button>
         <h1 className="w-full text-center text-3xl font-bold pb-10 text-blue-900">Repositories Trained</h1>
         <div className="repos-cards">
           {repos.map(repo => (

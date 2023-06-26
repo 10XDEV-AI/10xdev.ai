@@ -14,10 +14,9 @@ import NewWelcome from "./NewWelcome";
 import Repos from "./Repos";
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
-  const [showRepos, setShowRepos] = useState(false);
   const navigate = useNavigate();
 
   const handleSyncClick = () => {
