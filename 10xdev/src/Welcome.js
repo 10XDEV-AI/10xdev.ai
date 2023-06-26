@@ -278,15 +278,10 @@ export const Welcome = () => {
               </button>
             </div>
 
-            <div className="text-center mt-5 grid grid-cols-8  text-sm">
-                  <div classname = ""><div>⭐️</div>Implement Features </div>
-                  <div classname = ""><div>❓</div>Explain Code</div>
-                  <div classname = ""><div>📖</div>Create Documents</div>
-                  <div classname = ""><div>🐞️</div>Fix Bugs & Erorrs</div>
-                  <div classname = ""><div>⚡️️</div> Optimse Code </div>
-                  <div classname = ""><div>🔬</div>Create Testcases</div>
-                  <div classname = ""><div>🕹️</div>Generate commands </div>
-                  <div classname = ""><div>🪄</div>and More </div>
+            <div className="text-center mt-5 grid grid-cols-1  text-sm">
+                  <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
+                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases 📖Create Documents</div>
+                  <div classname = "">and More 🪄 </div>
             </div>
           </div>
           <div className="absolute top-3 right-5">
