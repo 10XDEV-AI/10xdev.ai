@@ -61,10 +61,12 @@ export default function Repos() {
     <div>
       {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container">
-      <button className="back-button" onClick={() => setShowRepos(false)}>
+      <div className = "flex  pb-10 ">
+        <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={() => setShowRepos(false)}>
         Back
-      </button>
-        <h1 className="w-full text-center text-3xl font-bold pb-10 text-blue-900">Repositories Trained</h1>
+        </button>
+        <h1 className="w-full text-center text-3xl font-bold text-blue-900">Repositories Trained</h1>
+        </div>
         <div className="repos-cards">
           {repos.map(repo => (
             <div className="repo-card" key={repo.Directory}>
