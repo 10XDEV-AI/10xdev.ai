@@ -58,7 +58,6 @@ export default function Repos() {
 
   return (
     <div>
-      <Navbar LoadSync="True" LoadProjectInfo="True" />
       {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container">
         <h1 className="w-full text-center text-3xl font-bold pb-10 text-blue-900">Repositories Trained</h1>
