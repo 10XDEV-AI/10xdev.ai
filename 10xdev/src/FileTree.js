@@ -32,6 +32,7 @@ function DirectoryTreeView(props) {
                   <input
                     type="checkbox"
                     className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    onClick={(e) => e.stopPropagation()} // Stop event propagation
                   />
                 )}
                 {isBranch ? (
@@ -53,7 +54,7 @@ function DirectoryTreeView(props) {
 }
 
 const FolderIcon = ({ isOpen }) =>
-  isOpen ? <FaFolderOpen  className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder  className="inline-block align-middle mr-1 text-blue-900 " />;
+  isOpen ? <FaFolderOpen className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder className="inline-block align-middle mr-1 text-blue-900 " />;
 
 const FileIcon = ({ filename }) => {
   const extension = filename.slice(filename.lastIndexOf(".") + 1);
