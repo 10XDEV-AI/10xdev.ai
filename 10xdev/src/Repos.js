@@ -60,7 +60,7 @@ export default function Repos() {
   return (
     <div>
       {isLoading ? (<><LoadingRing /> </>) : (
-      <div className="repos-container">
+      <div className="repos-container h-screen">
       <div className = "flex  pb-10 ">
         <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={() => setShowRepos(false)}>
         Back

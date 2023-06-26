@@ -3,7 +3,7 @@
   margin: 0 auto;
   padding: 20px;
   font-family: "Roboto", Helvetica;
-  padding-top:20px;
+  overflow-y: auto;
 }
 
 .repos-title {
