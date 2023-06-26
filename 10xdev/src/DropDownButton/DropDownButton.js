@@ -19,9 +19,6 @@ function DropdownButton() {
     if (option === 1) {
       navigate('/clone');
     }
-    if (option === 2) {
-      navigate('/repos');
-    }
     if (option === 3) {
         navigate('/');
     }
@@ -44,7 +41,6 @@ function DropdownButton() {
       {isOpen && (
         <ul className="drop-down-list rounded-md text-black">
           <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(1)}> 🧠 Setup Repository</li>
-          <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(2)}> 🧳 Your Repositories</li>
           <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(4)}> 🔑 API Keys</li>
           <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(3)}> 👋🏻 Log Out</li>
         </ul>

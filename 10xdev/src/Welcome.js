@@ -188,18 +188,17 @@ export const Welcome = () => {
                         <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository}  branch={branch} />
                       </h1>
                       <button className="ml-auto rounded ml-auto hover:text-blue-600" onClick={() => setShowRepos(!showRepos)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
-                            <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
-                          </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                        </svg>
                       </button>
                     </div>
                     <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
                       <div className="flex items-center justify-center">
                       <h2 className="text-xl font-bold mb-2">Your code:</h2>
                       {/* Filter Icon */}
-                      <button className="bg-blue-900 text-white font-bold px-1 rounded-md ml-auto hover:bg-blue-600 shadow-md flex" onClick={handleFilterClick}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 p-1 my-1">
+                      <button className="font-bold px-1 rounded-md ml-auto" onClick={handleFilterClick}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 my-1">
                           <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clipRule="evenodd" />
                         </svg>
                       </button>
@@ -278,10 +277,9 @@ export const Welcome = () => {
               </button>
             </div>
 
-            <div className="text-center mt-5 grid grid-cols-1  text-sm">
+            <div className="text-center mt-4 grid grid-cols-1  text-sm">
                   <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
-                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases 📖Create Documents</div>
-                  <div classname = "">and More 🪄 </div>
+                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases 📖Create Documents and More 🪄</div>
             </div>
           </div>
           <div className="absolute top-3 right-5">

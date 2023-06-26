@@ -35,7 +35,7 @@ function LogViewer(props) {
           console.log(props.RedirectTo)
           if (props.RedirectTo) {
           const currentUrl = window.location.href;
-          const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/repos';
+          const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/welcome';
           window.location.href = newUrl;
           }
         }
