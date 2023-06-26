@@ -58,7 +58,7 @@ def search_functions(code_query, email, userlogger):
     # Convert the concatenated list to a single string
     result_string = '\n\n'.join(file_summary_string)
     # print(result_string)
-    filepaths = res['file_path'].tolist()
+    filepaths = fs['file_path'].tolist()
     return filter_functions(result_string, code_query, filepaths, email, userlogger)
 
 
