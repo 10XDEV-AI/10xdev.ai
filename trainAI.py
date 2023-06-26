@@ -119,6 +119,6 @@ def train_AI(repo_name, userlogger, email):
     userlogger.log("Your repo was trained into the AI successfully")
     userlogger.log("***")
     userlogger.log("-----------------------------------------------------")
-    time.sleep(10)
+    time.sleep(2)
     userlogger.clear_logs()
     return

@@ -16,6 +16,8 @@ const SearchState = ({ children }) => {
   const defaultUserPic = getRandomEmoji(emojis);
   const [showSync, setShowSync] = useState(false);
   const userPic = defaultUserPic;
+  const [showRepos, setShowRepos] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
@@ -65,10 +67,10 @@ const SearchState = ({ children }) => {
         files,
         referenced_code,
         userPic,
-        path,
-        setPath,
+        path, setPath,
         showSync, setShowSync,
-        isnewuser, setIsNewUser
+        isnewuser, setIsNewUser,
+        showRepos, setShowRepos,
       }}
     >
       {children}

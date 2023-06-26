@@ -27,32 +27,22 @@ function DirectoryTreeView(props) {
           aria-label="directory tree "
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
-              <label className="flex items-center cursor-pointer" onClick={() => console.log(element.name)}>
+              <label className="flex items-center cursor-pointer">
                 {props.showCheckboxes && (
-                  <input type="checkbox" className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                  onChange={(e) => {
-                                         const isChecked = e.target.checked;
-                                         const { id, isBranch, children } = element;
-                                         if (isBranch) {
-                                           // If the clicked node is a folder, update all files in that folder
-                                           const flattenedChildren = flattenTree(children);
-                                           flattenedChildren.forEach((child) => {
-                                             const { id, isBranch } = child;
-                                             if (!isBranch) {
-                                               const { checked } = getNodeProps({ nodeId: id });
-                                               if (checked !== isChecked) {
-                                                 getNodeProps({ nodeId: id, checked: isChecked });
-                                               }
-                                             }
-                                           });
-                                         } else {
-                                           // If the clicked node is a file, update its checked status
-                                           getNodeProps({ nodeId: id, checked: isChecked });
-                                         }
-                                       }}
+                  <input
+                    type="checkbox"
+                    className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    onClick={(e) => e.stopPropagation()} // Stop event propagation
                   />
-                  )}
-                {isBranch ? <FolderIcon isOpen={isExpanded} /> : <FileIcon filename={element.name} />}
+                )}
+                {isBranch ? (
+                  <FolderIcon
+                    isOpen={isExpanded}
+                    onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}
+                  />
+                ) : (
+                  <FileIcon filename={element.name} />
+                )}
                 {element.name}
               </label>
             </div>
@@ -64,7 +54,7 @@ function DirectoryTreeView(props) {
 }
 
 const FolderIcon = ({ isOpen }) =>
-  isOpen ? <FaFolderOpen  className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder  className="inline-block align-middle mr-1 text-blue-900 " />;
+  isOpen ? <FaFolderOpen className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder className="inline-block align-middle mr-1 text-blue-900 " />;
 
 const FileIcon = ({ filename }) => {
   const extension = filename.slice(filename.lastIndexOf(".") + 1);
