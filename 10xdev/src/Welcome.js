@@ -279,7 +279,7 @@ export const Welcome = () => {
 
             <div className="text-center mt-4 grid grid-cols-1  text-sm">
                   <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
-                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases 📖Create Documents and More 🪄</div>
+                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases and More 🪄</div>
             </div>
           </div>
           <div className="absolute top-3 right-5">
