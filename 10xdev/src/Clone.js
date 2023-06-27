@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import "./Clone.css";
 import Navbar from "./Navbar";
 import SearchContext from "./context/SearchContext";
@@ -10,6 +12,9 @@ import { FaGitlab } from "react-icons/fa";
 import cookies from "js-cookie";
 
 const Clone = () => {
+  useEffect(() => {
+    AOS.init();
+  }, []);
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
   const [input, setInput] = useState("");
@@ -141,11 +146,14 @@ const Clone = () => {
   return (
     <div >
       <Navbar />
-        <div className="h-screen">
+       {/* write back button to navigate to repos on click */}
+        <button className="bg-blue-900 text-white p-2 px-6 mx-[12%] m-2 rounded flex hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+
+        <div className="h-screen" >
 
           {!isauthenticated && (
-            <><div className="font-bold text-center text-xl m-3">Your Public Repository URL</div>
-            <div className="GetIgnorecontainer">
+            <><div className="font-bold text-center text-xl m-3 " data-aos="fade-right" data-aos-duration="500">Your Public Repository URL</div>
+            <div className="GetIgnorecontainer" data-aos="fade-right" data-aos-duration="500">
             
               <label className="pathsearchrow w-1/2">
                 <input
@@ -203,7 +211,7 @@ const Clone = () => {
             ) : (
               checkrepo==='repo' && (
                 <>
-              <div className="flex">
+              <div className="flex" data-aos="fade-right" data-aos-duration="500">
                 <button
                   onClick={loginWithGithub}
                   className="bg-blue-900 text-white px-8 py-2 mx-10 my-5 rounded-md flex hover:bg-blue-700"
@@ -217,9 +225,9 @@ const Clone = () => {
               </>)
             )}
           </div>
-          <div className="w-full items-center justify-center">
+          <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="2000">
             {branches.length > 0 ? (
-              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
+              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20" >
                   <h2 className="font-bold text-2xl">Select your desired Branch</h2>  
                 {branches.map((branch) => (
                   <ul key={branch}  className="px-10 mx-10 flex justify-center">
@@ -237,7 +245,7 @@ const Clone = () => {
             ) : (
               <div>
                 {repos.length > 0 ? (
-                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
+                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20" data-aos="fade-right" data-aos-duration="500">
                   <h2 className="font-bold text-2xl">Select your desired Repository</h2>      
                     {repos.map((repo) =>(
                           <>
