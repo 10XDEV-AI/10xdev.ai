@@ -13,6 +13,7 @@ const Clone = () => {
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
   const [input, setInput] = useState("");
+  const [checkrepo, setCheckRepo] = useState("repo");
   const hostname = window.location.hostname;
   const navigate = useNavigate();
   const client_id =
@@ -26,8 +27,6 @@ const Clone = () => {
   const [userdata, setUserData] = useState(null);
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
-  const [privateRepolink, setPrivateRepolink] = useState([]);
-  const [privateBranch, setPrivateBranch] = useState([]);
 
   const handleClone = async (repo) => {
     setIsLoading(true);
@@ -140,16 +139,15 @@ const Clone = () => {
   };
 
   return (
-    <div>
+    <div >
       <Navbar />
-      {isLoading ? (
-        <LoadingRing />
-      ) : (
-        <div>
+        <div> 
+
           {!isauthenticated && (
+            <><div className="font-bold text-center text-xl m-3">Your Public Repository URL</div>
             <div className="GetIgnorecontainer">
-              <div className="font-bold text-xl m-3">Your Public Repository URL:</div>
-              <label className="pathsearchrow">
+            
+              <label className="pathsearchrow w-1/2">
                 <input
                   type="text"
                   value={input}
@@ -158,10 +156,13 @@ const Clone = () => {
                 />
               </label>
               <button
-                onClick={() => handleClone(input)}
-                className="bg-blue-900 text-white p-2 m-2 rounded-full flex hover:bg-blue-700"
+                onClick={() => {
+                  handleClone(input);
+                  setCheckRepo("");
+                  }}
+                className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700"
               >
-                Clone Repo
+                Add
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -176,8 +177,17 @@ const Clone = () => {
                 </svg>
               </button>
             </div>
+            { (checkrepo==='repo' ) && <div className="flex items-center justify-center">
+              <div className="border-t border-gray-300 w-full my-5"></div>
+              <div className="mx-5 text-gray-700 font-bold">OR</div>
+              <div className="border-t border-gray-300 w-full my-5"></div>
+            </div>}
+            </>
           )}
           <br />
+
+            {/* lets add OR in between and horizontal ines in right and left of it  */}
+         
           <div
             style={{
               display: "flex",
@@ -187,32 +197,33 @@ const Clone = () => {
               marginTop: "20px",
             }}
           >
-            <div>
-              <h3 className="font-bold text-xl">Add Your Private Repository</h3>
-            </div>
-            {isauthenticated ? (
+           
+            {(isauthenticated )? (
               <div></div>
             ) : (
+              checkrepo==='repo' && (
+                <>
               <div className="flex">
                 <button
                   onClick={loginWithGithub}
-                  className="bg-blue-900 text-white p-2 m-2 rounded-md flex hover:bg-blue-700"
+                  className="bg-blue-900 text-white px-8 py-2 mx-10 my-5 rounded-md flex hover:bg-blue-700"
                 >
-                  Connect with Github <BsGithub className="ml-3 mr-1 m-1" />
+                  Connect with Github <BsGithub className="ml-3  mx-6 mr-1 m-1" />
                 </button>
-                <button className="bg-blue-900 text-white p-2 m-2 rounded-md flex hover:bg-blue-700">
-                  Connect with Gitlab <FaGitlab className="ml-3 mr-1 m-1" />
+                <button className="bg-blue-900 text-white px-8 py-2 mx-10 my-5 rounded-md flex hover:bg-blue-700">
+                  Connect with Gitlab <FaGitlab className="ml-3 mx-6 mr-1 m-1" />
                 </button>
               </div>
+              </>)
             )}
           </div>
           <div className="w-full items-center justify-center">
             {branches.length > 0 ? (
-              <div className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
-                <h2 className="font-bold text-2xl">Select your desired branch</h2>
+              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
+                  <h2 className="font-bold text-2xl">Select your desired Branch</h2>  
                 {branches.map((branch) => (
-                  <ul key={branch} className="">
-                    <li>
+                  <ul key={branch}  className="px-10 mx-10 flex justify-center">
+                    <li className="w-full">
                       <button
                         className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
                         onClick={() => handleSelect(branch)}
@@ -225,45 +236,27 @@ const Clone = () => {
               </div>
             ) : (
               <div>
-                {privateBranch.length > 0 && (
-                  <div className="ignoretips">
-                    {privateBranch.map((branch) => (
-                      <ul key={branch.name} className="branch-list w-40">
-                        <li>
-                          <button
-                            className="branch-buttons text-start"
-                            onClick={() => {
-                              setInput(privateRepolink);
-                              handleSelect(branch.name);
-                            }}
-                          >
-                            {branch.name}
-                          </button>
-                        </li>
-                      </ul>
-                    ))}
-                  </div>
-                )}
                 {repos.length > 0 ? (
-                  <div className="branch-container">
-                    {repos.map(
-                      (repo) =>
-                        repo.private && (
+                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20">
+                  <h2 className="font-bold text-2xl">Select your desired Repository</h2>      
+                    {repos.map((repo) =>(
+                          <>
                           <ul key={repo.id} className="px-10 mx-10 flex justify-center">
-                            <li className="w-1/2">
+                            <li className="w-full">
                               <button
                                 className="w-full text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
                                 onClick={() => {
                                   console.log(repo);
                                   console.log("User wants to clone " + repo.url);
                                   handleClonePrivate(repo.url);
-                                  setPrivateRepolink(repo.ssh_url);
+                                  setRepos([]);
                                 }}
                               >
                                 {repo.full_name}
                               </button>
                             </li>
                           </ul>
+                          </>
                         )
                     )}
                   </div>
@@ -272,7 +265,6 @@ const Clone = () => {
             )}
           </div>
         </div>
-      )}
     </div>
   );
 };

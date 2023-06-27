@@ -1,7 +1,8 @@
 import React, { useState, useEffect,useContext } from "react";
 import SearchContext from "../context/SearchContext";
 import "./UserPrompt.css";
-
+import {MdEdit} from 'react-icons/md';
+import {IoSyncCircleSharp} from 'react-icons/io5';
 function UserPrompt({indexval, searchTerm, onReprompt}) {
   const {userPic} = useContext(SearchContext);
   const [userPrompt, setUserPrompt] = useState(searchTerm);
@@ -62,10 +63,10 @@ function UserPrompt({indexval, searchTerm, onReprompt}) {
       </div>
       <div className="editOptions">
         <span className="editIcon" onClick={handleEditPrompt}>
-          ✏️
+        <MdEdit className="text-xl text-blue-900" />
         </span>
         <span className="retryIcon"  onClick={handleRetry}>
-          🔄
+          <IoSyncCircleSharp className="text-xl text-blue-900" color =""/>
         </span>
       </div>
     </div>

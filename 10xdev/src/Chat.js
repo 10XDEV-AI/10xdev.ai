@@ -23,9 +23,9 @@ export const Chat = () => {
     setIsLoading(true);
     setSideContainerOpen(false);
     try {
-      const data = await callAPI(`/api/data?prompt=${input}`, {
+      const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages }),
+        body: JSON.stringify({ chatMessages: chatMessages,prompt: input }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -61,9 +61,9 @@ export const Chat = () => {
     setIsLoading(true);
     setSideContainerOpen(false);
     try {
-      const data = await callAPI(`/api/data?prompt=${input}`, {
+      const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) }),
+        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index),prompt: input }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
