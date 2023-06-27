@@ -38,10 +38,19 @@ def filter_functions(result_string, code_query, filepaths, email,userlogger):
     return files
 
 
-def search_functions(code_query, email, userlogger):
+def search_functions(code_query, email, userlogger, scope):
+    global fs
     prompt_embedding = split_embed(code_query, email)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
+    if scope is not None:
+        files_in_scope = []
+        for file in scope:
+            if fs['file_path'].str.contains(file).any():
+                files_in_scope.append(fs[fs['file_path'].str.contains(file)]['file_path'].tolist()[0])
+        if len(files_in_scope) > 0:
+            fs = fs[fs['file_path'].isin(files_in_scope)]
+
     res = fs.sort_values('similarities', ascending=False).head(10)
 
     res.index = range(1, len(res) + 1)
@@ -141,7 +150,7 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
 
 
 
-def Ask_AI(prompt, userlogger, email, chatmessages):
+def Ask_AI(prompt, userlogger, email, chatmessages, scope):
     consolidated_prompt = consolidate_prompt_creation(chatmessages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
@@ -154,7 +163,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     userlogger.log("Analyzing your query...")
-    files = search_functions(prompt, email, userlogger)
+    files = search_functions(prompt, email, userlogger, scope)
 
     referenced_code = get_referenced_code(path, files)
     # print("Referenced code: ", referenced_code)

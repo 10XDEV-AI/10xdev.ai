@@ -55,7 +55,7 @@ const SearchState = ({ children }) => {
             console.log("is loading set true by context provider", isLoading)
             const data = await callAPI(`/api/data?prompt=${searchTerm}`, {
               method: "POST",
-              body: JSON.stringify({checkedFiles}),
+              body: JSON.stringify({checkedFiles:checkedFiles}),
             });
             setFiles(data.files);
             setResults(data.response);

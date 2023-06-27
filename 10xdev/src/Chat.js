@@ -9,7 +9,7 @@ import Navbar from "./Navbar";
 import { callAPI } from "./api";
 
 export const Chat = () => {
-  const { searchTerm, isLoading, results, setIsLoading, files, referenced_code } = useContext(SearchContext);
+  const { searchTerm, isLoading, results, setIsLoading, files, referenced_code, checkedFiles } = useContext(SearchContext);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
 
@@ -25,7 +25,7 @@ export const Chat = () => {
     try {
       const data = await callAPI(`/api/data?prompt=${input}`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages }),
+        body: JSON.stringify({ chatMessages,  checkedFiles }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -63,7 +63,7 @@ export const Chat = () => {
     try {
       const data = await callAPI(`/api/data?prompt=${input}`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) }),
+        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) , checkedFiles: checkedFiles   }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
