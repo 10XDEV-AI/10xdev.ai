@@ -279,20 +279,19 @@ export const Welcome = () => {
               </button>
             </div>
 
-<div className=" font-bold">
-  <div className="flex justify-center mx-2 px-2">
-    <FaStar className="text-yellow-500 my-1 m-2" /> Implement Features 
-    <FaQuestion className="text-red-500 my-1 m-2"  /> Explain Code 
-    <FaGamepad className="text-green-400 my-1 m-2" /> Generate commands
-    </div>
-     <div className="flex justify-center" >
-     <FaBug className="text-red-600 my-1 m-2" /> Fix Bugs & Errors 
-    <FaFlask className="text-purple-600 my-1 m-2" /> Create Testcases 
-    <FaBook className="text-orange-400 my-1 m-2" /> Create Documents and More 
-    <FaMagic className="text-pink-700 my-1 m-2" />
-     </div>
-</div>
-
+            <div className="">
+                 <div className="flex justify-center mx-auto">
+                    <FaStar className="text-blue-800 my-1 m-2" /> Implement Features
+                    <FaQuestion className="text-blue-800 my-1 m-2"  /> Explain Code
+                    <FaGamepad className="text-blue-800 my-1 m-2" /> Generate commands
+                 </div>
+                 <div className="flex justify-center" >
+                    <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs & Errors
+                    <FaFlask className="text-blue-800 my-1 m-2" /> Create Testcases
+                    <FaBook className="text-blue-800 my-1 m-2" /> Create Documents and More
+                    <FaMagic className="text-blue-800 my-1 m-2" />
+                 </div>
+            </div>
           </div>
           <div className="absolute top-3 right-5">
             <DropDownButton />

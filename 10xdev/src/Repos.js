@@ -59,12 +59,17 @@ export default function Repos() {
     navigate('/train');
   }, [navigate, setPath]);
 
+  const handleGoBack = useCallback(async () => {
+    setShowRepos(false);
+    navigate('/welcome');
+  }, [navigate, setShowRepos]);
+
   return (
     <div>
       {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container h-screen">
       <div className = "flex  pb-10 ">
-        <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={() => setShowRepos(false)}>
+        <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>
         Back
         </button>
         <h1 className="w-full text-center text-3xl font-bold text-blue-900">Repositories Trained</h1>
@@ -75,30 +80,30 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} 🖋️</button>
+                <button  className="change-branch-button px-1" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} 🖋️</button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
               <div className="repo-card-buttons">
                 {repo.Trained !== true ? (
-                  <button className="repo-card-button" onClick={() => handleTrain(repo.Directory)}>Train 🧠</button>
+                  <button className="repo-card-button px-1" onClick={() => handleTrain(repo.Directory)}>Train 🧠</button>
                 ) : (
                   <>
                     {repo.Selected ? (
                     <>
-                      <button className="repo-card-button text-center" onClick={() => handleSelect(repo.Directory)}> Selected <BsFillPatchCheckFill className="text-xl " color="green" style={{
+                      <button className="repo-card-button text-center px-1" onClick={() => handleSelect(repo.Directory)}> Selected <BsFillPatchCheckFill className="text-xl " color="green" style={{
                         marginLeft: "20px",marginTop: "3px"
                       }} /></button>
                     </>
                     ) : (
-                      <button className="repo-card-buttonc mx-1" onClick={() => handleSelect(repo.Directory)}>Select <BsPatchCheck className="text-xl " color="green" style={{
+                      <button className="repo-card-button mx-1" onClick={() => handleSelect(repo.Directory)}>Select <BsPatchCheck className="text-xl " color="green" style={{
                         marginLeft: "10px",marginTop: "3px"
                       }} /> </button>
                     )}
                   </>
                 )}
-                <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete <RiDeleteBin5Line color="#9b9b9b" className="text-2xl"  /></button>
-                <button className="repo-card-button" onClick={() => handleFiles(repo.Directory)}>Files <FcOpenedFolder className="text-2xl" /></button>
+                <button className="repo-card-button px-1" onClick={() => handleDelete(repo.Directory)}>Delete <RiDeleteBin5Line color="#9b9b9b" className="text-2xl"  /></button>
+                <button className="repo-card-button px-1" onClick={() => handleFiles(repo.Directory)}>Files <FcOpenedFolder className="text-2xl" /></button>
                 </div>
 
             </div>

@@ -141,7 +141,7 @@ const Clone = () => {
   return (
     <div >
       <Navbar />
-        <div> 
+        <div className="h-screen">
 
           {!isauthenticated && (
             <><div className="font-bold text-center text-xl m-3">Your Public Repository URL</div>
