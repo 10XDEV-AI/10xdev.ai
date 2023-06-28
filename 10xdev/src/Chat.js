@@ -116,7 +116,7 @@ return (
     <Navbar LoadProjectInfo="True" />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
                   {isLoading ? (<LoadingRing />) : (
-      <div >
+      <div className="">
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
             <UserPrompt

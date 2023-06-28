@@ -8,7 +8,7 @@
 }
 
 .codediffcontainer{
-width: 85%;
+width: 75%;
 padding: 20px 10px;
 }
 
@@ -27,7 +27,7 @@ text-align: justify;
 }
 
 .responsePicContainer{
-  width: 9%;
+  width: 15%;
   transition: width 0.2s ease;
 text-align: center;
 padding-top: 20px;
