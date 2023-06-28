@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DropDownButton.css';
-
+import {TbApi} from "react-icons/tb";
+import {BiGitRepoForked ,BiLogOut} from "react-icons/bi";
+import {BsPlusCircleFill} from "react-icons/bs";
 function DropdownButton() {
   const [isOpen, setIsOpen] = useState(false); // state to keep track of whether dropdown is open
 
@@ -25,8 +27,8 @@ function DropdownButton() {
     if (option === 4) {
         navigate('/apis');
     }
-    if (option === 5) {
-        navigate('/logs');
+    if (option === 2) {
+        navigate('/repos');
     }
     setIsOpen(false); // close the dropdown after an option is selected
   };
@@ -40,9 +42,10 @@ function DropdownButton() {
       </button>
       {isOpen && (
         <ul className="drop-down-list rounded-md text-black">
-          <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(1)}> 🧠 Setup Repository</li>
-          <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(4)}> 🔑 API Keys</li>
-          <li className="drop-down-bullets hover:bg-blue-900 rounded-md" onClick={() => handleOptionClick(3)}> 👋🏻 Log Out</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white  rounded-md flex" onClick={() => handleOptionClick(1)}> <BsPlusCircleFill className=' text-xl mx-2 '/>Setup New Repo</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(2)}> <BiGitRepoForked className=' text-xl mx-2 '/>Your Repositories</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(4)}> <TbApi className=" text-xl mx-2 " />API Keys</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(3)}> <BiLogOut className=' text-xl mx-2 ' /> Log Out</li>
         </ul>
       )}
     </div>

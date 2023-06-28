@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
+import {BiGitBranch} from 'react-icons/bi';
+import { FaBrain } from "react-icons/fa";
 import './Repos.css';
 import Navbar from './Navbar';
 import { callAPI } from './api';
 import LoadingRing from "./Loader/Loader";
-
+import {MdDelete} from 'react-icons/md';
+import {FcOpenedFolder} from 'react-icons/fc';
+import {BsFillPatchCheckFill,BsPatchCheck} from 'react-icons/bs';
 export default function Repos() {
   const {isLoading, setIsLoading } = useContext(SearchContext);
   const { setShowRepos } = useContext(SearchContext);
@@ -57,12 +61,17 @@ export default function Repos() {
     navigate('/train');
   }, [navigate, setPath]);
 
+  const handleGoBack = useCallback(async () => {
+    setShowRepos(false);
+    navigate('/welcome');
+  }, [navigate, setShowRepos]);
+
   return (
     <div>
       {isLoading ? (<><LoadingRing /> </>) : (
       <div className="repos-container h-screen">
       <div className = "flex  pb-10 ">
-        <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={() => setShowRepos(false)}>
+        <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>
         Back
         </button>
         <h1 className="w-full text-center text-3xl font-bold text-blue-900">Repositories Trained</h1>
@@ -73,26 +82,30 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} 🖋️</button>
+                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} <BiGitBranch className="text-blue-900 my-1"/> </button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
               <div className="repo-card-buttons">
                 {repo.Trained !== true ? (
-                  <button className="repo-card-button" onClick={() => handleTrain(repo.Directory)}>Train 🧠</button>
+                  <button className="repo-card-button px-1" onClick={() => handleTrain(repo.Directory)}> <div className="mb-1.5">Train</div> <FaBrain className="text-pink-500 text-xl " /></button>
                 ) : (
                   <>
                     {repo.Selected ? (
                     <>
-                      <button className="repo-card-button" onClick={() => handleSelect(repo.Directory)}>Selected ✅</button>
+                      <button className="repo-card-button text-center px-1" onClick={() => handleSelect(repo.Directory)}> Selected <BsFillPatchCheckFill className="text-xl " color="green" style={{
+                        marginLeft: "20px",marginTop: "3px"
+                      }} /></button>
                     </>
                     ) : (
-                      <button className="repo-card-button" onClick={() => handleSelect(repo.Directory)}>Select ✋️</button>
+                      <button className="repo-card-button mx-1" onClick={() => handleSelect(repo.Directory)}>Select <BsPatchCheck className="text-xl " color="green" style={{
+                        marginLeft: "10px",marginTop: "3px"
+                      }} /> </button>
                     )}
                   </>
                 )}
-                <button className="repo-card-button" onClick={() => handleDelete(repo.Directory)}>Delete 🗑️</button>
-                <button className="repo-card-button" onClick={() => handleFiles(repo.Directory)}>Files 📂️</button>
+                <button className="repo-card-button px-1" onClick={() => handleDelete(repo.Directory)}>Delete <MdDelete color="#9b9b9b" className="text-2xl" style={{marginTop:"1px"}}  /></button>
+                <button className="repo-card-button px-1" onClick={() => handleFiles(repo.Directory)}>Files <FcOpenedFolder className="text-2xl" /></button>
                 </div>
 
             </div>

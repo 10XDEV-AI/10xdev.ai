@@ -19,18 +19,18 @@ def process_file(root, filename, path, user_logger):
         if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
             pass
         else:
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
+            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'info'}
 
     try:
         file_contents = open(os.path.join(root, filename), 'r').read()
     except UnicodeDecodeError:
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'info'}
 
     if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": '⚠️'}
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'warning'}
     else:
         token_count = tokenCount(file_contents)
-        tick_or_cross = '✅' if token_count < 15000 else '⚠️'
+        tick_or_cross = 'success' if token_count < 15000 else 'warning'
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": token_count, "Sign": tick_or_cross}
 
 

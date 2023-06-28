@@ -27,7 +27,7 @@
 .pathsearchrow{
 display: flex;
 width: 65%;
-border-radius: 30px;
+border-radius: 10px;
 border: 1px solid #D3D3D3;
 align-items: center;
 font-family: "Roboto", Helvetica;
