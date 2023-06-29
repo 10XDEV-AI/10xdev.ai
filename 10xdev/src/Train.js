@@ -137,29 +137,30 @@ const Train = () => {
             <label className="pathsearchrow">
               <div className="pathsearchlabel">Train AI on Path: </div>
               <input
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                className=""
-              />
+  type="text"
+  value={input}
+  onChange={handleInputChange}
+  className="w-full peer px-4 py-2  rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+/>
+
             </label>
             <div className="gitIgnorebuttoncontainer">
               <div>
                 <button
                   onClick={handleGetGitIgnore}
-                  className="bg-blue-900 text-white p-2 ml-2 rounded-full hover:bg-blue-700"
+                  className="bg-blue-900 text-white p-2 ml-2 rounded hover:bg-blue-700"
                 >
                   Analyze Files
                 </button>
                 <button
                   onClick={handleTrain}
-                  className="bg-blue-900 text-white p-2 m-2 rounded-full hover:bg-blue-700"
+                  className="bg-blue-900 text-white p-2 m-2 rounded hover:bg-blue-700"
                 >
                   Start Training
                 </button>
                 <button
                   onClick={handleSync}
-                  className="bg-blue-900 text-white p-2 rounded-full hover:bg-blue-700"
+                  className="bg-blue-900 text-white p-2 rounded hover:bg-blue-700"
                 >
                   Sync Changes
                 </button>
@@ -197,9 +198,9 @@ const Train = () => {
                         </span>
                         : All good
                       </h4>
-                      <h4 className="p-2 m-2 rounded-md bg-red-300 flex">
+                      <h4 className="p-2 m-2 rounded-md bg-yellow-200 flex">
                         <span role="img" aria-label="emoji">
-                        <RiFileWarningFill color="red" className='text-xl'  />
+                        <RiFileWarningFill color="" className='text-yellow-500  text-xl'  />
                         </span>
                         : File too long
                       </h4>

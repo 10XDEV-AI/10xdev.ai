@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
-import {BiGitBranch} from 'react-icons/bi';
+import {MdEdit} from 'react-icons/md';
 import { FaBrain } from "react-icons/fa";
 import './Repos.css';
 import Navbar from './Navbar';
@@ -11,17 +11,10 @@ import {MdDelete} from 'react-icons/md';
 import {FcOpenedFolder} from 'react-icons/fc';
 import {BsFillPatchCheckFill,BsPatchCheck} from 'react-icons/bs';
 export default function Repos() {
-  const {isLoading, setIsLoading } = useContext(SearchContext);
+  const {isLoading, setIsLoading,setRepos,repos } = useContext(SearchContext);
   const { setShowRepos } = useContext(SearchContext);
   const { setPath } = useContext(SearchContext);
   const navigate = useNavigate();
-  const [repos, setRepos] = useState([]);
-
-  useEffect(() => {
-    callAPI('/api/Repos')
-      .then(data => setRepos(data))
-      .catch(error => console.error(error));
-  }, []);
 
   const handleDelete = useCallback(async (Directory) => {
     try {
@@ -68,9 +61,9 @@ export default function Repos() {
 
   return (
     <div>
-      {isLoading ? (<><LoadingRing /> </>) : (
+      {isLoading ? (<><LoadingRing  dontLog="true"  /> </>) : (
       <div className="repos-container h-screen">
-      <div className = "flex  pb-10 ">
+      <div className = "flex  pb-10 my-8 ">
         <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>
         Back
         </button>
@@ -82,7 +75,7 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} <BiGitBranch className="text-blue-900 my-1"/> </button>
+                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch}  <MdEdit className="text-xl text-blue-900" /> </button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>

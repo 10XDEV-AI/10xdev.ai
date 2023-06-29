@@ -10,7 +10,7 @@ const SearchState = ({ children }) => {
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
   const [files, setFiles] = useState('');
-  const [isnewuser, setIsNewUser] = useState(false);
+  const [isnewuser, setIsNewUser] = useState(localStorage.getItem('isNewUser') === 'true');
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
@@ -18,13 +18,28 @@ const SearchState = ({ children }) => {
   const userPic = defaultUserPic;
   const [showRepos, setShowRepos] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [repos, setRepos] = useState([]);
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
       const index = Math.floor(Math.random() * emojiList.length);
       return emojiList[index];
   }
-
+  useEffect(() => {
+    callAPI('/api/Repos')
+      .then(data => {
+        setRepos(data)
+        console.log("repos", data);
+        if(data.length> 0){
+          localStorage.setItem("isNewUser", "false");
+          setIsNewUser(false);
+        }else{
+          localStorage.setItem("isNewUser", "true");
+          setIsNewUser(true);
+        }
+      })
+      .catch(error => console.error(error));
+  }, []);
 
     useEffect(() => {
       const getResults = async () => {
@@ -71,6 +86,7 @@ const SearchState = ({ children }) => {
         showSync, setShowSync,
         isnewuser, setIsNewUser,
         showRepos, setShowRepos,
+        repos, setRepos,
       }}
     >
       {children}

@@ -12,11 +12,27 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 import Repos from "./Repos";
-import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from 'react-icons/fa';
-
+import {
+  FaStar,
+  FaQuestion,
+  FaGamepad,
+  FaBug,
+  FaFlask,
+  FaBook,
+  FaMagic,
+} from "react-icons/fa";
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos } = useContext(SearchContext);
+  const {
+    setSearchTerm,
+    isLoading,
+    setIsLoading,
+    showSync,
+    setShowSync,
+    isnewuser,
+    showRepos,
+    setShowRepos,
+  } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
@@ -30,26 +46,33 @@ export const Welcome = () => {
       const urlParams = new URLSearchParams(window.location.hash.substring(1));
       const code = urlParams.get("access_token");
       if (code) {
-        Cookies.set("cognitoCode", code, { path: "/", secure: true, sameSite: "strict" });
+        Cookies.set("cognitoCode", code, {
+          path: "/",
+          secure: true,
+          sameSite: "strict",
+        });
         console.log("Got the code");
         try {
           setIsLoading(true);
           await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState({}, document.title, window.location.pathname); 
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
         } catch (error) {
-          // Handle the error
+          console.error(error);
         }
       }
       const cognitoCode = Cookies.get("cognitoCode");
-      if  (cognitoCode) {
+      if (cognitoCode) {
         try {
           setIsLoading(true);
           setIsLoading(false);
         } catch (error) {
-          // Handle the error
+          console.error(error);
         }
       }
-
     };
 
     fetchData();
@@ -143,165 +166,224 @@ export const Welcome = () => {
       console.log(error);
     }
   };
-
-  const [repository, setRepository] = useState('');
-  const [branch, setBranch] = useState('');
-  const { isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const [repository, setRepository] = useState("");
+  const [branch, setBranch] = useState("");
+  const { isLoadingProjectInfo, setIsLoadingProjectInfo } =
+    useContext(SearchContext);
   useEffect(() => {
     const fetchData = async () => {
-    const cognitoCode = Cookies.get("cognitoCode");
-    if(cognitoCode) {
-           setIsLoadingProjectInfo(true);
-           const data = await callAPI('/api/projectInfo');
-            if(data.repo_name==='No Repos selected') {
-              setIsNewUser(false);
-            }else{
-              setIsNewUser(true);
-              getTreeData();
-            }
-           setRepository(data.repo_name);
-           setBranch(data.branch_name);
-           setIsLoadingProjectInfo(false);
-           }
+      const cognitoCode = Cookies.get("cognitoCode");
+      if (cognitoCode) {
+        setIsLoadingProjectInfo(true);
+        const data = await callAPI("/api/projectInfo");
+        if (data.repo_name === "No Repos selected") {
+        } else {
+          getTreeData();
+        }
+        setRepository(data.repo_name);
+        setBranch(data.branch_name);
+        setIsLoadingProjectInfo(false);
+      }
     };
     fetchData();
   }, [setIsLoadingProjectInfo]);
 
   if (isLoading) {
-  return (
-  <LoadingRing />
-  )}
-  else{
-  return (<>
-    {isnewuser ? (
-    <div className="flex ">
-      <div className="w-1/2 p-6 bg-slate-50 h-screen">
-        {showSync ? (
-          <div className="py-2 h-[90vh]">
-            <Sync/>
-          </div>
-        ) : (
-            <>
-                {showRepos? <Repos/>:
-                (
+    return <LoadingRing />;
+  } else {
+    return (
+      <>
+        {!isnewuser ? (
+          <div className="flex ">
+            <div className="w-1/2 p-6 bg-slate-50 h-screen">
+              {showSync ? (
+                <div className="py-2 h-[90vh]">
+                  <Sync />
+                </div>
+              ) : (
+                <>
+                  {showRepos ? (
+                    <Repos />
+                  ) : (
                     <>
-                    <div className="flex items-center text-blue-900 justify-center h-[16vh]">
-                      <h1 className="text-2xl">
-                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository}  branch={branch} />
-                      </h1>
-                      <button className="ml-auto rounded ml-auto hover:text-blue-600" onClick={() => setShowRepos(!showRepos)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
-                      <div className="flex items-center justify-center">
-                      <h2 className="text-xl font-bold mb-2">Your code:</h2>
-                      {/* Filter Icon */}
-                      <button className="font-bold px-1 rounded-md ml-auto" onClick={handleFilterClick}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 my-1">
-                          <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clipRule="evenodd" />
-                        </svg>
-                      </button>
+                      <div className="flex items-center text-blue-900 justify-center h-[16vh]">
+                        <h1 className="text-2xl">
+                          <ProjectInfo
+                            isLoadingProjectInfo={isLoadingProjectInfo}
+                            repository={repository}
+                            branch={branch}
+                          />
+                        </h1>
+                        <button
+                          className="ml-auto rounded ml-auto hover:text-blue-600"
+                          onClick={() => setShowRepos(!showRepos)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-7 h-7"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                      <div className="bg-white border border-gray-400 h-[50vh] overflow-y-auto rounded-lg shadow-md">
-                      <FileTree data={treeData} showCheckboxes={showCheckboxes} />
+                      <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
+                        <div className="flex items-center justify-center">
+                          <h2 className="text-xl font-bold mb-2">Your code:</h2>
+                          {/* Filter Icon */}
+                          <button
+                            className="font-bold px-1 rounded-md ml-auto"
+                            onClick={handleFilterClick}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              className="w-5 h-5 my-1"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="bg-white border border-gray-400 h-[50vh] overflow-y-auto rounded-lg shadow-md">
+                          <FileTree
+                            data={treeData}
+                            showCheckboxes={showCheckboxes}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center text-blue-900 justify-center">
-                      <div className="">
+                      <div className="flex items-center text-blue-900 justify-center">
+                        <div className="">
                           <h1 className="font-bold">
                             Last synced : {new Date().toLocaleString()}
                           </h1>
+                        </div>
+                        <button
+                          className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex"
+                          onClick={handleSyncClick}
+                        >
+                          Sync
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="w-4 h-4 m-1"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 4.5c1.215 0 2.417.055 3.604.162a.68.68 0 01.615.597c.124 1.038.208 2.088.25 3.15l-1.689-1.69a.75.75 0 00-1.06 1.061l2.999 3a.75.75 0 001.06 0l3.001-3a.75.75 0 10-1.06-1.06l-1.748 1.747a41.31 41.31 0 00-.264-3.386 2.18 2.18 0 00-1.97-1.913 41.512 41.512 0 00-7.477 0 2.18 2.18 0 00-1.969 1.913 41.16 41.16 0 00-.16 1.61.75.75 0 101.495.12c.041-.52.093-1.038.154-1.552a.68.68 0 01.615-.597A40.012 40.012 0 0110 4.5zM5.281 9.22a.75.75 0 00-1.06 0l-3.001 3a.75.75 0 101.06 1.06l1.748-1.747c.042 1.141.13 2.27.264 3.386a2.18 2.18 0 001.97 1.913 41.533 41.533 0 007.477 0 2.18 2.18 0 001.969-1.913c.064-.534.117-1.071.16-1.61a.75.75 0 10-1.495-.12c-.041.52-.093 1.037-.154 1.552a.68.68 0 01-.615.597 40.013 40.013 0 01-7.208 0 .68.68 0 01-.615-.597 39.785 39.785 0 01-.25-3.15l1.689 1.69a.75.75 0 001.06-1.061l-2.999-3z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                      <button
-                        className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex"
-                        onClick={handleSyncClick}>
-                        Sync
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 m-1">
-                          <path fill-rule="evenodd" d="M10 4.5c1.215 0 2.417.055 3.604.162a.68.68 0 01.615.597c.124 1.038.208 2.088.25 3.15l-1.689-1.69a.75.75 0 00-1.06 1.061l2.999 3a.75.75 0 001.06 0l3.001-3a.75.75 0 10-1.06-1.06l-1.748 1.747a41.31 41.31 0 00-.264-3.386 2.18 2.18 0 00-1.97-1.913 41.512 41.512 0 00-7.477 0 2.18 2.18 0 00-1.969 1.913 41.16 41.16 0 00-.16 1.61.75.75 0 101.495.12c.041-.52.093-1.038.154-1.552a.68.68 0 01.615-.597A40.012 40.012 0 0110 4.5zM5.281 9.22a.75.75 0 00-1.06 0l-3.001 3a.75.75 0 101.06 1.06l1.748-1.747c.042 1.141.13 2.27.264 3.386a2.18 2.18 0 001.97 1.913 41.533 41.533 0 007.477 0 2.18 2.18 0 001.969-1.913c.064-.534.117-1.071.16-1.61a.75.75 0 10-1.495-.12c-.041.52-.093 1.037-.154 1.552a.68.68 0 01-.615.597 40.013 40.013 0 01-7.208 0 .68.68 0 01-.615-.597 39.785 39.785 0 01-.25-3.15l1.689 1.69a.75.75 0 001.06-1.061l-2.999-3z" clip-rule="evenodd" />
-                        </svg>
-
-
-                      </button>
-                    </div>
                     </>
-                    )}
-            </>
-        )
-        }
-      </div>
-
-
-      <div className="shadow-xl w-1/2 p-6">
-        <div className="text-centre">
-          <div className="h-[16vh] ">
-            <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-                10XDEV.AI
+                  )}
+                </>
+              )}
             </div>
-          </div>
+            <div className="shadow-xl w-1/2 p-6">
+              <div className="text-centre">
+                <div className="h-[16vh] ">
+                  <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+                    10XDEV.AI
+                  </div>
+                </div>
 
-          <div className="">
-            <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
-            <div className="border border-gray-400 rounded-lg shadow-md">
-              <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
-                {typingStarted ? <textarea
-                                                   className="flex-grow h-[48vh] focus:outline-none"
-                                                   value={input}
-                                                   placeholder=""
-                                                   onClick={() => setTypingStarted(true)}
-                                                   onChange={handleInputChange}
-                                                   onKeyDown={(e) => e.key === 'Enter' && search(e)}
-                                                 /> : (
-                  <Typewriter className = "h-[48vh]"
-                    options={{
-                      strings: shuffledStrings,
-                      autoStart: true,
-                      loop: true,
-                      cursor: " |",
-                      delay: 30,
-                    }}
-                    onInit={(typewriter) => {
-                      typewriter.pauseFor(3000).start();
-                    }}
-                  />
-                )}
+                <div className="">
+                  <div className="text-xl font-bold mb-2">
+                    Describe a task, query, or a bug:
+                  </div>
+                  <div className="border border-gray-400 rounded-lg shadow-md">
+                    <div
+                      className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"
+                      onClick={() => setTypingStarted(true)}
+                    >
+                      {typingStarted ? (
+                        <textarea
+                          className="flex-grow h-[48vh] focus:outline-none"
+                          value={input}
+                          placeholder=""
+                          onClick={() => setTypingStarted(true)}
+                          onChange={handleInputChange}
+                          onKeyDown={(e) => e.key === "Enter" && search(e)}
+                        />
+                      ) : (
+                        <Typewriter
+                          className="h-[48vh]"
+                          options={{
+                            strings: shuffledStrings,
+                            autoStart: true,
+                            loop: true,
+                            cursor: " |",
+                            delay: 30,
+                          }}
+                          onInit={(typewriter) => {
+                            typewriter.pauseFor(3000).start();
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
 
+                  <div className="flex items-end justify-end">
+                    <button
+                      className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md "
+                      onClick={search}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-7 h-7"
+                      >
+                        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="">
+                    <div className="flex justify-center mx-auto">
+                      <FaStar className="text-blue-800 my-1 m-2" /> Implement
+                      Features
+                      <FaQuestion className="text-blue-800 my-1 m-2" /> Explain
+                      Code
+                      <FaGamepad className="text-blue-800 my-1 m-2" /> Generate
+                      commands
+                    </div>
+                    <div className="flex justify-center">
+                      <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs &
+                      Errors
+                      <FaFlask className="text-blue-800 my-1 m-2" /> Create
+                      Testcases
+                      <FaBook className="text-blue-800 my-1 m-2" /> Create
+                      Documents and More
+                      <FaMagic className="text-blue-800 my-1 m-2" />
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute top-3 right-5">
+                  <DropDownButton />
+                </div>
               </div>
             </div>
-
-            <div className="flex items-end justify-end">
-              <button className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
-                  <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="">
-                 <div className="flex justify-center mx-auto">
-                    <FaStar className="text-blue-800 my-1 m-2" /> Implement Features
-                    <FaQuestion className="text-blue-800 my-1 m-2"  /> Explain Code
-                    <FaGamepad className="text-blue-800 my-1 m-2" /> Generate commands
-                 </div>
-                 <div className="flex justify-center" >
-                    <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs & Errors
-                    <FaFlask className="text-blue-800 my-1 m-2" /> Create Testcases
-                    <FaBook className="text-blue-800 my-1 m-2" /> Create Documents and More
-                    <FaMagic className="text-blue-800 my-1 m-2" />
-                 </div>
-            </div>
           </div>
-          <div className="absolute top-3 right-5">
-            <DropDownButton />
-          </div>
-        </div>
-      </div>
-    </div>):(<NewWelcome/>)
-    }
-    </>
-  );
+        ) : (
+          <NewWelcome />
+        )}
+      </>
+    );
+  }
 };
-}
 export default Welcome;
