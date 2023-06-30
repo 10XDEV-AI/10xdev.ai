@@ -17,10 +17,20 @@ export default function Repos() {
   const navigate = useNavigate();
   const [repos, setRepos] = useState([]);
 
-  useEffect(() => {
-    callAPI('/api/Repos')
-      .then(data => setRepos(data))
-      .catch(error => console.error(error));
+  useEffect( async() => {
+    try {
+      setIsLoading(true);
+      const response = await callAPI('/api/Repos', {
+        method: 'GET',
+      });
+      console.log(response);
+      setRepos(response);
+      setIsLoading(false);
+    }
+    catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
   }, []);
 
   const handleDelete = useCallback(async (Directory) => {
