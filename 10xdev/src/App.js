@@ -10,6 +10,7 @@ import Branch from "./Branch/Branch";
 import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
+import LeftWelcome from "./LeftWelcome";
 import User from "./User";
 import Wait from "./Wait";
 
@@ -29,7 +30,7 @@ function App () {
                 <Route path="/clone" element={<Clone/>} />
                 <Route path="/logs" element={<LoadingRing/>} />
                 <Route path="/branch" element={<Branch/>} />
-                <Route path="/test" element={<User/>} />
+                <Route path="/test" element={<LeftWelcome/>} />
                 <Route path="/wait" element={<Wait/>} />
             </Routes>
         </Router>
