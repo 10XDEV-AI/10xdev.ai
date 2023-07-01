@@ -122,7 +122,7 @@ export const LeftWelcome = () => {
   )}
   else{
   return (
-          <div className="w-1/2 p-6 bg-slate-50 h-screen">
+          <div className="p-6 bg-slate-50 h-screen">
             {showSync ? (
               <div className="py-2 h-[90vh]">
                 <Sync/>
