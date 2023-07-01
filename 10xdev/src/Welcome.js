@@ -278,19 +278,9 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-
-            <div className="">
-                 <div className="flex justify-center mx-auto">
-                    <FaStar className="text-blue-800 my-1 m-2" /> Implement Features
-                    <FaQuestion className="text-blue-800 my-1 m-2"  /> Explain Code
-                    <FaGamepad className="text-blue-800 my-1 m-2" /> Generate commands
-                 </div>
-                 <div className="flex justify-center" >
-                    <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs & Errors
-                    <FaFlask className="text-blue-800 my-1 m-2" /> Create Testcases
-                    <FaBook className="text-blue-800 my-1 m-2" /> Create Documents and More
-                    <FaMagic className="text-blue-800 my-1 m-2" />
-                 </div>
+            <div className="text-center mt-4 grid grid-cols-1  text-sm">
+                  <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
+                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases and More 🪄</div>
             </div>
           </div>
           <div className="absolute top-3 right-5">

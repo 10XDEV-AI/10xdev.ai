@@ -118,9 +118,10 @@ def get_syncAI():
 def get_data():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
+    scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    response = Ask_AI(prompt, user_logger, email, chat_messages)
+    response = Ask_AI(prompt, user_logger, email, chat_messages, scope)
     return jsonify(
         {
             "files": response["files"],
