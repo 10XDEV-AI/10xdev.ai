@@ -40,7 +40,8 @@ export default function Repos() {
       await callAPI(`/api/SelectRepo?Directory=${Directory}`, {
         method: 'GET',
       });
-      navigate('/welcome');
+      window.location.reload();
+      setShowRepos(false);
     } catch (error) {
       console.error(error);
     }

@@ -18,6 +18,24 @@ const SearchState = ({ children }) => {
   const userPic = defaultUserPic;
   const [showRepos, setShowRepos] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [checkedFiles, setCheckedFiles] = useState([]);
+
+
+  const handleFileCheck = (file) => {
+    // Check if the file is already in the checkedFiles array
+    const isChecked = checkedFiles.includes(file);
+
+    if (isChecked) {
+      // File is already checked, remove it from the array
+      setCheckedFiles((prevCheckedFiles) =>
+        prevCheckedFiles.filter((checkedFile) => checkedFile !== file)
+      );
+    } else {
+      // File is not checked, add it to the array
+      setCheckedFiles((prevCheckedFiles) => [...prevCheckedFiles, file]);
+    }
+  };
+
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
@@ -37,7 +55,7 @@ const SearchState = ({ children }) => {
             console.log("is loading set true by context provider", isLoading)
             const data = await callAPI(`/api/data?prompt=${searchTerm}`, {
               method: "POST",
-              body: JSON.stringify({}),
+              body: JSON.stringify({checkedFiles:checkedFiles}),
             });
             setFiles(data.files);
             setResults(data.response);
@@ -71,6 +89,7 @@ const SearchState = ({ children }) => {
         showSync, setShowSync,
         isnewuser, setIsNewUser,
         showRepos, setShowRepos,
+        checkedFiles, handleFileCheck,
       }}
     >
       {children}

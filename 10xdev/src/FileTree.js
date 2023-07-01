@@ -1,11 +1,14 @@
 import React from "react";
+import {useContext} from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
 import { FaList, FaPython, FaReadme, FaFolderOpen, FaFolder } from "react-icons/fa";
 import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
 import { RiFileCodeLine } from "react-icons/ri";
 import TreeView, { flattenTree } from "react-accessible-treeview";
+import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
+  const {checkedFiles, setCheckedFiles, handleFileCheck } = useContext(SearchContext);
   console.log(props.data);
   const data = flattenTree(props.data);
 
@@ -32,9 +35,12 @@ function DirectoryTreeView(props) {
                   <input
                     type="checkbox"
                     className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    checked={checkedFiles.includes(element.name)}
+                    onChange={() => handleFileCheck(element.name)}
                     onClick={(e) => e.stopPropagation()} // Stop event propagation
                   />
                 )}
+
                 {isBranch ? (
                   <FolderIcon
                     isOpen={isExpanded}
