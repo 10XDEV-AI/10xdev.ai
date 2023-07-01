@@ -9,6 +9,9 @@ import { useEffect } from "react";
 import FilesTree from "./FileTree";
 import Sync from './Sync/Sync';
 import {useNavigate} from 'react-router-dom';
+import {RiFileWarningFill} from 'react-icons/ri';
+import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
+import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
   const { isLoading, setIsLoading, path } = useContext(SearchContext);
@@ -66,6 +69,15 @@ const Train = () => {
       console.log(data);
     } catch (error) {
       console.log(error);
+    }
+  };
+  const showIcons = (sign) => {
+    if (sign === "warning") {
+      return <RiFileWarningFill className="text-yellow-500 text-xl" />;
+    } else if (sign === "success") {
+      return <BsFillFileEarmarkCheckFill className="text-green-500 text-xl" />;
+    } else if (sign === "info") {
+      return <AiFillFileUnknown className="text-blue-500 text-xl" />;
     }
   };
 
@@ -173,27 +185,27 @@ const Train = () => {
                           <tr key={index}>
                             <td className="tdp">{file.Path}</td>
                             <td>{file.Tokens}</td>
-                            <td>{file.Sign}</td>
+                            <td>{showIcons(file.Sign) }</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                     <div className="flex justify-center text-base font-bold">
-                      <h4 className="p-2 m-2 rounded-md bg-green-300">
+                      <h4 className="p-2 m-2 rounded-md bg-green-300 flex">
                         <span role="img" aria-label="Description of the emoji">
-                          ✅
+                          <BsFillFileEarmarkCheckFill color="green"  className='text-xl' />
                         </span>
                         : All good
                       </h4>
-                      <h4 className="p-2 m-2 rounded-md bg-red-300">
+                      <h4 className="p-2 m-2 rounded-md bg-red-300 flex">
                         <span role="img" aria-label="emoji">
-                          ⚠️
+                        <RiFileWarningFill color="red" className='text-xl'  />
                         </span>
                         : File too long
                       </h4>
-                      <h4 className="p-2 m-2 rounded-md bg-blue-300">
+                      <h4 className="p-2 m-2 rounded-md bg-blue-300 flex">
                         <span role="img" aria-label="emoji">
-                          ℹ️
+                          <AiFillFileUnknown color="blue"  className='text-xl' />
                         </span>
                         : File is not text
                       </h4>

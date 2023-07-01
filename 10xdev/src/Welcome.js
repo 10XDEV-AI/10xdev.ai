@@ -12,6 +12,8 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 import Repos from "./Repos";
+import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from 'react-icons/fa';
+
 
 export const Welcome = () => {
   const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos } = useContext(SearchContext);
@@ -276,7 +278,6 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-
             <div className="text-center mt-4 grid grid-cols-1  text-sm">
                   <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
                   <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases and More 🪄</div>

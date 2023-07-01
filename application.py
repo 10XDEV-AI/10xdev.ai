@@ -118,8 +118,8 @@ def get_syncAI():
 def get_data():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
-    prompt = request.args.get("prompt")
     scope = request.json.get("checkedFiles")
+    prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     response = Ask_AI(prompt, user_logger, email, chat_messages, scope)
     return jsonify(
@@ -129,7 +129,6 @@ def get_data():
             "referenced_code": response["referenced_code"],
         }
     )
-
 
 @application.route("/api/Ignore", methods=["GET"])
 def get_AIIgnore():
@@ -315,7 +314,7 @@ def get_user():
 def get_alluserrepos():
     access_token = request.args.get('access_token')
     headers = {'Authorization': f'token {access_token}'}
-    params={'visibility': 'private'}
+    params={'visibility': 'all','per_page': 1000}
     response = requests.get('https://api.github.com/user/repos', headers=headers, params=params)
     
     if response.status_code == 200:

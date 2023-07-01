@@ -23,9 +23,9 @@ export const Chat = () => {
     setIsLoading(true);
     setSideContainerOpen(false);
     try {
-      const data = await callAPI(`/api/data?prompt=${input}`, {
+      const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages,  checkedFiles }),
+        body: JSON.stringify({ chatMessages: chatMessages,prompt: input }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -61,9 +61,9 @@ export const Chat = () => {
     setIsLoading(true);
     setSideContainerOpen(false);
     try {
-      const data = await callAPI(`/api/data?prompt=${input}`, {
+      const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index) , checkedFiles: checkedFiles   }),
+        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index),checkedFiles: checkedFiles , prompt: input }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -116,7 +116,7 @@ return (
     <Navbar LoadProjectInfo="True" />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
                   {isLoading ? (<LoadingRing />) : (
-      <div >
+      <div className="">
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
             <UserPrompt
