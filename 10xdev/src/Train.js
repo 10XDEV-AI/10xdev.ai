@@ -256,7 +256,7 @@ const Train = () => {
                           </button>
                         </div>
                       </div>
-                      <div>
+                      <div className="h-full">
                         {
                           <textarea
                             className="w-full h-[80%] p-2 rounded-md text-black shadow-md"
