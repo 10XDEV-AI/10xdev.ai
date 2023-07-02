@@ -117,42 +117,37 @@ export const Chat = () => {
       },
     ]);
   }, [results, searchTerm, files, referenced_code]);
+
 return (
-    <>
-    <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
+  <>
+    <Navbar LoadProjectInfo="True" />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
-                  {isLoading ? (<LoadingRing />) : (
-      <div className="">
-        {chatMessages.map((chatMessage, index) => (
-          <div key={index}>
-            <UserPrompt
-                searchTerm={chatMessage.prompt.searchTerm}
-                onReprompt={handleReprompt}
-                onRetry={handleReprompt}
-                indexval={index}
-            />
-            <ResponseContainer
-                searchResults={chatMessage.response.searchResults}
-                files={chatMessage.response.files}
-                referenced_code={chatMessage.response.referenced_code}
-                toggleSideContainer={toggleSideContainer}
-                sideContainerOpen={sideContainerOpen}
-              />
-          </div>
-        ))}
-        <div className = "fixed top-0 left-0 w-1/2 shadow-xl">
-            {showLeftWelcome && <LeftWelcome />}
+      {chatMessages.map((chatMessage, index) => (
+        <div key={index}>
+          <UserPrompt
+            searchTerm={chatMessage.prompt.searchTerm}
+            onReprompt={handleReprompt}
+            onRetry={handleReprompt}
+            indexval={index}
+          />
+          <ResponseContainer
+            searchResults={chatMessage.response.searchResults}
+            files={chatMessage.response.files}
+            referenced_code={chatMessage.response.referenced_code}
+            toggleSideContainer={toggleSideContainer}
+            sideContainerOpen={sideContainerOpen}
+          />
+          {index === chatMessages.length - 1 && isLoading && <LoadingRing />}
         </div>
-      </div>
-      )}
+      ))}
       <div className="spacer"></div>
       <div className="footer"></div>
-      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`  }>
-        <SearchBar onSearch={handleSearch}  />
+      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`}>
+        <SearchBar onSearch={handleSearch} />
       </div>
     </div>
-    </>
-  );
+  </>
+);
 };
 
 export default Chat;
