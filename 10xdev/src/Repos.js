@@ -33,6 +33,7 @@ export default function Repos() {
       window.location.reload();
     } catch (error) {
       console.error(error);
+      console.error(error);
     }
   }, []);
 
@@ -97,19 +98,15 @@ export default function Repos() {
                   <>
                     {repo.Selected ? (
                     <>
-                      <button className="repo-card-button text-center px-1" onClick={() => handleSelect(repo.Directory)}> Selected <BsFillPatchCheckFill className="text-xl " color="green" style={{
-                        marginLeft: "20px",marginTop: "3px"
-                      }} /></button>
+                      <button className="repo-card-button px-1" onClick={() => handleSelect(repo.Directory)}> Selected <BsFillPatchCheckFill className="text-xl mx-auto mb-1" color="green" /></button>
                     </>
                     ) : (
-                      <button className="repo-card-button mx-1" onClick={() => handleSelect(repo.Directory)}>Select <BsPatchCheck className="text-xl " color="green" style={{
-                        marginLeft: "10px",marginTop: "3px"
-                      }} /> </button>
+                      <button className="repo-card-button px-1" onClick={() => handleSelect(repo.Directory)}>Select <BsPatchCheck className="text-xl mx-auto mb-1" color="green"/> </button>
                     )}
                   </>
                 )}
-                <button className="repo-card-button px-1" onClick={() => handleDelete(repo.Directory)}>Delete <MdDelete color="#9b9b9b" className="text-2xl" style={{marginTop:"1px"}}  /></button>
-                <button className="repo-card-button px-1" onClick={() => handleFiles(repo.Directory)}>Files <FcOpenedFolder className="text-2xl" /></button>
+                <button className="repo-card-button px-1" onClick={() => handleDelete(repo.Directory)}>Delete <MdDelete color="#9b9b9b" className="text-2xl mx-auto"  /></button>
+                <button className="repo-card-button px-1" onClick={() => handleFiles(repo.Directory)}>Files <FcOpenedFolder className="text-2xl mx-auto" /></button>
                 </div>
 
             </div>
