@@ -32,14 +32,16 @@ export const Welcome = () => {
       const urlParams = new URLSearchParams(window.location.hash.substring(1));
       const code = urlParams.get("access_token");
       if (code) {
-        Cookies.set("cognitoCode", code, { path: "/", secure: true, sameSite: "strict" });
-        console.log("Got the code");
+        Cookies.set("cognitoCode", code, { path: "/", secure: true, sameSite: "None" });
+        console.log("Set the code");
+        console.log(code);
         try {
           setIsLoading(true);
+          console.log("Calling API");
+          console.log(code);
           await callAPI(`/api/login`, { method: "GET" });
           window.history.replaceState({}, document.title, window.location.pathname); 
         } catch (error) {
-          // Handle the error
         }
       }
     };

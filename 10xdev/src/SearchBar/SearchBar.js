@@ -5,6 +5,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleClick = () => {
     onSearch(searchInput);
+    setSearchInput('');
   };
 
   const newTab = async () => {
