@@ -5,16 +5,22 @@ import ResponseContainer from "./ResponseContainer/ResponseContainer";
 import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
+import LeftWelcome from  "./LeftWelcome";
 import Navbar from "./Navbar";
 import { callAPI } from "./api";
 
 export const Chat = () => {
   const { searchTerm, isLoading, results, setIsLoading, files, referenced_code, checkedFiles } = useContext(SearchContext);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [showLeftWelcome, setShowLeftWelcome] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
 
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
+  };
+
+  const handleHamburgerClick = () => {
+    setShowLeftWelcome(!showLeftWelcome);
   };
 
   const handleSearch = async (input) => {
@@ -113,7 +119,7 @@ export const Chat = () => {
   }, [results, searchTerm, files, referenced_code]);
 return (
     <>
-    <Navbar LoadProjectInfo="True" />
+    <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
                   {isLoading ? (<LoadingRing />) : (
       <div className="">
@@ -134,6 +140,9 @@ return (
               />
           </div>
         ))}
+        <div className = "fixed top-0 left-0 w-1/2 shadow-xl">
+            {showLeftWelcome && <LeftWelcome />}
+        </div>
       </div>
       )}
       <div className="spacer"></div>

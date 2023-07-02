@@ -6,24 +6,21 @@ from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.files2analyse import check_file_type, files2analyse
 from utilities.rates import get_rates
+from utilities.notebook_utils import convert_ipynb_to_python
 import difflib
 
 fs = pd.DataFrame()
+
 def get_diff(old_file_path, new_file_path, threshold=0.1):
     old_size = os.path.getsize(old_file_path)
-
     if not os.path.exists(new_file_path):
         return None
-
     new_size = os.path.getsize(new_file_path)
-
     with open(old_file_path, 'r') as old_file, open(new_file_path, 'r') as new_file:
         old_lines = old_file.readlines()
         new_lines = new_file.readlines()
-
     differ = difflib.ndiff(old_lines, new_lines)
     diff_output = differ
-    
     if old_lines == new_lines:
         return None
     num_changes = 0
@@ -36,30 +33,36 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
             num_changes += 1
     total_lines = max(old_size, new_size)
     change_ratio = num_changes / total_lines
-
     if change_ratio > threshold:
         return diff_output
     else:
         return None
 
-
 def summarize_str(filename, file_contents, userid):
     prompt = "File " + filename + " has " + file_contents
-    system_message = "Summarize what this file in the codebase does, assume context when neccessary."
-    return AskGPT(userid, system_message=system_message, prompt=prompt, temperature=0,max_tokens=380)
+    system_message = "Summarize what this file in the codebase does, assume context when necessary."
+    return AskGPT(userid, system_message=system_message, prompt=prompt, temperature=0, max_tokens=380)
 
 
-def sumarize(filename, userid):
+def summarize(filename, userid):
     root = read_info(userid)
-    if not check_file_type(os.path.join(root,filename)):
-        print("File " + filename + " was not summarised as it is not a text file")
+    full_filepath = os.path.join(root, filename)
+
+    if not check_file_type(full_filepath):
+        print("File " + filename + " was not summarized as it is not a text file")
         return "Ignore"
-    with open(os.path.join(root,filename), 'r') as f:
-        try:
-            file_contents = f.read()
-        except UnicodeDecodeError:
-            print("File " + filename + " was not summarised as it is not a text file")
-            return "Ignore"
+
+    if filename.endswith(".ipynb"):
+        # Convert .ipynb file to human-readable format
+        file_contents = convert_ipynb_to_python(full_filepath)
+    else:
+        with open(full_filepath, 'r') as f:
+            try:
+                file_contents = f.read()
+            except UnicodeDecodeError:
+                print("File " + filename + " was not summarized as it is not a text file")
+                return "Ignore"
+
     return summarize_str(filename, file_contents, userid)
 
 def syncAI(sync_flag, user_logger, userid):
@@ -69,23 +72,13 @@ def syncAI(sync_flag, user_logger, userid):
         return "DONE", []
 
     # git pull at path
-    subprocess.run(["git", "pull"], cwd=path)
-
-    branches_output = subprocess.check_output(["git", "branch"], cwd=path).decode("utf-8")
-    branches = branches_output.split("\n")
-    current_branch = subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"], cwd=path).decode("utf-8").strip()
-
-    for branch in branches:
-        branch_name = branch.strip()
-        if branch_name != "" and branch_name != current_branch:
-            subprocess.run(["git", "branch", "-D", branch_name], cwd=path)
-            print(f"Deleted local branch: {branch_name}")
-
+    subprocess.run(["git", "fetch", "--prune"], cwd=path)
 
     global fs
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
     chat_limit = get_rates(userid).split(",")[0]
     delay = 60 / int(chat_limit)
+
     fs = pd.read_csv(fsfilename)
     fs["embedding"] = fs.embedding.apply(lambda x: str2float(str(x)))
 
@@ -96,7 +89,7 @@ def syncAI(sync_flag, user_logger, userid):
         if get_diff(os.path.join(path, file), clone_path) is not None:
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
-            summary = sumarize(file, userid)
+            summary = summarize(file, userid)
             if summary == "Ignore":
                 continue
             fs["summary"][fs["file_path"] == file] = summary
@@ -130,17 +123,19 @@ def syncAI(sync_flag, user_logger, userid):
 
         new_fs["embedding"] = ""
         new_fs["summary"] = ""
+
         for ind in new_fs.index:
             user_logger.log("Analyzing New File: " + new_fs["file_path"][ind])
-            new_fs["summary"][ind] = sumarize(new_fs["file_path"][ind], userid)
+            new_fs["summary"][ind] = summarize(new_fs["file_path"][ind], userid)
             if new_fs["summary"][ind] != "Ignore":
                 print(new_fs["file_path"][ind] + " is being embedded")
                 new_fs["embedding"][ind] = split_embed(new_fs["summary"][ind], userid)
             time.sleep(delay)
 
         fs = pd.concat([fs, new_fs], ignore_index=True)
+        fs.to_csv(fsfilename, index=False)
 
-    fs.to_csv(fsfilename, index=False)
     create_clone(read_info(userid).split("/")[-1], userid)
     user_logger.clear_logs()
+
     return "DONE", list(new_file_paths)

@@ -65,8 +65,7 @@ export default function Repos() {
 
   const handleGoBack = useCallback(async () => {
     setShowRepos(false);
-    navigate('/welcome');
-  }, [navigate, setShowRepos]);
+  }, [setShowRepos]);
 
   return (
     <div>
@@ -74,7 +73,9 @@ export default function Repos() {
       <div className="repos-container h-screen">
       <div className = "flex  pb-10 ">
         <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>
-        Back
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
         </button>
         <h1 className="w-full text-center text-3xl font-bold text-blue-900">Repositories Trained</h1>
         </div>

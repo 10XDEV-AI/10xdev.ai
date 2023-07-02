@@ -31,7 +31,7 @@ const Branch = () => {
       console.log(branch);
       const data = await callAPI(`/api/setBranch?path=${path}&branch=${branch}`);
       console.log(data);
-      navigate(`/repos`);
+      navigate(`/welcome`);
       window.location.reload();
     } catch (error) {
       console.error(error);
