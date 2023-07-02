@@ -18,6 +18,7 @@ import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from '
 export const LeftWelcome = () => {
   const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
   const [input, setInput] = useState("");
+  const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [typingStarted, setTypingStarted] = useState(false);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [treeData, setTreeData] = useState([]);
@@ -32,34 +33,9 @@ export const LeftWelcome = () => {
     };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const urlParams = new URLSearchParams(window.location.hash.substring(1));
-      const code = urlParams.get("access_token");
-      if (code) {
-        Cookies.set("cognitoCode", code, { path: "/", secure: true, sameSite: "strict" });
-        console.log("Got the code");
-        try {
-          setIsLoading(true);
-          await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (error) {
-          // Handle the error
-        }
-      }
-      const cognitoCode = Cookies.get("cognitoCode");
-      if  (cognitoCode) {
-        try {
-          setIsLoading(true);
-          setIsLoading(false);
-        } catch (error) {
-          // Handle the error
-        }
-      }
 
-    };
-
-    fetchData();
-  }, [navigate]);
+              getTreeData();
+  }, []);
 
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
@@ -91,6 +67,7 @@ export const LeftWelcome = () => {
       const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
+      setIsTreeLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -153,7 +130,12 @@ export const LeftWelcome = () => {
                           </button>
                           </div>
                           <div className="bg-white border border-gray-400 h-[50vh] overflow-y-auto rounded-lg shadow-md">
-                          <FileTree data={treeData} showCheckboxes={showCheckboxes} />
+                            {isTreeLoading ? (
+                            <div className="flex justify-center items-center h-[50vh] text-gray-500">
+                            Loading......
+                            </div>
+                            ) : (  <FileTree data={treeData} showCheckboxes={showCheckboxes} />
+                            )}
                           </div>
                         </div>
                         <div className="flex items-center text-blue-900 justify-center">
