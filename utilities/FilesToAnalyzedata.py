@@ -12,10 +12,6 @@ def process_file(root, filename, path, user_logger):
     if ".git" in root.split(os.path.sep):
         return None
 
-    # Skip file types like jpg, svg, gif, etc.
-    if filename.endswith(('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv', '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', '.ttf', '.bmp', '.ipynb')):
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
-
     if not filename.endswith(('.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml', '.json', '.sql', '.md', '.yml', '.yaml', '.sh', '.bat', '.jsx', '.txt', '.php', '.rb', '.pl', '.swift', '.go', '.cs', '.vb', '.lua', '.scala', '.rust', '.ts', '.scss', '.sass', '.less', '.coffee', '.asm', '.r', '.pyc', '.class', '.dll', '.exe', '.bat', '.ps1')):
         # Code to handle the file with the supported extensions
         user_logger.log("Analysing new data type: " + str(filename))
@@ -28,19 +24,19 @@ def process_file(root, filename, path, user_logger):
         if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
             pass
         else:
-            return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
+            return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
     try:
         file_contents = open(os.path.join(root, filename), 'r').read()
     except UnicodeDecodeError:
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'ℹ️'}
+        return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
     if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": '⚠️'}
+        return {"Path": os.path.relpath(os.path.join(root, filename), path)}
     else:
         token_count = tokenCount(file_contents)
         tick_or_cross = '✅' if token_count < 15000 else '⚠️'
-        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": token_count, "Sign": tick_or_cross}
+        return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
 
 

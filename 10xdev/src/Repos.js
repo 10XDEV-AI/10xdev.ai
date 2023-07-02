@@ -33,7 +33,6 @@ export default function Repos() {
       window.location.reload();
     } catch (error) {
       console.error(error);
-      console.error(error);
     }
   }, []);
 

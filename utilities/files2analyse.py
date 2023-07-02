@@ -35,7 +35,7 @@ def parse_ignore_file(file_path):
 def check_file_type(file_path):
     ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
                           '.pptx', '.ppt', '.txt', '.zip', '.rar', '.7z', '.mp4', '.webm', '.avi', '.mkv', '.flv',
-                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp', '.ipynb')
+                          '.mpeg', '.mpg', '.ogg', '.ogv', '.webm', '.wmv', 'ttf', '.bmp')
     if file_path.endswith(ignored_extensions):
         return False
     if not file_path.endswith(('.c', '.cpp', '.h', '.java', '.js', '.css', '.html', '.htm', '.xml',

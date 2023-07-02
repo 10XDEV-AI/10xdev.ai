@@ -4,7 +4,7 @@ import os
 import chardet
 from utilities.embedding import split_embed
 from openai.embeddings_utils import cosine_similarity
-
+from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.logger import UserLogger
 from utilities.projectInfo import read_info
 from utilities.str2float import str2float
@@ -91,10 +91,13 @@ def get_referenced_code(path, files):
 
     for file in files:
         try:
-            with open(os.path.join(path, file), 'r') as f:
-                code = f.read()
-                code_block = f"{file}\n{code}"
-                referenced_code.append(code_block)
+            if file.endswith(".ipynb"):
+               code = convert_ipynb_to_python(os.path.join(path, file))
+            else:
+                with open(os.path.join(path, file), 'r') as f:
+                    code = f.read()
+            code_block = f"{file}\n{code}"
+            referenced_code.append(code_block)
         except Exception as e:
             print("Error opening file:", file)
             print("Error message:", str(e))
@@ -174,12 +177,12 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
     estimated_tokens = 0
     for i in files:
         j = os.path.join(path, i)
-        with open(j, 'rb') as f:
-            result = chardet.detect(f.read())
-            if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252':
-                final_contents = open(j).read()
-                final_contents = re.sub(r'\s+', ' ', final_contents)
-                estimated_tokens += tokenCount(final_contents)
+        if i.endswith(".ipynb"):
+            final_contents = convert_ipynb_to_python(j)
+        else:
+            final_contents = open(j).read()
+        final_contents = re.sub(r'\s+', ' ', final_contents)
+        estimated_tokens += tokenCount(final_contents)
 
     if estimated_tokens > 15000:
         for file in files:
@@ -187,19 +190,17 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
 
         print("Estimated tokens: " + str(estimated_tokens))
-        # print("Final Prompt : " + final_prompt)
     else:
         for i in files:
             final_prompt += "\nFile path " + i + ":\n"
             path = read_info(email)
-
             j = os.path.join(path, i)
-            with open(j, 'rb') as f:
-                result = chardet.detect(f.read())
-                if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'Windows-1252' or result['encoding'] == 'utf-16' or result['encoding'] == 'utf-16-le' or result['encoding'] == 'utf-16-be' or result['encoding'] == 'MacRoman':
-                    final_contents = open(j).read()
-                    final_contents = re.sub(r'\s+', ' ', final_contents)
-                    final_prompt += final_contents
+            if j.endswith(".ipynb"):
+                final_contents = convert_ipynb_to_python(j)
+            else:
+                final_contents = open(j).read()
+            final_contents = re.sub(r'\s+', ' ', final_contents)
+            final_prompt += final_contents
 
     system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
 
