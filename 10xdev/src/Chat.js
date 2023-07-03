@@ -130,13 +130,17 @@ return (
             onRetry={handleReprompt}
             indexval={index}
           />
-          <ResponseContainer
-            searchResults={chatMessage.response.searchResults}
-            files={chatMessage.response.files}
-            referenced_code={chatMessage.response.referenced_code}
-            toggleSideContainer={toggleSideContainer}
-            sideContainerOpen={sideContainerOpen}
-          />
+          {
+              chatMessage.response.searchResults &&
+              <ResponseContainer
+                searchResults={chatMessage.response.searchResults}
+                files={chatMessage.response.files}
+                referenced_code={chatMessage.response.referenced_code}
+                toggleSideContainer={toggleSideContainer}
+                sideContainerOpen={sideContainerOpen}
+              />
+
+          }
           {index === chatMessages.length - 1 && isLoading && <LoadingRing />}
         </div>
       ))}
