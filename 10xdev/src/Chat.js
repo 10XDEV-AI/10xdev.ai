@@ -10,12 +10,19 @@ import Navbar from "./Navbar";
 import { callAPI } from "./api";
 
 export const Chat = () => {
-  const { searchTerm, isLoading, results, setIsLoading, files, referenced_code, checkedFiles } = useContext(SearchContext);
+  const {
+    searchTerm,
+    isLoading,
+    results,
+    setIsLoading,
+    files,
+    referenced_code,
+    checkedFiles,
+  } = useContext(SearchContext);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [showLeftWelcome, setShowLeftWelcome] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
-
-  const loadingRingRef = useRef();
+  const loadingRingRef = useRef(null);
 
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
@@ -30,16 +37,11 @@ export const Chat = () => {
     console.log(input);
     setIsLoading(true);
     setSideContainerOpen(false);
-
     try {
       const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({
-          chatMessages: chatMessages,
-          prompt: input
-        })
+        body: JSON.stringify({ chatMessages: chatMessages, prompt: input }),
       });
-
       console.log(data);
       const results = JSON.stringify(data.response);
       const files = data.files;
@@ -51,14 +53,14 @@ export const Chat = () => {
         ...prevState,
         {
           prompt: {
-            searchTerm: input
+            searchTerm: input,
           },
           response: {
             searchResults: data.response,
             files: data.files,
-            referenced_code: data.referenced_code
-          }
-        }
+            referenced_code: data.referenced_code,
+          },
+        },
       ]);
     } catch (error) {
       console.error("Error during API call:", error);
@@ -72,34 +74,30 @@ export const Chat = () => {
     console.log("searching for");
     console.log(input);
     setSideContainerOpen(false);
-
     setChatMessages((prevState) => {
       const updatedMessages = [...prevState];
       updatedMessages[index] = {
         prompt: {
-          searchTerm: input
+          searchTerm: input,
         },
         response: {
           searchResults: null,
           files: null,
-          referenced_code: null
-        }
+          referenced_code: null,
+        },
       };
       return updatedMessages;
     });
-
     setIsLoading(true);
-
     try {
       const data = await callAPI(`/api/data`, {
         method: "POST",
         body: JSON.stringify({
           chatMessages: chatMessages.slice(0, index),
           checkedFiles: checkedFiles,
-          prompt: input
-        })
+          prompt: input,
+        }),
       });
-
       console.log(data);
       const results = JSON.stringify(data.response);
       const files = data.files;
@@ -109,28 +107,25 @@ export const Chat = () => {
       console.log(code);
       console.log("index");
       console.log(index);
-
       setChatMessages((prevState) => {
         const updatedMessages = [...prevState];
         updatedMessages[index] = {
           prompt: {
-            searchTerm: input
+            searchTerm: input,
           },
           response: {
             searchResults: data.response,
             files: data.files,
-            referenced_code: data.referenced_code
-          }
+            referenced_code: data.referenced_code,
+          },
         };
         return updatedMessages;
       });
-
       console.log("Updated chat messages");
       console.log(chatMessages);
     } catch (error) {
       console.error("Error during API call:", error);
     }
-
     setIsLoading(false);
   };
 
@@ -139,27 +134,30 @@ export const Chat = () => {
       {
         index: 0,
         prompt: {
-          searchTerm: searchTerm
+          searchTerm: searchTerm,
         },
         response: {
           searchResults: results,
           files: files,
-          referenced_code: referenced_code
-        }
-      }
+          referenced_code: referenced_code,
+        },
+      },
     ]);
   }, [results, searchTerm, files, referenced_code]);
 
   useEffect(() => {
     if (isLoading && loadingRingRef.current) {
-      loadingRingRef.current.scrollIntoView({ behavior: "smooth" });
+      loadingRingRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
   }, [isLoading]);
 
   return (
     <>
       <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
-      <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
+      <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
             <UserPrompt
@@ -178,13 +176,15 @@ export const Chat = () => {
               />
             )}
             {index === chatMessages.length - 1 && isLoading && (
-              <LoadingRing ref={loadingRingRef} />
+              <div >
+                <LoadingRing />
+              </div>
             )}
           </div>
         ))}
-        <div className="spacer"></div>
+        <div className="spacer" ref={loadingRingRef}></div>
         <div className="footer"></div>
-        <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`}>
+        <div className={`searchbarrow ${sideContainerOpen ? "open" : ""}`}>
           <SearchBar onSearch={handleSearch} />
         </div>
       </div>
