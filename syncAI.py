@@ -73,6 +73,7 @@ def syncAI(sync_flag, user_logger, userid):
 
     # git pull at path
     subprocess.run(["git", "fetch", "--prune"], cwd=path)
+    subprocess.run(["git", "pull"], cwd=path)
 
     global fs
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
