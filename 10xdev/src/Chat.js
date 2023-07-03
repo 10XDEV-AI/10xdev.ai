@@ -119,7 +119,7 @@ export const Chat = () => {
   }, [results, searchTerm, files, referenced_code]);
 return (
     <>
-    <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
+    <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
                   {isLoading ? (<LoadingRing />) : (
       <div className="">

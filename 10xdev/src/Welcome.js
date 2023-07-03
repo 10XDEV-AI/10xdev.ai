@@ -13,11 +13,27 @@ import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
 import Repos from "./Repos";
-import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from 'react-icons/fa';
-
+import {
+  FaStar,
+  FaQuestion,
+  FaGamepad,
+  FaBug,
+  FaFlask,
+  FaBook,
+  FaMagic,
+} from "react-icons/fa";
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos } = useContext(SearchContext);
+  const {
+    setSearchTerm,
+    isLoading,
+    setIsLoading,
+    showSync,
+    setShowSync,
+    isnewuser,
+    showRepos,
+    setShowRepos,
+  } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [typingStarted, setTypingStarted] = useState(false);
@@ -40,7 +56,11 @@ export const Welcome = () => {
           console.log("Calling API");
           console.log(code);
           await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState({}, document.title, window.location.pathname); 
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
         } catch (error) {
         }
       }
@@ -127,58 +147,97 @@ export const Welcome = () => {
             <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
                 10XDEV.AI
             </div>
-          </div>
+            <div className="shadow-xl w-1/2 p-6">
+              <div className="text-centre">
+                <div className="h-[16vh] ">
+                  <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+                    10XDEV.AI
+                  </div>
+                </div>
 
-          <div className="">
-            <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
-            <div className="border border-gray-400 rounded-lg shadow-md">
-              <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
-                {typingStarted ? <textarea
-                                                   className="flex-grow h-[48vh] focus:outline-none"
-                                                   value={input}
-                                                   placeholder=""
-                                                   onClick={() => setTypingStarted(true)}
-                                                   onChange={handleInputChange}
-                                                   onKeyDown={(e) => e.key === 'Enter' && search(e)}
-                                                 /> : (
-                  <Typewriter className = "h-[48vh]"
-                    options={{
-                      strings: shuffledStrings,
-                      autoStart: true,
-                      loop: true,
-                      cursor: " |",
-                      delay: 30,
-                    }}
-                    onInit={(typewriter) => {
-                      typewriter.pauseFor(3000).start();
-                    }}
-                  />
-                )}
+                <div className="">
+                  <div className="text-xl font-bold mb-2">
+                    Describe a task, query, or a bug:
+                  </div>
+                  <div className="border border-gray-400 rounded-lg shadow-md">
+                    <div
+                      className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"
+                      onClick={() => setTypingStarted(true)}
+                    >
+                      {typingStarted ? (
+                        <textarea
+                          className="flex-grow h-[48vh] focus:outline-none"
+                          value={input}
+                          placeholder=""
+                          onClick={() => setTypingStarted(true)}
+                          onChange={handleInputChange}
+                          onKeyDown={(e) => e.key === "Enter" && search(e)}
+                        />
+                      ) : (
+                        <Typewriter
+                          className="h-[48vh]"
+                          options={{
+                            strings: shuffledStrings,
+                            autoStart: true,
+                            loop: true,
+                            cursor: " |",
+                            delay: 30,
+                          }}
+                          onInit={(typewriter) => {
+                            typewriter.pauseFor(3000).start();
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
 
+                  <div className="flex items-end justify-end">
+                    <button
+                      className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md "
+                      onClick={search}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-7 h-7"
+                      >
+                        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="">
+                    <div className="flex justify-center mx-auto">
+                      <FaStar className="text-blue-800 my-1 m-2" /> Implement
+                      Features
+                      <FaQuestion className="text-blue-800 my-1 m-2" /> Explain
+                      Code
+                      <FaGamepad className="text-blue-800 my-1 m-2" /> Generate
+                      commands
+                    </div>
+                    <div className="flex justify-center">
+                      <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs &
+                      Errors
+                      <FaFlask className="text-blue-800 my-1 m-2" /> Create
+                      Testcases
+                      <FaBook className="text-blue-800 my-1 m-2" /> Create
+                      Documents and More
+                      <FaMagic className="text-blue-800 my-1 m-2" />
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute top-3 right-5">
+                  <DropDownButton />
+                </div>
               </div>
             </div>
-
-            <div className="flex items-end justify-end">
-              <button className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
-                  <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                </svg>
-              </button>
-            </div>
-            <div className="text-center mt-4 grid grid-cols-1  text-sm">
-                  <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
-                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases and More 🪄</div>
-            </div>
           </div>
-          <div className="absolute top-3 right-5">
-            <DropDownButton />
-          </div>
-        </div>
-      </div>
-    </div>):(<NewWelcome/>)
-    }
-    </>
-  );
+        ) : (
+          <NewWelcome />
+        )}
+      </>
+    );
+  }
 };
-}
 export default Welcome;

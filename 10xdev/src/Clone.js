@@ -15,7 +15,7 @@ const Clone = () => {
   useEffect(() => {
     AOS.init();
   }, []);
-  const { isLoading, setIsLoading } = useContext(SearchContext);
+  const { isLoading, setIsLoading ,setPath} = useContext(SearchContext);
   const [branches, setBranches] = useState([]);
   const [input, setInput] = useState("");
   const [checkrepo, setCheckRepo] = useState("repo");
@@ -29,7 +29,7 @@ const Clone = () => {
       : hostname === "10xdevai.com"
       ? "40acda1a937125d9193b"
       : "YoYOHS";
-  const [userdata, setUserData] = useState(null);
+      
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
 
@@ -57,6 +57,7 @@ const Clone = () => {
       });
       console.log(data);
       setBranches(data);
+      
     } catch (error) {
       console.log(error);
     }
@@ -69,6 +70,7 @@ const Clone = () => {
     window.location.assign(
       `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo`
     );
+    
   };
 
   useEffect(() => {
@@ -88,28 +90,13 @@ const Clone = () => {
       };
       fetchToken();
       setTimeout(() => {
-        getGithubUser();
         getAllPrivateRepos();
         setIsAuthenticated(true);
       }, 2000);
     }
   }, []);
 
-  const getGithubUser = async () => {
-    const accessToken = cookies.get("accesstoken");
-    console.log(accessToken);
-    try {
-      const response = await callAPI(`/api/github/getuser?access_token=${accessToken}`, {
-        method: "GET",
-      });
-      console.log(response);
-      setUserData(response);
-      return response;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };
+ 
 
   const getAllPrivateRepos = async () => {
     const accessToken = cookies.get("accesstoken");
@@ -131,36 +118,41 @@ const Clone = () => {
   };
 
   const handleSelect = async (branch) => {
+    setIsLoading(true);
     try {
       console.log(branch);
       const data = await callAPI(`/api/setBranch?path=${input}&branch=${branch}`, {
         method: "GET",
       });
       console.log(data);
-      navigate(`/repos`);
+      navigate(`/train`);
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   return (
-    <div >
+    <div >{isLoading?<LoadingRing  dontLog="true" />:
+      <>
       <Navbar />
-       {/* write back button to navigate to repos on click */}
-        <button className="bg-blue-900 text-white p-2 px-6 mx-[12%] m-2 rounded flex hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-
-        <div className="h-screen" >
-
-          {!isauthenticated && (
-            <><div className="font-bold text-center text-xl m-3 " data-aos="fade-right" data-aos-duration="500">Your Public Repository URL</div>
-            <div className="GetIgnorecontainer" data-aos="fade-right" data-aos-duration="500">
+        <div className="h-screen " >
+        {!isauthenticated && (
+            <>
             
-              <label className="pathsearchrow w-1/2">
+            <div className=" mt-[8%]  " >
+            <div className="flex  ">
+            <button className="bg-blue-900 text-white px-4 ml-[33%] my-[0.75%] btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+            <div className="text-3xl font-bold text-blue-900 my-3 mx-[2%]" >Your Public Repository URL</div>
+           
+            </div> 
+            <div className="flex justify-center">
+              <label className="pathsearchrow  w-[28%] my-10">
                 <input
                   type="text"
                   value={input}
                   onChange={handleInputChange}
-                  className="w-full focus:outline-none focus:shadow-outline mx-5 my-2"
+                  className="w-full focus:outline-none focus:shadow-outline mx-5 my-2 "
                 />
               </label>
               <button
@@ -168,7 +160,7 @@ const Clone = () => {
                   handleClone(input);
                   setCheckRepo("");
                   }}
-                className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700"
+                className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700 my-10"
               >
                 Add
                 <svg
@@ -184,6 +176,7 @@ const Clone = () => {
                   />
                 </svg>
               </button>
+              </div>
             </div>
             { (checkrepo==='repo' ) && <div className="flex items-center justify-center">
               <div className="border-t border-gray-300 w-full my-5"></div>
@@ -211,24 +204,31 @@ const Clone = () => {
             ) : (
               checkrepo==='repo' && (
                 <>
-              <div className="flex" data-aos="fade-right" data-aos-duration="500">
+              <div className="flex">
                 <button
                   onClick={loginWithGithub}
-                  className="bg-blue-900 text-white px-8 py-2 mx-10 my-5 rounded-md flex hover:bg-blue-700"
+                  className="bg-blue-900 text-white px-8 py-2 mx-10  rounded-md flex hover:bg-blue-700"
                 >
                   Connect with Github <BsGithub className="ml-3  mx-6 mr-1 m-1" />
                 </button>
-                <button className="bg-blue-900 text-white px-8 py-2 mx-10 my-5 rounded-md flex hover:bg-blue-700">
+                <button className="bg-blue-900 text-white px-8 py-2 mx-10  rounded-md flex hover:bg-blue-700">
                   Connect with Gitlab <FaGitlab className="ml-3 mx-6 mr-1 m-1" />
                 </button>
               </div>
               </>)
             )}
           </div>
-          <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="2000">
+          <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="500">
             {branches.length > 0 ? (
-              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20" >
-                  <h2 className="font-bold text-2xl">Select your desired Branch</h2>  
+              <>
+              <div className="flex  ">
+              <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+            <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Branch</h2>                 
+            </div> 
+                     
+              
+              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" >
+                  
                 {branches.map((branch) => (
                   <ul key={branch}  className="px-10 mx-10 flex justify-center">
                     <li className="w-full">
@@ -242,11 +242,17 @@ const Clone = () => {
                   </ul>
                 ))}
               </div>
+              </>
             ) : (
               <div>
                 {repos.length > 0 ? (
-                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-20" data-aos="fade-right" data-aos-duration="500">
-                  <h2 className="font-bold text-2xl">Select your desired Repository</h2>      
+                  <>
+                  <div className="flex  ">
+            <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+            <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Repository</h2>             
+            </div>  
+                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" data-aos="fade-right" data-aos-duration="500">
+                       
                     {repos.map((repo) =>(
                           <>
                           <ul key={repo.id} className="px-10 mx-10 flex justify-center">
@@ -256,6 +262,7 @@ const Clone = () => {
                                 onClick={() => {
                                   console.log(repo);
                                   console.log("User wants to clone " + repo.url);
+                                  setPath(repo.name);
                                   handleClonePrivate(repo.url);
                                   setRepos([]);
                                 }}
@@ -268,11 +275,13 @@ const Clone = () => {
                         )
                     )}
                   </div>
+                  </>
                 ) : null}
               </div>
             )}
           </div>
-        </div>
+        </div></>
+        }
     </div>
   );
 };
