@@ -93,6 +93,9 @@ function Sync(handleSyncClick) {
             <span role="img" aria-label="Description of the emoji">
               ⌛️
             </span>
+            <div className="text-center text-sm">
+              <LogViewer />
+            </div>
           </div>
         ) : showTick ? (
           <div className="">

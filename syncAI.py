@@ -135,7 +135,9 @@ def syncAI(sync_flag, user_logger, userid):
         fs = pd.concat([fs, new_fs], ignore_index=True)
         fs.to_csv(fsfilename, index=False)
 
+    user_logger.log("Syncing file contents..")
     create_clone(read_info(userid).split("/")[-1], userid)
+
     user_logger.clear_logs()
 
     return "DONE", list(new_file_paths)

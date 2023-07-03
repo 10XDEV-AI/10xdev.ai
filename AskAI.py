@@ -215,7 +215,6 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
     userlogger.log("Thinking of an answer...")
     FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
                          temperature=0.7)
-
     userlogger.clear_logs()
 
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}

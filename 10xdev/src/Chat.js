@@ -64,8 +64,22 @@ export const Chat = () => {
   const handleReprompt = async (input, index) => {
     console.log("searching for");
     console.log(input);
-    setIsLoading(true);
     setSideContainerOpen(false);
+     setChatMessages((prevState) => {
+            const updatedMessages = [...prevState];
+            updatedMessages[index] = {
+              prompt: {
+                searchTerm: input,
+              },
+              response: {
+                          searchResults: null,
+                          files: null,
+                          referenced_code: null,
+                        },
+            };
+            return updatedMessages;
+          });
+    setIsLoading(true);
     try {
       const data = await callAPI(`/api/data`, {
         method: "POST",
@@ -120,7 +134,7 @@ export const Chat = () => {
 
 return (
   <>
-    <Navbar LoadProjectInfo="True" />
+    <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
     <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
       {chatMessages.map((chatMessage, index) => (
         <div key={index}>
