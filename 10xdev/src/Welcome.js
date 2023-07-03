@@ -30,7 +30,7 @@ export const Welcome = () => {
     setIsLoading,
     showSync,
     setShowSync,
-    isnewuser,
+    currentRepo,
     showRepos,
     setShowRepos,
   } = useContext(SearchContext);
@@ -115,20 +115,7 @@ export const Welcome = () => {
 
   const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
 
-  useEffect(() => {
-    const fetchData = async () => {
-    const cognitoCode = Cookies.get("cognitoCode");
-    if(cognitoCode) {
-           const data = await callAPI('/api/projectInfo');
-            if(data.repo_name==='No Repos selected') {
-              setIsNewUser(false);
-            }else{
-              setIsNewUser(true);
-            }
-           }
-    };
-    fetchData();
-  }, []);
+ 
 
   if (isLoading) {
   return (
@@ -136,17 +123,11 @@ export const Welcome = () => {
   )}
   else{
   return (<>
-    {isnewuser ? (
+    {currentRepo!=="No Repos selected"? (
     <div className="flex ">
       <div  className="w-1/2">
       <LeftWelcome/>
       </div>
-      <div className="shadow-xl w-1/2 p-6">
-        <div className="text-centre">
-          <div className="h-[16vh] ">
-            <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-                10XDEV.AI
-            </div>
             <div className="shadow-xl w-1/2 p-6">
               <div className="text-centre">
                 <div className="h-[16vh] ">
@@ -154,7 +135,6 @@ export const Welcome = () => {
                     10XDEV.AI
                   </div>
                 </div>
-
                 <div className="">
                   <div className="text-xl font-bold mb-2">
                     Describe a task, query, or a bug:

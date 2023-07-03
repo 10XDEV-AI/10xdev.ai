@@ -19,7 +19,9 @@ export default function Repos() {
 
    useEffect(() => {
     callAPI('/api/Repos')
-      .then(data => setRepos(data))
+      .then(data => {setRepos(data);
+      if(data.length>0){
+      } })
       .catch(error => console.error(error));
       }
       , []);

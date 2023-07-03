@@ -16,7 +16,7 @@ import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from '
 
 
 export const LeftWelcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentRepo,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [typingStarted, setTypingStarted] = useState(false);
@@ -64,6 +64,7 @@ export const LeftWelcome = () => {
 
   const getTreeData = async () => {
     try {
+      if(currentRepo==='No Repos selected') return;
       const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
@@ -80,9 +81,9 @@ export const LeftWelcome = () => {
            setIsLoadingProjectInfo(true);
            const data = await callAPI('/api/projectInfo');
             if(data.repo_name==='No Repos selected') {
-              setIsNewUser(false);
+              setCurrentRepo(data.repo_name);
             }else{
-              setIsNewUser(true);
+              setCurrentRepo(data.repo_name);
               getTreeData();
             }
            setRepository(data.repo_name);

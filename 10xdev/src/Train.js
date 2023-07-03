@@ -187,13 +187,13 @@ const Train = () => {
                 <>
                   <button
                     onClick={handleShowPopup}
-                    className="bg-blue-900 text-white p-2 m-2 rounded-full hover:bg-blue-700"
+                    className="bg-blue-900 text-white p-2 m-2 rounded hover:bg-blue-700"
                     >
                     Start Training
                   </button>
                   <button
                     onClick={handleSync}
-                    className="bg-blue-900 text-white p-2 rounded-full hover:bg-blue-700"
+                    className="bg-blue-900 text-white p-2 rounded hover:bg-blue-700"
                     >
                     Sync Changes
                   </button>
