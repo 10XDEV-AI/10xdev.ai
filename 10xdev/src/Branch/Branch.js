@@ -55,8 +55,8 @@ const Branch = () => {
   return (
     <div>
       <Navbar />
-      {isLoading ? (
-        <LoadingRing />
+      {(isLoading || isRefreshing)? (
+        <LoadingRing className="h-screen"/>
       ) : (
         <div className="min-h-screen flex items-center justify-center">
           <div className="max-w-md w-full bg-white border-dashed border-gray-300 border-2 rounded-lg p-6">
