@@ -28,7 +28,7 @@ def filter_functions(result_string, code_query, filepaths, email,userlogger):
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
 
     response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0,max_tokens=200)
-    userlogger.log(response_functions)
+    #userlogger.log(response_functions)
     files = []
     for i in filepaths:
         # find i in response_functions using regex
@@ -209,13 +209,12 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
     tokens = tokenCount(final_prompt)
 
 
-    userlogger.log("Total Tokens in the query: " + str(tokens))
+    #userlogger.log("Total Tokens in the query: " + str(tokens))
     print("Total Tokens in the query: " + str(tokens))
 
     userlogger.log("Thinking of an answer...")
     FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
                          temperature=0.7)
-
     userlogger.clear_logs()
 
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}

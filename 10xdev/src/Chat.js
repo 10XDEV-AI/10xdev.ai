@@ -1,19 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import SearchContext from "./context/SearchContext";
 import LoadingRing from "./Loader/Loader";
 import ResponseContainer from "./ResponseContainer/ResponseContainer";
 import UserPrompt from "./UserPrompt/UserPrompt";
 import "./Chat.css";
 import SearchBar from "./SearchBar/SearchBar";
-import LeftWelcome from  "./LeftWelcome";
+import LeftWelcome from "./LeftWelcome";
 import Navbar from "./Navbar";
 import { callAPI } from "./api";
 
 export const Chat = () => {
-  const { searchTerm, isLoading, results, setIsLoading, files, referenced_code, checkedFiles } = useContext(SearchContext);
+  const {
+    searchTerm,
+    isLoading,
+    results,
+    setIsLoading,
+    files,
+    referenced_code,
+    checkedFiles,
+  } = useContext(SearchContext);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [showLeftWelcome, setShowLeftWelcome] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
+  const loadingRingRef = useRef(null);
 
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
@@ -31,7 +40,7 @@ export const Chat = () => {
     try {
       const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages,prompt: input }),
+        body: JSON.stringify({ chatMessages: chatMessages, prompt: input }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -64,12 +73,30 @@ export const Chat = () => {
   const handleReprompt = async (input, index) => {
     console.log("searching for");
     console.log(input);
-    setIsLoading(true);
     setSideContainerOpen(false);
+    setChatMessages((prevState) => {
+      const updatedMessages = [...prevState];
+      updatedMessages[index] = {
+        prompt: {
+          searchTerm: input,
+        },
+        response: {
+          searchResults: null,
+          files: null,
+          referenced_code: null,
+        },
+      };
+      return updatedMessages;
+    });
+    setIsLoading(true);
     try {
       const data = await callAPI(`/api/data`, {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages.slice(0,index),checkedFiles: checkedFiles , prompt: input }),
+        body: JSON.stringify({
+          chatMessages: chatMessages.slice(0, index),
+          checkedFiles: checkedFiles,
+          prompt: input,
+        }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
@@ -117,40 +144,50 @@ export const Chat = () => {
       },
     ]);
   }, [results, searchTerm, files, referenced_code]);
-return (
+
+  useEffect(() => {
+    if (isLoading && loadingRingRef.current) {
+      loadingRingRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [isLoading]);
+
+  return (
     <>
-    <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
-    <div className={`${sideContainerOpen ? 'w-8/12' : 'w-full'}`}>
-                  {isLoading ? (<LoadingRing />) : (
-      <div className="">
+      <Navbar LoadProjectInfo="True" onHamburgerClick={handleHamburgerClick} />
+      <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
             <UserPrompt
-                searchTerm={chatMessage.prompt.searchTerm}
-                onReprompt={handleReprompt}
-                onRetry={handleReprompt}
-                indexval={index}
+              searchTerm={chatMessage.prompt.searchTerm}
+              onReprompt={handleReprompt}
+              onRetry={handleReprompt}
+              indexval={index}
             />
-            <ResponseContainer
+            {chatMessage.response.searchResults && (
+              <ResponseContainer
                 searchResults={chatMessage.response.searchResults}
                 files={chatMessage.response.files}
                 referenced_code={chatMessage.response.referenced_code}
                 toggleSideContainer={toggleSideContainer}
                 sideContainerOpen={sideContainerOpen}
               />
+            )}
+            {index === chatMessages.length - 1 && isLoading && (
+              <div >
+                <LoadingRing />
+              </div>
+            )}
           </div>
         ))}
-        <div className = "fixed top-0 left-0 w-1/2 shadow-xl">
-            {showLeftWelcome && <LeftWelcome />}
+        <div className="spacer" ref={loadingRingRef}></div>
+        <div className="footer"></div>
+        <div className={`searchbarrow ${sideContainerOpen ? "open" : ""}`}>
+          <SearchBar onSearch={handleSearch} />
         </div>
       </div>
-      )}
-      <div className="spacer"></div>
-      <div className="footer"></div>
-      <div className={`searchbarrow ${sideContainerOpen ? 'open' : ''}`  }>
-        <SearchBar onSearch={handleSearch}  />
-      </div>
-    </div>
     </>
   );
 };

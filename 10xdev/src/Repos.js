@@ -41,8 +41,8 @@ export default function Repos() {
       await callAPI(`/api/SelectRepo?Directory=${Directory}`, {
         method: 'GET',
       });
-      window.location.reload();
-      setShowRepos(false);
+      setShowRepos(false)
+      window.location.href = '/welcome';
     } catch (error) {
       console.error(error);
     }

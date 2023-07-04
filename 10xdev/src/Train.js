@@ -160,7 +160,7 @@ const Train = () => {
         )}
 
       {isLoading ? (
-        <LoadingRing RedirectTo="/repos" />
+        <LoadingRing RedirectTo="/repos" className="h-screen w-screen"/>
       ) : (
         <div>
           <Navbar />

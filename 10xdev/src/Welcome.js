@@ -112,7 +112,7 @@ export const Welcome = () => {
 
   if (isLoading) {
   return (
-  <LoadingRing />
+  <LoadingRing  className="h-screen"/>
   )}
   else{
   return (<>
