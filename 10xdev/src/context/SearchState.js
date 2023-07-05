@@ -18,7 +18,7 @@ const SearchState = ({ children }) => {
   const [showRepos, setShowRepos] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
-  const [currentRepo, setCurrentRepo] = useState('');
+  const [currentuser, setCurrentUser] = useState(localStorage.getItem('currentuser'));
   const [searchFiles, setSearchFiles] = useState([]);
 
 
@@ -107,7 +107,7 @@ const SearchState = ({ children }) => {
         userPic,
         path, setPath,
         showSync, setShowSync,
-        currentRepo, setCurrentRepo,
+        currentuser, setCurrentUser,
         showRepos, setShowRepos,
         checkedFiles, handleFileCheck,
         repos, setRepos,

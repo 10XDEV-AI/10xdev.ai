@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Train from "./Train";
 import Repos from "./Repos";
@@ -15,6 +15,15 @@ import User from "./User";
 import Wait from "./Wait";
 
 function App () {
+  useEffect(() => {
+  const handleBeforeUnload = () => {
+    window.localStorage.removeItem('currentuser');
+  };
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, []);
   return (
     <div className="App">
     <div id="alert-container"></div>

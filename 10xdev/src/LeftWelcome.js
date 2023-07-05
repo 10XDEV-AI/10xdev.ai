@@ -5,21 +5,16 @@ import "./Welcome.css";
 import { callAPI } from "./api";
 import Cookies from "js-cookie";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
-import DropDownButton from "./DropDownButton/DropDownButton";
-import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
-import NewWelcome from "./NewWelcome";
 import Repos from "./Repos";
-import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from 'react-icons/fa';
 
 export const LeftWelcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentRepo,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
-  const [typingStarted, setTypingStarted] = useState(false);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [treeData, setTreeData] = useState([]);
   const navigate = useNavigate();
@@ -34,9 +29,6 @@ export const LeftWelcome = () => {
     setShowCheckboxes(!showCheckboxes);
   };
 
-  useEffect(() => {
-    getTreeData();
-  }, []);
 
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
@@ -85,9 +77,11 @@ export const LeftWelcome = () => {
            setIsLoadingProjectInfo(true);
            const data = await callAPI('/api/projectInfo');
             if(data.repo_name==='No Repos selected') {
-              setCurrentRepo(data.repo_name);
+              localStorage.setItem('currentuser',"new");
+              setCurrentUser("new");
             }else{
-              setCurrentRepo(data.repo_name);
+              setCurrentUser("old");
+              localStorage.setItem('currentuser',"old");
               getTreeData();
             }
            setRepository(data.repo_name);

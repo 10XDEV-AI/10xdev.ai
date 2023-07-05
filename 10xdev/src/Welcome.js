@@ -4,15 +4,11 @@ import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
 import { callAPI } from "./api";
 import Cookies from "js-cookie";
-import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import DropDownButton from "./DropDownButton/DropDownButton";
 import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
-import FileTree from "./FileTree";
-import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
-import Repos from "./Repos";
 import {
   FaStar,
   FaQuestion,
@@ -28,22 +24,14 @@ export const Welcome = () => {
     setSearchTerm,
     isLoading,
     setIsLoading,
-    showSync,
-    setShowSync,
-    currentRepo,
-    showRepos,
-    setShowRepos,
+    currentuser,
   } = useContext(SearchContext);
   const [input, setInput] = useState("");
-  const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
 
-  const handleSyncClick = () => {
-    setShowSync(true);
-  };
-
   useEffect(() => {
+
     const fetchData = async () => {
       const urlParams = new URLSearchParams(window.location.hash.substring(1));
       const code = urlParams.get("access_token");
@@ -113,18 +101,10 @@ export const Welcome = () => {
     "Add a progress bar to indicate the status of long-running tasks",
   ];
 
-  const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
-
- 
-
-  if (isLoading) {
-  return (
-  <LoadingRing  className="h-screen"/>
-  )}
-  else{
-  return (<>
-    {currentRepo!=="No Repos selected"? (
-    <div className="flex ">
+  const Oldwelcome =()=>{
+    return(
+      <>
+        <div className="flex ">
       <div  className="w-1/2">
       <LeftWelcome/>
       </div>
@@ -213,6 +193,19 @@ export const Welcome = () => {
               </div>
             </div>
           </div>
+      </>
+    )
+  }
+
+  const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
+  if (isLoading) {
+  return (
+  <LoadingRing  className="h-screen"/>
+  )}
+  else{
+  return (<>
+    {currentuser!=="new"? (
+          <Oldwelcome />
         ) : (
           <NewWelcome />
         )}
