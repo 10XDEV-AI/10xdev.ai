@@ -22,13 +22,13 @@ def max_cosine_sim(embeddings, prompt_embedding):
     return y
 
 
-def filter_functions(result_string, code_query, filepaths, email,userlogger):
+def filter_functions(result_string, code_query, filepaths, email, userlogger):
     task = "List the file paths that will be required to answer the current user prompt based on above given file summaries. if user is talking about specific file paths, only return those"
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
 
-    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0,max_tokens=200)
-    #userlogger.log(response_functions)
+    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0, max_tokens=200)
+    # userlogger.log(response_functions)
     files = []
     for i in filepaths:
         # find i in response_functions using regex
@@ -92,7 +92,7 @@ def get_referenced_code(path, files):
     for file in files:
         try:
             if file.endswith(".ipynb"):
-               code = convert_ipynb_to_python(os.path.join(path, file))
+                code = convert_ipynb_to_python(os.path.join(path, file))
             else:
                 with open(os.path.join(path, file), 'r') as f:
                     code = f.read()
@@ -103,6 +103,7 @@ def get_referenced_code(path, files):
             print("Error message:", str(e))
 
     return referenced_code
+
 
 def consolidate_prompt_creation(chatmessages, current_prompt):
     if chatmessages is not None:
@@ -143,14 +144,12 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
         history_prompt_old_1 = f"Task for you : Come up with a consolidated prompt to best answer user prompt {len(previous_user_prompts) + 1}. Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the user query"
 
         history_prompt_old_2 = f"Task for you : \n" \
-                            f"1. Return 'Context': This should include exact code blocks and parts of conversation history exactly as they are, to best answer the Current user prompt.\n"\
-                            f"2. Return a consolidated user prompt:  to best answer current user prompt . Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the consolidated user prompt "
-
+                               f"1. Return 'Context': This should include exact code blocks and parts of conversation history exactly as they are, to best answer the Current user prompt.\n" \
+                               f"2. Return a consolidated user prompt:  to best answer current user prompt . Return just the consolidated user prompt and nothing else. Do not use your own brain, just give me the consolidated user prompt "
 
         return history_prompt.strip()
 
     return ""
-
 
 
 def Ask_AI(prompt, userlogger, email, chatmessages, scope):
@@ -204,22 +203,86 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
 
     system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
 
-    final_prompt += "\n" + "Current User Prompt: "+ prompt
+    final_prompt += "\n" + "Current User Prompt: " + prompt
     # print(final_prompt)
     tokens = tokenCount(final_prompt)
 
-
-    #userlogger.log("Total Tokens in the query: " + str(tokens))
+    # userlogger.log("Total Tokens in the query: " + str(tokens))
     print("Total Tokens in the query: " + str(tokens))
 
     userlogger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email , system_message=system_message, prompt=final_prompt,
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt,
                          temperature=0.7)
     userlogger.clear_logs()
 
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
 
-#run if main
+
+def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
+    global fs
+    consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
+    if consolidated_prompt:
+        prompt = consolidated_prompt
+    path = read_info(email)
+    if path == "":
+        return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
+    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
+    fs = pd.read_csv(filename)
+    fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
+    user_logger.log("Analyzing your query...")
+    files = search_functions(prompt, email, user_logger, scope)
+    return {'files': files}
+
+
+def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files):
+    consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
+    if consolidated_prompt:
+        prompt = consolidated_prompt
+    path = read_info(email)
+    if path == "":
+        return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
+    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
+    fs = pd.read_csv(filename)
+    fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
+    files = referenced_files
+    referenced_code = get_referenced_code(path, files)
+    final_prompt = ""
+    estimated_tokens = 0
+    for i in files:
+        j = os.path.join(path, i)
+        if i.endswith(".ipynb"):
+            final_contents = convert_ipynb_to_python(j)
+        else:
+            final_contents = open(j).read()
+        final_contents = re.sub(r'\s+', ' ', final_contents)
+        estimated_tokens += tokenCount(final_contents)
+    if estimated_tokens > 15000:
+        for file in files:
+            final_prompt += "\nFile path " + file + ":\n"
+            final_prompt += fs['summary'][fs['file_path'] == file].values[0]
+        print("Estimated tokens: " + str(estimated_tokens))
+    else:
+        for i in files:
+            final_prompt += "\nFile path " + i + ":\n"
+            path = read_info(email)
+            j = os.path.join(path, i)
+            if j.endswith(".ipynb"):
+                final_contents = convert_ipynb_to_python(j)
+            else:
+                final_contents = open(j).read()
+            final_contents = re.sub(r'\s+', ' ', final_contents)
+            final_prompt += final_contents
+    system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
+    final_prompt += "\n" + "Current User Prompt: " + prompt + "\n Response :"
+    tokens = tokenCount(final_prompt)
+    print("Total Tokens in the query: " + str(tokens))
+    user_logger.log("Thinking of an answer...")
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=0.7)
+    user_logger.clear_logs()
+    return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
+
+
 if __name__ == "__main__":
     question = "In the 10xdev/src/Clone.js file write a new handle clone function that will handle call to backend when the user tried to clone a private repo, take the access token from there and pass it to backend, in the backend (application.py file) write a new endpoint to clone private repos just like the utilities/clone_repo.py functions"
-    Ask_AI(question, userlogger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com", chatmessages=None)
+    Ask_AI(question, userlogger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",
+           chatmessages=None)
