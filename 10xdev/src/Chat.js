@@ -38,13 +38,27 @@ export const Chat = () => {
     setIsLoading(true);
     setSideContainerOpen(false);
     try {
-      const data = await callAPI(`/api/data`, {
+      const filesData = await callAPI("/api/search_files", {
         method: "POST",
-        body: JSON.stringify({ chatMessages: chatMessages, prompt: input }),
+        body: JSON.stringify({
+          chatMessages: chatMessages,
+          checkedFiles: checkedFiles,
+          prompt: input,
+        }),
+      });
+      const files = filesData.files;
+
+      // Second API call to get the results
+      const data = await callAPI("/api/get_response", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: input,
+          chatMessages: chatMessages,
+          files: files,
+        }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
-      const files = data.files;
       const code = data.referenced_code;
       console.log(results);
       console.log(files);
@@ -86,6 +100,7 @@ export const Chat = () => {
           referenced_code: null,
         },
       };
+      updatedMessages.splice(index + 1);
       return updatedMessages;
     });
     setIsLoading(true);

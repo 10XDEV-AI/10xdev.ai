@@ -244,7 +244,6 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
     filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-    user_logger.log("Analyzing your query...")
     files = referenced_files
     referenced_code = get_referenced_code(path, files)
     final_prompt = ""
@@ -274,7 +273,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
             final_contents = re.sub(r'\s+', ' ', final_contents)
             final_prompt += final_contents
     system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
-    final_prompt += "\n" + "Current User Prompt: " + prompt
+    final_prompt += "\n" + "Current User Prompt: " + prompt + "\n Response :"
     tokens = tokenCount(final_prompt)
     print("Total Tokens in the query: " + str(tokens))
     user_logger.log("Thinking of an answer...")
