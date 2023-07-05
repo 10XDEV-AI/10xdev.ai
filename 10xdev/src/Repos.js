@@ -88,7 +88,7 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button rounded-sm flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} <BiGitBranch className="text-blue-900 my-1"/> </button>
+                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch}  <MdEdit className="text-xl text-blue-900" /> </button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
