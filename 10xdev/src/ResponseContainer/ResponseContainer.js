@@ -15,17 +15,20 @@ const ResponseContainer = ({
     const blocks = full_text.split("```");
     // remove the first and last \n in all blocks if it exists
     for (let i = 0; i < blocks.length; i++) {
-      if (blocks[i][0] === "\n") {
-        blocks[i] = blocks[i].slice(1);
+        if (blocks[i][0] === "\n") {
+          blocks[i] = blocks[i].slice(1);
+        }
       }
-    }
-    const mapped_blocks = blocks.map((block, index) => {
+
+      const mapped_blocks = blocks.map((block, index) => {
         if (flag === 0) {
           if (index % 2 === 0) {
             return (
               <div key={index}>
                 {block.split("\n").map((sentence, i) => (
-                  <p key={i} className="mb-4">{sentence}</p>
+                  <p key={i} className="mb-4">
+                    {sentence}
+                  </p>
                 ))}
               </div>
             );
@@ -45,11 +48,13 @@ const ResponseContainer = ({
           }
         } else {
           if (index % 2 === 0) {
+            // Ignore the word immediately after ''' (e.g., 'javascript')
+            const language = block.split(" ")[1]; // Get the second word after splitting by space
             return (
               <div key={index}>
                 <CopyBlock
                   text={block}
-                  language="jsx"
+                  language={language}
                   showLineNumbers={true}
                   startingLineNumber={1}
                   theme={dracula}
@@ -61,7 +66,9 @@ const ResponseContainer = ({
             return (
               <div key={index}>
                 {block.split("\n").map((sentence, i) => (
-                  <p key={i} className="mb-4">{sentence}</p>
+                  <p key={i} className="mb-4">
+                    {sentence}
+                  </p>
                 ))}
               </div>
             );
@@ -69,8 +76,8 @@ const ResponseContainer = ({
         }
       });
 
-    return mapped_blocks;
-  }
+      return mapped_blocks;
+    }
 
   return (
     <div className={"ResponseContainer max-w-full"}>

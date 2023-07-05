@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g
-from AskAI import Ask_AI
+from AskAI import Ask_AI, Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
@@ -121,7 +121,12 @@ def get_data():
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    response = Ask_AI(prompt, user_logger, email, chat_messages, scope)
+    #old
+    #response = Ask_AI(prompt, user_logger, email, chat_messages, scope)
+
+    #new
+    referenced_files = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)["files"]
+    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
     return jsonify(
         {
             "files": response["files"],
@@ -129,6 +134,26 @@ def get_data():
             "referenced_code": response["referenced_code"],
         }
     )
+
+@application.route("/api/search_files", methods=["POST"])
+def search_files_api():
+    email = getattr(g, "email", None)
+    user_logger = getattr(g, "user_loggers", None)[email]
+    scope = request.json.get("checkedFiles")
+    prompt = request.json.get("prompt")
+    chat_messages = request.json.get("chatMessages")
+    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)
+    return jsonify(response)
+
+@application.route("/api/get_response", methods=["POST"])
+def get_response_api():
+    email = getattr(g, "email", None)
+    user_logger = getattr(g, "user_loggers", None)[email]
+    prompt = request.json.get("prompt")
+    chat_messages = request.json.get("chatMessages")
+    referenced_files = request.json.get("files")
+    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
+    return jsonify(response)
 
 @application.route("/api/Ignore", methods=["GET"])
 def get_AIIgnore():

@@ -7,7 +7,7 @@ import { FaFile } from 'react-icons/fa';
 import {useNavigate} from 'react-router-dom';
 
 function Sync(handleSyncClick) {
-  const { showSync, setShowSync } = useContext(SearchContext);
+  const { showSync, setShowSync , setPath} = useContext(SearchContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -80,6 +80,7 @@ function Sync(handleSyncClick) {
   };
 
   const handleSelectClick = async () => {
+    setPath()
     navigate("/train")
   }
 
@@ -92,6 +93,9 @@ function Sync(handleSyncClick) {
             <span role="img" aria-label="Description of the emoji">
               ⌛️
             </span>
+            <div className="text-center text-sm">
+              <LogViewer />
+            </div>
           </div>
         ) : showTick ? (
           <div className="">

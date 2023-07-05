@@ -25,7 +25,7 @@ const Alert = (props) => {
       case 400:
         return 'Error 400: Bad Request';
       case 401:
-        return 'Error 401: Unauthorized Please login Again';
+        return 'Error 401: Unauthorized. Please login Again';
       case 403:
         return 'Error 403: Forbidden';
       case 404:
@@ -41,7 +41,7 @@ const Alert = (props) => {
       case 503:
         return 'Error 503: Service Unavailable';
       case 504:
-        return 'Error 504: Gateway Timeout';
+        return 'Error 504: Gateway Timeout. Please Try Again';
       default:
         return 'Error: Something went wrong';
     }

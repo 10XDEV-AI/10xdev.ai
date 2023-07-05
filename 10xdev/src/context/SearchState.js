@@ -19,6 +19,7 @@ const SearchState = ({ children }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
   const [currentRepo, setCurrentRepo] = useState('');
+  const [searchFiles, setSearchFiles] = useState([]);
 
 
   const handleFileCheck = (file) => {
@@ -48,30 +49,48 @@ const SearchState = ({ children }) => {
     useEffect(() => {
       const getResults = async () => {
         try {
-
           const code = Cookies.get('cognitoCode');
 
           if (code && searchTerm.length > 0) {
             setIsLoading(true);
-            console.log("is loading set true by context provider", isLoading)
-            const data = await callAPI(`/api/data`, {
+            console.log("is loading set true by context provider", isLoading);
+
+            // First API call to get the files
+            const filesData = await callAPI("/api/search_files", {
               method: "POST",
-              body: JSON.stringify({checkedFiles:checkedFiles, prompt:searchTerm}),
+              body: JSON.stringify({
+                checkedFiles: checkedFiles,
+                prompt: searchTerm,
+              }),
             });
-            setFiles(data.files);
-            setResults(data.response);
-            setreferenced_code(data.referenced_code);
+
+            // Extract the files from the response
+            const files = filesData.files;
+
+            // Second API call to get the response
+            const responseData = await callAPI("/api/get_response", {
+              method: "POST",
+              body: JSON.stringify({
+                prompt: searchTerm,
+                chatMessages: [], // Provide chatMessages if needed
+                files: files, // Pass the obtained files from the first API call
+              }),
+            });
+
+            setFiles(files);
+            setResults(responseData.response);
+            setreferenced_code(responseData.referenced_code);
             setIsLoading(false);
           }
         } catch (error) {
           setIsLoading(false);
           console.error(error);
         }
-
       };
 
-    getResults();
-  }, [searchTerm]);
+      getResults();
+    }, [searchTerm, checkedFiles]);
+
 
   return (
     <SearchContext.Provider

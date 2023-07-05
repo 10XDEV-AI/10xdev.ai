@@ -15,31 +15,9 @@ const LoadingRing = ({RedirectTo,dontLog}) => {
   };
 
   const loaders = [
-    <Dna
-      visible={true}
-      height={80}
-      width={80}
-      ariaLabel="dna-loading"
-      wrapperStyle={{}}
-      wrapperClass="dna-wrapper"
-      key="dna-loader"
-    />,
-    <Oval
-          height={80}
-          width={80}
-          color="#87CEEB"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-          ariaLabel="oval-loading"
-          secondaryColor="#000066"
-          strokeWidth={2}
-          strokeWidthSecondary={2}
-          key="oval-loader"
-        />,
         <Rings
-          height={80}
-          width={80}
+          height={60}
+          width={60}
           color="#000066"
           radius={6}
           wrapperStyle={{}}
