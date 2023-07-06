@@ -15,15 +15,7 @@ import User from "./User";
 import Wait from "./Wait";
 
 function App () {
-  useEffect(() => {
-  const handleBeforeUnload = () => {
-    window.localStorage.removeItem('currentuser');
-  };
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
-}, []);
+  
   return (
     <div className="App">
     <div id="alert-container"></div>

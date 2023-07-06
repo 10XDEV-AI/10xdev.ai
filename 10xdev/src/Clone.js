@@ -55,9 +55,8 @@ const Clone = () => {
       const data = await callAPI(`/api/clone-private?path=${repo_url}&access_token=${accessToken}`, {
         method: "GET",
       });
-      console.log(data);
-      setBranches(data);
-      
+      console.log(data); 
+      setBranches(data);      
     } catch (error) {
       console.log(error);
     }
