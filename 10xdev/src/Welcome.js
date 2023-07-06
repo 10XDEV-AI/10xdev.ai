@@ -166,74 +166,64 @@ export const Welcome = () => {
     "Implement a real-time chat feature using websockets",
     "Add a progress bar to indicate the status of long-running tasks",
   ];
-
-  const Oldwelcome =()=>{
-    return(
+const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
+  if (isLoading) {
+  return (
+  <LoadingRing  className="h-screen"/>
+  )}
+  else{
+  return (<>
+    {currentuser!=="new"? (
       <>
         <div className="flex ">
       <div  className="w-1/2">
       {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
         <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm}/>
-      </div>
-            <div className="shadow-xl w-1/2 p-6">
-              <div className="text-centre">
-                <div className="h-[16vh] ">
-                  <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-                    10XDEV.AI
-                  </div>
-                </div>
-                <div className="">
-                  <div className="text-xl font-bold mb-2">
-                    Describe a task, query, or a bug:
-                  </div>
-                  <div className="border border-gray-400 rounded-lg shadow-md">
-                    <div
-                      className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"
-                      onClick={() => setTypingStarted(true)}
-                    >
-                      {typingStarted ? (
-                        <textarea
-                          className="flex-grow h-[48vh] focus:outline-none"
-                          value={input}
-                          placeholder="write your prompt here"
-                          onClick={() => setTypingStarted(true)}
-                          onChange={handleInputChange}
-                          onKeyDown={(e) => e.key === "Enter" && search(e)}
-                        />
-                      ) : (
-                        <Typewriter
-                          className="h-[48vh]"
-                          options={{
-                            strings: shuffledStrings,
-                            autoStart: true,
-                            loop: true,
-                            cursor: " |",
-                            delay: 30,
-                          }}
-                          onInit={(typewriter) => {
-                            typewriter.pauseFor(3000).start();
-                          }}
-                        />
-                      )}
-                    </div>
-                  </div>
+        </div>
+      <div className="shadow-xl w-1/2 p-6">
+        <div className="text-centre">
+          <div className="h-[16vh] ">
+            <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+                10XDEV.AI
+            </div>
+          </div>
 
-                  <div className="flex items-end justify-end">
-                    <button
-                      className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md "
-                      onClick={search}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-7 h-7"
-                      >
-                        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                      </svg>
-                    </button>
-                  </div>
+          <div className="">
+            <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
+            <div className="border border-gray-400 rounded-lg shadow-md">
+              <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
+                {typingStarted ? <textarea
+                                                   className="flex-grow h-[48vh] focus:outline-none"
+                                                   value={input}
+                                                   placeholder=""
+                                                   onClick={() => setTypingStarted(true)}
+                                                   onChange={handleInputChange}
+                                                   onKeyDown={(e) => e.key === 'Enter' && search(e)}
+                                                 /> : (
+                  <Typewriter className = "h-[48vh]"
+                    options={{
+                      strings: shuffledStrings,
+                      autoStart: true,
+                      loop: true,
+                      cursor: " |",
+                      delay: 30,
+                    }}
+                    onInit={(typewriter) => {
+                      typewriter.pauseFor(3000).start();
+                    }}
+                  />
+                )}
 
+              </div>
+            </div>
+
+            <div className="flex items-end justify-end">
+              <button className="bg-blue-900 text-white mt-6 py-1 px-4 rounded hover:bg-blue-600 shadow-md " onClick={search}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
+                  <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                </svg>
+              </button>
+            </div>
                   <div className="">
                     <div className="flex justify-center mx-auto">
                       <FaStar className="text-blue-800 my-1 m-2" /> Implement
@@ -261,18 +251,6 @@ export const Welcome = () => {
             </div>
           </div>
       </>
-    )
-  }
-
-  const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
-  if (isLoading) {
-  return (
-  <LoadingRing  className="h-screen"/>
-  )}
-  else{
-  return (<>
-    {currentuser!=="new"? (
-      <Oldwelcome />
         ) : (
           <NewWelcome />
         )}
