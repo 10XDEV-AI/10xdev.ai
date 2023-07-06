@@ -20,18 +20,21 @@ import {
 } from "react-icons/fa";
 
 export const Welcome = () => {
-  const {
-    setSearchTerm,
-    isLoading,
-    setIsLoading,
-    currentuser,
-  } = useContext(SearchContext);
+
+  
+  const { setSearchTerm, isLoading,setIsLoading, currentuser,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
 
+  const [filesearchTerm, setFileSearchTerm] = useState("");
+  const [isTreeLoading, setIsTreeLoading] = useState(true);
+  const [treeData, setTreeData] = useState([]);
+  const [repository, setRepository] = useState('');
+  const [branch, setBranch] = useState('');
+
+  useEffect(() => {
     const fetchData = async () => {
       const urlParams = new URLSearchParams(window.location.hash.substring(1));
       const code = urlParams.get("access_token");
@@ -56,6 +59,69 @@ export const Welcome = () => {
 
     fetchData();
   }, [navigate]);
+
+  const convertToTree = (files) => {
+    const root = { name: "", children: [] };
+    const nodeMap = { root };
+    const pathRegex = /[\\/]/; // Matches either forward slash or backslash
+
+    /* Tree data filtering for later
+    const filteredData = searchTerm
+      ? data.filter((file) => file.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      : data;
+    */
+
+    files.forEach((file) => {
+      const pathComponents = file.Path.split(pathRegex);
+      let parent = root;
+      for (let i = 0; i < pathComponents.length; i++) {
+        const nodeName = pathComponents[i];
+        if (!nodeMap[nodeName]) {
+          const newNode = { name: nodeName, children: [] };
+          nodeMap[nodeName] = newNode;
+          parent.children.push(newNode);
+        }
+        parent = nodeMap[nodeName];
+      }
+    });
+
+    return root;
+  };
+
+  const getTreeData = async () => {
+    try {
+      if(currentRepo==='No Repos selected') return;
+      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
+      const tree = convertToTree(data.files2analyze);
+      setTreeData(tree);
+      setIsTreeLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cognitoCode = Cookies.get("cognitoCode");
+      if (cognitoCode) {
+        setIsLoadingProjectInfo(true);
+        const data = await callAPI('/api/projectInfo');
+        if (data.repo_name === 'No Repos selected') {
+          localStorage.setItem('currentuser', "new");
+          setCurrentUser("new");
+        } else {
+          setCurrentUser("old");
+          console.log("old user");
+          localStorage.setItem('currentuser', "old");
+          getTreeData();
+          setRepository(data.repo_name);
+          setBranch(data.branch_name);
+        }
+        setIsLoadingProjectInfo(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const search = (e) => {
     e.preventDefault();
@@ -106,7 +172,8 @@ export const Welcome = () => {
       <>
         <div className="flex ">
       <div  className="w-1/2">
-      <LeftWelcome/>
+      {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
+        <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm}/>
       </div>
             <div className="shadow-xl w-1/2 p-6">
               <div className="text-centre">
@@ -128,7 +195,7 @@ export const Welcome = () => {
                         <textarea
                           className="flex-grow h-[48vh] focus:outline-none"
                           value={input}
-                          placeholder=""
+                          placeholder="write your prompt here"
                           onClick={() => setTypingStarted(true)}
                           onChange={handleInputChange}
                           onKeyDown={(e) => e.key === "Enter" && search(e)}
@@ -205,7 +272,7 @@ export const Welcome = () => {
   else{
   return (<>
     {currentuser!=="new"? (
-          <Oldwelcome />
+      <Oldwelcome />
         ) : (
           <NewWelcome />
         )}

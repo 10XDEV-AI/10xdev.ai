@@ -18,7 +18,7 @@ const SearchState = ({ children }) => {
   const [showRepos, setShowRepos] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
-  const [currentuser, setCurrentUser] = useState(localStorage.getItem('currentuser'));
+  const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
 
 
@@ -44,6 +44,11 @@ const SearchState = ({ children }) => {
       const index = Math.floor(Math.random() * emojiList.length);
       return emojiList[index];
   }
+  useEffect(() => {
+    setCurrentUser(window.localStorage.getItem('currentuser'));
+    console.log("current user",currentuser);
+  }, []);
+
 
 
     useEffect(() => {
