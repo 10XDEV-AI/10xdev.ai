@@ -5,11 +5,11 @@
     position: fixed; /* Stay in place */
     z-index: 9999;
     top: 0;
-    background-color: #fffefe; 
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; 
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
+    border-radius:5px;
 }
 
 /* The navigation menu links */
@@ -64,7 +64,6 @@
     margin-top: -55px ;
     display: flex;
     justify-content: center;
-
 }
 
 .side-spacer{

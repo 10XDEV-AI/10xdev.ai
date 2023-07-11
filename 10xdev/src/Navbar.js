@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 function Navbar({LoadProjectInfo,file,onHamburgerClick}) {
   return (
     <>
-    {file==="chat"? <nav className="flex sticky top-0 text-blue-900 h-10 z-50">
+    {file==="chat"? <nav className="flex sticky top-0 text-blue-900 bg-slate-50 h-10 z-50">
 
 <button className="">
 <Link to="/welcome">
