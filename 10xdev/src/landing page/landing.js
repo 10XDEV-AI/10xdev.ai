@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './landing.css';
 import myimg from './images/feature-1.png';
 
@@ -13,6 +13,10 @@ const LandingPage = () => {
   } else if (hostname === '10xdevai.com') {
     redirectUri = 'https%3A%2F%2F10xdevai.com%2Fwelcome';
   }
+  useEffect(() => {
+    window.localStorage.removeItem('currentuser');
+    }, []);
+
 
   return (
     <div>

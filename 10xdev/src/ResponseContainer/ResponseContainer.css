@@ -8,7 +8,7 @@
 }
 
 .codediffcontainer{
-width: 75%;
+width: 80%;
 padding: 20px 10px;
 }
 
@@ -35,8 +35,8 @@ font: 25px Proxima Nova, sans-serif;
 }
 
 .files{
-font: 17px Proxima Nova, sans-serif;
+font: 16px Proxima Nova, sans-serif;
 color: #00308F;
-font-weight: 600;
+font-weight: 500;
 text-align: right;
 }

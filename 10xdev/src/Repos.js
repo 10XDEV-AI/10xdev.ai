@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
-import {BiGitBranch} from 'react-icons/bi';
+import {MdEdit} from 'react-icons/md';
 import { FaBrain } from "react-icons/fa";
 import './Repos.css';
 import Navbar from './Navbar';
@@ -19,7 +19,9 @@ export default function Repos() {
 
    useEffect(() => {
     callAPI('/api/Repos')
-      .then(data => setRepos(data))
+      .then(data => {setRepos(data);
+      if(data.length>0){
+      } })
       .catch(error => console.error(error));
       }
       , []);
@@ -70,12 +72,12 @@ export default function Repos() {
 
   return (
     <div>
-      {isLoading ? (<><LoadingRing /> </>) : (
+      {isLoading ? (<><LoadingRing  dontLog="true"  /> </>) : (
       <div className="repos-container h-screen">
-      <div className = "flex  pb-10 ">
+      <div className = "flex  pb-10 my-8 ">
         <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
         </button>
         <h1 className="w-full text-center text-3xl font-bold text-blue-900">Repositories Trained</h1>
@@ -86,7 +88,7 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button rounded-sm flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch} <BiGitBranch className="text-blue-900 my-1"/> </button>
+                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch}  <MdEdit className="text-xl text-blue-900" /> </button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>

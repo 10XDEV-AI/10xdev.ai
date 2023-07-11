@@ -10,7 +10,6 @@ const SearchState = ({ children }) => {
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
   const [files, setFiles] = useState('');
-  const [isnewuser, setIsNewUser] = useState(false);
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
@@ -19,6 +18,7 @@ const SearchState = ({ children }) => {
   const [showRepos, setShowRepos] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
+  const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
 
 
@@ -37,12 +37,18 @@ const SearchState = ({ children }) => {
     }
   };
 
+  const [repos, setRepos] = useState([]);
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
       const index = Math.floor(Math.random() * emojiList.length);
       return emojiList[index];
   }
+  useEffect(() => {
+    setCurrentUser(window.localStorage.getItem('currentuser'));
+    console.log("current user",currentuser);
+  }, []);
+
 
 
     useEffect(() => {
@@ -106,9 +112,10 @@ const SearchState = ({ children }) => {
         userPic,
         path, setPath,
         showSync, setShowSync,
-        isnewuser, setIsNewUser,
+        currentuser, setCurrentUser,
         showRepos, setShowRepos,
         checkedFiles, handleFileCheck,
+        repos, setRepos,
       }}
     >
       {children}

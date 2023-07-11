@@ -81,7 +81,7 @@ const ResponseContainer = ({
 
   return (
     <div className={"ResponseContainer max-w-full"}>
-      <div className={`responsePicContainer }`}>
+      <div className="responsePicContainer text-gray-800">
         <b> AI </b>
       </div>
       <div className="codediffcontainer">

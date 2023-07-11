@@ -56,26 +56,25 @@ const Sidecontainer = (props) => {
     <>
       <div
         id="mySidenav"
-        className="sidenav bg"
+        className="sidenav"
         style={{ width: isContainerOpen ? '33.33%' : '0' }}
       >
         <div className="referance">References</div>
-        <button
-          className="closedbtn"
-          onClick={() => {
-            props.toggleSideContainer();
-            toggleSideContainer();
-          }}
-        >
-           <span className="closebtn">⏩</span> 
-        </button>
-        <div style={{ textAlign: 'start', fontSize: '12px' }}>
-          {renderUpdated()}
+            <button
+              className="closedbtn"
+              onClick={() => {
+                props.toggleSideContainer();
+                toggleSideContainer();
+              }}
+            >
+                <span className="closebtn">⏩</span>
+            </button>
+            <div style={{ textAlign: 'start', fontSize: '12px' }}>
+              {renderUpdated()}
+            </div>
+            <div className="side-spacer">
+            </div>
         </div>
-
-          <div className="side-spacer">
-          </div>
-      </div>
       {props.files.length > 0 && (
         <div onClick={() => {
                          toggleSideContainer();

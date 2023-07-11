@@ -4,28 +4,35 @@ import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
 import { callAPI } from "./api";
 import Cookies from "js-cookie";
-import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import DropDownButton from "./DropDownButton/DropDownButton";
 import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
-import FileTree from "./FileTree";
-import Sync from "./Sync/Sync";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
-import Repos from "./Repos";
-import { FaStar, FaQuestion, FaGamepad, FaBug, FaFlask, FaBook, FaMagic } from 'react-icons/fa';
-
+import {
+  FaStar,
+  FaQuestion,
+  FaGamepad,
+  FaBug,
+  FaFlask,
+  FaBook,
+  FaMagic,
+} from "react-icons/fa";
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync ,isnewuser, setIsNewUser,showRepos, setShowRepos } = useContext(SearchContext);
+
+  
+  const { setSearchTerm, isLoading,setIsLoading, currentuser,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
   const [input, setInput] = useState("");
-  const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
 
-  const handleSyncClick = () => {
-    setShowSync(true);
-  };
+
+  const [filesearchTerm, setFileSearchTerm] = useState("");
+  const [isTreeLoading, setIsTreeLoading] = useState(true);
+  const [treeData, setTreeData] = useState([]);
+  const [repository, setRepository] = useState('');
+  const [branch, setBranch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +47,11 @@ export const Welcome = () => {
           console.log("Calling API");
           console.log(code);
           await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState({}, document.title, window.location.pathname); 
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
         } catch (error) {
         }
       }
@@ -48,6 +59,69 @@ export const Welcome = () => {
 
     fetchData();
   }, [navigate]);
+
+  const convertToTree = (files) => {
+    const root = { name: "", children: [] };
+    const nodeMap = { root };
+    const pathRegex = /[\\/]/; // Matches either forward slash or backslash
+
+    /* Tree data filtering for later
+    const filteredData = searchTerm
+      ? data.filter((file) => file.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      : data;
+    */
+
+    files.forEach((file) => {
+      const pathComponents = file.Path.split(pathRegex);
+      let parent = root;
+      for (let i = 0; i < pathComponents.length; i++) {
+        const nodeName = pathComponents[i];
+        if (!nodeMap[nodeName]) {
+          const newNode = { name: nodeName, children: [] };
+          nodeMap[nodeName] = newNode;
+          parent.children.push(newNode);
+        }
+        parent = nodeMap[nodeName];
+      }
+    });
+
+    return root;
+  };
+
+  const getTreeData = async () => {
+    try {
+      if(currentRepo==='No Repos selected') return;
+      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
+      const tree = convertToTree(data.files2analyze);
+      setTreeData(tree);
+      setIsTreeLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cognitoCode = Cookies.get("cognitoCode");
+      if (cognitoCode) {
+        setIsLoadingProjectInfo(true);
+        const data = await callAPI('/api/projectInfo');
+        if (data.repo_name === 'No Repos selected') {
+          localStorage.setItem('currentuser', "new");
+          setCurrentUser("new");
+        } else {
+          setCurrentUser("old");
+          console.log("old user");
+          localStorage.setItem('currentuser', "old");
+          getTreeData();
+          setRepository(data.repo_name);
+          setBranch(data.branch_name);
+        }
+        setIsLoadingProjectInfo(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const search = (e) => {
     e.preventDefault();
@@ -92,35 +166,20 @@ export const Welcome = () => {
     "Implement a real-time chat feature using websockets",
     "Add a progress bar to indicate the status of long-running tasks",
   ];
-
-  const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
-
-  useEffect(() => {
-    const fetchData = async () => {
-    const cognitoCode = Cookies.get("cognitoCode");
-    if(cognitoCode) {
-           const data = await callAPI('/api/projectInfo');
-            if(data.repo_name==='No Repos selected') {
-              setIsNewUser(false);
-            }else{
-              setIsNewUser(true);
-            }
-           }
-    };
-    fetchData();
-  }, []);
-
+const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   if (isLoading) {
   return (
   <LoadingRing  className="h-screen"/>
   )}
   else{
   return (<>
-    {isnewuser ? (
-    <div className="flex ">
+    {currentuser!=="new"? (
+      <>
+        <div className="flex ">
       <div  className="w-1/2">
-      <LeftWelcome/>
-      </div>
+      {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
+        <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm}/>
+        </div>
       <div className="shadow-xl w-1/2 p-6">
         <div className="text-centre">
           <div className="h-[16vh] ">
@@ -165,20 +224,38 @@ export const Welcome = () => {
                 </svg>
               </button>
             </div>
-            <div className="text-center mt-4 grid grid-cols-1  text-sm">
-                  <div classname = "">⭐️Implement Features  ❓Explain Code 🕹️Generate commands</div>
-                  <div classname = "">🐞️Fix Bugs & Erorrs 🔬Create Testcases and More 🪄</div>
+                  <div className="">
+                    <div className="flex justify-center mx-auto">
+                      <FaStar className="text-blue-800 my-1 m-2" /> Implement
+                      Features
+                      <FaQuestion className="text-blue-800 my-1 m-2" /> Explain
+                      Code
+                      <FaGamepad className="text-blue-800 my-1 m-2" /> Generate
+                      commands
+                    </div>
+                    <div className="flex justify-center">
+                      <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs &
+                      Errors
+                      <FaFlask className="text-blue-800 my-1 m-2" /> Create
+                      Testcases
+                      <FaBook className="text-blue-800 my-1 m-2" /> Create
+                      Documents and More
+                      <FaMagic className="text-blue-800 my-1 m-2" />
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute top-3 right-5">
+                  <DropDownButton />
+                </div>
+              </div>
             </div>
           </div>
-          <div className="absolute top-3 right-5">
-            <DropDownButton />
-          </div>
-        </div>
-      </div>
-    </div>):(<NewWelcome/>)
-    }
-    </>
-  );
+      </>
+        ) : (
+          <NewWelcome />
+        )}
+      </>
+    );
+  }
 };
-}
 export default Welcome;
