@@ -19,7 +19,6 @@ const ResponseContainer = ({
           blocks[i] = blocks[i].slice(1);
         }
       }
-
       const mapped_blocks = blocks.map((block, index) => {
         if (flag === 0) {
           if (index % 2 === 0) {
