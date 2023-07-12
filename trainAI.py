@@ -5,6 +5,7 @@ from utilities.files2analyse import files2analyse, check_file_type
 from utilities.tokenCount import tokenCount
 from utilities.keyutils import get_key
 from utilities.rates import get_rates
+from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
 
 def summarize_str(filename, string, email, userlogger):
@@ -118,6 +119,7 @@ def train_AI(repo_name, userlogger, email):
     userlogger.log("Analyzed all files successfully")
 
     fs.to_csv(fsfilename, index=False)
+    select_repo(repo_name,email)
 
     print("100% Done")
     create_clone(repo_name, email)
