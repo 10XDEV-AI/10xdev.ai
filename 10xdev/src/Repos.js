@@ -88,13 +88,13 @@ export default function Repos() {
               <div className="repo-card-info">
                 <h2 className="font-bold">{repo.Directory}</h2>
                 <p>
-                <button  className="change-branch-button px-1 flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch}  <MdEdit className="text-xl text-blue-900" /> </button>
+                <button  className="change-branch-button flex" onClick={() => handleChangeBranch(repo.Directory)}> Branch:  {repo.Branch}  <MdEdit className="text-xl text-blue-900" /> </button>
                 </p>
                 <p>Trained: {repo.Trained? "Yes" : "No"}</p>
               </div>
               <div className="repo-card-buttons">
                 {repo.Trained !== true ? (
-                  <button className="repo-card-button px-1" onClick={() => handleTrain(repo.Directory)}> <div className="mb-1.5">Train</div> <FaBrain className="text-pink-500 text-xl " /></button>
+                  <button className="repo-card-button px-1" onClick={() => handleTrain(repo.Directory)}> Train <FaBrain className="text-pink-600 text-xl mx-auto mb-1" /></button>
                 ) : (
                   <>
                     {repo.Selected ? (

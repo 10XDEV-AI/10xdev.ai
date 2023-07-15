@@ -2,19 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 
 .logbox {
   display: flex;
-  position: absolute;
-  top: 50%;
-  right: 15%;
-  width: 70%;
   text-align: center;
 }
 

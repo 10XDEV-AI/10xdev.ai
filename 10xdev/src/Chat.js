@@ -191,7 +191,7 @@ export const Chat = () => {
               />
             )}
             {index === chatMessages.length - 1 && isLoading && (
-              <div >
+              <div className="my-10 p-10">
                 <LoadingRing />
               </div>
             )}
