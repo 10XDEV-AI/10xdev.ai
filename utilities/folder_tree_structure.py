@@ -11,7 +11,7 @@ def generate_folder_structure(email, root_folder):
         if os.path.basename(folder).startswith('.'):
             return
 
-        log.append(f"{indent}- {folder}")
+        log.append(f"{indent}- {folder.split('/')[-1]}")
 
         for item in os.listdir(folder):
             item_path = os.path.join(folder, item)
