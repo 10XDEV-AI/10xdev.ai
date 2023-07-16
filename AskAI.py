@@ -27,8 +27,9 @@ def filter_functions(result_string, code_query, filepaths, email, userlogger):
 
     filter_prompt = result_string + "\nUser Query: " + code_query + "\n" + task
 
+
     response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0, max_tokens=200)
-    # userlogger.log(response_functions)
+    userlogger.log(response_functions)
     files = []
     for i in filepaths:
         # find i in response_functions using regex
