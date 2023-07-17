@@ -7,7 +7,7 @@ from utilities.keyutils import get_key
 from utilities.rates import get_rates
 from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
-
+from utilities.create_project_summary import create_project_summary
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
     max_attempts = 3
@@ -120,7 +120,7 @@ def train_AI(repo_name, userlogger, email):
 
     fs.to_csv(fsfilename, index=False)
     select_repo(repo_name,email)
-
+    create_project_summary(repo_name,email)
     print("100% Done")
     create_clone(repo_name, email)
     userlogger.clear_logs()
