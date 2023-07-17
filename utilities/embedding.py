@@ -74,7 +74,7 @@ def split_embed(summary, userid):
         while len(batch) < MAX_BATCH_SIZE and not requests_queue.empty():
             batch.append(requests_queue.get())
 
-        print("Created a batch of size", len(batch))
+        #print("Created a batch of size", len(batch))
 
         if num_requests_made >= MAX_BATCH_SIZE:
             time.sleep(60)
@@ -96,6 +96,6 @@ def split_embed(summary, userid):
         while not results_queue.empty():
             sentence_embeddings += results_queue.get()
 
-        print("Combined results for batch of  size " + str(num_requests_made))
+        #print("Combined results for batch of  size " + str(num_requests_made))
 
     return sentence_embeddings
