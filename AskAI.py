@@ -9,6 +9,7 @@ from utilities.projectInfo import read_info
 from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
+from utilities.folder_tree_structure import generate_folder_structure
 
 fs = pd.DataFrame()
 
@@ -21,7 +22,8 @@ def max_cosine_sim(embeddings, prompt_embedding):
     return y
 
 def filter_functions(result_string, code_query, filepaths, email, userlogger):
-    task = "Task for you : If the user is speaking about specific file paths in the 'Current user prompt', list the file paths that will be required to answer the current user prompt based on above given file summaries.\n Else if, information about the architechture, folder structure, tech stack or functionality will be strictly required to answer the current user prompt , append the key word 'FULL_PROJECT_INFO' \nYour Response :"
+    #-1 task = "\nIf the user is speaking about a specific file path or particular functionality in the 'Current user prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user needs general information about the project like architechture, folder structure, tech stack or overall functionality, append the code word 'FULL_PROJECT_INFO' \n"
+    task =     "\n When the user mentions a specific file path or requests information about a particular functionality in the 'Current user prompt,' filter the necessary file paths based on the provided file summaries. \n If the 'Current user prompt' requires general information about the project, such as architecture, folder structure, tech stack, or overall functionality, append the code word 'FULL_PROJECT_INFO'."
     filter_prompt = result_string + "\n-----\nUser Query: " + code_query + "\n" + task
 
     response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0, max_tokens=200)
@@ -245,33 +247,30 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
     files = referenced_files
     final_prompt = ""
     estimated_tokens = 0
-    if files == ["Referring Project Context"]:
+    if "Referring Project Context" in files:
         final_prompt = open("../user/"+email+"/AIFiles/"+path.split('/')[-1]+"_full_project_info.txt").read()
+        final_prompt += "File Structure:\n" + generate_folder_structure(email,path.split('/')[-1])
+        files.remove("Referring Project Context")
+
+    if len(files)>=7:
+        user_logger.log("I think, I need more information... ¯\_(ツ)_/¯...")
         files = []
+
+    if estimated_tokens > 15000:
+        for file in files:
+            final_prompt += "\nFile path " + file + ":\n"
+            final_prompt += fs['summary'][fs['file_path'] == file].values[0]
     else:
         for i in files:
+            final_prompt += "\nFile path " + i + ":\n"
+            path = read_info(email)
             j = os.path.join(path, i)
-            if i.endswith(".ipynb"):
-                final_contents =  convert_ipynb_to_python(j)
+            if j.endswith(".ipynb"):
+                final_contents = convert_ipynb_to_python(j)
             else:
                 final_contents = open(j).read()
             final_contents = re.sub(r'\s+', ' ', final_contents)
-            estimated_tokens += tokenCount(final_contents)
-        if estimated_tokens > 15000:
-            for file in files:
-                final_prompt += "\nFile path " + file + ":\n"
-                final_prompt += fs['summary'][fs['file_path'] == file].values[0]
-        else:
-            for i in files:
-                final_prompt += "\nFile path " + i + ":\n"
-                path = read_info(email)
-                j = os.path.join(path, i)
-                if j.endswith(".ipynb"):
-                    final_contents = convert_ipynb_to_python(j)
-                else:
-                    final_contents = open(j).read()
-                final_contents = re.sub(r'\s+', ' ', final_contents)
-                final_prompt += final_contents
+            final_prompt += final_contents
     system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
     final_prompt += "\n" + "Current User Prompt: " + prompt + "\n Response :"
     tokens = tokenCount(final_prompt)
@@ -296,6 +295,7 @@ if __name__ == "__main__":
     print(question)
     print(Answer)
 
+
     question = "When the user submits an answer from the welcome component how is it passed to the backend?" #Passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
     print(question)
@@ -306,13 +306,18 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
     print(question)
     print(Answer)
-    
+
 
     question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    print(Answer)
+    
+    '''
+
+    question = "Add parallelization to the training repo process, we should also be able to log into the userlogger how much of the repo is trained as a percentage" #passed
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
     print(question)
     print(Answer)
-    '''
 
 
     question = "Add dark mode to this project"
