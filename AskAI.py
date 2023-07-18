@@ -20,8 +20,8 @@ def max_cosine_sim(embeddings, prompt_embedding):
             y = max(y, cosine_similarity(x, i))
     return y
 
-def filter_functions(result_string, code_query, filepaths, email, userlogger,path):
-    task = "Task for you : If the user is speaking about specific file paths in the 'Current user prompt', list the file paths that will be required to answer the current user prompt based on above given file summaries.\n Else if, full information about the architechture/ file structure/ tech stack/ functionality will be strictly required to answer the current user prompt , append the key word 'FULL_PROJECT_INFO'  \n----\nYour Response :"
+def filter_functions(result_string, code_query, filepaths, email, userlogger):
+    task = "Task for you : If the user is speaking about specific file paths in the 'Current user prompt', list the file paths that will be required to answer the current user prompt based on above given file summaries.\n Else if, information about the architechture, folder structure, tech stack or functionality will be strictly required to answer the current user prompt , append the key word 'FULL_PROJECT_INFO' \nYour Response :"
     filter_prompt = result_string + "\n-----\nUser Query: " + code_query + "\n" + task
 
     response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0, max_tokens=200)
@@ -72,7 +72,7 @@ def search_functions(code_query, email, userlogger, scope, path):
     result_string = '\n\n'.join(file_summary_string)
     # print(result_string)
     filepaths = fs['file_path'].tolist()
-    return filter_functions(result_string, code_query, filepaths, email, userlogger, path)
+    return filter_functions(result_string, code_query, filepaths, email, userlogger)
 
 
 def files2str(files):

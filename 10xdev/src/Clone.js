@@ -33,6 +33,18 @@ const Clone = () => {
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
 
+  function getRepoNameFromURL(url) {
+    const gitExtension = '.git';
+    const gitIndex = url.indexOf(gitExtension);
+
+    if (gitIndex !== -1) {
+      url = url.substring(0, gitIndex);
+    }
+    const urlParts = url.split('/');
+    const repoName = urlParts[urlParts.length - 1];
+    return repoName;
+  }
+
   const handleClone = async (repo) => {
     setIsLoading(true);
     try {
@@ -41,6 +53,7 @@ const Clone = () => {
       });
       console.log(data);
       setBranches(data);
+      setPath(getRepoNameFromURL(repo));
     } catch (error) {
       console.log(error);
     }

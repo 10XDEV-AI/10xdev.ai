@@ -119,6 +119,7 @@ def train_AI(repo_name, userlogger, email):
     userlogger.log("Analyzed all files successfully")
 
     fs.to_csv(fsfilename, index=False)
+
     select_repo(repo_name,email)
     create_project_summary(repo_name,email)
     print("100% Done")
