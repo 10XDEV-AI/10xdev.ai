@@ -11,20 +11,22 @@ def getprojectInfo(email, repo_name=True, branch_name=True, full_path=False):
         return {"repo_name": "No Repos selected", "branch_name": "No branch selected"}
 
     repo_path = "../user/"+email+"/"+data['current_repo']
-
-
     repo_name = repo_path.split('/')[-1]
 
     # Check the current branch of the repo
     if os.path.exists(os.path.join(repo_path, '.git')):
         output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_path)
         branch_name = output.decode('utf-8').strip()
+        latest_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo_path)
+        latest_commit_hash = latest_commit.decode('utf-8').strip()
     else:
         branch_name = None
+        latest_commit_hash = None
 
     response_json = {
         "repo_name": repo_name,
-        "branch_name": branch_name
+        "branch_name": branch_name,
+        "latest_commit_hash": latest_commit_hash
     }
 
     return response_json
