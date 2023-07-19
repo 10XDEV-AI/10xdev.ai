@@ -9,6 +9,8 @@ import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
+import emoji from 'react-easy-emoji'
+
 import {
   FaStar,
   FaQuestion,
@@ -222,23 +224,26 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
               </button>
             </div>
                   <div className="">
-                    <div className="flex justify-center mx-auto">
-                      <FaStar className="text-blue-800 my-1 m-2" /> Implement
-                      Features
-                      <FaQuestion className="text-blue-800 my-1 m-2" /> Explain
-                      Code
-                      <FaGamepad className="text-blue-800 my-1 m-2" /> Generate
-                      commands
-                    </div>
-                    <div className="flex justify-center">
-                      <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs &
-                      Errors
-                      <FaFlask className="text-blue-800 my-1 m-2" /> Create
-                      Testcases
-                      <FaBook className="text-blue-800 my-1 m-2" /> Create
-                      Documents and More
-                      <FaMagic className="text-blue-800 my-1 m-2" />
-                    </div>
+                   <div className="flex justify-center mx-auto my-1 mt-[5%]">
+                     <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
+                     <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
+                     <div className="py-1 px-1"> {emoji('⚡️')}</div>Generate commands
+                   </div>
+                   <div className="flex justify-center">
+                     <div className="py-1 px-1">
+                       {emoji('🐞')}
+                     </div>Fix Bugs & Errors
+                     <div className="py-1 px-1">
+                       {emoji('🧪')}
+                     </div>Create Testcases
+                     <div className="py-1 px-1">
+                       {emoji('📕')}
+                     </div>Create Documentation and More
+                     <div className="py-1 px-1">
+                     {emoji('🪄')}
+                     </div>
+                   </div>
+
                   </div>
                 </div>
                 <div className="absolute top-3 right-5">

@@ -1,5 +1,8 @@
 import os, json
 import shutil
+import asyncio
+import syncAI
+from utilities.logger import UserLogger
 
 
 def get_clones(url, email):
@@ -137,6 +140,7 @@ def select_branch(path, branch, email):
     path = path.replace('.git', '')
     result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd="../user/" + email + '/' + path, capture_output=True)
     current_branch = result.stdout.decode().strip()
+    asyncio.create_task(syncAI.syncAI(0, UserLogger(email), email))  # Pass the appropriate arguments asynchronously
     if str(current_branch) == str(branch):
         print("Already on that branch!")
         return

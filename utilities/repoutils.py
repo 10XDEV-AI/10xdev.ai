@@ -1,4 +1,5 @@
 import os, json, subprocess, shutil
+import asyncio
 from utilities.projectInfo import read_info
 
 def select_repo(Full_Path,email):
@@ -47,8 +48,6 @@ def list_repos(email):
         for i in range(len(directories)):
             if directories[i]['Selected'] == True:
                 directories.insert(0, directories.pop(i))
-
-
     return directories
 
 def delete_repo(Full_path,email):

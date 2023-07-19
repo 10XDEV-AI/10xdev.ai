@@ -25,11 +25,11 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
     if history:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the Current user prompt, filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
         system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a chat between AI and Human User delimited XML tags. "
-        system_message += "Your job is to guess the highly relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
+        system_message += "Your job is to guess the relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
     else:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
         system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a user prompt delimited XML tags. "
-        system_message += "Your job is to guess the highly relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
+        system_message += "Your job is to guess the relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
 
     filter_prompt = result_string
 
@@ -244,7 +244,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     return {'files': files}
 
 
-def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files):
+def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, files):
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
@@ -254,7 +254,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
     filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-    files = referenced_files
+
     final_prompt = ""
     estimated_tokens = 0
     if "Referring Project Context" in files:
