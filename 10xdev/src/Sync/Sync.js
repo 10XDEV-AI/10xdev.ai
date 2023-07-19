@@ -7,7 +7,7 @@ import { FaFile } from 'react-icons/fa';
 import {useNavigate} from 'react-router-dom';
 
 function Sync(handleSyncClick) {
-  const { showSync, setShowSync , setPath} = useContext(SearchContext);
+  const { showSync, setShowSync , setPath, commitHash,setCommitHash } = useContext(SearchContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -62,8 +62,10 @@ function Sync(handleSyncClick) {
           setShowWarning(false);
           setShowTick(true);
           setNewFiles([]);
+          const data = await callAPI('/api/projectInfo');
+          setCommitHash(data.latest_commit_hash)
           setTimeout(() => {
-            setShowSync(false);
+          setShowSync(false);
           }, 5000); // Set showSync to false after 5 seconds
         } else if (data.message === "NEW") {
           setShowTick(false);
@@ -93,9 +95,6 @@ function Sync(handleSyncClick) {
             <span role="img" aria-label="Description of the emoji">
               ⌛️
             </span>
-            <div className="text-center text-sm">
-              <LogViewer />
-            </div>
           </div>
         ) : showTick ? (
           <div className="">

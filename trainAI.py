@@ -7,7 +7,7 @@ from utilities.keyutils import get_key
 from utilities.rates import get_rates
 from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
-
+from utilities.create_project_summary import create_project_summary
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
     max_attempts = 3
@@ -22,11 +22,10 @@ def summarize_str(filename, string, email, userlogger):
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary."},
+                    {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary. Be concise."},
                     {"role": "user", "content": "File " + filename + " has " + string}
                 ],
                 temperature=0,
-                max_tokens=380,
             )
             return response["choices"][0]["message"]["content"]
 
@@ -119,8 +118,9 @@ def train_AI(repo_name, userlogger, email):
     userlogger.log("Analyzed all files successfully")
 
     fs.to_csv(fsfilename, index=False)
-    select_repo(repo_name,email)
 
+    select_repo(repo_name,email)
+    create_project_summary(repo_name,email)
     print("100% Done")
     create_clone(repo_name, email)
     userlogger.clear_logs()

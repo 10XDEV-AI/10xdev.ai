@@ -7,6 +7,7 @@ from utilities.AskGPT import AskGPT
 from utilities.files2analyse import check_file_type, files2analyse
 from utilities.rates import get_rates
 from utilities.notebook_utils import convert_ipynb_to_python
+from utilities.create_project_summary import create_project_summary
 import difflib
 
 fs = pd.DataFrame()
@@ -135,6 +136,22 @@ def syncAI(sync_flag, user_logger, userid):
 
         fs = pd.concat([fs, new_fs], ignore_index=True)
         fs.to_csv(fsfilename, index=False)
+
+        # Add new summaries to the summary file with the keyword "Recently_added_file_path"
+        with open("../user/" + userid + "/AIFiles/" + path.split("/")[-1] + "_full_project_info.txt", "a") as summary_file:
+            for ind in new_fs.index:
+                if new_fs["summary"][ind] != "Ignore":
+                    summary_file.write( " Recently_added_file_path : "+new_fs["file_path"][ind] + ":" + new_fs["summary"][ind])
+
+        # Check if the count of "Recently_added_file_path" is more than 15% of total files in fs dataframe
+        keyword = "Recently_added_file_path"
+        keyword_count = fs['summary'].str.count(keyword).sum()
+        total_files_count = len(fs)
+        keyword_percentage = keyword_count / total_files_count
+
+        if keyword_percentage > 0.15:
+            # Call the function create_project_summary if the condition is met
+            create_project_summary(path.split("/")[-1], userid)
 
     user_logger.log("Syncing file contents..")
     create_clone(read_info(userid).split("/")[-1], userid)

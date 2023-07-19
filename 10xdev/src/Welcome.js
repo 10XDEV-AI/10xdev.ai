@@ -21,13 +21,10 @@ import {
 
 export const Welcome = () => {
 
-  
-  const { setSearchTerm, isLoading,setIsLoading, currentuser,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
-
-
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [treeData, setTreeData] = useState([]);
@@ -115,6 +112,7 @@ export const Welcome = () => {
           localStorage.setItem('currentuser', "old");
           getTreeData();
           setRepository(data.repo_name);
+          setCommitHash(data.latest_commit_hash);
           setBranch(data.branch_name);
         }
         setIsLoadingProjectInfo(false);
@@ -178,7 +176,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
         <div className="flex ">
       <div  className="w-1/2">
       {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
-        <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm}/>
+        <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">
         <div className="text-centre">
@@ -213,7 +211,6 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                     }}
                   />
                 )}
-
               </div>
             </div>
 
