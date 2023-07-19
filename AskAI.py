@@ -21,12 +21,15 @@ def max_cosine_sim(embeddings, prompt_embedding):
             y = max(y, cosine_similarity(x, i))
     return y
 
-def filter_functions(result_string, code_query, filepaths, email, userlogger):
-    #-1 task = "\nIf the user is speaking about a specific file path or particular functionality in the 'Current user prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user needs general information about the project like architechture, folder structure, tech stack or overall functionality, append the code word 'FULL_PROJECT_INFO' \n"
-    task =     "\n When the user mentions a specific file path or requests information about a particular functionality in the 'Current user prompt,' filter the necessary file paths based on the provided file summaries. \n If the 'Current user prompt' requires general information about the project, such as architecture, folder structure, tech stack, or overall functionality, append the code word 'FULL_PROJECT_INFO'."
-    filter_prompt = result_string + "\n-----\nUser Query: " + code_query + "\n" + task
+def filter_functions(result_string, filepaths, email, userlogger, history):
+    if history:
+        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'Current user prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
+    else:
+        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
 
-    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0, max_tokens=200)
+    filter_prompt = result_string + "\n" + task
+
+    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0)
     userlogger.log(response_functions)
 
     files = []
@@ -41,7 +44,7 @@ def filter_functions(result_string, code_query, filepaths, email, userlogger):
     return files
 
 
-def search_functions(code_query, email, userlogger, scope, path):
+def search_functions(code_query, email, userlogger, scope, history):
     global fs
     prompt_embedding = split_embed(code_query, email)
 
@@ -59,22 +62,23 @@ def search_functions(code_query, email, userlogger, scope, path):
     res.index = range(1, len(res) + 1)
     # Concatenate filenames, summary columns
     if len(fs)>10:
-        file_summary_string = ["Here are a few file paths and their summaries returned based on a similarity search. The code base may have more file paths"]
+        file_summary_string = ["Here are a few file paths and their summaries returned based on a similarity search. The code base has more file paths\n----"]
     else:
         file_summary_string = []
     for index, row in res.iterrows():
         file_path = row['file_path']
         summary = row['summary']
         if summary != "Ignore" and summary:
-            file_summary = 'File path: ' + str(file_path) + "\nFile summary: " + summary
-            file_summary_string.append(file_summary)
+            file_summary = 'File path: ' + str(file_path) + "\nSummary: " + summary
+            file_summary_string.append(file_summary.replace('\n',' '))
         else:
             file_summary_string.append('File path: ' + file_path)
     # Convert the concatenated list to a single string
     result_string = '\n\n'.join(file_summary_string)
-    # print(result_string)
+    if not history:
+        result_string += "\n-----\nUser Prompt: " + code_query
     filepaths = fs['file_path'].tolist()
-    return filter_functions(result_string, code_query, filepaths, email, userlogger)
+    return filter_functions(result_string, filepaths, email, userlogger, history)
 
 
 def files2str(files):
@@ -220,9 +224,11 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
 
 def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     global fs
+    history = False
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
+        history = True
     path = read_info(email)
     if path == "":
         return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
@@ -230,7 +236,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     user_logger.log("Analyzing your query...")
-    files = search_functions(prompt, email, user_logger, scope, path)
+    files = search_functions(prompt, email, user_logger, scope, history)
     return {'files': files}
 
 
@@ -283,7 +289,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
 
 
 if __name__ == "__main__":
-    '''question = "What should I do next in this project?" #passed
+    question = "What should I do next in this project?" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",
                                  chat_messages=None, scope=None)
     print(question)
@@ -324,3 +330,4 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
     print(question)
     print(Answer)
+    '''
