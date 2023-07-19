@@ -79,8 +79,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
 
                 <div className="flex items-center text-blue-900 justify-center">
                   <div className="">
-                    <h1 className="font-bold"> Last synced : {new Date().toLocaleString()} </h1>
-                    <h1 className="font-bold"> Commit hash : #{commitHash}</h1>
+                    <h1 className="font-bold"> Last synced commit hash : #{commitHash}</h1>
                   </div>
                   <button className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex" onClick={handleSyncClick}>
                     Sync
