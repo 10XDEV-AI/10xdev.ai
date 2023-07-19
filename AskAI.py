@@ -25,7 +25,7 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
     if history:
         task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'Current user prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
     else:
-        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
+        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
 
     filter_prompt = result_string + "\n" + task
 
@@ -49,14 +49,14 @@ def search_functions(code_query, email, userlogger, scope, history):
     prompt_embedding = split_embed(code_query, email)
 
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
-    if scope is not None:
+    if len(scope):
         files_in_scope = []
         for file in scope:
             if fs['file_path'].str.contains(file).any():
                 files_in_scope.append(fs[fs['file_path'].str.contains(file)]['file_path'].tolist()[0])
         if len(files_in_scope) < 5:
             return files_in_scope
-        if len(files_in_scope) > 0:
+        if len(files_in_scope) >= 5:
             fs = fs[fs['file_path'].isin(files_in_scope)]
 
     res = fs.sort_values('similarities', ascending=False).head(10)
