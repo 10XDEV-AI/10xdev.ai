@@ -10,11 +10,9 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 
-export const LeftWelcome = ({repository,branch,isTreeLoading,treeData,filesearchTerm}) => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo } = useContext(SearchContext);
+export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
+  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo , commitHash} = useContext(SearchContext);
   const [input, setInput] = useState("");
-
-
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const handleSyncClick = () => {
     setShowSync(true);
@@ -82,6 +80,7 @@ export const LeftWelcome = ({repository,branch,isTreeLoading,treeData,filesearch
                 <div className="flex items-center text-blue-900 justify-center">
                   <div className="">
                     <h1 className="font-bold"> Last synced : {new Date().toLocaleString()} </h1>
+                    <h1 className="font-bold"> Commit hash : #{commitHash}</h1>
                   </div>
                   <button className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex" onClick={handleSyncClick}>
                     Sync

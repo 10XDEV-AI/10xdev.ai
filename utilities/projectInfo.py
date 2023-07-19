@@ -17,7 +17,7 @@ def getprojectInfo(email, repo_name=True, branch_name=True, full_path=False):
     if os.path.exists(os.path.join(repo_path, '.git')):
         output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], cwd=repo_path)
         branch_name = output.decode('utf-8').strip()
-        latest_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo_path)
+        latest_commit = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path)
         latest_commit_hash = latest_commit.decode('utf-8').strip()
     else:
         branch_name = None
@@ -26,7 +26,7 @@ def getprojectInfo(email, repo_name=True, branch_name=True, full_path=False):
     response_json = {
         "repo_name": repo_name,
         "branch_name": branch_name,
-        "latest_commit_hash": latest_commit_hash
+        "latest_commit_hash": str(latest_commit_hash)
     }
 
     return response_json
