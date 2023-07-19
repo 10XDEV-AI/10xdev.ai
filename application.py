@@ -121,10 +121,6 @@ def get_data():
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    #old
-    #response = Ask_AI(prompt, user_logger, email, chat_messages, scope)
-
-    #new
     referenced_files = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)["files"]
     response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
     return jsonify(
