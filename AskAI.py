@@ -23,13 +23,17 @@ def max_cosine_sim(embeddings, prompt_embedding):
 
 def filter_functions(result_string, filepaths, email, userlogger, history):
     if history:
-        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'Current user prompt', filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
+        #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the Current user prompt, filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
+        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a chat between AI and Human User delimited XML tags. "
+        system_message += "Your job is to guess the most relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
     else:
-        task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
+        #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
+        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a user prompt delimited XML tags. "
+        system_message += "Your job is to guess the most relevant file paths that the user is speaking about in the Current User Prompt. If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
 
-    filter_prompt = result_string + "\n" + task
+    filter_prompt = result_string
 
-    response_functions = AskGPT(email, system_message="", prompt=filter_prompt, temperature=0)
+    response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0)
     userlogger.log(response_functions)
 
     files = []
@@ -62,23 +66,21 @@ def search_functions(code_query, email, userlogger, scope, history):
     res = fs.sort_values('similarities', ascending=False).head(10)
 
     res.index = range(1, len(res) + 1)
-    # Concatenate filenames, summary columns
-    if len(fs)>10:
-        file_summary_string = ["Here are a few file paths and their summaries returned based on a similarity search. The code base has more file paths\n----"]
-    else:
-        file_summary_string = []
+    file_summary_string = []
     for index, row in res.iterrows():
         file_path = row['file_path']
         summary = row['summary']
         if summary != "Ignore" and summary:
-            file_summary = 'File path: ' + str(file_path) + "\nSummary: " + summary
+            file_summary = f'''"""File path: {file_path} Summary: {summary}"""'''
             file_summary_string.append(file_summary.replace('\n',' '))
         else:
-            file_summary_string.append('File path: ' + file_path)
-    # Convert the concatenated list to a single string
+            file_summary_string.append(f'''File path: {file_path}''')
+        # Convert the concatenated list to a single string
     result_string = '\n\n'.join(file_summary_string)
     if not history:
-        result_string += "\n-----\nUser Prompt: " + code_query
+        result_string += f"\n\n<User Prompt>\n{code_query}\n</User Prompt>\n"
+    else:
+        result_string+= f"\n{code_query}\n"
     filepaths = fs['file_path'].tolist()
     return filter_functions(result_string, filepaths, email, userlogger, history)
 
@@ -137,7 +139,7 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
             previous_search_results.append(search_results)
             previous_files.append(files)  # Use extend to add all files in the list
 
-        history_prompt = "Here is a conversation between a human and an AI code assistant\n-------\n"
+        history_prompt = "<Chat>\n"
 
         # Add previous user prompts, AI responses, and file references to the consolidated prompt
         for i, user_prompt in enumerate(previous_user_prompts):
@@ -145,13 +147,13 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
             file_references = previous_files[i]  # Assuming each search returns 10 files
 
             consolidated_prompt = f"User prompt {i + 1}: {user_prompt}\n" \
-                                  f"Response {i + 1}: {ai_response}\n" \
+                                  f"AI Response {i + 1}: {ai_response}\n" \
                                   f"File References {i + 1} : {file_references}\n\n"
             history_prompt += consolidated_prompt
-            history_prompt += "------\n"
+            history_prompt += "\n"
 
         # Add the current prompt to the consolidated prompt
-        history_prompt += f"Current user prompt : {current_prompt}\n-----\n"
+        history_prompt += f"Current user prompt : {current_prompt}\n</Chat>\n"
 
         return history_prompt.strip()
 
@@ -291,45 +293,46 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, refe
 
 
 if __name__ == "__main__":
+    '''
     question = "What should I do next in this project?" #passed
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",
-                                 chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
 
     question = "How is the repository being cloned?"  #passed
     #question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
 
 
     question = "When the user submits an answer from the welcome component how is it passed to the backend?" #Passed
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
     
 
     question = "Hi" #TMI
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
 
 
     question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(Answer)
     
-    '''
+
 
     question = "Add parallelization to the training repo process, we should also be able to log into the userlogger how much of the repo is trained as a percentage" #passed
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
 
-
-    question = "Add dark mode to this project"
-    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=None)
-    print(question)
-    print(Answer)
     '''
+    question = "How do I add dark mode functionality to the project" #Passed
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+    print(question)
+    print(Answer)
+
+
