@@ -172,6 +172,7 @@ export const Chat = () => {
   return (
     <>
       <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
+      {showLeftWelcome && <LeftWelcome />}
       <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>
