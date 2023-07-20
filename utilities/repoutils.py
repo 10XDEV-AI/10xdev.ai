@@ -1,5 +1,4 @@
 import os, json, subprocess, shutil
-import asyncio
 from utilities.projectInfo import read_info
 
 def select_repo(Full_Path,email):
