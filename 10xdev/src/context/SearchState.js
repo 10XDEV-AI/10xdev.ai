@@ -60,7 +60,8 @@ const SearchState = ({ children }) => {
           if (code && searchTerm.length > 0) {
             setIsLoading(true);
             console.log("is loading set true by context provider", isLoading);
-
+            setFiles("");
+            setResults("");
             // First API call to get the files
             const filesData = await callAPI("/api/search_files", {
               method: "POST",
@@ -83,7 +84,7 @@ const SearchState = ({ children }) => {
               }),
             });
 
-            setFiles(files);
+            setFiles(responseData.files);
             setResults(responseData.response);
             setreferenced_code(responseData.referenced_code);
             setIsLoading(false);
@@ -95,7 +96,7 @@ const SearchState = ({ children }) => {
       };
 
       getResults();
-    }, [searchTerm, checkedFiles]);
+    }, [searchTerm]);
 
 
   return (
@@ -116,6 +117,7 @@ const SearchState = ({ children }) => {
         currentuser, setCurrentUser,
         showRepos, setShowRepos,
         checkedFiles, handleFileCheck,
+        setCheckedFiles,
         repos, setRepos,
         commitHash,setCommitHash
       }}

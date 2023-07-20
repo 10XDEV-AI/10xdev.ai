@@ -8,7 +8,7 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
-  const {checkedFiles, setCheckedFiles, handleFileCheck } = useContext(SearchContext);
+  const {f,checkedFiles,setCheckedFiles, handleFileCheck } = useContext(SearchContext);
   console.log(props.data);
   const data = flattenTree(props.data);
 
