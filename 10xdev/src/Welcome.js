@@ -23,15 +23,13 @@ import {
 
 export const Welcome = () => {
 
-  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
   const [treeData, setTreeData] = useState([]);
-  const [repository, setRepository] = useState('');
-  const [branch, setBranch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {

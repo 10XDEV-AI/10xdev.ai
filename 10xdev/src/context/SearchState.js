@@ -21,6 +21,8 @@ const SearchState = ({ children }) => {
   const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
   const [commitHash, setCommitHash] = useState("");
+  const [repository, setRepository] = useState('');
+  const [branch, setBranch] = useState('');
 
 
   const handleFileCheck = (file) => {
@@ -119,7 +121,9 @@ const SearchState = ({ children }) => {
         checkedFiles, handleFileCheck,
         setCheckedFiles,
         repos, setRepos,
-        commitHash,setCommitHash
+        commitHash,setCommitHash,
+        repository, setRepository,
+        branch, setBranch,
       }}
     >
       {children}
