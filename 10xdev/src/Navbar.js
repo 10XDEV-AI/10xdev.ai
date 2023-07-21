@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import './Navbar.css';
+import { useNavigate } from 'react-router-dom';
 import SearchContext from './context/SearchContext';
 import Sync from './Sync/Sync';
 import ProjectInfo from './ProjectInfo/ProjectInfo';
@@ -9,6 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 function Navbar({LoadProjectInfo,file,onHamburgerClick}) {
+  const navigate = useNavigate();
   const { isLoadingProjectInfo, repository, branch } = useContext(SearchContext);
   return (
     <>
@@ -22,11 +24,9 @@ function Navbar({LoadProjectInfo,file,onHamburgerClick}) {
                 </button>
 
                 <div className="my-auto mx-auto">
-                    <ProjectInfo
-                         isLoadingProjectInfo={isLoadingProjectInfo}
-                         repository={repository}
-                         branch={branch}
-                       />
+                    <Link to="/repos">
+                       <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                     </Link>
                 </div>
             <div className="">
             <div className="text-blue-900">
