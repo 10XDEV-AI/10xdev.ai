@@ -342,6 +342,7 @@ if __name__ == "__main__":
 
     question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+    print(question)
     print(Answer)
     
 
@@ -357,4 +358,8 @@ if __name__ == "__main__":
     print(question)
     print(Answer)
 
+    question = "Create a new python file that will help me analyse the file summaries of the repos that have been trained "
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+    print(question)
+    print(Answer)
 
