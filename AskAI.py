@@ -265,6 +265,9 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
     if len(files)>=7:
         user_logger.log("I think, I need more information... ¯\_(ツ)_/¯...")
         files = []
+        final_prompt = open("../user/"+email+"/AIFiles/"+path.split('/')[-1]+"_full_project_info.txt").read()
+        final_prompt += "File Structure:\n" + generate_folder_structure(email,path.split('/')[-1])
+
 
     if estimated_tokens > 15000:
         for file in files:
