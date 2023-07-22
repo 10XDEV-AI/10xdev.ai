@@ -18,12 +18,17 @@ export const Chat = () => {
     files,
     referenced_code,
     checkedFiles,
+    sideContainerOpen, setSideContainerOpen,
+    repository, setRepository,
+    branch, setBranch,
+    treeData, setTreeData,
+    commitHash,
   } = useContext(SearchContext);
-  const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [showLeftWelcome, setShowLeftWelcome] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const loadingRingRef = useRef(null);
-
+  const [isTreeLoading, setIsTreeLoading] = useState(false);
+  const [filesearchTerm, setFileSearchTerm] = useState("");
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
   };
@@ -172,7 +177,7 @@ export const Chat = () => {
   return (
     <>
       <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
-      {showLeftWelcome && <LeftWelcome />}
+      {showLeftWelcome && <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} commitHash={commitHash}/>}
       <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
         {chatMessages.map((chatMessage, index) => (
           <div key={index}>

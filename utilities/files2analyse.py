@@ -26,7 +26,6 @@ def files2analyse(repo_name, email):
 
     return file_paths_details
 
-
 def parse_ignore_file(file_path):
     with open(file_path, 'r') as f:
         patterns = [line.strip() for line in f if line.strip() and not line.strip().startswith('#')]

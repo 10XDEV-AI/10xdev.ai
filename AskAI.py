@@ -34,7 +34,7 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
     filter_prompt = result_string
 
     response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0)
-    userlogger.log(response_functions)
+    #userlogger.log(response_functions)
 
     files = []
     if 'FULL_PROJECT_INFO' in response_functions:
@@ -277,6 +277,8 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             else:
                 prompt = "User Prompt: "+prompt
                 system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. Your task is to help the user with the 'User prompt'."
+    else:
+        user_logger.log("Referring Files : " + str(files))
 
     if len(files)>=7:
         user_logger.log("I think, I need more information... ¯\_(ツ)_/¯...")
@@ -285,10 +287,10 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
         final_prompt += "File Structure:\n" + generate_folder_structure(email,path.split('/')[-1])
         if consolidated_prompt:
             prompt = consolidated_prompt
-            system_message = "As a coding assistant, you will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. Summary and architechture of a repository.\nYour task is to ask the user for more context about 'Current user prompt'."
+            system_message = "As a coding assistant, you will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. Summary and architechture of a repository.\nYour task is to ask the user for more context about 'Current user prompt' and which files will be relevant to answer it."
         else:
             prompt = "User Prompt: "+prompt
-            system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository\nYour task is to ask the user for more context about 'Current user prompt'."
+            system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository\nYour task is to ask the user for more context about 'Current user prompt' and which files will be relevant to answer it."
 
 
     estimated_tokens = 0

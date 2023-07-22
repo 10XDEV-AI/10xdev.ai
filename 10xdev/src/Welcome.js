@@ -23,15 +23,12 @@ import {
 
 export const Welcome = () => {
 
-  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash } = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
-  const [treeData, setTreeData] = useState([]);
-  const [repository, setRepository] = useState('');
-  const [branch, setBranch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +87,7 @@ export const Welcome = () => {
   const getTreeData = async () => {
     try {
       if(currentRepo==='No Repos selected') return;
-      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
+      const data = await callAPI(`/api/Treedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
       setIsTreeLoading(false);
@@ -177,7 +174,6 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
       <>
         <div className="flex ">
       <div  className="w-1/2">
-      {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
         <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">

@@ -23,6 +23,7 @@ const Train = () => {
   const [Treedata, setTreedata] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+  const [isLoadingTree, setIsLoadingTree] = useState(true);
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -60,10 +61,9 @@ const Train = () => {
     try {
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
-      console.log("ANalyse Data");
+      console.log("Analyse Data");
       console.log(data);
       setFilesToAnalyze(data.files2analyze);
-
       setFilesToIgnore(data.files2ignore);
       setShowFilesToIgnore(true);
       const tree = convertToTree(data.files2analyze);
@@ -75,6 +75,7 @@ const Train = () => {
       console.log(error);
     }
   };
+
   const showIcons = (sign) => {
     if (sign === "warning") {
       return <RiFileWarningFill className="text-yellow-500 text-xl" />;
@@ -87,16 +88,18 @@ const Train = () => {
 
   const getTreedata = async () => {
     try {
-      const data = await callAPI(`/api/FilesToAnalyzedata?path=${input}`);
+      const data = await callAPI(`/api/Treedata?path=${input}`);
       const tree = convertToTree(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
       setTreedata(tree);
+      setIsLoadingTree(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    setIsLoadingTree(true);
     getTreedata();
   }, []);
 
@@ -274,9 +277,16 @@ const Train = () => {
             ) : (
               <div className="ignorecontainer">
                 <div className="ignorebox1">
-                  <div className="">
+                  <div className="min-h-[60%]">
                     <h2 className="text-xl font-bold">All Files</h2>
-                    <FilesTree data={Treedata} />
+
+                    {isLoadingTree ? (
+                      <div className="flex justify-center items-center h-[50vh] text-gray-500">
+                       Loading......
+                      </div>
+                    ) : (
+                      <FilesTree data={Treedata} />
+                    )}
                   </div>
                 </div>
                 <div className="ignorebox2">
