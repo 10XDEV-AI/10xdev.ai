@@ -278,7 +278,7 @@ const Train = () => {
             ) : (
               <div className="ignorecontainer">
                 <div className="ignorebox1">
-                  <div className="">
+                  <div className="min-h-[60%]">
                     <h2 className="text-xl font-bold">All Files</h2>
 
                     {isLoadingTree ? (

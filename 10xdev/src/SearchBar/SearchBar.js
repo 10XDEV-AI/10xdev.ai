@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
+import SearchContext from "../context/SearchContext";
 
 const SearchBar = ({ onSearch }) => {
-  const [searchInput, setSearchInput, setSideContainerOpen] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const {setSideContainerOpen}  = useContext(SearchContext);
 
   const handleClick = () => {
     onSearch(searchInput);

@@ -44,7 +44,6 @@ function DropdownButton() {
         <ul className="drop-down-list rounded-md text-black">
           <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white  rounded-md flex" onClick={() => handleOptionClick(1)}> <BsPlusCircleFill className=' text-xl mx-2 '/>Setup New Repo</li>
           <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(2)}> <BiGitRepoForked className=' text-xl mx-2 '/>Your Repositories</li>
-          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(4)}> <TbApi className=" text-xl mx-2 " />API Keys</li>
           <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(3)}> <BiLogOut className=' text-xl mx-2 ' /> Log Out</li>
         </ul>
       )}

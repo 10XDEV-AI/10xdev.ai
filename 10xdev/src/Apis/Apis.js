@@ -9,7 +9,7 @@ export default function Apis() {
   const [api, setApi] = useState(null);
   const [apikey, setApikey] = useState('');
   const [message, setMessage] = useState('');
-  const [newRates, setNewRates] = useState([3, 60]);
+  const [newRates, setNewRates] = useState([]);
 
   useEffect(() => {
     (async function() {
@@ -19,12 +19,14 @@ export default function Apis() {
         console.log(data);
         const data2 = await callAPI('/api/getRates');
         console.log(data2);
+        setNewRates([data2]);
+        console.log(newRates);
       } catch (error) {
         console.error(error);
       }
       setMessage('');
     })();
-  }, [newRates]);
+  }, []);
 
   const deleteKey = () => {
     callAPI('/api/deleteKey', { method: 'GET' })

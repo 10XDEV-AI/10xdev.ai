@@ -14,7 +14,6 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
   const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo , commitHash,checkedFiles, setCheckedFiles} = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [showCheckboxes, setShowCheckboxes] = useState(false);
-
   const handleSyncClick = () => {
     setShowSync(true);
   };
