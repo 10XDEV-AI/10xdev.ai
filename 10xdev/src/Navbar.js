@@ -11,28 +11,35 @@ import { Link } from 'react-router-dom';
 
 function Navbar({LoadProjectInfo,file,onHamburgerClick}) {
   const navigate = useNavigate();
-  const { isLoadingProjectInfo, repository, branch } = useContext(SearchContext);
+  const { isLoadingProjectInfo, repository, branch,commitHash } = useContext(SearchContext);
   return (
     <>
         {file==="chat"?
         <nav className="flex sticky top-0 text-blue-900 bg-slate-50 h-10 z-50">
             <div className="w-full flex">
-                <button className="" onClick={onHamburgerClick}>
+                <button onClick={onHamburgerClick}>
                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-900 ml-1 px-1 w-10 h-8">
                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                    </svg>
                 </button>
-
+                <Link to="/welcome" className="my-auto">
+                    <div className="italic font-bold text-xl">
+                        10XDEV.AI
+                    </div>
+                </Link>
                 <div className="my-auto mx-auto">
-                    <Link to="/repos">
+                    <Link to="/repos" className="">
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </Link>
                 </div>
-            <div className="">
-            <div className="text-blue-900">
-              <DropdownButton />
-            </div>
-        </div>
+                <button className="font-bold text-sm" onClick={onHamburgerClick}>
+                    #{commitHash}
+                </button>
+                <div className="text-blue-900">
+                  <DropdownButton />
+                </div>
+
+
         </div>
     </nav>:
     <nav className="flex sticky top-0 bg-blue-900 h-10 z-50">

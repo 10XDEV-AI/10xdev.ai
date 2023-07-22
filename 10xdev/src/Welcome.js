@@ -87,7 +87,7 @@ export const Welcome = () => {
   const getTreeData = async () => {
     try {
       if(currentRepo==='No Repos selected') return;
-      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
+      const data = await callAPI(`/api/Treedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
       setIsTreeLoading(false);

@@ -1,6 +1,6 @@
-import os, fnmatch, chardet,pandas as pd
+import os, fnmatch, chardet
 
-def files2analyse_old(repo_name, email):
+def files2analyse(repo_name, email):
     file_paths_details = []
 
     ignore_file_path = os.path.join("../user", email, '.AIIgnore' + repo_name)
@@ -23,78 +23,6 @@ def files2analyse_old(repo_name, email):
                 if check_file_type(os.path.join(root, filename)):
                     # Append the file path relative to the root of the repo
                     file_paths_details.append(os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name)))
-
-    return file_paths_details
-
-def files2analyse(repo_name, email):
-    file_paths_details = []
-
-    csv_file_path = os.path.join("../user", email,"/AIFiles", repo_name+ "_file_data.csv")
-
-    if os.path.exists(csv_file_path):
-        # Load data from CSV file
-        df = pd.read_csv(csv_file_path)
-        file_paths_details = df['file_path'].tolist()
-
-        # Recalculate which files to ignore and keep in the dataframe
-        ignore_file_path = os.path.join("../user", email, '.AIIgnore' + repo_name)
-        AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
-
-        for root, directories, files in os.walk(os.path.join("../user", email, repo_name)):
-            # Check if the current directory should be ignored
-            relpath = os.path.relpath(root, os.path.join("../user", email, repo_name))
-            if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
-                directories[:] = []  # Don't traverse this directory further
-                continue
-
-            # Process all non-ignored files in the directory
-            for filename in files:
-                relfilepath = os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name))
-                if AIignore(relfilepath):
-                    continue  # Ignore this file
-                else:
-                    if relfilepath not in file_paths_details:
-                        # Append the file path relative to the root of the repo
-                        file_paths_details.append(relfilepath)
-
-        # Add new files to the dataframe
-        new_files = [file_path for file_path in file_paths_details if file_path not in df['file_path'].tolist()]
-        if new_files:
-            new_data = {'file_path': new_files}
-            new_df = pd.DataFrame(new_data)
-            df = pd.concat([df, new_df])
-
-        # Save the updated dataframe as a CSV file
-        df.to_csv(csv_file_path, index=False)
-
-        return file_paths_details
-
-    ignore_file_path = os.path.join("../user", email, '.AIIgnore' + repo_name)
-    AIignore = parse_ignore_file(ignore_file_path) if os.path.exists(ignore_file_path) else lambda x: False
-
-    for root, directories, files in os.walk(os.path.join("../user", email, repo_name)):
-        # Check if the current directory should be ignored
-        relpath = os.path.relpath(root, os.path.join("../user", email, repo_name))
-        if AIignore(relpath) or (any(d.startswith(".") for d in relpath.split(os.path.sep)) and relpath != "."):
-            directories[:] = []  # Don't traverse this directory further
-            continue
-
-        # Process all non-ignored files in the directory
-        for filename in files:
-            relfilepath = os.path.relpath(os.path.join(root, filename), os.path.join("../user", email, repo_name))
-            if AIignore(relfilepath):
-                continue  # Ignore this file
-            else:
-                if check_file_type(os.path.join(root, filename)):
-                    # Append the file path relative to the root of the repo
-                    file_paths_details.append(os.path.relpath(os.path.join(root, filename),
-                                                              os.path.join("../user", email, repo_name)))
-
-    # Create a dataframe from the file_paths_details list
-    df = pd.DataFrame(file_paths_details, columns=['file_path'])
-
-    # Save the dataframe as a CSV file
-    df.to_csv(csv_file_path, index=False)
 
     return file_paths_details
 

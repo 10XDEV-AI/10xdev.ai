@@ -287,10 +287,10 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
         final_prompt += "File Structure:\n" + generate_folder_structure(email,path.split('/')[-1])
         if consolidated_prompt:
             prompt = consolidated_prompt
-            system_message = "As a coding assistant, you will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. Summary and architechture of a repository.\nYour task is to ask the user for more context about 'Current user prompt'."
+            system_message = "As a coding assistant, you will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. Summary and architechture of a repository.\nYour task is to ask the user for more context about 'Current user prompt' and which files will be relevant to answer it."
         else:
             prompt = "User Prompt: "+prompt
-            system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository\nYour task is to ask the user for more context about 'Current user prompt'."
+            system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository\nYour task is to ask the user for more context about 'Current user prompt' and which files will be relevant to answer it."
 
 
     estimated_tokens = 0

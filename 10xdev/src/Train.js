@@ -61,10 +61,9 @@ const Train = () => {
     try {
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
-      console.log("ANalyse Data");
+      console.log("Analyse Data");
       console.log(data);
       setFilesToAnalyze(data.files2analyze);
-
       setFilesToIgnore(data.files2ignore);
       setShowFilesToIgnore(true);
       const tree = convertToTree(data.files2analyze);
@@ -89,7 +88,7 @@ const Train = () => {
 
   const getTreedata = async () => {
     try {
-      const data = await callAPI(`/api/FilesToAnalyzedata?path=${input}`);
+      const data = await callAPI(`/api/Treedata?path=${input}`);
       const tree = convertToTree(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
       setTreedata(tree);

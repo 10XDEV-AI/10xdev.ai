@@ -161,7 +161,7 @@ def get_AIIgnore():
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
 
-@application.route("/api/FilesToAnalyzedata", methods=["GET"])
+@application.route("/api/Treedata", methods=["GET"])
 def get_FilesToAnalyze():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
