@@ -23,6 +23,7 @@ const Train = () => {
   const [Treedata, setTreedata] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+  const [isLoadingTree, setIsLoadingTree] = useState(true);
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -75,6 +76,7 @@ const Train = () => {
       console.log(error);
     }
   };
+
   const showIcons = (sign) => {
     if (sign === "warning") {
       return <RiFileWarningFill className="text-yellow-500 text-xl" />;
@@ -91,12 +93,14 @@ const Train = () => {
       const tree = convertToTree(data.files2analyze);
       setFilesToIgnore(data.files2ignore);
       setTreedata(tree);
+      setIsLoadingTree(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    setIsLoadingTree(true);
     getTreedata();
   }, []);
 
@@ -276,7 +280,14 @@ const Train = () => {
                 <div className="ignorebox1">
                   <div className="">
                     <h2 className="text-xl font-bold">All Files</h2>
-                    <FilesTree data={Treedata} />
+
+                    {isLoadingTree ? (
+                      <div className="flex justify-center items-center h-[50vh] text-gray-500">
+                       Loading......
+                      </div>
+                    ) : (
+                      <FilesTree data={Treedata} />
+                    )}
                   </div>
                 </div>
                 <div className="ignorebox2">

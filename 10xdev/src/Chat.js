@@ -18,8 +18,8 @@ export const Chat = () => {
     files,
     referenced_code,
     checkedFiles,
+    sideContainerOpen, setSideContainerOpen
   } = useContext(SearchContext);
-  const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [showLeftWelcome, setShowLeftWelcome] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const loadingRingRef = useRef(null);

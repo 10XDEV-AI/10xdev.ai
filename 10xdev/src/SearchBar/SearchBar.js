@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 const SearchBar = ({ onSearch }) => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput, setSideContainerOpen] = useState('');
 
   const handleClick = () => {
     onSearch(searchInput);
     setSearchInput('');
+    setSideContainerOpen(false)
   };
 
   const newTab = async () => {

@@ -23,7 +23,7 @@ const SearchState = ({ children }) => {
   const [commitHash, setCommitHash] = useState("");
   const [repository, setRepository] = useState('');
   const [branch, setBranch] = useState('');
-
+  const [sideContainerOpen, setSideContainerOpen] = useState(false);
 
   const handleFileCheck = (file) => {
     // Check if the file is already in the checkedFiles array
@@ -124,6 +124,7 @@ const SearchState = ({ children }) => {
         commitHash,setCommitHash,
         repository, setRepository,
         branch, setBranch,
+        sideContainerOpen, setSideContainerOpen
       }}
     >
       {children}
