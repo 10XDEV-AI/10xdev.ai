@@ -28,7 +28,7 @@ const Clone = () => {
       ? "7de77ae768aa62b79e09"
       : hostname === "10xdevai.com"
       ? "40acda1a937125d9193b"
-      : "YoYOHS";
+      : "NULL";
       
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
@@ -82,7 +82,6 @@ const Clone = () => {
     window.location.assign(
       `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo`
     );
-    
   };
 
   useEffect(() => {
@@ -107,8 +106,6 @@ const Clone = () => {
       }, 2000);
     }
   }, []);
-
- 
 
   const getAllPrivateRepos = async () => {
     const accessToken = cookies.get("accesstoken");
@@ -145,154 +142,128 @@ const Clone = () => {
   };
 
   return (
-    <div >{isLoading?<LoadingRing  dontLog="true" />:
-      <>
-      <Navbar />
-        <div className="h-screen " >
-        {!isauthenticated && (
+    <div >
+        {isLoading?
+            <LoadingRing dontLog="true"/>
+            :
             <>
-            
-            <div className=" mt-[8%]  " >
-            <div className="flex  ">
-            <button className="bg-blue-900 text-white px-4 ml-[33%] my-[0.75%] btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-            <div className="text-3xl font-bold text-blue-900 my-3 mx-[2%]" >Your Public Repository URL</div>
-           
-            </div> 
-            <div className="flex justify-center">
-              <label className="pathsearchrow  w-[28%] my-10">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={handleInputChange}
-                  className="w-full focus:outline-none focus:shadow-outline mx-5 my-2 "
-                />
-              </label>
-              <button
-                onClick={() => {
-                  handleClone(input);
-                  setCheckRepo("");
-                  }}
-                className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700 my-10"
-              >
-                Add
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="mx-2 w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-              </div>
-            </div>
-            { (checkrepo==='repo' ) && <div className="flex items-center justify-center">
-              <div className="border-t border-gray-300 w-full my-5"></div>
-              <div className="mx-5 text-gray-700 font-bold">OR</div>
-              <div className="border-t border-gray-300 w-full my-5"></div>
-            </div>}
-            </>
-          )}
-          <br />
+                <Navbar />
+                <div className="h-screen" >
 
-            {/* lets add OR in between and horizontal ines in right and left of it  */}
-         
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              marginTop: "20px",
-            }}
-          >
-           
-            {(isauthenticated )? (
-              <div></div>
-            ) : (
-              checkrepo==='repo' && (
-                <>
-              <div className="flex">
-                <button
-                  onClick={loginWithGithub}
-                  className="bg-blue-900 text-white px-8 py-2 mx-10  rounded-md flex hover:bg-blue-700"
-                >
-                  Connect with Github <BsGithub className="ml-3  mx-6 mr-1 m-1" />
-                </button>
-                <button className="bg-blue-900 text-white px-8 py-2 mx-10  rounded-md flex hover:bg-blue-700">
-                  Connect with Gitlab <FaGitlab className="ml-3 mx-6 mr-1 m-1" />
-                </button>
-              </div>
-              </>)
-            )}
-          </div>
-          <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="500">
-            {branches.length > 0 ? (
-              <>
-              <div className="flex  ">
-              <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-            <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Branch</h2>                 
-            </div> 
-                     
-              
-              <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" >
-                  
-                {branches.map((branch) => (
-                  <ul key={branch}  className="px-10 mx-10 flex justify-center">
-                    <li className="w-full">
-                      <button
-                        className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
-                        onClick={() => handleSelect(branch)}
-                      >
-                        {branch}
-                      </button>
-                    </li>
-                  </ul>
-                ))}
-              </div>
-              </>
-            ) : (
-              <div>
-                {repos.length > 0 ? (
-                  <>
-                  <div className="flex  ">
-            <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-            <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Repository</h2>             
-            </div>  
-                  <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" data-aos="fade-right" data-aos-duration="500">
-                       
-                    {repos.map((repo) =>(
-                          <>
-                          <ul key={repo.id} className="px-10 mx-10 flex justify-center">
+                        {!isauthenticated && (
+                            <>
+                                <div className="mt-[8%]">
+                                    <div className="">
+                                        <button className="bg-blue-900 text-white px-4 ml-[33%] my-[0.75%] btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+                                        <div className="text-3xl font-bold text-blue-900 my-3 mx-[2%]" >Your Public Repository URL</div>
+                                    </div>
+                                    <div className="flex justify-center">
+                                        <label className="pathsearchrow  w-[28%] my-10">
+                                            <input
+                                              type="text"
+                                              value={input}
+                                              onChange={handleInputChange}
+                                              className="w-full focus:outline-none focus:shadow-outline mx-5 my-2 "
+                                            />
+                                        </label>
+                                        <button onClick={() => { handleClone(input); setCheckRepo(""); }}  className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700 my-10">
+                                            Add
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="mx-2 w-6 h-6">
+                                                    <path fillRule="evenodd" d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z" clipRule="evenodd"/>
+                                                </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                { (checkrepo==='repo' ) &&
+                                    <div className="flex items-center justify-center">
+                                        <div className="border-t border-gray-300 w-full my-5"></div>
+                                        <div className="mx-5 text-gray-700 font-bold">OR</div>
+                                        <div className="border-t border-gray-300 w-full my-5"></div>
+                                    </div>
+                                }
+                            </>
+                          )}
+
+
+                  <div>
+                    {(isauthenticated )? (
+                      <div></div>
+                    ) : (
+                      checkrepo==='repo' && (
+                                                <div className="h-screen items-center justify-center">
+                                                  <div className="w-full">
+                                                    Setup Your Repository
+                                                    </div>
+                                                    <div>
+                                                    <button onClick={loginWithGithub} className="bg-blue-900 text-white px-8 py-2  rounded-md flex hover:bg-blue-700">
+                                                      Connect with Github <BsGithub className="ml-3  mx-6 mr-1 m-1" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                            )
+                    )}
+                  </div>
+                  <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="500">
+                    {branches.length > 0 ? (
+                      <>
+                      <div className="flex  ">
+                        <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+                    <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Branch</h2>
+                    </div>
+                      <div className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" >
+                        {branches.map((branch) => (
+                          <ul key={branch}  className="px-10 mx-10 flex justify-center">
                             <li className="w-full">
                               <button
-                                className="w-full text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
-                                onClick={() => {
-                                  console.log(repo);
-                                  console.log("User wants to clone " + repo.url);
-                                  setPath(repo.name);
-                                  handleClonePrivate(repo.url);
-                                  setRepos([]);
-                                }}
+                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
+                                onClick={() => handleSelect(branch)}
                               >
-                                {repo.full_name}
+                                {branch}
                               </button>
                             </li>
                           </ul>
+                        ))}
+                      </div>
+                      </>
+                    ) : (
+                      <div>
+                        {repos.length > 0 ? (
+                          <>
+                          <div className="flex">
+                    <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
+                    <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Repository</h2>
+                    </div>
+                          <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" data-aos="fade-right" data-aos-duration="500">
+
+                            {repos.map((repo) =>(
+                                  <>
+                                  <ul key={repo.id} className="px-10 mx-10 flex justify-center">
+                                    <li className="w-full">
+                                      <button
+                                        className="w-full text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
+                                        onClick={() => {
+                                          console.log(repo);
+                                          console.log("User wants to clone " + repo.url);
+                                          setPath(repo.name);
+                                          handleClonePrivate(repo.url);
+                                          setRepos([]);
+                                        }}
+                                      >
+                                        {repo.full_name}
+                                      </button>
+                                    </li>
+                                  </ul>
+                                  </>
+                                )
+                            )}
+                          </div>
                           </>
-                        )
+                        ) : null}
+                      </div>
                     )}
                   </div>
-                  </>
-                ) : null}
-              </div>
-            )}
-          </div>
-        </div></>
+                </div>
+            </>
         }
     </div>
   );

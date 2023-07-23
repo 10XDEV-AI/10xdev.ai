@@ -4,9 +4,13 @@ import './DropDownButton.css';
 import {TbApi} from "react-icons/tb";
 import {BiGitRepoForked ,BiLogOut} from "react-icons/bi";
 import {BsPlusCircleFill} from "react-icons/bs";
+import Cookies from 'js-cookie';
 function DropdownButton() {
   const [isOpen, setIsOpen] = useState(false); // state to keep track of whether dropdown is open
 
+  const handleLogout = () => {
+        Cookies.remove('cognitoCode'); // Clear the 'cognitoCode' cookie
+  };
   const navigate = useNavigate(); // move the useNavigate hook outside of the handleOptionClick function
 
   const newTab = async () => {

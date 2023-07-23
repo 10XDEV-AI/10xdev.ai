@@ -42,6 +42,7 @@ export const Chat = () => {
     console.log(input);
     setIsLoading(true);
     setSideContainerOpen(false);
+    setShowLeftWelcome(false)
     try {
       const filesData = await callAPI("/api/search_files", {
         method: "POST",
@@ -93,6 +94,7 @@ export const Chat = () => {
     console.log("searching for");
     console.log(input);
     setSideContainerOpen(false);
+    setShowLeftWelcome(false);
     setChatMessages((prevState) => {
       const updatedMessages = [...prevState];
       updatedMessages[index] = {

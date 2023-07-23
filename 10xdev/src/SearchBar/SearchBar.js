@@ -3,7 +3,7 @@ import SearchContext from "../context/SearchContext";
 
 const SearchBar = ({ onSearch }) => {
   const [searchInput, setSearchInput] = useState('');
-  const {setSideContainerOpen}  = useContext(SearchContext);
+  const {sideContainerOpen, setSideContainerOpen}  = useContext(SearchContext);
 
   const handleClick = () => {
     onSearch(searchInput);
