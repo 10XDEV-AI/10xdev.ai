@@ -323,7 +323,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
 
 
 if __name__ == "__main__":
-
+    '''
     question = "What should I do next in this project?" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
@@ -367,6 +367,11 @@ if __name__ == "__main__":
     print(Answer)
 
     question = "Create a new python file that will help me analyse the file summaries of the repos that have been trained "
+    Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+    print(question)
+    print(Answer)'''
+
+    question="Give code for the handle file check function in the leftwelcome component that will be sent as props to the Filetree.js component, (Directory Tree View). Refer FileTree component and LeftWelcome"
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
