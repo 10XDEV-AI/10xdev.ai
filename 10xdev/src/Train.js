@@ -220,8 +220,8 @@ const Train = () => {
         <div>
           <Navbar />
           <div className="GetIgnorecontainer">
-            <label className="flex border border-gray-300 rounded-md p-2">
-              <div className="flex font-bold">Train AI on Repository: </div>
+            <label className="w-1/2 flex border border-gray-300 rounded-md p-2">
+              <div className="w-60 flex font-bold">Train AI on Repository: </div>
               <input
                   type="text"
                   value={input}
@@ -341,7 +341,7 @@ const Train = () => {
                       <div className="h-full p-2 border-4 rounded-md shadow-md border-slate-200">
                         {
                           <textarea
-                            className="w-full h-full text-black"
+                            className="w-full h-full text-black px-2"
                             placeholder="Type files you want the AI to ignore here or Click on the files in the list"
                             value={filesToIgnore.join('\n')}
                             onChange={(event) =>
