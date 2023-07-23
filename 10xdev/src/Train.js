@@ -357,8 +357,7 @@ const Train = () => {
               <div className="ignorecontainer">
                 <div className="ignorebox1">
                   <div className="min-h-[60%]">
-                    <h2 className="text-xl font-bold ">All Files</h2>
-
+                    <h2 className="text-xl font-bold">All Files</h2>
                     {isLoadingTree ? (
                       <div className="flex justify-center items-center h-[50vh] text-gray-500">
                        Loading......
