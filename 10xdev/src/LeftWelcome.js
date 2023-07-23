@@ -25,6 +25,9 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
     setCheckedFiles([])
   };
 
+
+
+
   if (isLoading) {
     return (
       <LoadingRing />

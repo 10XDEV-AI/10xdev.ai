@@ -99,15 +99,22 @@ const Train = () => {
     }
   };
 
+
+
   useEffect(() => {
     setIsLoadingTree(true);
     getTreedata();
   }, []);
 
   const handleShowPopup = () => {
-  console.log(filesToAnalyze);
-  setShowPopup(true);
-  }
+    if (filesToAnalyze.length > 200) {
+      setShowPopup(false);
+      alert("Add files to be ignored in the files to ignore box to proceed");
+    } else {
+      setShowPopup(true);
+    }
+  };
+
   const handleTrain = async () => {
     setIsLoading(true);
     try {
@@ -177,25 +184,35 @@ const Train = () => {
   return (
     <div>
       {showPopup && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-gray-500 backdrop-filter backdrop-blur-sm">
-            <div className="bg-gray-100 p-4 rounded-md text-center">
-              <p>You will be training {filesToAnalyze.length} files</p>
-              <button
-                onClick= {() => {setShowPopup(false)}}
-                className="border-2 border-blue-900 text-blue-900 rounded-md p-2 mt-4 hover:bg-red-700"
-                disabled={filesToAnalyze.length === 0}
-              >
-                Retry
-              </button>
-              <button
-                className="border-2 border-blue-900 bg-blue-900 text-white rounded-md p-2 ml-4 hover:bg-red-700"
-                onClick={handleTrain}
-              >
-                Train AI
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-gray-500 backdrop-filter backdrop-blur-sm">
+          <div className="bg-gray-100 p-4 rounded-md text-center">
+            <p>You will be training {filesToAnalyze.length} files</p>
+            {filesToAnalyze.length > 100 ? (
+              <>
+                <p>Add files to be ignored in the files to ignore box to proceed</p>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setShowPopup(false);
+                  }}
+                  className="border-2 border-blue-900 text-blue-900 rounded-md p-2 mt-4 hover:bg-red-700 hover:border-red-700 hover:text-white"
+                  disabled={filesToAnalyze.length === 0}
+                >
+                  Retry
                 </button>
-            </div>
+                <button
+                  className="border-2 border-blue-900 bg-blue-900 text-white rounded-md p-2 ml-4 hover:bg-red-700"
+                  onClick={handleTrain}
+                >
+                  Train AI
+                </button>
+              </>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
       {isLoading ? (
         <LoadingRing RedirectTo="/repos" className="h-screen w-screen"/>

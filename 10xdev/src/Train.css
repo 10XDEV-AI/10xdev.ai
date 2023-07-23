@@ -34,22 +34,20 @@ font-size: 15px;
 .ignorebox1 {
 width: 70%;
 float: left;
-background-color: #f3fafe ;
+background-color: #f3f4f6 ;
 margin: 10px;
 border-radius: 10px;
 padding: 10px;
-border: 1px dashed #D3D3D3;
 }
 
 
 .ignorebox2 {
 width: 30%;
 float: left;
-background-color: #f3fafe ;
+background-color: #f3f4f6 ;
 margin: 10px;
 border-radius: 10px;
 padding: 10px;
-border: 1px dashed #D3D3D3;
 }
 
 .ignoretext{

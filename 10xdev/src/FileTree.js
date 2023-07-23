@@ -8,8 +8,19 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
-  const {f,checkedFiles,setCheckedFiles, handleFileCheck } = useContext(SearchContext);
-  console.log(props.data);
+  const {checkedFiles,setCheckedFiles} = useContext(SearchContext);
+    const handleFileCheck = async (filename) => {
+
+      if (checkedFiles.includes(filename)) {
+        await setCheckedFiles((prevCheckedFiles) =>
+          prevCheckedFiles.filter((file) => file !== filename)
+        );
+      } else {
+        // If the file is not checked, add it to the checkedFiles state
+        await setCheckedFiles((prevCheckedFiles) => [...prevCheckedFiles, filename]);
+      }
+    };
+
   const data = flattenTree(props.data);
 
   const calculateIndentation = (level) => {
@@ -36,7 +47,7 @@ function DirectoryTreeView(props) {
                     type="checkbox"
                     className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
                     checked={checkedFiles.includes(element.name)}
-                    onChange={() => handleFileCheck(element.name)}
+                    onChange={() => {handleFileCheck(element.name);}}
                     onClick={(e) => e.stopPropagation()} // Stop event propagation
                   />
                 )}
