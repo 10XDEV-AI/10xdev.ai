@@ -29,7 +29,7 @@ const Clone = () => {
       : hostname === "10xdevai.com"
       ? "40acda1a937125d9193b"
       : "NULL";
-      
+
   const [isauthenticated, setIsAuthenticated] = useState(false);
   const [repos, setRepos] = useState([]);
 
@@ -68,8 +68,8 @@ const Clone = () => {
       const data = await callAPI(`/api/clone-private?path=${repo_url}&access_token=${accessToken}`, {
         method: "GET",
       });
-      console.log(data); 
-      setBranches(data);      
+      console.log(data);
+      setBranches(data);
     } catch (error) {
       console.log(error);
     }
@@ -149,21 +149,30 @@ const Clone = () => {
             <>
                 <Navbar />
                 <div className="h-screen" >
-
+                     <div class="p-4 flex">
+                       <button className="bg-blue-900 text-white px-4 btn-font rounded-md hover:bg-blue-700" onClick={() => navigate(`/repos`)}>
+                         Back
+                       </button>
+                         <h1 class="text-4xl font-bold mx-auto">Setup Repository</h1>
+                       <div className="">
+                         <button className="bg-white text-white px-4" onClick={() => navigate(`/repos`)}>
+                                Back
+                            </button>
+                       </div>
+                     </div>
                         {!isauthenticated && (
                             <>
-                                <div className="mt-[8%]">
-                                    <div className="">
-                                        <button className="bg-blue-900 text-white px-4 ml-[33%] my-[0.75%] btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-                                        <div className="text-3xl font-bold text-blue-900 my-3 mx-[2%]" >Your Public Repository URL</div>
+                                <div className="">
+                                    <div className="w-full flex">
+                                        <div className="text-2xl font-bold text-blue-900 mt-20 mx-auto" >Add Your Public Git URL</div>
                                     </div>
                                     <div className="flex justify-center">
-                                        <label className="pathsearchrow  w-[28%] my-10">
+                                        <label className="border border-gray-300 centre w-[45%] my-10 rounded-md">
                                             <input
                                               type="text"
                                               value={input}
                                               onChange={handleInputChange}
-                                              className="w-full focus:outline-none focus:shadow-outline mx-5 my-2 "
+                                              className="w-full focus:outline-none focus:shadow-outline px-5 my-2 "
                                             />
                                         </label>
                                         <button onClick={() => { handleClone(input); setCheckRepo(""); }}  className="bg-blue-900 text-white p-2 m-2 rounded flex hover:bg-blue-700 my-10">
@@ -177,7 +186,7 @@ const Clone = () => {
                                 { (checkrepo==='repo' ) &&
                                     <div className="flex items-center justify-center">
                                         <div className="border-t border-gray-300 w-full my-5"></div>
-                                        <div className="mx-5 text-gray-700 font-bold">OR</div>
+                                        <div className="text-2xl mx-5 text-gray-700 font-bold">OR</div>
                                         <div className="border-t border-gray-300 w-full my-5"></div>
                                     </div>
                                 }
@@ -190,15 +199,15 @@ const Clone = () => {
                       <div></div>
                     ) : (
                       checkrepo==='repo' && (
-                                                <div className="h-screen items-center justify-center">
-                                                  <div className="w-full">
-                                                    Setup Your Repository
+                                                <div className="">
+                                                    <div className="w-full flex">
+                                                        <div className="text-2xl font-bold text-blue-900 mx-auto mt-10">Add your public and private repos</div>
                                                     </div>
-                                                    <div>
-                                                    <button onClick={loginWithGithub} className="bg-blue-900 text-white px-8 py-2  rounded-md flex hover:bg-blue-700">
-                                                      Connect with Github <BsGithub className="ml-3  mx-6 mr-1 m-1" />
-                                                    </button>
-                                                  </div>
+                                                    <div className="flex items-center justify-center">
+                                                        <button onClick={loginWithGithub} className="bg-blue-900 text-white px-8 py-2 mt-10 rounded-md flex hover:bg-blue-700">
+                                                          Connect with Github <BsGithub className="mr-1 m-1" />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             )
                     )}
@@ -206,13 +215,12 @@ const Clone = () => {
                   <div className="w-full items-center justify-center" data-aos="fade-right" data-aos-duration="500">
                     {branches.length > 0 ? (
                       <>
-                      <div className="flex  ">
-                        <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-                    <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Branch</h2>
-                    </div>
-                      <div className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" >
+                      <div className="flex ">
+                        <h2 className="font-bold text-2xl my-6 mx-auto">Select your desired Branch</h2>
+                      </div>
+                      <div className="bg-white border-dashed border-gray-300 border-2 rounded-lg p-4 mx-[35%]" >
                         {branches.map((branch) => (
-                          <ul key={branch}  className="px-10 mx-10 flex justify-center">
+                          <ul key={branch}  className="flex justify-center">
                             <li className="w-full">
                               <button
                                 className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
@@ -230,17 +238,14 @@ const Clone = () => {
                         {repos.length > 0 ? (
                           <>
                           <div className="flex">
-                    <button className="bg-blue-900 text-white px-4 ml-[25%] my-6 btn-font  rounded-md  hover:bg-blue-700" onClick={() => navigate(`/repos`)}>Back</button>
-                    <h2 className="font-bold text-2xl  my-6 mx-[10%]">Select your desired Repository</h2>
                     </div>
-                          <div className="branch-container bg-white border-dashed border-gray-300 border-2 rounded-lg p-6 mx-[25%]" data-aos="fade-right" data-aos-duration="500">
-
+                          <div className=" bg-white border-dashed border-gray-300 border-2 rounded-lg mx-[30%]" data-aos="fade-right" data-aos-duration="500">
                             {repos.map((repo) =>(
                                   <>
-                                  <ul key={repo.id} className="px-10 mx-10 flex justify-center">
+                                  <ul key={repo.id} className="m-2 flex justify-center">
                                     <li className="w-full">
                                       <button
-                                        className="w-full text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded mt-2 focus:outline-none focus:ring"
+                                        className="w-full flex text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
                                         onClick={() => {
                                           console.log(repo);
                                           console.log("User wants to clone " + repo.url);
@@ -249,6 +254,7 @@ const Clone = () => {
                                           setRepos([]);
                                         }}
                                       >
+                                      <BsGithub className="mr-3 my-1" />
                                         {repo.full_name}
                                       </button>
                                     </li>
