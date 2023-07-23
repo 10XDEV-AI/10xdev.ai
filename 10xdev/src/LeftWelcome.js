@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
-import { callAPI } from "./api";
-import Cookies from "js-cookie";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
@@ -11,8 +9,7 @@ import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo , commitHash,checkedFiles, setCheckedFiles} = useContext(SearchContext);
-  const [input, setInput] = useState("");
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles} = useContext(SearchContext);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const handleSyncClick = () => {
     setShowSync(true);
@@ -24,9 +21,6 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
     setShowCheckboxes(!showCheckboxes);
     setCheckedFiles([])
   };
-
-
-
 
   if (isLoading) {
     return (

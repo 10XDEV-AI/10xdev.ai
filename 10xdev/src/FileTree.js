@@ -10,7 +10,6 @@ import SearchContext from './context/SearchContext';
 function DirectoryTreeView(props) {
   const {checkedFiles,setCheckedFiles} = useContext(SearchContext);
     const handleFileCheck = async (filename) => {
-
       if (checkedFiles.includes(filename)) {
         await setCheckedFiles((prevCheckedFiles) =>
           prevCheckedFiles.filter((file) => file !== filename)
