@@ -7,8 +7,6 @@ import ProjectInfo from './ProjectInfo/ProjectInfo';
 import DropdownButton from './DropDownButton/DropDownButton';
 import { Link } from 'react-router-dom';
 
-
-
 function Navbar({file,onHamburgerClick}) {
   const navigate = useNavigate();
   const { isLoadingProjectInfo, repository, branch,commitHash } = useContext(SearchContext);
