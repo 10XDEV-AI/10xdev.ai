@@ -1,5 +1,4 @@
-import React from "react";
-import {useContext} from "react";
+import React, { useContext, useState } from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
 import { FaList, FaPython, FaReadme, FaFolderOpen, FaFolder } from "react-icons/fa";
 import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
@@ -8,7 +7,7 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
-  
+  const [filesearchTerm, setFileSearchTerm] = useState("");
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
     const handleFileCheck = async (filename, isBranch) => {
         if (isBranch) {
@@ -26,6 +25,9 @@ function DirectoryTreeView(props) {
         }
       };
 
+  const filteredData = props.data.filter((node) =>
+    node.name.toLowerCase().includes(filesearchTerm.toLowerCase())
+  );
 
   const data = flattenTree(props.data);
 
