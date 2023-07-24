@@ -11,16 +11,6 @@ import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 
-import {
-  FaStar,
-  FaQuestion,
-  FaGamepad,
-  FaBug,
-  FaFlask,
-  FaBook,
-  FaMagic,
-} from "react-icons/fa";
-
 export const Welcome = () => {
 
   const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
@@ -48,6 +38,7 @@ export const Welcome = () => {
             document.title,
             window.location.pathname
           );
+          setIsLoading(false);
         } catch (error) {
         }
       }
@@ -55,6 +46,30 @@ export const Welcome = () => {
 
     fetchData();
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cognitoCode = Cookies.get("cognitoCode");
+      if (cognitoCode) {
+        setIsLoadingProjectInfo(true);
+        const data = await callAPI('/api/projectInfo');
+        if (data.repo_name === 'No Repos selected') {
+          localStorage.setItem('currentuser', "new");
+          setCurrentUser("new");
+        } else {
+          setCurrentUser("old");
+          console.log("old user");
+          localStorage.setItem('currentuser', "old");
+          getTreeData();
+          setRepository(data.repo_name);
+          setCommitHash(data.latest_commit_hash);
+          setBranch(data.branch_name);
+        }
+        setIsLoadingProjectInfo(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
@@ -95,30 +110,6 @@ export const Welcome = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cognitoCode = Cookies.get("cognitoCode");
-      if (cognitoCode) {
-        setIsLoadingProjectInfo(true);
-        const data = await callAPI('/api/projectInfo');
-        if (data.repo_name === 'No Repos selected') {
-          localStorage.setItem('currentuser', "new");
-          setCurrentUser("new");
-        } else {
-          setCurrentUser("old");
-          console.log("old user");
-          localStorage.setItem('currentuser', "old");
-          getTreeData();
-          setRepository(data.repo_name);
-          setCommitHash(data.latest_commit_hash);
-          setBranch(data.branch_name);
-        }
-        setIsLoadingProjectInfo(false);
-      }
-    };
-    fetchData();
-  }, []);
 
   const search = (e) => {
     e.preventDefault();
@@ -167,7 +158,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   if (isLoading) {
   return (
   <div  className="h-screen">
-    <LoadingRing/>
+    <LoadingRing dontLog="true"/>
   </div>
   )}
   else{

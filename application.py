@@ -294,7 +294,20 @@ def getBranches():
 
 @application.route("/api/login", methods=["GET"])
 def login():
-    return jsonify({"loggedIn": True, "message": "Logged In"}), 200
+    email = getattr(g, "email", None)
+    try:
+        if not os.path.exists("../user/" + email):
+            os.makedirs("../user/" + email)
+        if not  os.path.exists("../user/" + email+"/AIFiles"):
+            os.makedirs("../user/" + email + "/AIFiles")
+        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
+            os.system("cp info.json " + "../user/" + email + "/AIFiles")
+        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
+            os.system("cp AI.log " + "../user/" + email + "/AIFiles")
+        return jsonify({"loggedIn": True, "message": "Logged In"}), 200
+    except:
+        return jsonify({"loggedIn": False, "message": "Some issues occured"})
+
 
 @application.route("/api/github", methods=["GET"])
 def github_api():
