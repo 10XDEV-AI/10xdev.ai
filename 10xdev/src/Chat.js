@@ -31,6 +31,7 @@ export const Chat = () => {
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const toggleSideContainer = () => {
     setSideContainerOpen(!sideContainerOpen);
+    setShowLeftWelcome(false)
   };
 
   const handleHamburgerClick = () => {
@@ -178,55 +179,60 @@ export const Chat = () => {
 
   return (
     <>
-      <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
-      {showLeftWelcome && <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} commitHash={commitHash}/>}
-        <div class="w-full bg-slate-50 p-4 rounded-lg">
-              <div class="flex flex-wrap gap-2 justify-center items-center" onClick={handleHamburgerClick}>
-                {checkedFiles.length>0&&
-                    <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 my-1">
-                           <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clipRule="evenodd" />
-                         </svg></div>}
-                {checkedFiles.map((file, index) => (
-                  <div
-                    key={index}
-                    class="text-blue-500 border border-blue-500 py-1 px-3 rounded-full text-sm font-semibold"
-                  >
-                    {file}
-                  </div>
-                ))}
-              </div>
-            </div>
-      <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
-        {chatMessages.map((chatMessage, index) => (
-          <div key={index}>
-            <UserPrompt
-              searchTerm={chatMessage.prompt.searchTerm}
-              onReprompt={handleReprompt}
-              onRetry={handleReprompt}
-              indexval={index}
-            />
-            {chatMessage.response.searchResults && (
-              <ResponseContainer
-                searchResults={chatMessage.response.searchResults}
-                files={chatMessage.response.files}
-                referenced_code={chatMessage.response.referenced_code}
-                toggleSideContainer={toggleSideContainer}
-                sideContainerOpen={sideContainerOpen}
-              />
-            )}
-            {index === chatMessages.length - 1 && isLoading && (
-              <div className="my-10 p-10">
-                <LoadingRing />
-              </div>
-            )}
-          </div>
-        ))}
-        <div className="spacer" ref={loadingRingRef}></div>
-        <div className="footer"></div>
-        <div className={`searchbarrow ${sideContainerOpen ? "open" : ""}`}>
-          <SearchBar onSearch={handleSearch} />
+        <div className="flex">
+                    {showLeftWelcome &&  <div className="w-6/12 fixed border-r"><LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} commitHash={commitHash}/></div>}
+                    <div className={`${showLeftWelcome ? "w-6/12 absolute right-0 " : "w-full"}`}>
+                      <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
+                      <div class="w-full bg-slate-50 p-4 rounded-lg ">
+                        <div class="flex flex-wrap gap-2 justify-center items-center" onClick={handleHamburgerClick}>
+                          {checkedFiles.length>0&&
+                              <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 my-1">
+                                     <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clipRule="evenodd" />
+                                   </svg></div>}
+                          {checkedFiles.map((file, index) => (
+                            <div
+                              key={index}
+                              class="text-blue-500 border border-blue-500 py-1 px-3 rounded-full text-sm font-semibold"
+                            >
+                              {file}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className={`${sideContainerOpen ? "w-8/12" : "w-full"}`}>
+                      {chatMessages.map((chatMessage, index) => (
+                        <div key={index}>
+                          <UserPrompt
+                            searchTerm={chatMessage.prompt.searchTerm}
+                            onReprompt={handleReprompt}
+                            onRetry={handleReprompt}
+                            indexval={index}
+                          />
+                          {chatMessage.response.searchResults && (
+                            <ResponseContainer
+                              searchResults={chatMessage.response.searchResults}
+                              files={chatMessage.response.files}
+                              referenced_code={chatMessage.response.referenced_code}
+                              toggleSideContainer={toggleSideContainer}
+                              sideContainerOpen={sideContainerOpen}
+                            />
+                          )}
+                          {index === chatMessages.length - 1 && isLoading && (
+                            <div className="my-10 p-10">
+                              <LoadingRing />
+                            </div>
+                          )}
+                        </div>
+                        ))}
+                        <div className="spacer" ref={loadingRingRef}></div>
+
+                      </div>
+                    </div>
+                    <div className="footer"></div>
+                      <div className={`searchbarrow ${sideContainerOpen ? "open" : ""}`}>
+                      <SearchBar onSearch={handleSearch} />
+                      </div>
         </div>
-      </div>
     </>
   );
 };
