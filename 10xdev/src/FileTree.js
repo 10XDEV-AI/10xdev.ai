@@ -10,16 +10,22 @@ import SearchContext from './context/SearchContext';
 function DirectoryTreeView(props) {
   
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
-    const handleFileCheck = async (filename) => {
-      if (checkedFiles.includes(filename)) {
-        await setCheckedFiles((prevCheckedFiles) =>
-          prevCheckedFiles.filter((file) => file !== filename)
-        );
-      } else {
-        // If the file is not checked, add it to the checkedFiles state
-        await setCheckedFiles((prevCheckedFiles) => [...prevCheckedFiles, filename]);
-      }
-    };
+    const handleFileCheck = async (filename, isBranch) => {
+        if (isBranch) {
+          // If it's a folder (branch), simply return without modifying the checkedFiles state.
+          return;
+        }
+
+        // File handling logic remains the same
+        if (checkedFiles.includes(filename)) {
+          await setCheckedFiles((prevCheckedFiles) =>
+            prevCheckedFiles.filter((file) => file !== filename)
+          );
+        } else {
+          await setCheckedFiles((prevCheckedFiles) => [...prevCheckedFiles, filename]);
+        }
+      };
+
 
   const data = flattenTree(props.data);
 
@@ -34,40 +40,40 @@ function DirectoryTreeView(props) {
   }));
 
   return (
-    <div className="">
-      <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
-        <TreeView
-          data={modifiedData}
-          aria-label="directory tree "
-          nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
-            <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
-              <label className="flex items-center cursor-pointer">
-                {showCheckboxes && (
-                  <input
-                    type="checkbox"
-                    className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                    checked={checkedFiles.includes(element.name)}
-                    onChange={() => {handleFileCheck(element.name);}}
-                    onClick={(e) => e.stopPropagation()} // Stop event propagation
-                  />
-                )}
+      <div className="">
+        <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
+          <TreeView
+            data={modifiedData}
+            aria-label="directory tree "
+            nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
+              <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
+                <label className="flex items-center cursor-pointer">
+                  {showCheckboxes && (
+                    <input
+                      type="checkbox"
+                      className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                      checked={checkedFiles.includes(element.name)}
+                      onChange={() => {handleFileCheck(element.name, isBranch);}} // Pass isBranch to the handler
+                      onClick={(e) => e.stopPropagation()} // Stop event propagation
+                    />
+                  )}
 
-                {isBranch ? (
-                  <FolderIcon
-                    isOpen={isExpanded}
-                    onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}
-                  />
-                ) : (
-                  <FileIcon filename={element.name} />
-                )}
-                {element.name}
-              </label>
-            </div>
-          )}
-        />
+                  {isBranch ? (
+                    <FolderIcon
+                      isOpen={isExpanded}
+                      onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}
+                    />
+                  ) : (
+                    <FileIcon filename={element.name} />
+                  )}
+                  {element.name}
+                </label>
+              </div>
+            )}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
 }
 
 const FolderIcon = ({ isOpen }) =>

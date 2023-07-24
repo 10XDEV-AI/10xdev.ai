@@ -17,7 +17,7 @@ export const Chat = () => {
     setIsLoading,
     files,
     referenced_code,
-    checkedFiles,
+    checkedFiles,setCheckedFiles,
     sideContainerOpen, setSideContainerOpen,
     repository, setRepository,
     branch, setBranch,
