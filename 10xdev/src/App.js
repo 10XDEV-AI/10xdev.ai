@@ -31,7 +31,12 @@ function App () {
                 <Route path="/clone" element={<Clone/>} />
                 <Route path="/logs" element={<LoadingRing/>} />
                 <Route path="/branch" element={<Branch/>} />
-                <Route path="/test" element={<LoadingRing/>} />
+                <Route path="/test" element={
+                <div className="h-screen">
+                <LoadingRing/>
+                </div>
+
+                } />
                 <Route path="/wait" element={<Wait/>} />
             </Routes>
         </Router>

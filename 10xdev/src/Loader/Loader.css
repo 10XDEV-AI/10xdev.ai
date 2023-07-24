@@ -1,14 +1,22 @@
+.loading-ring-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .loading-ring {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1; /* Take up all available vertical space */
 }
-
 
 .logbox {
   display: flex;
   text-align: center;
 }
+
+/* Rest of the CSS styles... */
 
 .loading-cancel{
   position: absolute;

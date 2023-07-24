@@ -49,6 +49,8 @@ const ResponseContainer = ({
           if (index % 2 === 0) {
             // Ignore the word immediately after ''' (e.g., 'javascript')
             const language = block.split(" ")[1]; // Get the second word after splitting by space
+            console.log("XYZ :" )
+            console.log(language)
             return (
               <div key={index}>
                 <CopyBlock

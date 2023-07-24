@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
-import { callAPI } from "./api";
-import Cookies from "js-cookie";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
@@ -11,13 +9,13 @@ import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo , commitHash,checkedFiles, setCheckedFiles} = useContext(SearchContext);
-  const [input, setInput] = useState("");
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles} = useContext(SearchContext);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
-
   const handleSyncClick = () => {
     setShowSync(true);
   };
+
+  const navigate = useNavigate();
 
   const handleFilterClick = () => {
     setShowCheckboxes(!showCheckboxes);
@@ -41,7 +39,9 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
               <>
                 <div className="flex items-center text-blue-900 justify-center h-[16vh]">
                   <h1 className="text-2xl">
-                    <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                     <Link to="/repos">
+                       <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                     </Link>
                   </h1>
                   <button className="ml-auto rounded ml-auto hover:text-blue-600" onClick={() => setShowRepos(!showRepos)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
