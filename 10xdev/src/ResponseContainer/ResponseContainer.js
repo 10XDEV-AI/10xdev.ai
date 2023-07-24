@@ -13,7 +13,6 @@ const ResponseContainer = ({
     const full_text = props.text;
     const flag = full_text[0] === "```" ? 1 : 0;
     const blocks = full_text.split("```");
-    // remove the first and last \n in all blocks if it exists
     for (let i = 0; i < blocks.length; i++) {
         if (blocks[i][0] === "\n") {
           blocks[i] = blocks[i].slice(1);
@@ -32,6 +31,44 @@ const ResponseContainer = ({
               </div>
             );
           } else {
+            const language = block.split("\n")[0]; // Get the second word after splitting by space
+            console.log("XYZ 1:" )
+            console.log(language)
+            {
+              "languages": [
+                "python",
+                "javascript",
+                "java",
+                "c++",
+                "c#",
+                "ruby",
+                "swift",
+                "go",
+                "php",
+                "typescript",
+                "kotlin",
+                "rust",
+                "matlab",
+                "r",
+                "bash",
+                "html/css",
+                "sql",
+                "assembly",
+                "perl",
+                "lua",
+                "objective-c",
+                "scala",
+                "haskell",
+                "lisp",
+                "prolog",
+                "fortran",
+                "vb",
+                "dart",
+                "tcl",
+                "groovy"
+              ]
+            }
+
             return (
               <div key={index}>
                 <CopyBlock
@@ -47,9 +84,8 @@ const ResponseContainer = ({
           }
         } else {
           if (index % 2 === 0) {
-            // Ignore the word immediately after ''' (e.g., 'javascript')
             const language = block.split(" ")[1]; // Get the second word after splitting by space
-            console.log("XYZ :" )
+            console.log("XYZ 2:" )
             console.log(language)
             return (
               <div key={index}>
