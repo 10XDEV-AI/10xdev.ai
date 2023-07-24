@@ -19,7 +19,7 @@ const ResponseContainer = ({
       "python", "javascript", "java", "c++", "c#", "ruby", "swift", "go", "php",
       "typescript", "kotlin", "rust", "matlab", "r", "bash", "html/css", "sql",
       "assembly", "perl", "lua", "objective-c", "scala", "haskell", "lisp", "prolog",
-      "fortran", "vb", "dart", "tcl", "groovy"
+      "fortran", "vb", "dart", "tcl", "groovy","json"
     ];
 
     // Helper function to check if a language is supported
