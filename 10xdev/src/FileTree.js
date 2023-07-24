@@ -8,6 +8,7 @@ import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
   const [filesearchTerm, setFileSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState(props.data)
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
     const handleFileCheck = async (filename, isBranch) => {
         if (isBranch) {
@@ -25,9 +26,15 @@ function DirectoryTreeView(props) {
         }
       };
 
-  const filteredData = props.data.filter((node) =>
-    node.name.toLowerCase().includes(filesearchTerm.toLowerCase())
-  );
+  const filterData = () => {
+    const filteredData = Array.isArray(props.data)
+        ? props.data.filter((node) =>
+            node.name.toLowerCase().includes(filesearchTerm.toLowerCase())
+          )
+        : [];
+    setFilteredData(filteredData);
+    console.log(filteredData);
+  };
 
   const data = flattenTree(props.data);
 
@@ -45,43 +52,32 @@ function DirectoryTreeView(props) {
       <div className="">
 
                   <div className="flex w-full justify-center my-1">
-                                    <input
-                                      type="text"
-                                      value={filesearchTerm}
-                                      onChange={(e) => setFileSearchTerm(e.target.value)}
-                                      placeholder="Search files..."
-                                      className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none"
-                                    />
+                                    <input type="text" value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none" />
                                   </div>
         <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
-          <TreeView
-            data={modifiedData}
-            aria-label="directory tree "
-            nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
-              <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
-                <label className="flex items-center cursor-pointer">
-                  {showCheckboxes && (
-                    <input
-                      type="checkbox"
-                      className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                      checked={checkedFiles.includes(element.name)}
-                      onChange={() => {handleFileCheck(element.name, isBranch);}} // Pass isBranch to the handler
-                      onClick={(e) => e.stopPropagation()} // Stop event propagation
-                    />
-                  )}
-
-                  {isBranch ? (
-                    <FolderIcon
-                      isOpen={isExpanded}
-                      onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}
-                    />
-                  ) : (
-                    <FileIcon filename={element.name} />
-                  )}
-                  {element.name}
-                </label>
-              </div>
-            )}
+          <TreeView data={modifiedData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
+            <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
+              <label className="flex items-center cursor-pointer">
+                {showCheckboxes && (
+                  <input
+                    type="checkbox"
+                    className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    checked={checkedFiles.includes(element.name)}
+                    onChange={() => {
+                      handleFileCheck(element.name, isBranch);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                )}
+                {isBranch ? (
+                  <FolderIcon isOpen={isExpanded} onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })} />
+                ) : (
+                  <FileIcon filename={element.name} />
+                )}
+                {element.name}
+              </label>
+            </div>
+          )}
           />
         </div>
       </div>
