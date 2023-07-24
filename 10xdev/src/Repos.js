@@ -72,7 +72,8 @@ export default function Repos() {
 
   return (
     <div>
-      {isLoading ? (<><LoadingRing  dontLog="true"  /> </>) : (
+      {isLoading ? (
+        <div  className="h-screen"><LoadingRing  dontLog="true"  /> </div>) : (
       <div className="repos-container h-screen">
       <div className = "flex  pb-10 my-8 ">
         <button className="bg-blue-900 hover:bg-blue-600 text-white px-4 rounded-md" onClick={()=>handleGoBack()}>

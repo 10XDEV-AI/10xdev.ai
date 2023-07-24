@@ -166,7 +166,9 @@ export const Welcome = () => {
 const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   if (isLoading) {
   return (
-  <LoadingRing  className="h-screen"/>
+  <div  className="h-screen">
+    <LoadingRing/>
+  </div>
   )}
   else{
   return (<>

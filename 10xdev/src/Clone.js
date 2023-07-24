@@ -144,7 +144,7 @@ const Clone = () => {
   return (
     <div >
         {isLoading?
-            <LoadingRing dontLog="true"/>
+        <div  className="h-screen"><LoadingRing dontLog="true"/></div>
             :
             <>
                 <Navbar />
