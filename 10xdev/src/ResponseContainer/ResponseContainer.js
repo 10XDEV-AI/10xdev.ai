@@ -47,10 +47,7 @@ const ResponseContainer = ({
           );
         } else {
           const language = block.split("\n")[0].trim(); // Get the second word after splitting by space
-          console.log("XYZ 1:")
-          console.log(language)
 
-          // Check if the language is supported
           if (isLanguageSupported(language)) {
             // If supported, remove the language from the block
             block = block.replace(language, "").trim();
@@ -85,11 +82,7 @@ const ResponseContainer = ({
       } else {
         if (index % 2 === 0) {
           const language = block.split(" ")[1].trim(); // Get the second word after splitting by space
-          console.log("XYZ 2:")
-          console.log(language)
-
-          // Check if the language is supported
-          if (isLanguageSupported(language)) {
+        if (isLanguageSupported(language)) {
             // If supported, remove the language from the block
             block = block.replace(language, "").trim();
             return (
