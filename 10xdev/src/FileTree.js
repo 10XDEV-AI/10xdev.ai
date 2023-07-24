@@ -8,6 +8,7 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
+  
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
     const handleFileCheck = async (filename) => {
       if (checkedFiles.includes(filename)) {

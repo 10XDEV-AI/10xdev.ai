@@ -9,6 +9,7 @@ import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
+
   const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
