@@ -8,7 +8,8 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
-  const {checkedFiles,setCheckedFiles} = useContext(SearchContext);
+  
+  const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
     const handleFileCheck = async (filename) => {
       if (checkedFiles.includes(filename)) {
         await setCheckedFiles((prevCheckedFiles) =>
@@ -41,7 +42,7 @@ function DirectoryTreeView(props) {
           nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
               <label className="flex items-center cursor-pointer">
-                {props.showCheckboxes && (
+                {showCheckboxes && (
                   <input
                     type="checkbox"
                     className="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"

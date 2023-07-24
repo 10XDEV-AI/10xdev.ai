@@ -16,7 +16,6 @@ const SearchState = ({ children }) => {
   const [showSync, setShowSync] = useState(false);
   const userPic = defaultUserPic;
   const [showRepos, setShowRepos] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
   const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
@@ -26,7 +25,8 @@ const SearchState = ({ children }) => {
   const [treeData, setTreeData] = useState([]);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);
   const [filesearchTerm, setFileSearchTerm] = useState("");
-
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const [expandedNodes, setExpandedNodes] = useState([]);
   const handleFileCheck = (file) => {
     // Check if the file is already in the checkedFiles array
     const isChecked = checkedFiles.includes(file);
@@ -128,7 +128,8 @@ const SearchState = ({ children }) => {
         branch, setBranch,
         sideContainerOpen, setSideContainerOpen,
         filesearchTerm, setFileSearchTerm,
-        treeData, setTreeData
+        treeData, setTreeData,
+        showCheckboxes, setShowCheckboxes
       }}
     >
       {children}
