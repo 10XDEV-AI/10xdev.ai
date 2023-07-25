@@ -27,14 +27,37 @@ function DirectoryTreeView(props) {
       };
 
   const filterData = () => {
-    console.log(props.data)
-    const filteredData = Array.isArray(props.data)
-        ? props.data.filter((node) =>
-            node.name.toLowerCase().includes(filesearchTerm.toLowerCase())
-          )
-        : [];
-    setFilteredData(filteredData);
-    console.log(filteredData);
+    console.log(props.data);
+
+    // Assuming 'filesearchTerm' is accessible in this function
+    const searchTerm = filesearchTerm.toLowerCase();
+    const filteredData = flattenTree(props.data).filter((node) =>
+      node.name.toLowerCase().includes(searchTerm)
+    );
+
+    const buildTree = (flatData) => {
+          const rootNodes = [];
+          const nodeMap = {};
+
+          flatData.forEach((node) => {
+            const clonedNode = { ...node, children: [] };
+            nodeMap[node.id] = clonedNode;
+
+            const parent = nodeMap[node.parentId];
+            if (parent) {
+              parent.children.push(clonedNode);
+            } else {
+              rootNodes.push(clonedNode);
+            }
+          });
+
+          return rootNodes;
+        };
+
+    const filteredTree = buildTree(filteredData);
+
+    setFilteredData(filteredTree);
+    console.log(filteredTree);
   };
 
   const data = flattenTree(props.data);
