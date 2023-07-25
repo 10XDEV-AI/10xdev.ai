@@ -27,6 +27,7 @@ function DirectoryTreeView(props) {
       };
 
   const filterData = () => {
+    console.log(props.data)
     const filteredData = Array.isArray(props.data)
         ? props.data.filter((node) =>
             node.name.toLowerCase().includes(filesearchTerm.toLowerCase())
@@ -50,10 +51,9 @@ function DirectoryTreeView(props) {
 
   return (
       <div className="">
-
-                  <div className="flex w-full justify-center my-1">
-                                    <input type="text" value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none" />
-                                  </div>
+          <div className="flex w-full justify-center my-1">
+            <input type="text" value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none" />
+          </div>
         <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
           <TreeView data={modifiedData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
