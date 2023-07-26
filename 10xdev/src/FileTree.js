@@ -5,6 +5,8 @@ import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
 import { RiFileCodeLine } from "react-icons/ri";
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
+
+
 function DirectoryTreeView(props) {
   const [filteredData, setFilteredData] = useState(flattenTree(props.data))
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes , filesearchTerm, setFileSearchTerm} = useContext(SearchContext);
@@ -104,32 +106,32 @@ function DirectoryTreeView(props) {
 const FolderIcon = ({ isOpen }) =>
   isOpen ? <FaFolderOpen className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder className="inline-block align-middle mr-1 text-blue-900 " />;
 
-const FileIcon = ({ filename }) => {
-  const extension = filename.slice(filename.lastIndexOf(".") + 1);
-  switch (extension) {
-    case "js":
-      return <DiJavascript color="rgb(217 119 6)" className="inline-block align-middle mr-1" />;
-    case "css":
-      return <DiCss3 color="rgb(22 163 74)" className="inline-block align-middle mr-1" />;
-    case "json":
-      return <FaList color="rgb(3 105 161)" className="inline-block align-middle mr-1" />;
-    case "npmignore":
-      return <DiNpm color="red" className="inline-block align-middle mr-1" />;
-    case "jsx":
-      return <BsFiletypeJsx color="blue" className="inline-block align-middle mr-1" />;
-    case "scss":
-      return <BsFiletypeScss color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
-    case "py":
-      return <FaPython color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
-    case "md":
-      return <FaReadme color="black" className="inline-block align-middle mr-1" />;
-    case "ts":
-    case "yml":
-    case "html":
-      return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
-    default:
-      return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
-  }
-};
+    const FileIcon = ({ filename }) => {
+      const extension = filename.slice(filename.lastIndexOf(".") + 1);
+      switch (extension) {
+        case "js":
+          return <DiJavascript color="rgb(217 119 6)" className="inline-block align-middle mr-1" />;
+        case "css":
+          return <DiCss3 color="rgb(22 163 74)" className="inline-block align-middle mr-1" />;
+        case "json":
+          return <FaList color="rgb(3 105 161)" className="inline-block align-middle mr-1" />;
+        case "npmignore":
+          return <DiNpm color="red" className="inline-block align-middle mr-1" />;
+        case "jsx":
+          return <BsFiletypeJsx color="blue" className="inline-block align-middle mr-1" />;
+        case "scss":
+          return <BsFiletypeScss color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
+        case "py":
+          return <FaPython color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
+        case "md":
+          return <FaReadme color="black" className="inline-block align-middle mr-1" />;
+        case "ts":
+        case "yml":
+        case "html":
+          return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
+        default:
+          return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
+      }
+    };
 
 export default DirectoryTreeView;
