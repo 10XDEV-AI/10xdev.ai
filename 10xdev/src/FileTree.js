@@ -1,16 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
 import { FaList, FaPython, FaReadme, FaFolderOpen, FaFolder } from "react-icons/fa";
 import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
 import { RiFileCodeLine } from "react-icons/ri";
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import SearchContext from './context/SearchContext';
-
 function DirectoryTreeView(props) {
-  const [filesearchTerm, setFileSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState(flattenTree(props.data))
-  const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
-    const handleFileCheck = async (filename, isBranch) => {
+  const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes , filesearchTerm, setFileSearchTerm} = useContext(SearchContext);
+  const handleFileCheck = async (filename, isBranch) => {
         if (isBranch) {
           // If it's a folder (branch), simply return without modifying the checkedFiles state.
           return;
@@ -26,38 +24,32 @@ function DirectoryTreeView(props) {
         }
       };
 
-  const filterData = () => {
-    console.log(props.data);
+  useEffect(() => {
+    filterData()
+  }, [filesearchTerm]);
 
-    // Assuming 'filesearchTerm' is accessible in this function
+  const filterData = async() => {
+    if (!filesearchTerm.trim()) {
+        setFilteredData(flattenTree(props.data))
+        return;
+      }
+
     const searchTerm = filesearchTerm.toLowerCase();
-    const filteredData = flattenTree(props.data).filter((node) =>
+    const allData = flattenTree(props.data);
+
+    const filteredData = allData.filter((node) =>
       node.name.toLowerCase().includes(searchTerm)
     );
 
-    const buildTree = (flatData) => {
-          const rootNodes = [];
-          const nodeMap = {};
+    const rootNode = {
+                         "id": 0,
+                         "name": "",
+                         "children": filteredData.map((node) => node.id),
+                         "parent": null
+                     }
 
-          flatData.forEach((node) => {
-            const clonedNode = { ...node, children: [] };
-            nodeMap[node.id] = clonedNode;
-
-            const parent = nodeMap[node.parentId];
-            if (parent) {
-              parent.children.push(clonedNode);
-            } else {
-              rootNodes.push(clonedNode);
-            }
-          });
-
-          return rootNodes;
-        };
-
-    const filteredTree = buildTree(filteredData);
-
-    setFilteredData(filteredTree);
-    console.log(filteredTree);
+    filteredData.unshift(rootNode);
+    setFilteredData(filteredData);
   };
 
   const data = flattenTree(props.data);
@@ -74,10 +66,12 @@ function DirectoryTreeView(props) {
 
   return (
       <div className="">
-          <div className="flex w-full justify-center my-1">
-            <input type="text" value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none" />
+      {showCheckboxes &&
+          <div className="flex w-full justify-center mt-1 border-b ">
+            <input type="text " value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border-none outline-none rounded-md focus:outline-none mb-0" />
           </div>
-        <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
+          }
+        <div className="px-4 pt-2 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
           <TreeView data={filteredData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
               <label className="flex items-center cursor-pointer">

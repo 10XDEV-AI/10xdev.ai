@@ -129,7 +129,8 @@ const SearchState = ({ children }) => {
         sideContainerOpen, setSideContainerOpen,
         filesearchTerm, setFileSearchTerm,
         treeData, setTreeData,
-        showCheckboxes, setShowCheckboxes
+        showCheckboxes, setShowCheckboxes,
+        filesearchTerm, setFileSearchTerm
       }}
     >
       {children}

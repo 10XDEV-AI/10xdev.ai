@@ -18,7 +18,7 @@
 .userPromptext{
 padding: 10px;
 float: left;
-
+ white-space: pre-line;
 }
 
 .editUserPromptContainer {

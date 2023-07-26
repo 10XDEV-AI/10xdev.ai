@@ -10,7 +10,7 @@ import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
 
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes} = useContext(SearchContext);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
@@ -20,6 +20,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
   const handleFilterClick = () => {
     setShowCheckboxes(!showCheckboxes);
     setCheckedFiles([])
+    setFileSearchTerm("");
   };
 
   if (isLoading) {
