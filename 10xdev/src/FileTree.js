@@ -8,7 +8,7 @@ import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
   const [filesearchTerm, setFileSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState(props.data)
+  const [filteredData, setFilteredData] = useState(flattenTree(props.data))
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes} = useContext(SearchContext);
     const handleFileCheck = async (filename, isBranch) => {
         if (isBranch) {
@@ -67,7 +67,7 @@ function DirectoryTreeView(props) {
     return `${percentage}%`;
   };
 
-  const modifiedData = data.map((node) => ({
+  const modifiedData = filteredData.map((node) => ({
     ...node,
     defaultExpanded: true, // Set defaultExpanded to true for each node
   }));
@@ -78,7 +78,7 @@ function DirectoryTreeView(props) {
             <input type="text" value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none" />
           </div>
         <div className="p-4 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
-          <TreeView data={modifiedData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
+          <TreeView data={filteredData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
             <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
               <label className="flex items-center cursor-pointer">
                 {showCheckboxes && (
