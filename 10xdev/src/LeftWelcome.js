@@ -10,7 +10,7 @@ import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
 
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes} = useContext(SearchContext);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
@@ -20,11 +20,14 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
   const handleFilterClick = () => {
     setShowCheckboxes(!showCheckboxes);
     setCheckedFiles([])
+    setFileSearchTerm("");
   };
 
   if (isLoading) {
     return (
-      <LoadingRing />
+      <div  className="h-screen">
+          <LoadingRing dontLog="true"/>
+        </div>
     )
   } else {
     return (
@@ -65,18 +68,9 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                         Loading......
                       </div>
                     ) : (
-                      <FileTree data={treeData} showCheckboxes={showCheckboxes} filesearchTerm={filesearchTerm} />
+                      <FileTree data={treeData} showCheckboxes={showCheckboxes} />
                     )}
                   </div>
-                  {/*<div className="flex w-full justify-center my-1">
-                                    <input
-                                      type="text"
-                                      value={filesearchTerm}
-                                      onChange={(e) => setFileSearchTerm(e.target.value)}
-                                      placeholder="Search files..."
-                                      className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none"
-                                    />
-                                  </div>*/}
                 </div>
 
                 <div className="flex items-center text-blue-900 justify-center">
