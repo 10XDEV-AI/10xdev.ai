@@ -57,7 +57,7 @@ def search_functions(code_query, email, userlogger, scope, history):
         files_in_scope = []
         for file in scope:
             if fs['file_path'].str.contains(file).any():
-                files_in_scope.append(fs[fs['file_path'].str.contains(file)]['file_path'].tolist()[0])
+                files_in_scope.append(fs[fs['file_path'].str.contains(file)]['file_path'].tolist())
         if len(files_in_scope) < 5:
             return files_in_scope
         if len(files_in_scope) >= 5:
@@ -217,8 +217,7 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
     print("Total Tokens in the query: " + str(tokens))
 
     userlogger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt,
-                         temperature=0.7)
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1)
     userlogger.clear_logs()
 
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}

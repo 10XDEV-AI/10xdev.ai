@@ -5,7 +5,7 @@ import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
 import SearchContext from '../context/SearchContext';
 
-const LoadingRing = ({ RedirectTo, dontLog }) => {
+const LoadingRing = ({  files, RedirectTo, dontLog }) => {
   const { setIsLoading } = useContext(SearchContext);
   const navigate = useNavigate();
 
@@ -37,6 +37,11 @@ const LoadingRing = ({ RedirectTo, dontLog }) => {
       {dontLog === 'true' ? null : (
         <div className="logbox">
           <LogViewer RedirectTo={RedirectTo} />
+          <div>
+              {files && files.map((file, index) => (
+                <div key={index}>{file}</div>
+              ))}
+            </div>
         </div>
       )}
     </div>

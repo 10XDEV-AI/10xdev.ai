@@ -221,7 +221,7 @@ const Train = () => {
           <Navbar />
           <div className="GetIgnorecontainer">
             <label className="w-1/2 flex border border-gray-300 rounded-md p-2">
-              <div className="w-60 flex font-bold">Train AI on Repository: </div>
+              <div className="w-80 flex font-bold">Train AI on Repository: </div>
               <input
                   type="text"
                   value={input}
@@ -262,41 +262,40 @@ const Train = () => {
                 <div className="w-8/12 pt-1">
                   <div className=" ">
                         <h2 className="text-xl font-bold mb-1">Files to Analyze:</h2>
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-2">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-gray-700 uppercase bg-slate-200 ">
+                            <thead class="text-xs  text-gray-700 uppercase bg-slate-200">
                                 <tr>
-                                    <th scope="col" class="px-3 py-3">
+                                    <th scope="col" class="px-3 py-3 w-[70%]">
                                         File Path
                                     </th>
-                                    <th scope="col" class="px-1 py-3 text-center">
+                                    <th scope="col" class="px-1 py-3 text-center w-[15%]">
                                         Tokens
                                     </th>
-                                    <th scope="col" class="px-1 py-3 text-center">
+                                    <th scope="col" class="px-1 py-3 text-center w-[12%]">
                                         Status
                                     </th>
-                                    <th scope="col" class="py-3">
-
+                                    <th scope="col" class="py-3  w-[3%]">
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                               {filesToAnalyze.map((file, index) => (
                                 <tr
-                                  className="bg-white border-b hover:bg-gray-100"
+                                  className="border-b hover:bg-gray-100 max-w-lg"
                                   key={index}
                                   onMouseEnter={() => handleRowMouseEnter(index)}
                                   onMouseLeave={() => handleRowMouseLeave(index)}
                                 >
-                                  <td className="whitespace-wrap px-4">{file.Path}</td>
-                                  <td className="whitespace-wrap text-center">{file.Tokens}</td>
-                                  <td className="flex">
-                                    <div className="mx-auto">{showIcons(file.Sign)}</div>
+                                  <td className="px-4 break-words max-w-lg">{file.Path}</td>
+                                  <td className="text-center">{file.Tokens}</td>
+                                  <td className="h-full">
+                                    <div className="mx-12 my-auto">{showIcons(file.Sign)}</div>
                                   </td>
                                   <td className="text-center">
                                     <button
                                     onClick={() => handleAddToIgnore(file.Path)}
-                                      className={`text-white rounded-sm  px-1 ${showAddButton[index] ? 'bg-blue-800' : ''}`}
+                                      className={`text-white rounded-sm mx-1 px-1 ${showAddButton[index] ? 'bg-blue-800' : ''}`}
                                     >
                                       Add
                                     </button>

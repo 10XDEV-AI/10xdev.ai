@@ -10,7 +10,7 @@ import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
 
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
@@ -52,7 +52,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     </svg>
                   </button>
                 </div>
-                <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
+                <div className="h-[57vh] overflow-y-auto overflow-x-hidden ">
                   <div className="flex items-center justify-center">
                     <h2 className="text-xl font-bold mb-2">Your code:</h2>
                     {/* Filter Icon */}
@@ -72,8 +72,37 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     )}
                   </div>
                 </div>
+                  <div class="w-full bg-slate-50 rounded-lg ">
+                <div class="flex flex-wrap gap-2 justify-center items-center" >
+                  {checkedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="flex text-blue-500 border border-blue-500 py-1 pl-6 gap-1 pr-2 rounded-full text-sm font-semibold justify-center items-center">
+                        {file}
+                          <button
+                              className="text-slate-50 hover:text-blue-500"
 
-                <div className="flex items-center text-blue-900 justify-center">
+                          >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  </div>
+                </div>
+                <div className="flex items-center text-blue-900 justify-center pt-4">
                   <div className="">
                     <h1 className="font-bold"> Last synced commit hash : #{commitHash}</h1>
                   </div>

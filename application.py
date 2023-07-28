@@ -257,11 +257,15 @@ def setRates():
     message, code = set_rates(request.args.get("rates"), email)
     return jsonify({"message": message}), code
 
+from flask import request, jsonify, g
 
 @application.route("/api/clone", methods=["GET"])
 def getClones():
     email = getattr(g, "email", None)
     path = request.args.get("path")
+    # Check if the path ends with ".git"
+    if not path.endswith(".git"):
+        path += ".git"
     branches, code = get_clones(path, email)
     return jsonify(branches), code
 

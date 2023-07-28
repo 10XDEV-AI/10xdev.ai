@@ -66,6 +66,25 @@ function DirectoryTreeView(props) {
     defaultExpanded: true, // Set defaultExpanded to true for each node
   }));
 
+ const calculateTotalFiles = (node, filteredData) => {
+   let count = 0;
+
+   // If the node is a file, return 1
+   if (!node.children || node.children.length === 0) {
+     return 1;
+   }
+
+   // Recursively calculate the total number of files in children folders
+   for (const childId of node.children) {
+     const childNode = data.find((node) => node.id === childId);
+     if (childNode) {
+       count += calculateTotalFiles(childNode, filteredData);
+     }
+   }
+
+   return count;
+ };
+
   return (
       <div className="">
       {showCheckboxes &&
@@ -94,6 +113,12 @@ function DirectoryTreeView(props) {
                   <FileIcon filename={element.name} />
                 )}
                 {element.name}
+                {isBranch && (
+                        <span className="ml-auto text-gray-500">
+                          ({calculateTotalFiles(element)} {calculateTotalFiles(element) === 1 ? 'file' : 'files'})
+                        </span>
+                      )}
+                {isBranch && <button className="ml-2 bg-gray-500 text-white"> Ignore</button>}
               </label>
             </div>
           )}
