@@ -9,6 +9,7 @@ import SearchContext from './context/SearchContext';
 
 function DirectoryTreeView(props) {
   const [filteredData, setFilteredData] = useState(flattenTree(props.data))
+  const [countFiles, setCountFiles] = useState(props.CountFiles);
   const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes , filesearchTerm, setFileSearchTerm} = useContext(SearchContext);
   const handleFileCheck = async (filename, isBranch) => {
         if (isBranch) {
@@ -108,17 +109,22 @@ function DirectoryTreeView(props) {
                   />
                 )}
                 {isBranch ? (
-                  <FolderIcon isOpen={isExpanded} onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })} />
+                <div onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}>
+                  <FolderIcon isOpen={isExpanded} />
+                  {element.name}
+                          </div>
+
                 ) : (
+                  <div>
                   <FileIcon filename={element.name} />
+                  {element.name}
+                  </div>
                 )}
-                {element.name}
-                {isBranch && (
-                        <span className="ml-auto text-gray-500">
-                          ({calculateTotalFiles(element)} {calculateTotalFiles(element) === 1 ? 'file' : 'files'})
-                        </span>
-                      )}
-                {isBranch && <button className="ml-2 bg-gray-500 text-white"> Ignore</button>}
+                {isBranch && countFiles &&(
+                <span className="ml-auto text-gray-500">
+                  ({calculateTotalFiles(element)} {calculateTotalFiles(element) === 1 ? 'file' : 'files'})
+                </span>
+                )}
               </label>
             </div>
           )}
