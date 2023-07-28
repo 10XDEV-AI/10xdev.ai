@@ -362,7 +362,7 @@ const Train = () => {
                        Loading......
                       </div>
                     ) : (
-                      <FilesTree data={Treedata} CountFiles={true}/>
+                      <FilesTree data={Treedata} CountFiles={true} handleAddToIgnore={handleAddToIgnore}/>
                     )}
                   </div>
                 </div>

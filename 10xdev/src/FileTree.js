@@ -109,15 +109,18 @@ function DirectoryTreeView(props) {
                   />
                 )}
                 {isBranch ? (
-                <div onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}>
-                  <FolderIcon isOpen={isExpanded} />
-                  {element.name}
-                          </div>
-
+                <div>
+                    <div >
+                      <FolderIcon isOpen={isExpanded} onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}/>
+                      {element.name}
+                    </div>
+                    <button onClick={() => props.handleAddToIgnore(element.name)}>Ignore</button>
+                  </div>
                 ) : (
                   <div>
                   <FileIcon filename={element.name} />
                   {element.name}
+                  <button onClick={() => props.handleAddToIgnore(element.name)}>Ignore</button>
                   </div>
                 )}
                 {isBranch && countFiles &&(
