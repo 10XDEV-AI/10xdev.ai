@@ -54,8 +54,6 @@ const SearchState = ({ children }) => {
     console.log("current user",currentuser);
   }, []);
 
-
-
     useEffect(() => {
       const getResults = async () => {
         try {

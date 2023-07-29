@@ -5,7 +5,7 @@ import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
 import SearchContext from '../context/SearchContext';
 
-const LoadingRing = ({ RedirectTo, dontLog }) => {
+const LoadingRing = ({  files, RedirectTo, dontLog }) => {
   const { setIsLoading } = useContext(SearchContext);
   const navigate = useNavigate();
 
@@ -35,8 +35,13 @@ const LoadingRing = ({ RedirectTo, dontLog }) => {
     <div className="loading-ring-container">
       <div className="loading-ring">{randomLoader}</div>
       {dontLog === 'true' ? null : (
-        <div className="logbox">
+        <div className="logbox p-20">
           <LogViewer RedirectTo={RedirectTo} />
+          <div>
+              {files && files.map((file, index) => (
+                <div key={index}>{file}</div>
+              ))}
+            </div>
         </div>
       )}
     </div>

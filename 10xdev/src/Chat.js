@@ -15,7 +15,7 @@ export const Chat = () => {
     isLoading,
     results,
     setIsLoading,
-    files,
+    files, setFiles,
     referenced_code,
     checkedFiles,setCheckedFiles,
     sideContainerOpen, setSideContainerOpen,
@@ -61,7 +61,7 @@ export const Chat = () => {
           prompt: input,
         }),
       });
-      const files = filesData.files;
+      setFiles(filesData.files);
 
       // Second API call to get the results
       const data = await callAPI("/api/get_response", {
@@ -75,9 +75,6 @@ export const Chat = () => {
       console.log(data);
       const results = JSON.stringify(data.response);
       const code = data.referenced_code;
-      console.log(results);
-      console.log(files);
-      console.log(code);
       setChatMessages((prevState) => [
         ...prevState,
         {
@@ -216,7 +213,6 @@ export const Chat = () => {
                                   </svg>
                                 </button>
                               </div>
-
                             </div>
                           ))}
                         </div>
@@ -241,7 +237,7 @@ export const Chat = () => {
                           )}
                           {index === chatMessages.length - 1 && isLoading && (
                             <div className="my-10 p-10">
-                              <LoadingRing />
+                              <LoadingRing files={files}/>
                             </div>
                           )}
                         </div>

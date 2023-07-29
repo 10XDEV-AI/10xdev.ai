@@ -10,7 +10,7 @@ import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
 
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
@@ -52,7 +52,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     </svg>
                   </button>
                 </div>
-                <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
+                <div className="h-[57vh] overflow-y-auto overflow-x-hidden ">
                   <div className="flex items-center justify-center">
                     <h2 className="text-xl font-bold mb-2">Your code:</h2>
                     {/* Filter Icon */}
@@ -72,8 +72,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     )}
                   </div>
                 </div>
-
-                <div className="flex items-center text-blue-900 justify-center">
+                <div className="flex items-center text-blue-900 justify-center pt-4">
                   <div className="">
                     <h1 className="font-bold"> Last synced commit hash : #{commitHash}</h1>
                   </div>
@@ -84,6 +83,18 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     </svg>
                   </button>
                 </div>
+                <div class="w-full bg-slate-50 rounded-lg mt-10">
+                    <div class="flex flex-wrap gap-2 justify-center items-center" >
+                      {checkedFiles.map((file, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="flex text-blue-500 border border-blue-500 py-1 px-6 gap-1 rounded-full text-sm font-semibold justify-center items-center">
+                            {file}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                </div>
+
               </>
             )}
           </>
