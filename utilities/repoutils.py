@@ -91,6 +91,8 @@ def delete_repo(Full_path,email):
         f.truncate()
         json.dump(info, f)
 
-
+    trained_repos = [repo for repo in list_repos(email) if repo["Trained"]]
+    if trained_repos:
+        select_repo(trained_repos[0]["Directory"], email)
 
     return {"message": 'f"{repo_name} has been deleted.'}, 200
