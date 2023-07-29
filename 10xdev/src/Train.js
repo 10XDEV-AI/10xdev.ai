@@ -261,13 +261,12 @@ const Train = () => {
               <div className="w-full flex justify-center">
                 <div className="w-8/12 pt-1">
                   <div className=" ">
-                        <h2 className="text-xl font-bold mb-1">Files to Analyze:</h2>
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-2">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-2  min-h-[70vh]">
                         <table class="w-full text-sm text-left">
                             <thead class="text-xs  text-gray-700 uppercase bg-slate-200">
                                 <tr>
-                                    <th scope="col" class="px-3 py-3 w-[70%]">
-                                        File Path
+                                    <th scope="col" class=" w-[70%]">
+                                        <h2 className="text-xl font-bold ml-2">Files to Analyze</h2>
                                     </th>
                                     <th scope="col" class="px-1 py-3 text-center w-[15%]">
                                         Tokens
@@ -303,11 +302,10 @@ const Train = () => {
                                 </tr>
                               ))}
                             </tbody>
-
                         </table>
                     </div>
                     <div className="flex justify-center text-base font-bold">
-                      <h4 className="p-2 m-2 rounded-md bg-green-300 flex">
+                      <h4 className="p-2 m-2 rounded-md bg-green-300 flex ">
                         <span role="img" aria-label="Description of the emoji">
                           <BsFillFileEarmarkCheckFill color="green"  className='text-xl' />
                         </span>
@@ -328,50 +326,81 @@ const Train = () => {
                     </div>
                   </div>
                 </div>
+                    <form className="w-4/12 mx-4  mt-3 shadow-md sm:rounded-lg">
+                       <div class="w-full rounded-lg bg-slate-200  min-h-[65vh]">
+                           <div class="flex items-center justify-between px-2 ">
+                               <h2 className="text-gray-700 uppercase text-xl font-bold">Files to Ignore</h2>
+                               <button onClick={handleSaveFilesToIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center px-3 py-1 mt-1 mb-1 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                  Save & Refresh
+                               </button>
+                           </div>
+                           <div class="bg-white">
+                               <textarea id="editor" rows="8" class="min-h-[70vh] w-full px-2 text-sm bg-white border-0 focus:ring-0"
+                               placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
+                                                                             value={filesToIgnore.join('\n')}
+                                                                             onChange={(event) =>
+                                                                               setFilesToIgnore(event.target.value.split('\n'))
+                                                                             }>
+
+                               </textarea>
+                           </div>
+                       </div>
+                    </form>
+
+                    {/*
+
                 <div className="w-4/12 mx-4 p-1">
-                      <div className="flex mb-1">
-                        <h2 className="text-xl font-bold">Files to Ignore:</h2>
-                        <div className="ml-auto bg-blue-900 text-white px-2 mx-2 pt-1 rounded-md hover:bg-blue-700">
-                          <button onClick={handleSaveFilesToIgnore} className="">
-                            Save & Refresh
-                          </button>
-                        </div>
-                      </div>
-                      <div className="h-full p-2 border-4 rounded-md shadow-md border-slate-200">
-                        {
-                          <textarea
-                            className="w-full h-full text-black px-2"
-                            placeholder="Type files you want the AI to ignore here or Click on the files in the list"
-                            value={filesToIgnore.join('\n')}
-                            onChange={(event) =>
-                              setFilesToIgnore(event.target.value.split('\n'))
-                            }
-                          />
-                        }
-                      </div>
-                </div>
+                      <div className="bg-gray-300 w-full">
+                                        <div className="w-full">
+                                          <div className="">
+                                            <div className="flex items-center">
+                                              <h2 className="text-xl font-bold">Files to Ignore:</h2>
+                                              <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 mb-2 rounded-md hover:bg-blue-700">
+                                                <button onClick={handleSaveFilesToIgnore} className="">
+                                                  Save & Refresh
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          {
+                                            <textarea
+                                              className="w-full min-h-[75vh] p-2 rounded-md text-black"
+                                              placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
+                                              value={filesToIgnore.join('\n')}
+                                              onChange={(event) =>
+                                                setFilesToIgnore(event.target.value.split('\n'))
+                                              }
+                                            />
+                                          }
+                                        </div>
+                                      </div>
+
+                </div> */}
 
               </div>
             ) : (
-              <div className="ignorecontainer">
+              <div className="ignorecontainer min-h-[65vh]">
                 <div className="ignorebox1">
-                  <div className="min-h-[60%]">
-                    <h2 className="text-xl font-bold">All Files</h2>
+                  <div className="">
+                    <h2 className="text-xl font-bold mb-2">All Files</h2>
                     {isLoadingTree ? (
                       <div className="flex justify-center items-center h-[50vh] text-gray-500">
                        Loading......
                       </div>
                     ) : (
-                      <FilesTree data={Treedata} CountFiles={true} handleAddToIgnore={handleAddToIgnore}/>
+                    <div className="min-h-[75vh] border-0 rounded-md bg-white">
+                      <FilesTree data={Treedata} CountFiles={true} handleAddToIgnore={handleAddToIgnore} />
+                    </div>
                     )}
                   </div>
                 </div>
+
                 <div className="ignorebox2">
-                  <div className="ignoretext">
+                  <div className="">
                     <div className="">
-                      <div className="flex">
+                      <div className="flex items-center">
                         <h2 className="text-xl font-bold">Files to Ignore:</h2>
-                        <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 rounded-md hover:bg-blue-700">
+                        <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 mb-2 rounded-md hover:bg-blue-700">
                           <button onClick={handleSaveFilesToIgnore} className="">
                             Save
                           </button>
@@ -380,8 +409,8 @@ const Train = () => {
                     </div>
                     {
                       <textarea
-                        className="w-full h-[80%] p-2 rounded-md text-black"
-                        placeholder="Type files and folders you want the AI to ignore here."
+                        className="w-full min-h-[75vh] p-2 rounded-md text-black"
+                        placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
                         value={filesToIgnore.join('\n')}
                         onChange={(event) =>
                           setFilesToIgnore(event.target.value.split('\n'))

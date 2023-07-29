@@ -213,7 +213,6 @@ export const Chat = () => {
                                   </svg>
                                 </button>
                               </div>
-
                             </div>
                           ))}
                         </div>

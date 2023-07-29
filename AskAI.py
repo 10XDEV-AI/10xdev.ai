@@ -28,8 +28,8 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
         system_message += "Your job is to guess the relevant files that the user is speaking about in the Current User Prompt and return a filtered list of file paths. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
     else:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
-        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a user prompt delimited XML tags. "
-        system_message += "Your job is to guess the relevant files that the user is speaking about in the Current User Prompt and return a filtered list of file paths . If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
+        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a user prompt delimited by XML tags. "
+        system_message += "Your job is to guess the relevant files that the user is speaking about in the User Prompt and return a filtered list of file paths . If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
 
     filter_prompt = result_string
 
@@ -279,7 +279,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
     else:
         user_logger.log("Referring Files : " + str(files))
 
-    if len(files)>=7:
+    '''if len(files)>=7:
         user_logger.log("I think, I need more information... ¯\_(ツ)_/¯...")
         files = []
         final_prompt = open("../user/"+email+"/AIFiles/"+path.split('/')[-1]+"_full_project_info.txt").read()
@@ -290,7 +290,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
         else:
             prompt = "User Prompt: "+prompt
             system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository\nYour task is to ask the user for more context about 'Current user prompt' and which files will be relevant to answer it."
-
+    '''
 
     estimated_tokens = 0
     for i in files:

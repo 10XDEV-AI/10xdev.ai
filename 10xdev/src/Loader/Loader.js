@@ -35,7 +35,7 @@ const LoadingRing = ({  files, RedirectTo, dontLog }) => {
     <div className="loading-ring-container">
       <div className="loading-ring">{randomLoader}</div>
       {dontLog === 'true' ? null : (
-        <div className="logbox">
+        <div className="logbox p-20">
           <LogViewer RedirectTo={RedirectTo} />
           <div>
               {files && files.map((file, index) => (

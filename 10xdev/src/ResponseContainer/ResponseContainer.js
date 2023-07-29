@@ -17,7 +17,7 @@ const ResponseContainer = ({
     // List of supported languages
     const supportedLanguages = [
       "python", "javascript", "java", "c++", "c#", "ruby", "swift", "go", "php",
-      "typescript", "kotlin", "rust", "matlab", "r", "bash", "html/css", "sql",
+      "typescript", "kotlin", "rust", "matlab", "r", "bash", "html" , "css", "sql",
       "assembly", "perl", "lua", "objective-c", "scala", "haskell", "lisp", "prolog",
       "fortran", "vb", "dart", "tcl", "groovy","json", "jsx"
     ];
