@@ -9,7 +9,7 @@ const SearchState = ({ children }) => {
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
-  const [files, setFiles] = useState('');
+  const [files, setFiles] = useState([]);
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
@@ -27,6 +27,8 @@ const SearchState = ({ children }) => {
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [expandedNodes, setExpandedNodes] = useState([]);
+  const [repos, setRepos] = useState([]);
+
   const handleFileCheck = (file) => {
     // Check if the file is already in the checkedFiles array
     const isChecked = checkedFiles.includes(file);
@@ -42,7 +44,6 @@ const SearchState = ({ children }) => {
     }
   };
 
-  const [repos, setRepos] = useState([]);
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
@@ -111,7 +112,7 @@ const SearchState = ({ children }) => {
         isLoadingProjectInfo,
         setIsLoadingProjectInfo,
         results,
-        files,
+        files,setFiles,
         referenced_code,
         userPic,
         path, setPath,

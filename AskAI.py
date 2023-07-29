@@ -294,7 +294,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
 
     estimated_tokens = 0
     for i in files:
-        final_prompt += "\n```File path " + i + ":\n"
+        final_prompt += "\n```File path " + str(i) + ":\n"
         path = read_info(email)
         j = os.path.join(path, i)
         if j.endswith(".ipynb"):
