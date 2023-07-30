@@ -57,7 +57,8 @@ def search_functions(code_query, email, userlogger, scope, history):
         files_in_scope = []
         for file in scope:
             if fs['file_path'].str.contains(file).any():
-                files_in_scope.append(fs[fs['file_path'].str.contains(file)]['file_path'].tolist())
+                for j in fs[fs['file_path'].str.contains(file)]['file_path'].tolist():
+                    files_in_scope.append(j)
         if len(files_in_scope) < 5:
             return files_in_scope
         if len(files_in_scope) >= 5:
