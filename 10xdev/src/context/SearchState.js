@@ -76,6 +76,7 @@ const SearchState = ({ children }) => {
 
             // Extract the files from the response
             const files = filesData.files;
+            setLogFiles(filesData.files);
 
             // Second API call to get the response
             const responseData = await callAPI("/api/get_response", {
@@ -90,7 +91,6 @@ const SearchState = ({ children }) => {
             setLogFiles(responseData.files);
             setResults(responseData.response);
             setreferenced_code(responseData.referenced_code);
-            setIsLoading(false);
           }
         } catch (error) {
           setIsLoading(false);

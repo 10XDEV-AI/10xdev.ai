@@ -50,7 +50,7 @@ export const Chat = () => {
     console.log("searching for");
     console.log(input);
     setIsLoading(true);
-    setLogFiles()
+    setLogFiles([])
     setSideContainerOpen(false);
     setShowLeftWelcome(false)
     setChatMessages((prevState) => [
@@ -134,7 +134,7 @@ export const Chat = () => {
       return updatedMessages;
     });
     setIsLoading(true);
-    setLogFiles();
+    setLogFiles([]);
       try {
             const filesData = await callAPI("/api/search_files", {
               method: "POST",
