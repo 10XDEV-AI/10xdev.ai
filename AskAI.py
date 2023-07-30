@@ -276,10 +276,10 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             else:
                 prompt = "User Prompt: "+prompt
                 system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. Your task is to help the user with the 'User prompt'."
-    else:
+    '''else:
         user_logger.log("Referring Files : " + str(files))
 
-    '''if len(files)>=7:
+    if len(files)>=7:
         user_logger.log("I think, I need more information... ¯\_(ツ)_/¯...")
         files = []
         final_prompt = open("../user/"+email+"/AIFiles/"+path.split('/')[-1]+"_full_project_info.txt").read()

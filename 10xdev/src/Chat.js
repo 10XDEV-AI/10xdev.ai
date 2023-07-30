@@ -120,7 +120,7 @@ export const Chat = () => {
     setShowLeftWelcome(false);
     setChatMessages((prevState) => {
       const updatedMessages = [...prevState];
-      updatedMessages[chatMessages.length] = {
+      updatedMessages[index] = {
         prompt: {
           searchTerm: input,
         },
