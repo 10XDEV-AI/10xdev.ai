@@ -26,6 +26,7 @@ def create_project_summary(repo_name, email):
     project_summary = AskGPT(email=email, prompt=prompt)
 
     # Save the project summary to a file
+
     summary_file_path = "../user/" + email + "/AIFiles/" + repo_name.split('/')[-1] + "_full_project_info.txt"
 
     with open(summary_file_path, 'w') as file:
