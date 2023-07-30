@@ -83,7 +83,7 @@ const SearchState = ({ children }) => {
               body: JSON.stringify({
                 prompt: searchTerm,
                 chatMessages: [], // Provide chatMessages if needed
-                files: logFiles, // Pass the obtained files from the first API call
+                files: filesData.files, // Pass the obtained files from the first API call
               }),
             });
 
