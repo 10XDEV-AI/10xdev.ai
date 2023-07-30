@@ -177,7 +177,6 @@ def Ask_AI(prompt, userlogger, email, chatmessages, scope):
 
     referenced_code = get_referenced_code(path, files)
     # print("Referenced code: ", referenced_code)
-    userlogger.log("Analyzing files: " + str(files))
     print("Analyzing files: " + str(files))
     final_prompt = ""
 
