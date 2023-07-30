@@ -87,8 +87,8 @@ const SearchState = ({ children }) => {
                 files: filesData.files, // Pass the obtained files from the first API call
               }),
             });
-
             setLogFiles(responseData.files);
+            setIsLoading(false);
             setResults(responseData.response);
             setreferenced_code(responseData.referenced_code);
           }
