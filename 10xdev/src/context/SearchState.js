@@ -9,7 +9,7 @@ const SearchState = ({ children }) => {
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
-  const [files, setFiles] = useState([]);
+  const [logFiles, setLogFiles] = useState([]);
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
@@ -63,7 +63,7 @@ const SearchState = ({ children }) => {
           if (code && searchTerm.length > 0) {
             setIsLoading(true);
             console.log("is loading set true by context provider", isLoading);
-            setFiles("");
+
             setResults("");
             // First API call to get the files
             const filesData = await callAPI("/api/search_files", {
@@ -83,11 +83,11 @@ const SearchState = ({ children }) => {
               body: JSON.stringify({
                 prompt: searchTerm,
                 chatMessages: [], // Provide chatMessages if needed
-                files: files, // Pass the obtained files from the first API call
+                files: logFiles, // Pass the obtained files from the first API call
               }),
             });
 
-            setFiles(responseData.files);
+            setLogFiles(responseData.files);
             setResults(responseData.response);
             setreferenced_code(responseData.referenced_code);
             setIsLoading(false);
@@ -105,14 +105,11 @@ const SearchState = ({ children }) => {
   return (
     <SearchContext.Provider
       value={{
-        searchTerm,
-        setSearchTerm,
-        isLoading,
-        setIsLoading,
-        isLoadingProjectInfo,
-        setIsLoadingProjectInfo,
+        searchTerm, setSearchTerm,
+        isLoading, setIsLoading,
+        isLoadingProjectInfo, setIsLoadingProjectInfo,
         results,
-        files,setFiles,
+        logFiles, setLogFiles,
         referenced_code,
         userPic,
         path, setPath,

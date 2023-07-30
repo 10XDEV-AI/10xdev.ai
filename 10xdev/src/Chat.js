@@ -15,7 +15,7 @@ export const Chat = () => {
     isLoading,
     results,
     setIsLoading,
-    files, setFiles,
+    logFiles, setLogFiles,
     referenced_code,
     checkedFiles,setCheckedFiles,
     sideContainerOpen, setSideContainerOpen,
@@ -50,8 +50,22 @@ export const Chat = () => {
     console.log("searching for");
     console.log(input);
     setIsLoading(true);
+    setLogFiles()
     setSideContainerOpen(false);
     setShowLeftWelcome(false)
+    setChatMessages((prevState) => [
+            ...prevState,
+            {
+              prompt: {
+                searchTerm: input,
+              },
+              response: {
+                searchResults: null,
+                files: null,
+                referenced_code: null,
+              },
+            },
+          ]);
     try {
       const filesData = await callAPI("/api/search_files", {
         method: "POST",
@@ -61,7 +75,9 @@ export const Chat = () => {
           prompt: input,
         }),
       });
-      setFiles(filesData.files);
+      console.log("Received filesData:");
+      console.log(filesData);
+      setLogFiles(filesData.files);
 
       // Second API call to get the results
       const data = await callAPI("/api/get_response", {
@@ -69,25 +85,26 @@ export const Chat = () => {
         body: JSON.stringify({
           prompt: input,
           chatMessages: chatMessages,
-          files: files,
+          files: filesData.files,
         }),
       });
       console.log(data);
       const results = JSON.stringify(data.response);
       const code = data.referenced_code;
-      setChatMessages((prevState) => [
-        ...prevState,
-        {
-          prompt: {
-            searchTerm: input,
-          },
-          response: {
-            searchResults: data.response,
-            files: data.files,
-            referenced_code: data.referenced_code,
-          },
-        },
-      ]);
+      setChatMessages((prevState) => {
+                          const updatedMessages = [...prevState];
+                          updatedMessages[chatMessages.length] = {
+                            prompt: {
+                              searchTerm: input,
+                            },
+                            response: {
+                              searchResults: data.response,
+                              files: data.files,
+                              referenced_code: data.referenced_code,
+                            },
+                          };
+                          return updatedMessages;
+                        });
     } catch (error) {
       console.error("Error during API call:", error);
     }
@@ -117,38 +134,49 @@ export const Chat = () => {
       return updatedMessages;
     });
     setIsLoading(true);
-    try {
-      const data = await callAPI(`/api/data`, {
-        method: "POST",
-        body: JSON.stringify({
-          chatMessages: chatMessages.slice(0, index),
-          checkedFiles: checkedFiles,
-          prompt: input,
-        }),
-      });
-      console.log(data);
-      const results = JSON.stringify(data.response);
-      const files = data.files;
-      const code = data.referenced_code;
-      setChatMessages((prevState) => {
-        const updatedMessages = [...prevState];
-        updatedMessages[index] = {
-          prompt: {
-            searchTerm: input,
-          },
-          response: {
-            searchResults: data.response,
-            files: data.files,
-            referenced_code: data.referenced_code,
-          },
-        };
-        return updatedMessages;
-      });
-      console.log("Updated chat messages");
-      console.log(chatMessages);
-    } catch (error) {
-      console.error("Error during API call:", error);
-    }
+    setLogFiles();
+      try {
+            const filesData = await callAPI("/api/search_files", {
+              method: "POST",
+              body: JSON.stringify({
+                chatMessages: chatMessages.slice(0, index),
+                checkedFiles: checkedFiles,
+                prompt: input,
+              }),
+            });
+            console.log("Received filesData:");
+            console.log(filesData);
+            setLogFiles(filesData.files);
+
+            // Second API call to get the results
+            const data = await callAPI("/api/get_response", {
+              method: "POST",
+              body: JSON.stringify({
+                prompt: input,
+                chatMessages: chatMessages,
+                files: filesData.files,
+              }),
+            });
+            console.log(data);
+            const results = JSON.stringify(data.response);
+            const code = data.referenced_code;
+            setChatMessages((prevState) => {
+                    const updatedMessages = [...prevState];
+                    updatedMessages[index] = {
+                      prompt: {
+                        searchTerm: input,
+                      },
+                      response: {
+                        searchResults: data.response,
+                        files: data.files,
+                        referenced_code: data.referenced_code,
+                      },
+                    };
+                    return updatedMessages;
+                  });
+          } catch (error) {
+            console.error("Error during API call:", error);
+          }
     setIsLoading(false);
   };
 
@@ -161,12 +189,12 @@ export const Chat = () => {
         },
         response: {
           searchResults: results,
-          files: files,
+          files: logFiles,
           referenced_code: referenced_code,
         },
       },
     ]);
-  }, [results, searchTerm, files, referenced_code]);
+  }, [results, searchTerm, referenced_code]);
 
   useEffect(() => {
     if (isLoading && loadingRingRef.current) {
@@ -237,7 +265,7 @@ export const Chat = () => {
                           )}
                           {index === chatMessages.length - 1 && isLoading && (
                             <div className="my-10 p-10">
-                              <LoadingRing files={files}/>
+                              <LoadingRing/>
                             </div>
                           )}
                         </div>
