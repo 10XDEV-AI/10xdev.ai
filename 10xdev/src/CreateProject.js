@@ -6,6 +6,7 @@ function CreateProject() {
   const [prompt, setPrompt] = useState("");
   const [clarifyingQuestions, setClarifyingQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
+  const [userClarifyingAnswers, setUserClarifyingAnswers] = useState([]);
 
   const handlePromptChange = (event) => {
     setPrompt(event.target.value);
@@ -29,6 +30,22 @@ function CreateProject() {
     const answers = [...userAnswers];
     answers[index] = event.target.value;
     setUserAnswers(answers);
+  };
+
+  const handleClarifyingQuestionsSubmit = async () => {
+    try {
+      const response = await callAPI("/api/create_project_with_clarity", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt,
+          clarifyingQuestions,
+          userClarifyingAnswers,
+        }),
+      });
+      // Handle the response as needed
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -58,6 +75,9 @@ function CreateProject() {
               />
             </div>
           ))}
+          <button type="submit" onClick={handleClarifyingQuestionsSubmit}>
+            Submit Clarifying Answers
+          </button>
         </div>
       )}
     </div>

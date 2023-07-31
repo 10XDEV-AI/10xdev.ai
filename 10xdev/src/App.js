@@ -12,7 +12,7 @@ import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
 import LeftWelcome from "./LeftWelcome";
 import User from "./User";
-import Wait from "./Wait";
+import CreateProject from "./CreateProject";
 
 function App () {
   
@@ -32,12 +32,8 @@ function App () {
                 <Route path="/logs" element={<LoadingRing/>} />
                 <Route path="/branch" element={<Branch/>} />
                 <Route path="/test" element={
-                <div className="h-screen">
-                <LoadingRing/>
-                </div>
-
+                <CreateProject/>
                 } />
-                <Route path="/wait" element={<Wait/>} />
             </Routes>
         </Router>
     </SearchState>
