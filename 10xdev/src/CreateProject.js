@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { callAPI } from "./api";
+
 
 function CreateProject() {
   const [prompt, setPrompt] = useState("");
@@ -9,36 +11,24 @@ function CreateProject() {
     setPrompt(event.target.value);
   };
 
-  const AskGPT(prompt)
+  const handleSubmit = async (event) => {
+   event.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Call the AskGPT function with the prompt
-    // and handle the response
-    AskGPT(prompt)
-      .then((response) => {
-        // Extract the clarifying questions from the response
-        const questions = extractClarifyingQuestions(response);
-        setClarifyingQuestions(questions);
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-  };
+   try {
+     const response = await callAPI("/api/new_project", {
+       method: "GET",
+       body: JSON.stringify({ prompt }),
+     });
+     setClarifyingQuestions(response);
+   } catch (error) {
+     console.error(error);
+   }
+ };
 
   const handleAnswerChange = (event, index) => {
     const answers = [...userAnswers];
     answers[index] = event.target.value;
     setUserAnswers(answers);
-  };
-
-  const extractClarifyingQuestions = (response) => {
-    const aiMessages = response.messages.filter(
-      (message) => message.role === "ai"
-    );
-    const questions = aiMessages.map((message) => message.content);
-    return questions;
   };
 
   return (
