@@ -79,10 +79,13 @@ function CreateProject() {
                    <div class="px-4 py-2 bg-white rounded-t-lg ">
                        <label for="comment" class="sr-only">Your comment</label>
                        <textarea
-                        onChange={() => handleAnswerChange()}
-                        id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
-                        placeholder="Add clarifying answers here" required>
-                       </textarea>
+                         onChange={handleAnswerChange} // Pass the function reference directly
+                         id="comment"
+                         rows="4"
+                         class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0"
+                         placeholder="Add clarifying answers here"
+                         required
+                       ></textarea>
                    </div>
                    <div class="flex items-center justify-between px-3 py-2 border-t ">
                        <button  onClick={handleClarifyingQuestionsSubmit} type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
