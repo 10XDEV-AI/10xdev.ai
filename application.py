@@ -11,6 +11,8 @@ from utilities.clone_repo import get_clones, get_branches, select_branch, get_pr
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
+from utilities.create_project import new_project, create_project_with_clarity
+
 from syncAI import syncAI
 import os, threading
 import requests
@@ -131,6 +133,7 @@ def get_data():
         }
     )
 
+
 @application.route("/api/search_files", methods=["POST"])
 def search_files_api():
     email = getattr(g, "email", None)
@@ -141,6 +144,7 @@ def search_files_api():
     response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)
     return jsonify(response)
 
+
 @application.route("/api/get_response", methods=["POST"])
 def get_response_api():
     email = getattr(g, "email", None)
@@ -150,6 +154,7 @@ def get_response_api():
     referenced_files = request.json.get("files")
     response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
     return jsonify(response)
+
 
 @application.route("/api/Ignore", methods=["GET"])
 def get_AIIgnore():
@@ -257,7 +262,6 @@ def setRates():
     message, code = set_rates(request.args.get("rates"), email)
     return jsonify({"message": message}), code
 
-from flask import request, jsonify, g
 
 @application.route("/api/clone", methods=["GET"])
 def getClones():
@@ -302,11 +306,11 @@ def login():
     try:
         if not os.path.exists("../user/" + email):
             os.makedirs("../user/" + email)
-        if not  os.path.exists("../user/" + email+"/AIFiles"):
+        if not os.path.exists("../user/" + email + "/AIFiles"):
             os.makedirs("../user/" + email + "/AIFiles")
-        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
+        if not os.path.exists("../user/" + email + "/AIFiles/info.json"):
             os.system("cp info.json " + "../user/" + email + "/AIFiles")
-        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
+        if not os.path.exists("../user/" + email + "/AIFiles/info.json"):
             os.system("cp AI.log " + "../user/" + email + "/AIFiles")
         return jsonify({"loggedIn": True, "message": "Logged In"}), 200
     except:
@@ -321,7 +325,7 @@ def github_api():
         client_secret = "613f61d82e9dae784ee76bb85dbf11eaf24d2766"
     elif client_id == "7de77ae768aa62b79e09":
         client_secret = "bb481efea8c764dd02af801d783ff61f3954b43d"
-    elif  client_id == "40acda1a937125d9193b":
+    elif client_id == "40acda1a937125d9193b":
         client_secret = "d5f903e15c64c6ffb7fbf011fac15045cc2f0758"
     else:
         return jsonify({"error": "Invalid client_id"}), 400
@@ -332,6 +336,7 @@ def github_api():
         headers={'Accept': 'application/json'}
     )
     return jsonify(response.json())
+
 
 @application.route("/api/github/getuser", methods=["GET"])
 def get_user():
@@ -349,24 +354,36 @@ def get_user():
         return jsonify({'error': 'Failed to retrieve user data'})
 
 
-@application.route("/api/create_project_with_clarity", methods=["GET"])
-def get_questions():
+@application.route("/api/create_project_with_clarity", methods=["POST"])
+def create_project_with_clarity():
     email = getattr(g, "email", None)
     data = request.get_json()
     project_prompt = data["prompt"]
-    return  get_questions(project_prompt)
+    return jsonify(create_project_with_clarity(email, project_prompt))
+
+
+@application.route("/api/new_project", methods=["POST"])
+def get_project_questions():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    project_prompt = data["prompt"]
+    return jsonify(new_project(email, project_prompt))
+
+
 @application.route("/api/github/getallrepos", methods=["GET"])
 def get_alluserrepos():
     access_token = request.args.get('access_token')
     headers = {'Authorization': f'token {access_token}'}
-    params={'visibility': 'all','per_page': 1000}
+    params = {'visibility': 'all', 'per_page': 1000}
     response = requests.get('https://api.github.com/user/repos', headers=headers, params=params)
-    
+
     if response.status_code == 200:
         try:
             user_data = response.json()
             return jsonify(user_data)
         except ValueError:
             return jsonify({'error': 'Failed to parse JSON response'})
+
+
 if __name__ == "__main__":
     application.run(debug=True, port=8000)

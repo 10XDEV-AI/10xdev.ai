@@ -13,13 +13,17 @@ function CreateProject() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const body = JSON.stringify({ prompt: prompt });
 
     try {
+      // Make sure the body is a valid JSON string
+      console.log(body);
+
       const response = await callAPI("/api/new_project", {
         method: "POST",
-        body: JSON.stringify({ prompt }),
+        body: body,
       });
-      setClarifyingQuestions(response);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
