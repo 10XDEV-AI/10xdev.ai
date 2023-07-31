@@ -348,6 +348,13 @@ def get_user():
     else:
         return jsonify({'error': 'Failed to retrieve user data'})
 
+
+@application.route("/api/create_project_with_clarity", methods=["GET"])
+def get_questions():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    project_prompt = data["prompt"]
+    return  get_questions(project_prompt)
 @application.route("/api/github/getallrepos", methods=["GET"])
 def get_alluserrepos():
     access_token = request.args.get('access_token')
