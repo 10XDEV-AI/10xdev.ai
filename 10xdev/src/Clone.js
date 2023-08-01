@@ -83,6 +83,19 @@ const Clone = () => {
       `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo`
     );
   };
+  const [filteredRepos, setFilteredRepos] = useState([]);
+
+  const SearchRepos = (searchValue) => {
+    if (!searchValue) {
+      setFilteredRepos(repos);
+    } else {
+      const filteredRepos = repos.filter((repo) => {
+        return repo.full_name.toLowerCase().includes(searchValue.toLowerCase());
+      });
+      setFilteredRepos(filteredRepos);
+    }
+  };
+    
 
   useEffect(() => {
     cookies.remove("accesstoken");
@@ -116,6 +129,7 @@ const Clone = () => {
       });
       console.log(response);
       setRepos(response);
+      setFilteredRepos(response);
       return response;
     } catch (error) {
       console.error(error);
@@ -149,11 +163,11 @@ const Clone = () => {
             <>
                 <Navbar />
                 <div className="h-screen" >
-                     <div class="p-4 flex">
+                     <div className="p-4 flex">
                        <button className="bg-blue-900 text-white px-4 btn-font rounded-md hover:bg-blue-700" onClick={() => navigate(`/repos`)}>
                          Back
                        </button>
-                         <h1 class="text-4xl font-bold mx-auto">Setup Repository</h1>
+                         <h1 className="text-4xl font-bold mx-auto">Setup Repository</h1>
                        <div className="">
                          <button className="bg-white text-white px-4" onClick={() => navigate(`/repos`)}>
                                 Back
@@ -241,30 +255,61 @@ const Clone = () => {
                         {repos.length > 0 ? (
                           <>
                           <div className="flex">
+                          
+                          <form className="flex mx-[28%] w-[80%]">
+        <div className="relative w-full m-3">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          {/* Step 3: Update the width and height of the input */}
+          <input
+            type="search"
+            id="default-search"
+            onChange={(e) => SearchRepos(e.target.value)}
+            className="block w-full py-2 pl-10 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search Repository"
+            required
+          />
+        </div>
+      </form>
+
                     </div>
                           <div className=" bg-white border-dashed border-gray-300 border-2 rounded-lg mx-[30%]" data-aos="fade-right" data-aos-duration="500">
-                            {repos.map((repo) =>(
-                                  <>
-                                  <ul key={repo.id} className="m-2 flex justify-center">
-                                    <li className="w-full">
-                                      <button
-                                        className="w-full flex text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
-                                        onClick={() => {
-                                          console.log(repo);
-                                          console.log("User wants to clone " + repo.url);
-                                          setPath(repo.name);
-                                          handleClonePrivate(repo.url);
-                                          setRepos([]);
-                                        }}
-                                      >
-                                      <BsGithub className="mr-3 my-1" />
-                                        {repo.full_name}
-                                      </button>
-                                    </li>
-                                  </ul>
-                                  </>
-                                )
-                            )}
+                          {filteredRepos.map((repo) => (
+              <>
+                <ul key={repo.id} className="m-2 flex justify-center">
+                  <li className="w-full">
+                    <button
+                      className="w-full flex text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
+                      onClick={() => {
+                        console.log(repo);
+                        console.log("User wants to clone " + repo.url);
+                        setPath(repo.name);
+                        handleClonePrivate(repo.url);
+                        setRepos([]);
+                      }}
+                    >
+                      <BsGithub className="mr-3 my-1" />
+                      {repo.full_name}
+                    </button>
+                  </li>
+                </ul>
+              </>
+            ))}
                           </div>
                           </>
                         ) : null}
