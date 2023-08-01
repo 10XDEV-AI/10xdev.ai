@@ -108,7 +108,7 @@ const SearchState = ({ children }) => {
         searchTerm, setSearchTerm,
         isLoading, setIsLoading,
         isLoadingProjectInfo, setIsLoadingProjectInfo,
-        results,
+        results, setResults,
         logFiles, setLogFiles,
         referenced_code,
         userPic,

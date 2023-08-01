@@ -114,7 +114,7 @@ export const Welcome = () => {
   const search = (e) => {
     e.preventDefault();
     setSearchTerm(input);
-    navigate("/chat"); // add this line to redirect to /chat
+    navigate("/chat");
   };
 
   const handleInputChange = (e) => {

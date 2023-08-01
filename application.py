@@ -11,7 +11,7 @@ from utilities.clone_repo import get_clones, get_branches, select_branch, get_pr
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
-from utilities.create_project import new_project, create_project_with_clarity
+from utilities.create_project import new_project, create_project_with_clarity, create_project_with_spec
 
 from syncAI import syncAI
 import os, threading
@@ -362,6 +362,13 @@ def cpwc():
     questions = data["clarifyingQuestions"]
     answers = data["userClarifyingAnswers"]
     return jsonify(create_project_with_clarity(email, project_prompt, questions, answers ))
+
+
+@application.route("/api/create_project_with_spec", methods=["POST"])
+def cpws():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    return jsonify(create_project_with_spec(email,  data["spec"]))
 
 
 @application.route("/api/new_project", methods=["POST"])

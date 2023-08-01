@@ -13,6 +13,7 @@ import LandingPage from "./landing page/landing";
 import LeftWelcome from "./LeftWelcome";
 import User from "./User";
 import CreateProject from "./CreateProject";
+import Create from "./Create";
 
 function App () {
   
@@ -30,6 +31,7 @@ function App () {
                 <Route path="/apis" element={<Apis/>} />
                 <Route path="/clone" element={<Clone/>} />
                 <Route path="/logs" element={<LoadingRing/>} />
+                <Route path="/create" element={<Create/>} />
                 <Route path="/branch" element={<Branch/>} />
                 <Route path="/test" element={
                 <CreateProject/>
