@@ -114,7 +114,6 @@ export const Chat = () => {
   };
 
   const handleReprompt = async (input, index) => {
-    console.log("searching for");
     console.log(input);
     setSideContainerOpen(false);
     setShowLeftWelcome(false);

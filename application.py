@@ -355,11 +355,13 @@ def get_user():
 
 
 @application.route("/api/create_project_with_clarity", methods=["POST"])
-def create_project_with_clarity():
+def cpwc():
     email = getattr(g, "email", None)
     data = request.get_json()
     project_prompt = data["prompt"]
-    return jsonify(create_project_with_clarity(email, project_prompt))
+    questions = data["clarifyingQuestions"]
+    answers = data["userClarifyingAnswers"]
+    return jsonify(create_project_with_clarity(email, project_prompt, questions, answers ))
 
 
 @application.route("/api/new_project", methods=["POST"])
