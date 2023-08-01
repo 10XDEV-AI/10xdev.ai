@@ -14,10 +14,9 @@ import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
 import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
-  const { isLoading, setIsLoading, path } = useContext(SearchContext);
+  const { isLoading, setIsLoading, path,setFilesToIgnore,filesToIgnore } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
-  const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
@@ -25,6 +24,7 @@ const Train = () => {
   const navigate = useNavigate();
   const [isLoadingTree, setIsLoadingTree] = useState(true);
   const [showAddButton, setShowAddButton] = useState([]);
+
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -98,8 +98,6 @@ const Train = () => {
       console.log(error);
     }
   };
-
-
 
   useEffect(() => {
     setIsLoadingTree(true);
