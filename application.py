@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask, jsonify, request, render_template, session, g
+from flask import Flask, jsonify, request, render_template, session, g, send_file
 from AskAI import Ask_AI, Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
@@ -11,8 +11,7 @@ from utilities.clone_repo import get_clones, get_branches, select_branch, get_pr
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
-from utilities.create_project import new_project, create_project_with_clarity, create_project_with_spec
-
+from utilities.create_project import new_project, create_project_with_clarity, create_project_with_spec, to_zip
 from syncAI import syncAI
 import os, threading
 import requests
@@ -355,7 +354,7 @@ def get_user():
 
 
 @application.route("/api/create_project_with_clarity", methods=["POST"])
-def cpwc():
+def cpwcl():
     email = getattr(g, "email", None)
     data = request.get_json()
     project_prompt = data["prompt"]
@@ -377,6 +376,14 @@ def get_project_questions():
     data = request.get_json()
     project_prompt = data["prompt"]
     return jsonify(new_project(email, project_prompt))
+
+@application.route("/api/create_project_with_code", methods=["POST"])
+def cpwc():
+    data = request.get_json()
+    results = data["results"]
+    to_zip(results)
+    ZIP_FILE_PATH = "files.zip"
+    return send_file(ZIP_FILE_PATH, as_attachment=True)
 
 
 @application.route("/api/github/getallrepos", methods=["GET"])

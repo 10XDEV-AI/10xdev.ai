@@ -91,13 +91,19 @@ export const Create = () => {
     }
   }, [isLoading]);
 
+    const handleDownload = async () => {
+
+
+
+  };
+
   return (
     <>
         <div className="flex">
             <div className="w-full">
               <Navbar/>
-
-              <h1 class="px-[5%] py-5 text-2xl font-bold bg-slate-50">Your project will be created based on below instructions</h1>
+              <h1 class="mx-[15%] mt-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 ">Your project will be created based on below instructions</h1>
+               <p class="mx-[15%] mb-4 text-lg font-normal text-gray-500 lg:text-xl ">You can edit these instructions to get better results</p>
               <div className="w-full">
               {chatMessages.map((chatMessage, index) => (
                 <div key={index}>
@@ -123,6 +129,16 @@ export const Create = () => {
                 </div>
                 ))}
                 <div className="" ref={loadingRingRef}></div>
+                <div className="px-[15%] p-10">
+                    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 ">Your Project is ready!</h1>
+                    <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl ">Add this Project to Github first and then to 10XDEV.AI to add more features</p>
+                    <a onClick={handleDownload} class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                        Download Zip File
+                        <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                      </svg>
+                    </a>
+                </div>
               </div>
             </div>
             </div>

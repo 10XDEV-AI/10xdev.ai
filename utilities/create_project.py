@@ -57,3 +57,59 @@ def new_project(email, user_prompt):
     system_message = "Based on the give project description ask clarifying questions to the user, so that you can geenrate code for that project"
     response = AskGPT(email, system_message, user_prompt)
     return response
+
+import re
+
+def parse_chat(chat):
+    regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
+    matches = re.finditer(regex, chat, re.DOTALL)
+
+    files = []
+    for match in matches:
+        # Strip the filename of any non-allowed characters and convert / to \
+        path = re.sub(r'[\:<>"|?*]', "", match.group(1))
+
+        # Remove leading and trailing brackets
+        path = re.sub(r"^\[(.*)\]$", r"\1", path)
+
+        # Remove leading and trailing backticks
+        path = re.sub(r"^`(.*)`$", r"\1", path)
+
+        # Remove trailing ]
+        path = re.sub(r"[\]\:]$", "", path)
+
+        # Get the code
+        code = match.group(2)
+
+        # Add the file to the list
+        files.append((path, code))
+
+    # Get all the text before the first ``` block
+    readme = chat.split("```")[0]
+    files.append(("README.md", readme))
+
+    # Return the files
+    return files
+
+
+def to_files(chat, workspace):
+    workspace["all_output.txt"] = chat
+
+    files = parse_chat(chat)
+    for file_name, file_content in files:
+        workspace[file_name] = file_content
+
+
+import zipfile
+
+def to_zip(chat):
+    # Convert chat to files
+    workspace = {}
+    to_files(chat, workspace)
+
+    # Create a new zip folder
+    with zipfile.ZipFile("../files.zip", "w") as zipf:
+        # Iterate through the files in the workspace
+        for filename, content in workspace.items():
+            # Add each file to the zip folder
+            zipf.writestr(filename, content)
