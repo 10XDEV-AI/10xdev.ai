@@ -47,8 +47,6 @@ def list_repos(email):
         for i in range(len(directories)):
             if directories[i]['Selected'] == True:
                 directories.insert(0, directories.pop(i))
-
-
     return directories
 
 def delete_repo(Full_path,email):
@@ -69,6 +67,14 @@ def delete_repo(Full_path,email):
     if os.path.exists(filename):
         os.remove(filename)
 
+    filename = "../user/"+email+"/AIFiles/"+repo_path.split('/')[-1]+"_full_project_info.txt"
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    filename = "../user/"+email+"/AIFiles/"+repo_path.split('/')[-1]+"_file_data.csv"
+    if os.path.exists(filename):
+        os.remove(filename)
+
     with open("../user/" + email+'/AIFiles/info.json', 'r+') as f:
         info = json.load(f)
         f.seek(0)
@@ -85,6 +91,8 @@ def delete_repo(Full_path,email):
         f.truncate()
         json.dump(info, f)
 
-
+    trained_repos = [repo for repo in list_repos(email) if repo["Trained"]]
+    if trained_repos:
+        select_repo(trained_repos[0]["Directory"], email)
 
     return {"message": 'f"{repo_name} has been deleted.'}, 200

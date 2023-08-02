@@ -9,18 +9,25 @@ const SearchState = ({ children }) => {
   const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState(true);
   const [results, setResults] = useState('');
   const [referenced_code, setreferenced_code] = useState('');
-  const [files, setFiles] = useState('');
+  const [logFiles, setLogFiles] = useState([]);
   const [path,setPath] = useState('');
   const emojis = ["🧑‍🦱", "🧑‍🦰", "🧑‍🦳", "🧑‍🎨", "🧑‍💼", "🧑‍🚀", "🧑‍🔬", "🧑‍🎤", "🧑‍🚒", "🧑‍🏫", "🧑‍🔧", "🧑‍🍳", "🧑‍🎓", "🧑‍💻", "🧑‍🚀", "🧑‍🌾", "🧑‍🏭", "🧑‍🎨", "🥷🏻"];
   const defaultUserPic = getRandomEmoji(emojis);
   const [showSync, setShowSync] = useState(false);
   const userPic = defaultUserPic;
   const [showRepos, setShowRepos] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [checkedFiles, setCheckedFiles] = useState([]);
   const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
   const [commitHash, setCommitHash] = useState("");
+  const [repository, setRepository] = useState('');
+  const [branch, setBranch] = useState('');
+  const [treeData, setTreeData] = useState([]);
+  const [sideContainerOpen, setSideContainerOpen] = useState(false);
+  const [filesearchTerm, setFileSearchTerm] = useState("");
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const [expandedNodes, setExpandedNodes] = useState([]);
+  const [repos, setRepos] = useState([]);
 
 
   const handleFileCheck = (file) => {
@@ -38,7 +45,6 @@ const SearchState = ({ children }) => {
     }
   };
 
-  const [repos, setRepos] = useState([]);
 
   function getRandomEmoji(emojiList) {
       // Generate a random index within the range of the emojiList array
@@ -50,8 +56,6 @@ const SearchState = ({ children }) => {
     console.log("current user",currentuser);
   }, []);
 
-
-
     useEffect(() => {
       const getResults = async () => {
         try {
@@ -61,6 +65,7 @@ const SearchState = ({ children }) => {
             setIsLoading(true);
             console.log("is loading set true by context provider", isLoading);
 
+            setResults("");
             // First API call to get the files
             const filesData = await callAPI("/api/search_files", {
               method: "POST",
@@ -72,6 +77,7 @@ const SearchState = ({ children }) => {
 
             // Extract the files from the response
             const files = filesData.files;
+            setLogFiles(filesData.files);
 
             // Second API call to get the response
             const responseData = await callAPI("/api/get_response", {
@@ -79,14 +85,13 @@ const SearchState = ({ children }) => {
               body: JSON.stringify({
                 prompt: searchTerm,
                 chatMessages: [], // Provide chatMessages if needed
-                files: files, // Pass the obtained files from the first API call
+                files: filesData.files, // Pass the obtained files from the first API call
               }),
             });
-
-            setFiles(files);
+            setLogFiles(responseData.files);
+            setIsLoading(false);
             setResults(responseData.response);
             setreferenced_code(responseData.referenced_code);
-            setIsLoading(false);
           }
         } catch (error) {
           setIsLoading(false);
@@ -95,20 +100,17 @@ const SearchState = ({ children }) => {
       };
 
       getResults();
-    }, [searchTerm, checkedFiles]);
+    }, [searchTerm]);
 
 
   return (
     <SearchContext.Provider
       value={{
-        searchTerm,
-        setSearchTerm,
-        isLoading,
-        setIsLoading,
-        isLoadingProjectInfo,
-        setIsLoadingProjectInfo,
-        results,
-        files,
+        searchTerm, setSearchTerm,
+        isLoading, setIsLoading,
+        isLoadingProjectInfo, setIsLoadingProjectInfo,
+        results, setResults,
+        logFiles, setLogFiles,
         referenced_code,
         userPic,
         path, setPath,
@@ -116,8 +118,16 @@ const SearchState = ({ children }) => {
         currentuser, setCurrentUser,
         showRepos, setShowRepos,
         checkedFiles, handleFileCheck,
+        setCheckedFiles,
         repos, setRepos,
-        commitHash,setCommitHash
+        commitHash,setCommitHash,
+        repository, setRepository,
+        branch, setBranch,
+        sideContainerOpen, setSideContainerOpen,
+        filesearchTerm, setFileSearchTerm,
+        treeData, setTreeData,
+        showCheckboxes, setShowCheckboxes,
+        filesearchTerm, setFileSearchTerm
       }}
     >
       {children}

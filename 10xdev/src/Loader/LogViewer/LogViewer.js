@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import './LogViewer.css';
 import { callAPI } from '../../api';
 import { useContext } from 'react';
 import SearchContext from '../../context/SearchContext';
@@ -62,7 +61,7 @@ function LogViewer(props) {
   };
 
   return (
-    <div className="logs">
+    <div className="w-full">
       <div className="log-col-2">
         <pre>{logs}</pre>
       </div>

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
+import SearchContext from "../context/SearchContext";
 
 const SearchBar = ({ onSearch }) => {
   const [searchInput, setSearchInput] = useState('');
+  const {sideContainerOpen, setSideContainerOpen}  = useContext(SearchContext);
 
   const handleClick = () => {
     onSearch(searchInput);
     setSearchInput('');
+    setSideContainerOpen(false)
   };
 
   const newTab = async () => {

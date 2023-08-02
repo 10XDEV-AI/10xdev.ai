@@ -3,7 +3,7 @@
     height: 100%;
     width: 0;
     position: fixed; /* Stay in place */
-    z-index: 9999;
+    z-index: 10;
     top: 0;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; 

@@ -9,27 +9,16 @@ import Typewriter from "typewriter-effect";
 import LoadingRing from "./Loader/Loader";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
-import {
-  FaStar,
-  FaQuestion,
-  FaGamepad,
-  FaBug,
-  FaFlask,
-  FaBook,
-  FaMagic,
-} from "react-icons/fa";
+import emoji from 'react-easy-emoji'
 
 export const Welcome = () => {
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
 
-  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash } = useContext(SearchContext);
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
   const [filesearchTerm, setFileSearchTerm] = useState("");
   const [isTreeLoading, setIsTreeLoading] = useState(true);
-  const [treeData, setTreeData] = useState([]);
-  const [repository, setRepository] = useState('');
-  const [branch, setBranch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +38,7 @@ export const Welcome = () => {
             document.title,
             window.location.pathname
           );
+          setIsLoading(false);
         } catch (error) {
         }
       }
@@ -56,6 +46,30 @@ export const Welcome = () => {
 
     fetchData();
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cognitoCode = Cookies.get("cognitoCode");
+      if (cognitoCode) {
+        setIsLoadingProjectInfo(true);
+        const data = await callAPI('/api/projectInfo');
+        if (data.repo_name === 'No Repos selected') {
+          localStorage.setItem('currentuser', "new");
+          setCurrentUser("new");
+        } else {
+          setCurrentUser("old");
+          console.log("old user");
+          localStorage.setItem('currentuser', "old");
+          getTreeData();
+          setRepository(data.repo_name);
+          setCommitHash(data.latest_commit_hash);
+          setBranch(data.branch_name);
+        }
+        setIsLoadingProjectInfo(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
@@ -88,7 +102,7 @@ export const Welcome = () => {
   const getTreeData = async () => {
     try {
       if(currentRepo==='No Repos selected') return;
-      const data = await callAPI(`/api/FilesToAnalyzedata?path=`);
+      const data = await callAPI(`/api/Treedata?path=`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
       setIsTreeLoading(false);
@@ -96,35 +110,11 @@ export const Welcome = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cognitoCode = Cookies.get("cognitoCode");
-      if (cognitoCode) {
-        setIsLoadingProjectInfo(true);
-        const data = await callAPI('/api/projectInfo');
-        if (data.repo_name === 'No Repos selected') {
-          localStorage.setItem('currentuser', "new");
-          setCurrentUser("new");
-        } else {
-          setCurrentUser("old");
-          console.log("old user");
-          localStorage.setItem('currentuser', "old");
-          getTreeData();
-          setRepository(data.repo_name);
-          setCommitHash(data.latest_commit_hash);
-          setBranch(data.branch_name);
-        }
-        setIsLoadingProjectInfo(false);
-      }
-    };
-    fetchData();
-  }, []);
-
+  
   const search = (e) => {
     e.preventDefault();
     setSearchTerm(input);
-    navigate("/chat"); // add this line to redirect to /chat
+    navigate("/chat");
   };
 
   const handleInputChange = (e) => {
@@ -167,7 +157,9 @@ export const Welcome = () => {
 const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   if (isLoading) {
   return (
-  <LoadingRing  className="h-screen"/>
+  <div  className="h-screen">
+    <LoadingRing dontLog="true"/>
+  </div>
   )}
   else{
   return (<>
@@ -175,7 +167,6 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
       <>
         <div className="flex ">
       <div  className="w-1/2">
-      {/*   repository,branch,isTreeLoading,treeData,filesearchTerm send this props to the component */}
         <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">
@@ -222,23 +213,26 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
               </button>
             </div>
                   <div className="">
-                    <div className="flex justify-center mx-auto">
-                      <FaStar className="text-blue-800 my-1 m-2" /> Implement
-                      Features
-                      <FaQuestion className="text-blue-800 my-1 m-2" /> Explain
-                      Code
-                      <FaGamepad className="text-blue-800 my-1 m-2" /> Generate
-                      commands
-                    </div>
-                    <div className="flex justify-center">
-                      <FaBug className="text-blue-800 my-1 m-2" /> Fix Bugs &
-                      Errors
-                      <FaFlask className="text-blue-800 my-1 m-2" /> Create
-                      Testcases
-                      <FaBook className="text-blue-800 my-1 m-2" /> Create
-                      Documents and More
-                      <FaMagic className="text-blue-800 my-1 m-2" />
-                    </div>
+                   <div className="flex justify-center mx-auto my-1 mt-[5%]">
+                     <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
+                     <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
+                     <div className="py-1 px-1"> {emoji('⚡️')}</div>Generate commands
+                   </div>
+                   <div className="flex justify-center">
+                     <div className="py-1 px-1">
+                       {emoji('🐞')}
+                     </div>Fix Bugs & Errors
+                     <div className="py-1 px-1">
+                       {emoji('🧪')}
+                     </div>Create Testcases
+                     <div className="py-1 px-1">
+                       {emoji('📕')}
+                     </div>Create Documentation and More
+                     <div className="py-1 px-1">
+                     {emoji('🪄')}
+                     </div>
+                   </div>
+
                   </div>
                 </div>
                 <div className="absolute top-3 right-5">

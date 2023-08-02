@@ -1,6 +1,7 @@
 import os, json
 import shutil
-
+import syncAI
+from utilities.logger import UserLogger
 
 def get_clones(url, email):
     # Check the URL has a real git repository
@@ -59,9 +60,6 @@ def get_clones(url, email):
     except subprocess.CalledProcessError:
         return [], 404
 
-import os
-import json
-import shutil
 import subprocess
 
 def get_private_clones(url, email, access_token):
@@ -137,12 +135,14 @@ def select_branch(path, branch, email):
     path = path.replace('.git', '')
     result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd="../user/" + email + '/' + path, capture_output=True)
     current_branch = result.stdout.decode().strip()
+    subprocess.Popen(['python', 'syncAI.py', '0', email, email])
     if str(current_branch) == str(branch):
         print("Already on that branch!")
         return
     else:
         subprocess.run(['git', 'checkout', branch], cwd="../user/" + email + '/' + path)
         return
+
 
 
 def get_branches(path, email):

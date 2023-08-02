@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
-import { callAPI } from "./api";
-import Cookies from "js-cookie";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
@@ -11,20 +9,24 @@ import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
-  const { setSearchTerm, isLoading, setIsLoading,showSync, setShowSync , setCurrentUser,currentRepo,showRepos, setShowRepos , isLoadingProjectInfo, setIsLoadingProjectInfo , commitHash} = useContext(SearchContext);
-  const [input, setInput] = useState("");
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
 
+  const navigate = useNavigate();
+
   const handleFilterClick = () => {
     setShowCheckboxes(!showCheckboxes);
+    setCheckedFiles([])
+    setFileSearchTerm("");
   };
 
   if (isLoading) {
     return (
-      <LoadingRing />
+      <div  className="h-screen">
+          <LoadingRing dontLog="true"/>
+        </div>
     )
   } else {
     return (
@@ -39,7 +41,9 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
               <>
                 <div className="flex items-center text-blue-900 justify-center h-[16vh]">
                   <h1 className="text-2xl">
-                    <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                     <Link to="/repos">
+                       <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                     </Link>
                   </h1>
                   <button className="ml-auto rounded ml-auto hover:text-blue-600" onClick={() => setShowRepos(!showRepos)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
@@ -47,7 +51,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     </svg>
                   </button>
                 </div>
-                <div className="h-[60vh] overflow-y-auto overflow-x-hidden ">
+                <div className="h-[57vh] overflow-y-auto overflow-x-hidden ">
                   <div className="flex items-center justify-center">
                     <h2 className="text-xl font-bold mb-2">Your code:</h2>
                     {/* Filter Icon */}
@@ -63,21 +67,11 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                         Loading......
                       </div>
                     ) : (
-                      <FileTree data={treeData} showCheckboxes={showCheckboxes} filesearchTerm={filesearchTerm} />
+                      <FileTree data={treeData} showCheckboxes={showCheckboxes} />
                     )}
                   </div>
-                  {/*<div className="flex w-full justify-center my-1">
-                                    <input
-                                      type="text"
-                                      value={filesearchTerm}
-                                      onChange={(e) => setFileSearchTerm(e.target.value)}
-                                      placeholder="Search files..."
-                                      className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none"
-                                    />
-                                  </div>*/}
                 </div>
-
-                <div className="flex items-center text-blue-900 justify-center">
+                <div className="flex items-center text-blue-900 justify-center pt-4">
                   <div className="">
                     <h1 className="font-bold"> Last synced commit hash : #{commitHash}</h1>
                   </div>
@@ -88,6 +82,18 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                     </svg>
                   </button>
                 </div>
+                <div class="w-full bg-slate-50 rounded-lg mt-10">
+                    <div class="flex flex-wrap gap-2 justify-center items-center" >
+                      {checkedFiles.map((file, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="flex text-blue-500 border border-blue-500 py-1 px-6 gap-1 rounded-full text-sm font-semibold justify-center items-center">
+                            {file}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                </div>
+
               </>
             )}
           </>

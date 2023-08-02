@@ -56,7 +56,7 @@ const Sidecontainer = (props) => {
     <>
       <div
         id="mySidenav"
-        className="sidenav"
+        className="sidenav bg-gray-100"
         style={{ width: isContainerOpen ? '33.33%' : '0' }}
       >
         <div className="referance">References</div>

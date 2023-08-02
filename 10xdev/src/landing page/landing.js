@@ -34,10 +34,7 @@ const LandingPage = () => {
                 <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                            <button class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use Auto GPT</button>
-                        </li>
-                        <li>
-                            <button class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Performance Snapshots</button>
+                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use Auto GPT</a>
                         </li>
                     </ul>
                 </div>
@@ -51,7 +48,7 @@ const LandingPage = () => {
                 <h1 class="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl dark:text-white">Use the power of Auto GPT to become a 10X developer</h1>
                 <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Train 10XDEV.AI on your git repository for free</p>
                 <div class="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfuSBcAXtMe0CXVfQmX8gRF82zC-uCl_IZVMwk0AmwPJEksKQ/viewform?usp=sf_link" class="text-white bg-blue-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-8 py-4 mr-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-700">Book a Demo</a>
+                    <a href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`} class="text-white bg-blue-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-8 py-4 mr-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-700">Start Free</a>
                 </div>
             </div>
             <div class="hidden lg:mt-0 lg:col-span-6 lg:flex">
@@ -92,9 +89,8 @@ const LandingPage = () => {
                         </li>
                     </ul>
                 </div>
-                <iframe className="w-full aspect-video" src="https://www.youtube.com/embed/JBIiaIgwNQo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe className="w-full aspect-video rounded-md" src="https://www.youtube.com/embed/JBIiaIgwNQo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
-
         </div>
       </section>
     <section class="bg-white dark:bg-gray-900">

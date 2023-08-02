@@ -11,8 +11,10 @@ import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
 import LeftWelcome from "./LeftWelcome";
+import NewWelcome from "./NewWelcome";
 import User from "./User";
-import Wait from "./Wait";
+import CreateProject from "./CreateProject";
+import Create from "./Create";
 
 function App () {
   
@@ -30,9 +32,12 @@ function App () {
                 <Route path="/apis" element={<Apis/>} />
                 <Route path="/clone" element={<Clone/>} />
                 <Route path="/logs" element={<LoadingRing/>} />
+                <Route path="/create" element={<Create/>} />
+                <Route path="/clarify" element={<CreateProject/>} />
                 <Route path="/branch" element={<Branch/>} />
-                <Route path="/test" element={<LoadingRing/>} />
-                <Route path="/wait" element={<Wait/>} />
+                <Route path="/test" element={
+                <NewWelcome/>
+                } />
             </Routes>
         </Router>
     </SearchState>

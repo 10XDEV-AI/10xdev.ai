@@ -87,7 +87,6 @@ def train_AI(repo_name, userlogger, email):
     fs.columns = ['file_path']
     start_time = time.time()
     chat_limit = get_rates(email).split(",")[0]
-    delay = 60 / int(chat_limit)
     i = 0
     fs['summary'] = ''
     fs['embedding'] = ''
@@ -98,7 +97,6 @@ def train_AI(repo_name, userlogger, email):
         if fs['summary'][ind] != "Ignore":
             fs['embedding'][ind] = split_embed(fs['file_path'][ind]+" "+fs['summary'][ind], email)
         if i_new != i:
-            time.sleep(delay)
             i = i_new
         if i != 0:
             rate = 60 * i / (time.time() - start_time)
@@ -106,12 +104,6 @@ def train_AI(repo_name, userlogger, email):
             p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate:"+ str(round(rate, 2)) + " requests/min. Time Elapsed: " + str(round(time_elapsed / 60, 2)))
             print(p)
             userlogger.log(p)
-            if rate > int(chat_limit):
-                delay = delay + 0.3
-                # print("Rate limit reached. Delay increased to " + str(delay) + " seconds")
-            if rate < 0.9 * int(chat_limit):
-                delay = delay * 0.8
-                # print("Rate limit not reached. Delay decreased to " + str(delay) + " seconds")
 
     fs = fs[fs['summary'] != "Ignore"]
 
@@ -125,9 +117,7 @@ def train_AI(repo_name, userlogger, email):
     create_clone(repo_name, email)
     userlogger.clear_logs()
     userlogger.log("-----------------------------------------------------")
-    userlogger.log("***")
     userlogger.log("Your repo was trained into the AI successfully")
-    userlogger.log("***")
     userlogger.log("-----------------------------------------------------")
     time.sleep(2)
     userlogger.clear_logs()
