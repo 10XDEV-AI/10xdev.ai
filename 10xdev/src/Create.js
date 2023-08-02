@@ -91,11 +91,37 @@ export const Create = () => {
     }
   }, [isLoading]);
 
-    const handleDownload = async () => {
+  const handleDownload = async () => {
+    try {
+      const response = await fetch("/api/create_project_with_code", {
+        method: "POST",
+        body: JSON.stringify({
+          results: results,
+        }),
+      });
 
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
+      const blob = await response.blob();
+      const fileName = "project.zip"; // You can set the desired filename here
 
+      // Create a temporary link to trigger the download
+      const downloadLink = window.document.createElement("a");
+      downloadLink.href = window.URL.createObjectURL(blob);
+      downloadLink.download = fileName;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+
+      // Clean up
+      document.body.removeChild(downloadLink);
+      window.URL.revokeObjectURL(downloadLink.href);
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
   };
+
 
   return (
     <>

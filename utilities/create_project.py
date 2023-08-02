@@ -108,7 +108,7 @@ def to_zip(chat):
     to_files(chat, workspace)
 
     # Create a new zip folder
-    with zipfile.ZipFile("../files.zip", "w") as zipf:
+    with zipfile.ZipFile("files.zip", "w") as zipf:
         # Iterate through the files in the workspace
         for filename, content in workspace.items():
             # Add each file to the zip folder
