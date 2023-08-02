@@ -14,7 +14,7 @@ import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
 import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
-  const { isLoading, setIsLoading, path,setFilesToIgnore,filesToIgnore } = useContext(SearchContext);
+  const { isLoading, setIsLoading, path,setFilesToIgnore,filesToIgnore, setShowCheckboxes } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
@@ -60,6 +60,7 @@ const Train = () => {
 
   const handleGetGitIgnore = async () => {
     try {
+      handleSaveFilesToIgnore();
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
@@ -100,6 +101,7 @@ const Train = () => {
   };
 
   useEffect(() => {
+    setShowCheckboxes(false);
     setIsLoadingTree(true);
     getTreedata();
   }, []);
@@ -137,7 +139,6 @@ const Train = () => {
         },
       });
       console.log(data);
-      handleGetGitIgnore();
       setIsLoading(false);
     } catch (error) {
       console.error(error);

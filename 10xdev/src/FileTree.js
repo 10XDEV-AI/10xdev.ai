@@ -167,9 +167,9 @@ function DirectoryTreeView(props) {
                   />
                 )}
                 {isBranch ? (
-                  <div className="  w-[90%]">
+                  <div className="  w-[80%]">
                     <div className="grid grid-cols-12 grid-rows-1" >
-                    <div className="col-span-1 p-0">
+                    <div className="">
                       <FolderIcon
                         isOpen={isExpanded}
                         onClick={() =>
@@ -180,9 +180,8 @@ function DirectoryTreeView(props) {
                         }
                       />
                     </div>
-                      {/* file name code  */}
                       <div
-                        className="cursor-pointer col-span-10 p-0"
+                        className="cursor-pointer col-span-10"
                         onClick={() =>
                           getNodeProps({
                             nodeId: element.id,
@@ -195,9 +194,8 @@ function DirectoryTreeView(props) {
                       >
                         {element.name}
                       </div>
-                      {/* add button code  */}
                         <div
-                          className={`col-span-1 p-0 bg-blue-900 text-white rounded-md mx-3 px-2 transition-opacity ${
+                          className={`col-span-1  text-xs bg-blue-900 text-white rounded-md px-4 my-auto transition-opacity ${
                             hoveredFolder === element.id
                               ? "opacity-100 pointer-events-auto hover:bg-blue-800"
                               : "opacity-0 pointer-events-none"
