@@ -35,7 +35,6 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
 
     response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0)
     #userlogger.log(response_functions)
-
     files = []
     if 'FULL_PROJECT_INFO' in response_functions:
         files = ["Referring Project Context"]
@@ -293,6 +292,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
     '''
 
     estimated_tokens = 0
+
     for i in files:
         final_prompt += "\n```File path " + str(i) + ":\n"
         path = read_info(email)
@@ -311,7 +311,6 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
 
     final_prompt += "\n" + prompt + "\n Response :"
-
     tokens = tokenCount(final_prompt)
     print("Total Tokens in the query: " + str(tokens))
     user_logger.clear_logs()
@@ -350,6 +349,7 @@ if __name__ == "__main__":
 
     question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+
     print(question)
     print(Answer)
     
@@ -361,6 +361,7 @@ if __name__ == "__main__":
     print(Answer)
 
 
+    '''
     question = "How do I add dark mode functionality to the project" #Passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
@@ -375,4 +376,3 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
-

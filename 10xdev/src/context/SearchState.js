@@ -29,6 +29,7 @@ const SearchState = ({ children }) => {
   const [expandedNodes, setExpandedNodes] = useState([]);
   const [repos, setRepos] = useState([]);
 
+
   const handleFileCheck = (file) => {
     // Check if the file is already in the checkedFiles array
     const isChecked = checkedFiles.includes(file);

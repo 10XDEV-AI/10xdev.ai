@@ -22,7 +22,7 @@ def summarize_str(filename, string, email, userlogger):
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary."},
+                    {"role": "system", "content": "Summarize what this file in the codebase does, assume context when necessary. Be concise."},
                     {"role": "user", "content": "File " + filename + " has " + string}
                 ],
                 temperature=0,
