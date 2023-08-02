@@ -37,7 +37,6 @@ const LoadingRing = ({RedirectTo, dontLog }) => {
       secondaryColor="#000026"
       strokeWidth={2}
       strokeWidthSecondary={2}
-
     />
   ];
 
