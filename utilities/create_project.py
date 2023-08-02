@@ -49,11 +49,11 @@ def create_project_with_spec(email, spec):
     Before you finish, double check that all parts of the architecture is present in the files.
     """
 
-    answer = AskGPT(email, system_message=system_message, prompt=spec)
+    answer = AskGPT(email, system_message=system_message, prompt=spec, model = "gpt-3.5-turbo-16k")
     print(answer)
     return answer
 
 def new_project(email, user_prompt):
-    system_message = "Based on the give project description ask clarifying questions to the user"
+    system_message = "Based on the give project description ask clarifying questions to the user, so that you can geenrate code for that project"
     response = AskGPT(email, system_message, user_prompt)
     return response

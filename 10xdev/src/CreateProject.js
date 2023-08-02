@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Loader from "./Loader/Loader";
 import { callAPI } from "./api";
 import SearchContext from "./context/SearchContext";
@@ -10,6 +10,19 @@ function CreateProject() {
       isLoading,setIsLoading,
       results,setResults,
     } = useContext(SearchContext);
+
+  const loadingRingRef = useRef(null);
+
+
+  useEffect(() => {
+      if (isLoading && loadingRingRef.current) {
+        loadingRingRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      }
+    }, [isLoading]);
+
 
   const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
@@ -96,6 +109,9 @@ function CreateProject() {
 
   return (
     <div className="p-10">
+        <a href="https://www.freepik.com/free-vector/business-idea-concept-with-people_5949651.htm#query=idea&position=2&from_view=keyword&track=sph">
+          <img src='https://i.postimg.cc/K8fCt5bh/3081627.jpg' alt="start" className="h-[28vh] w-[42vh] mx-auto"/>
+        </a>
       <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
         Create your project in just few steps
       </h1>
@@ -112,7 +128,7 @@ function CreateProject() {
               onChange={handlePromptChange}
               id="comment"
               rows="10"
-              class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
+              class="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
               placeholder="Describe your goal..."
               required
             ></textarea>
@@ -129,7 +145,7 @@ function CreateProject() {
       </form>
       {clarifyingQuestions.length > 0 && (
         <div>
-          <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
+          <h1 class="mt-10 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
             Clarifying Questions:
           </h1>
           <p className="whitespace-pre-line p-5">{clarifyingQuestions}</p>
@@ -140,7 +156,7 @@ function CreateProject() {
                 </label>
                 <textarea
                   onChange={handleAnswerChange}
-                  class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0"
+                  class="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0"
                   rows="10"
                   placeholder="Add clarifying answers here"
                   required
@@ -171,7 +187,9 @@ function CreateProject() {
                     </button>
                   </div>
                 )}
-      {isLoading && <Loader dontLog="true" />}
+      {isLoading && <div className="p-5"> <Loader dontLog="true" /> </div>}
+      <div className="spacer" ref={loadingRingRef}></div>
+
     </div>
   );
 }

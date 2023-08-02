@@ -153,7 +153,7 @@ const Clone = () => {
                        <button className="bg-blue-900 text-white px-4 btn-font rounded-md hover:bg-blue-700" onClick={() => navigate(`/repos`)}>
                          Back
                        </button>
-                         <h1 class="text-4xl font-bold mx-auto">Setup Repository</h1>
+                         <h1 class="text-4xl font-extrabold mx-auto text-gray-900 md:text-4xl lg:text-5xl ">Setup Repository</h1>
                        <div className="">
                          <button className="bg-white text-white px-4" onClick={() => navigate(`/repos`)}>
                                 Back

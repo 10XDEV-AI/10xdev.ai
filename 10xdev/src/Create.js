@@ -41,10 +41,10 @@ export const Create = () => {
       try {
             const data = await callAPI("/api/create_project_with_spec", {
               method: "POST",
-                      body: JSON.stringify({
-                        searchTerm,
-                      }),
-                    });
+                  body: JSON.stringify({
+                    spec : searchTerm,
+                  }),
+                });
             const results = JSON.stringify(data.response);
             setChatMessages((prevState) => {
                     const updatedMessages = [...prevState];
@@ -96,6 +96,7 @@ export const Create = () => {
         <div className="flex">
             <div className="w-full">
               <Navbar/>
+
               <h1 class="px-[5%] py-5 text-2xl font-bold bg-slate-50">Your project will be created based on below instructions</h1>
               <div className="w-full">
               {chatMessages.map((chatMessage, index) => (

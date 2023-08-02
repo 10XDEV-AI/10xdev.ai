@@ -5,6 +5,8 @@ import {TbApi} from "react-icons/tb";
 import {BiGitRepoForked ,BiLogOut} from "react-icons/bi";
 import {BsPlusCircleFill} from "react-icons/bs";
 import Cookies from 'js-cookie';
+import emoji from 'react-easy-emoji'
+
 function DropdownButton() {
   const [isOpen, setIsOpen] = useState(false); // state to keep track of whether dropdown is open
 
@@ -29,7 +31,7 @@ function DropdownButton() {
         navigate('/');
     }
     if (option === 4) {
-        navigate('/apis');
+        navigate('/clarify');
     }
     if (option === 2) {
         navigate('/repos');
@@ -46,9 +48,10 @@ function DropdownButton() {
       </button>
       {isOpen && (
         <ul className="drop-down-list rounded-md text-black">
-          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white  rounded-md flex" onClick={() => handleOptionClick(1)}> <BsPlusCircleFill className=' text-xl mx-2 '/>Setup New Repo</li>
-          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(2)}> <BiGitRepoForked className=' text-xl mx-2 '/>Your Repositories</li>
-          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(3)}> <BiLogOut className=' text-xl mx-2 ' /> Log Out</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white  rounded-md flex" onClick={() => handleOptionClick(1)}> <div className=' text-xl mx-2 '>{emoji('➕')}</div>Setup New Repo</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(2)}> <div className=' text-xl mx-2 '>{emoji('📂')}</div>Your Repositories</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(4)}> <div className=' text-xl mx-2 '>{emoji('💡')}</div>Create a Project</li>
+          <li className="drop-down-bullets hover:bg-blue-900 text-blue-900 hover:text-white rounded-md flex" onClick={() => handleOptionClick(3)}> <div className=' text-xl mx-2 '>{emoji('🚪')}</div> Log Out</li>
         </ul>
       )}
     </div>
