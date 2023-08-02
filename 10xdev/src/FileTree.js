@@ -181,16 +181,13 @@ function DirectoryTreeView(props) {
                       />
                     </div>
                       <div
-                        className="cursor-pointer col-span-10"
+                        className="cursor-pointer col-span-10 -ml-6"
                         onClick={() =>
                           getNodeProps({
                             nodeId: element.id,
                             isExpanded: !isExpanded,
                           })
                         }
-                        style={{ 
-                          marginLeft: "-2.5rem",
-                        }}
                       >
                         {element.name}
                       </div>
