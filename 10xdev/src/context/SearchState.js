@@ -28,7 +28,7 @@ const SearchState = ({ children }) => {
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [expandedNodes, setExpandedNodes] = useState([]);
   const [repos, setRepos] = useState([]);
-
+  const [filesToIgnore, setFilesToIgnore] = useState([]);
 
   const handleFileCheck = (file) => {
     // Check if the file is already in the checkedFiles array
@@ -127,7 +127,8 @@ const SearchState = ({ children }) => {
         filesearchTerm, setFileSearchTerm,
         treeData, setTreeData,
         showCheckboxes, setShowCheckboxes,
-        filesearchTerm, setFileSearchTerm
+        filesearchTerm, setFileSearchTerm,
+        filesToIgnore, setFilesToIgnore,
       }}
     >
       {children}

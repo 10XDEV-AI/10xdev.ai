@@ -209,8 +209,8 @@ def get_logs():
         # Assuming you have a dictionary of UserLogger instances, where the email is the key
         user_logger = user_loggers.get(email)
         if user_logger:
-            logs = user_logger.get_last_logs()
-            return jsonify(logs)
+            logs, percent, time = user_logger.get_last_logs()
+            return jsonify({"logs": logs, "percentage" : percent, "time" : time})
         else:
             return "User Logger not found", 404
     else:

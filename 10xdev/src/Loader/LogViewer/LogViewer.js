@@ -7,6 +7,8 @@ import { navigate } from 'react-router-dom';
 
 function LogViewer(props) {
   const [logs, setLogs] = useState('');
+  const [percentage, setPercentage] = useState("");
+  const [time, setTime] = useState("");
   const { isLoading, setIsLoading } = useContext(SearchContext);
   const navigate = useNavigate();
 
@@ -14,10 +16,14 @@ function LogViewer(props) {
     const fetchLogs = async () => {
       try {
         const response = await callAPI('/api/logs');
-        console.log(response);
+        console.log(response.logs);
+        setPercentage(response.percentage);
+        console.log(response.percentage);
+        setTime(response.time);
+        console.log(response.time);
 
-        if (Array.isArray(response)&& response.length > 0) {
-          let result = response.join(',\n');
+        if (Array.isArray(response.logs)&& response.logs.length > 0) {
+          let result = response.logs.join(',\n');
           if (result === '' && props.RedirectTo) {
             setIsLoading(false);
           const currentUrl = window.location.href;
@@ -62,9 +68,23 @@ function LogViewer(props) {
 
   return (
     <div className="w-full">
-      <div className="log-col-2">
-        <pre>{logs}</pre>
+      <div className="log-col-2 ">
+        <pre className="font-sans font-semibold text-lg">
+            {logs}
+        </pre>
+        {time&&percentage&&
+        <div className="w-1/2 mx-auto pt-6">
+            <div class="flex justify-between mb-1">
+              <span class="text-base font-medium text-blue-700">Time Elapsed :  {time} minutes</span>
+              <span class="text-sm font-medium text-blue-700">{percentage}%</span>
+            </div>
+            <div class="w-full bg-gray-300 rounded-full h-2.5">
+              <div class="bg-blue-600 h-2.5 rounded-full" style={{ width: `${percentage}%` }} ></div>
+            </div>
+          </div>
+          }
       </div>
+
     </div>
   );
 }

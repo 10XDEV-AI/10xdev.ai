@@ -54,7 +54,7 @@ def create_project_with_spec(email, spec):
     return answer
 
 def new_project(email, user_prompt):
-    system_message = "Based on the give project description ask clarifying questions to the user, so that you can geenrate code for that project"
+    system_message = "Based on the give project description ask clarifying questions to the user, so that you can generate a code base for that project"
     response = AskGPT(email, system_message, user_prompt)
     return response
 

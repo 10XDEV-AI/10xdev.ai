@@ -72,6 +72,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
 
 
 def train_AI(repo_name, userlogger, email):
+
     fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
 
     file_paths_details = files2analyse(repo_name, email)
@@ -90,7 +91,7 @@ def train_AI(repo_name, userlogger, email):
     i = 0
     fs['summary'] = ''
     fs['embedding'] = ''
-    userlogger.log("Starting analysis")
+    userlogger.log("Starting analysis", percent="0", time_left="0")
 
     for ind in fs.index:
         i_new, fs['summary'][ind] = summarize_file(repo_name, fs['file_path'][ind], i, userlogger, email)
@@ -99,11 +100,11 @@ def train_AI(repo_name, userlogger, email):
         if i_new != i:
             i = i_new
         if i != 0:
-            rate = 60 * i / (time.time() - start_time)
             time_elapsed = time.time() - start_time
-            p = (str(round(100 * (ind + 1) / len(fs))) + "% done. Rate:"+ str(round(rate, 2)) + " requests/min. Time Elapsed: " + str(round(time_elapsed / 60, 2)))
-            print(p)
-            userlogger.log(p)
+            p = str(round(100 * (ind + 1) / len(fs)))
+            t = str(round(time_elapsed / 60, 2))
+            userlogger.clear_logs()
+            userlogger.log("",percent=p,time_left=t)
 
     fs = fs[fs['summary'] != "Ignore"]
 
@@ -116,9 +117,7 @@ def train_AI(repo_name, userlogger, email):
     print("100% Done")
     create_clone(repo_name, email)
     userlogger.clear_logs()
-    userlogger.log("-----------------------------------------------------")
-    userlogger.log("Your repo was trained into the AI successfully")
-    userlogger.log("-----------------------------------------------------")
+    userlogger.log("Your repo was trained into the AI successfully",percent = "100", time_left=t)
     time.sleep(2)
     userlogger.clear_logs()
     return

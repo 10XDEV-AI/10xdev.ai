@@ -1,41 +1,60 @@
 import React, { useContext, useState, useEffect } from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
-import { FaList, FaPython, FaReadme, FaFolderOpen, FaFolder } from "react-icons/fa";
+import {
+  FaList,
+  FaPython,
+  FaReadme,
+  FaFolderOpen,
+  FaFolder,
+} from "react-icons/fa";
 import { BsFiletypeJsx, BsFiletypeScss } from "react-icons/bs";
 import { RiFileCodeLine } from "react-icons/ri";
 import TreeView, { flattenTree } from "react-accessible-treeview";
-import SearchContext from './context/SearchContext';
-
+import SearchContext from "./context/SearchContext";
 
 function DirectoryTreeView(props) {
-  const [filteredData, setFilteredData] = useState(flattenTree(props.data))
+  const [filteredData, setFilteredData] = useState(flattenTree(props.data));
   const [countFiles, setCountFiles] = useState(props.CountFiles);
-  const {checkedFiles,setCheckedFiles, showCheckboxes, setShowCheckboxes, expandedNodes, setExpandedNodes , filesearchTerm, setFileSearchTerm} = useContext(SearchContext);
+  const {
+    checkedFiles,
+    setCheckedFiles,
+    showCheckboxes,
+    setShowCheckboxes,
+    expandedNodes,
+    setExpandedNodes,
+    filesearchTerm,
+    setFileSearchTerm,
+    filesToIgnore,
+    setFilesToIgnore,
+  } = useContext(SearchContext);
   const handleFileCheck = async (filename, isBranch) => {
-        if (isBranch) {
-          // If it's a folder (branch), simply return without modifying the checkedFiles state.
-          return;
-        }
+    if (isBranch) {
+      // If it's a folder (branch), simply return without modifying the checkedFiles state.
+      return;
+    }
 
-        // File handling logic remains the same
-        if (checkedFiles.includes(filename)) {
-          await setCheckedFiles((prevCheckedFiles) =>
-            prevCheckedFiles.filter((file) => file !== filename)
-          );
-        } else {
-          await setCheckedFiles((prevCheckedFiles) => [...prevCheckedFiles, filename]);
-        }
-      };
+    // File handling logic remains the same
+    if (checkedFiles.includes(filename)) {
+      await setCheckedFiles((prevCheckedFiles) =>
+        prevCheckedFiles.filter((file) => file !== filename)
+      );
+    } else {
+      await setCheckedFiles((prevCheckedFiles) => [
+        ...prevCheckedFiles,
+        filename,
+      ]);
+    }
+  };
 
   useEffect(() => {
-    filterData()
+    filterData();
   }, [filesearchTerm]);
 
-  const filterData = async() => {
+  const filterData = async () => {
     if (!filesearchTerm.trim()) {
-        setFilteredData(flattenTree(props.data))
-        return;
-      }
+      setFilteredData(flattenTree(props.data));
+      return;
+    }
 
     const searchTerm = filesearchTerm.toLowerCase();
     const allData = flattenTree(props.data);
@@ -45,11 +64,11 @@ function DirectoryTreeView(props) {
     );
 
     const rootNode = {
-                         "id": 0,
-                         "name": "",
-                         "children": filteredData.map((node) => node.id),
-                         "parent": null
-                     }
+      id: 0,
+      name: "",
+      children: filteredData.map((node) => node.id),
+      parent: null,
+    };
 
     filteredData.unshift(rootNode);
     setFilteredData(filteredData);
@@ -67,35 +86,74 @@ function DirectoryTreeView(props) {
     defaultExpanded: true, // Set defaultExpanded to true for each node
   }));
 
- const calculateTotalFiles = (node, filteredData) => {
-   let count = 0;
+  const calculateTotalFiles = (node, filteredData) => {
+    let count = 0;
 
-   // If the node is a file, return 1
-   if (!node.children || node.children.length === 0) {
-     return 1;
-   }
+    // If the node is a file, return 1
+    if (!node.children || node.children.length === 0) {
+      return 1;
+    }
 
-   // Recursively calculate the total number of files in children folders
-   for (const childId of node.children) {
-     const childNode = data.find((node) => node.id === childId);
-     if (childNode) {
-       count += calculateTotalFiles(childNode, filteredData);
-     }
-   }
+    // Recursively calculate the total number of files in children folders
+    for (const childId of node.children) {
+      const childNode = data.find((node) => node.id === childId);
+      if (childNode) {
+        count += calculateTotalFiles(childNode, filteredData);
+      }
+    }
 
-   return count;
- };
+    return count;
+  };
+  const [hoveredFolder, setHoveredFolder] = useState(null);
+
+  const handleAddButtonClick = (element) => {
+    const folderPath = [element.name];
+    let currentNodeId = element.parent;
+    while (currentNodeId) {
+      const parentNode = data.find((node) => node.id === currentNodeId);
+      if (parentNode) {
+        folderPath.unshift(parentNode.name);
+        currentNodeId = parentNode.parent;
+      } else {
+        break;
+      }
+    }
+    var res = folderPath.join("/");
+    const updatedFilesToIgnore = [...filesToIgnore, res];
+    setFilesToIgnore(updatedFilesToIgnore);
+  };
 
   return (
-      <div className="">
-      {showCheckboxes &&
-          <div className="flex w-full justify-center mt-1 border-b ">
-            <input type="text " value={filesearchTerm} onChange={(e) => setFileSearchTerm(e.target.value)} onKeyUp={() => filterData()} placeholder="Search files..." className="w-full px-2 py-1 border-none outline-none rounded-md focus:outline-none mb-0" />
-          </div>
-          }
-        <div className="px-4 pt-2 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
-          <TreeView data={filteredData} aria-label="directory tree " nodeRenderer={({ element, isBranch, isExpanded, getNodeProps, level }) => (
-            <div {...getNodeProps()} style={{ paddingLeft: calculateIndentation(level) }}>
+    <div className="">
+      {showCheckboxes && (
+        <div className="flex w-full justify-center mt-1 border-b ">
+          <input
+            type="text"
+            value={filesearchTerm}
+            onChange={(e) => setFileSearchTerm(e.target.value)}
+            onKeyUp={() => filterData()}
+            placeholder="Search files..."
+            className="w-full px-2 py-1 border-none outline-none rounded-md focus:outline-none mb-0"
+          />
+        </div>
+      )}
+      <div className="px-4 pt-2 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
+        <TreeView
+          data={filteredData}
+          aria-label="directory tree "
+          nodeRenderer={({
+            element,
+            isBranch,
+            isExpanded,
+            getNodeProps,
+            level,
+          }) => (
+            <div
+              {...getNodeProps({ isExpanded })}
+              style={{ paddingLeft: calculateIndentation(level) }}
+              onMouseEnter={() => setHoveredFolder(element.id)}
+              onMouseLeave={() => setHoveredFolder(null)}
+            >
               <label className="flex items-center cursor-pointer">
                 {showCheckboxes && (
                   <input
@@ -109,61 +167,141 @@ function DirectoryTreeView(props) {
                   />
                 )}
                 {isBranch ? (
-                <div>
-                    <div >
-                      <FolderIcon isOpen={isExpanded} onClick={() => getNodeProps({ nodeId: element.id, isExpanded: !isExpanded })}/>
-                      {element.name}
+                  <div className="  w-[80%]">
+                    <div className="grid grid-cols-12 grid-rows-1" >
+                    <div className="">
+                      <FolderIcon
+                        isOpen={isExpanded}
+                        onClick={() =>
+                          getNodeProps({
+                            nodeId: element.id,
+                            isExpanded: !isExpanded,
+                          })
+                        }
+                      />
+                    </div>
+                      <div
+                        className="cursor-pointer col-span-10 -ml-6"
+                        onClick={() =>
+                          getNodeProps({
+                            nodeId: element.id,
+                            isExpanded: !isExpanded,
+                          })
+                        }
+                      >
+                        {element.name}
+                      </div>
+                        <div
+                          className={`col-span-1  text-xs bg-blue-900 text-white rounded-md px-4 my-auto transition-opacity ${
+                            hoveredFolder === element.id
+                              ? "opacity-100 pointer-events-auto hover:bg-blue-800"
+                              : "opacity-0 pointer-events-none"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddButtonClick(element);
+                          }}
+                        >
+                         Add
+                        </div>
                     </div>
                   </div>
                 ) : (
                   <div>
-                  <FileIcon filename={element.name} />
-                  {element.name}
+                    <FileIcon filename={element.name} />
+                    {element.name}
                   </div>
                 )}
-                {isBranch && countFiles &&(
-                <span className="ml-auto text-gray-500">
-                  ({calculateTotalFiles(element)} {calculateTotalFiles(element) === 1 ? 'file' : 'files'})
-                </span>
+                {isBranch && countFiles && (
+                  <span className="ml-auto text-gray-500">
+                    ({calculateTotalFiles(element)}{" "}
+                    {calculateTotalFiles(element) === 1 ? "file" : "files"})
+                  </span>
                 )}
               </label>
             </div>
           )}
-          />
-        </div>
+        />
       </div>
-    );
+    </div>
+  );
 }
 
 const FolderIcon = ({ isOpen }) =>
-  isOpen ? <FaFolderOpen className="inline-block align-middle mr-1 text-blue-900" /> : <FaFolder className="inline-block align-middle mr-1 text-blue-900 " />;
+  isOpen ? (
+    <FaFolderOpen className="inline-block align-middle mr-1 text-blue-900" />
+  ) : (
+    <FaFolder className="inline-block align-middle mr-1 text-blue-900 " />
+  );
 
-    const FileIcon = ({ filename }) => {
-      const extension = filename.slice(filename.lastIndexOf(".") + 1);
-      switch (extension) {
-        case "js":
-          return <DiJavascript color="rgb(217 119 6)" className="inline-block align-middle mr-1" />;
-        case "css":
-          return <DiCss3 color="rgb(22 163 74)" className="inline-block align-middle mr-1" />;
-        case "json":
-          return <FaList color="rgb(3 105 161)" className="inline-block align-middle mr-1" />;
-        case "npmignore":
-          return <DiNpm color="red" className="inline-block align-middle mr-1" />;
-        case "jsx":
-          return <BsFiletypeJsx color="blue" className="inline-block align-middle mr-1" />;
-        case "scss":
-          return <BsFiletypeScss color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
-        case "py":
-          return <FaPython color="rgb(13 148 136)" className="inline-block align-middle mr-1" />;
-        case "md":
-          return <FaReadme color="black" className="inline-block align-middle mr-1" />;
-        case "ts":
-        case "yml":
-        case "html":
-          return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
-        default:
-          return <RiFileCodeLine color="black" className="inline-block align-middle mr-1" />;
-      }
-    };
+const FileIcon = ({ filename }) => {
+  const extension = filename.slice(filename.lastIndexOf(".") + 1);
+  switch (extension) {
+    case "js":
+      return (
+        <DiJavascript
+          color="rgb(217 119 6)"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "css":
+      return (
+        <DiCss3
+          color="rgb(22 163 74)"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "json":
+      return (
+        <FaList
+          color="rgb(3 105 161)"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "npmignore":
+      return <DiNpm color="red" className="inline-block align-middle mr-1" />;
+    case "jsx":
+      return (
+        <BsFiletypeJsx
+          color="blue"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "scss":
+      return (
+        <BsFiletypeScss
+          color="rgb(13 148 136)"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "py":
+      return (
+        <FaPython
+          color="rgb(13 148 136)"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    case "md":
+      return (
+        <FaReadme color="black" className="inline-block align-middle mr-1" />
+      );
+    case "ts":
+    case "yml":
+    case "html":
+      return (
+        <RiFileCodeLine
+          color="black"
+          className="inline-block align-middle mr-1"
+        />
+      );
+    default:
+      return (
+        <RiFileCodeLine
+          color="black"
+          className="inline-block align-middle mr-1"
+        />
+      );
+  }
+};
 
 export default DirectoryTreeView;

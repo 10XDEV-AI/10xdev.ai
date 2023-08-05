@@ -14,10 +14,9 @@ import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
 import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
-  const { isLoading, setIsLoading, path } = useContext(SearchContext);
+  const { isLoading, setIsLoading, path,setFilesToIgnore,filesToIgnore, setShowCheckboxes } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
-  const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
@@ -25,6 +24,7 @@ const Train = () => {
   const navigate = useNavigate();
   const [isLoadingTree, setIsLoadingTree] = useState(true);
   const [showAddButton, setShowAddButton] = useState([]);
+
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -60,6 +60,7 @@ const Train = () => {
 
   const handleGetGitIgnore = async () => {
     try {
+      handleSaveFilesToIgnore();
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
@@ -99,9 +100,8 @@ const Train = () => {
     }
   };
 
-
-
   useEffect(() => {
+    setShowCheckboxes(false);
     setIsLoadingTree(true);
     getTreedata();
   }, []);
@@ -139,7 +139,6 @@ const Train = () => {
         },
       });
       console.log(data);
-      handleGetGitIgnore();
       setIsLoading(false);
     } catch (error) {
       console.error(error);
