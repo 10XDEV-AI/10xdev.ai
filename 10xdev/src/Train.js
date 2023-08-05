@@ -14,9 +14,10 @@ import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
 import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
-  const { isLoading, setIsLoading, path,setFilesToIgnore,filesToIgnore, setShowCheckboxes } = useContext(SearchContext);
+  const { isLoading, setIsLoading, path } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
+  const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
@@ -24,7 +25,6 @@ const Train = () => {
   const navigate = useNavigate();
   const [isLoadingTree, setIsLoadingTree] = useState(true);
   const [showAddButton, setShowAddButton] = useState([]);
-
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -60,7 +60,6 @@ const Train = () => {
 
   const handleGetGitIgnore = async () => {
     try {
-      handleSaveFilesToIgnore();
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
@@ -100,8 +99,9 @@ const Train = () => {
     }
   };
 
+
+
   useEffect(() => {
-    setShowCheckboxes(false);
     setIsLoadingTree(true);
     getTreedata();
   }, []);
@@ -139,6 +139,7 @@ const Train = () => {
         },
       });
       console.log(data);
+      handleGetGitIgnore();
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -295,7 +296,7 @@ const Train = () => {
                                     onClick={() => handleAddToIgnore(file.Path)}
                                       className={`text-white rounded-sm mx-1 px-1 ${showAddButton[index] ? 'bg-blue-800' : ''}`}
                                     >
-                                      Add
+                                      Add File
                                     </button>
                                   </td>
                                 </tr>
@@ -388,7 +389,7 @@ const Train = () => {
                       </div>
                     ) : (
                     <div className="min-h-[75vh] border-0 rounded-md bg-white">
-                      <FilesTree data={Treedata} CountFiles={true} handleAddToIgnore={handleAddToIgnore} />
+                      <FilesTree data={Treedata} CountFiles={true}/>
                     </div>
                     )}
                   </div>

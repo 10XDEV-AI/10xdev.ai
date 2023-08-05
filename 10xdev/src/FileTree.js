@@ -27,6 +27,7 @@ function DirectoryTreeView(props) {
     filesToIgnore,
     setFilesToIgnore,
   } = useContext(SearchContext);
+
   const handleFileCheck = async (filename, isBranch) => {
     if (isBranch) {
       // If it's a folder (branch), simply return without modifying the checkedFiles state.
@@ -203,7 +204,7 @@ function DirectoryTreeView(props) {
                             handleAddButtonClick(element);
                           }}
                         >
-                         Add
+                         Add Folder
                         </div>}
                     </div>
                   </div>
