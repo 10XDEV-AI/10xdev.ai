@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g, send_file
-from AskAI import Ask_AI, Ask_AI_search_files, Ask_AI_with_referenced_files
+from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
@@ -11,6 +11,7 @@ from utilities.clone_repo import get_clones, get_branches, select_branch, get_pr
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
+from utilities.mixpanel import track_event
 from utilities.create_project import new_project, create_project_with_clarity, create_project_with_spec, to_zip
 from syncAI import syncAI
 import os, threading
@@ -20,7 +21,7 @@ application = Flask(
     __name__, static_folder="./10xdev/build/static", template_folder="./10xdev/build"
 )
 application.secret_key = os.urandom(24)
-user_loggers = {}  # Dictionary to store UserLogger instances
+user_loggers = {}
 
 
 @application.before_request
@@ -305,12 +306,14 @@ def login():
     try:
         if not os.path.exists("../user/" + email):
             os.makedirs("../user/" + email)
-        if not os.path.exists("../user/" + email + "/AIFiles"):
+        if not  os.path.exists("../user/" + email+"/AIFiles"):
             os.makedirs("../user/" + email + "/AIFiles")
-        if not os.path.exists("../user/" + email + "/AIFiles/info.json"):
+        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
             os.system("cp info.json " + "../user/" + email + "/AIFiles")
-        if not os.path.exists("../user/" + email + "/AIFiles/info.json"):
+        if not os.path.exists("../user/" + email +"/AIFiles/info.json"):
             os.system("cp AI.log " + "../user/" + email + "/AIFiles")
+
+        track_event('login', {'email': email})
         return jsonify({"loggedIn": True, "message": "Logged In"}), 200
     except:
         return jsonify({"loggedIn": False, "message": "Some issues occured"})
@@ -335,7 +338,6 @@ def github_api():
         headers={'Accept': 'application/json'}
     )
     return jsonify(response.json())
-
 
 @application.route("/api/github/getuser", methods=["GET"])
 def get_user():

@@ -68,6 +68,7 @@ def summarize(filename, userid):
 
 def syncAI(sync_flag, user_logger, userid):
     path = read_info(userid)
+    track_event('syncAI', {'email': userid, 'Repo': path})
     if path == "" or path is None:
         print("No path for user " + userid)
         return "DONE", []
