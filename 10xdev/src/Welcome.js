@@ -12,8 +12,8 @@ import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 
 export const Welcome = () => {
-
   const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
+
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
   const navigate = useNavigate();
@@ -110,11 +110,11 @@ export const Welcome = () => {
       console.log(error);
     }
   };
-
+  
   const search = (e) => {
     e.preventDefault();
     setSearchTerm(input);
-    navigate("/chat"); // add this line to redirect to /chat
+    navigate("/chat");
   };
 
   const handleInputChange = (e) => {

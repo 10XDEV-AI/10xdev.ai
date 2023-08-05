@@ -114,7 +114,6 @@ export const Chat = () => {
   };
 
   const handleReprompt = async (input, index) => {
-    console.log("searching for");
     console.log(input);
     setSideContainerOpen(false);
     setShowLeftWelcome(false);
@@ -275,7 +274,7 @@ export const Chat = () => {
                       </div>
                     </div>
                     <div className="footer"></div>
-                      <div className={`searchbarrow ${sideContainerOpen ? "open" : ""}`}>
+                      <div className={`searchbarrow ${sideContainerOpen ? "open z-0" : "z-0"}`}>
                       <SearchBar onSearch={handleSearch} />
                       </div>
         </div>

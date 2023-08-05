@@ -95,7 +95,7 @@ const Clone = () => {
       setFilteredRepos(filteredRepos);
     }
   };
-    
+
 
   useEffect(() => {
     cookies.remove("accesstoken");
@@ -255,7 +255,7 @@ const Clone = () => {
                         {repos.length > 0 ? (
                           <>
                           <div className="flex">
-                          
+
                           <form className="flex mx-[28%] w-[80%]">
         <div className="relative w-full m-3">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

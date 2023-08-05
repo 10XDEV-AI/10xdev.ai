@@ -35,7 +35,6 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
 
     response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0)
     #userlogger.log(response_functions)
-
     files = []
     if 'FULL_PROJECT_INFO' in response_functions:
         files = ["Referring Project Context"]
@@ -161,7 +160,6 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
 
 
 def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
-    global fs
     history = False
     path = read_info(email)
     track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1]})
@@ -175,11 +173,11 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     user_logger.log("Analyzing your query...")
-    files = search_functions(prompt, email, user_logger, scope, history)
+    files = search_functions(prompt, email, user_logger, scope)
     return {'files': files}
 
 
-def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, files):
+def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files):
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
@@ -231,6 +229,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
     '''
 
     estimated_tokens = 0
+
     for i in files:
         final_prompt += "\n```File path " + str(i) + ":\n"
         path = read_info(email)
@@ -249,9 +248,9 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
 
     final_prompt += "\n" + prompt + "\n Response :"
-
     tokens = tokenCount(final_prompt)
     print("Total Tokens in the query: " + str(tokens))
+    user_logger.clear_logs()
     user_logger.log("Thinking of an answer...")
     FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=0.7)
     referenced_code = get_referenced_code(path, files)
@@ -287,6 +286,7 @@ if __name__ == "__main__":
 
     question = "Add a new modal in the front end code, that will pop up when an erorr occurs while making an API call" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
+
     print(question)
     print(Answer)
     
@@ -298,6 +298,7 @@ if __name__ == "__main__":
     print(Answer)
 
 
+    '''
     question = "How do I add dark mode functionality to the project" #Passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
@@ -306,10 +307,9 @@ if __name__ == "__main__":
     question = "Create a new python file that will help me analyse the file summaries of the repos that have been trained "
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
-    print(Answer)'''
+    print(Answer)
 
     question="Give code for the handle file check function in the leftwelcome component that will be sent as props to the Filetree.js component, (Directory Tree View). Refer FileTree component and LeftWelcome"
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
-

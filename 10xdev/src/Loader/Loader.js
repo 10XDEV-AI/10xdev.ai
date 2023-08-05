@@ -26,6 +26,18 @@ const LoadingRing = ({RedirectTo, dontLog }) => {
       ariaLabel="rings-loading"
       key="rings-loader"
     />,
+    <Oval
+      height={80}
+      width={80}
+      color="#000066"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+      ariaLabel='oval-loading'
+      secondaryColor="#000026"
+      strokeWidth={2}
+      strokeWidthSecondary={2}
+    />
   ];
 
   // Randomly select a loader

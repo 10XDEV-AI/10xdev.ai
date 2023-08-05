@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask, jsonify, request, render_template, session, g
+from flask import Flask, jsonify, request, render_template, session, g, send_file
 from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
@@ -12,11 +12,10 @@ from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
 from utilities.mixpanel import track_event
+from utilities.create_project import new_project, create_project_with_clarity, create_project_with_spec, to_zip
 from syncAI import syncAI
 import os, threading
 import requests
-
-
 
 application = Flask(
     __name__, static_folder="./10xdev/build/static", template_folder="./10xdev/build"
@@ -134,6 +133,7 @@ def get_data():
         }
     )
 
+
 @application.route("/api/search_files", methods=["POST"])
 def search_files_api():
     email = getattr(g, "email", None)
@@ -142,8 +142,8 @@ def search_files_api():
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)
-
     return jsonify(response)
+
 
 @application.route("/api/get_response", methods=["POST"])
 def get_response_api():
@@ -154,6 +154,7 @@ def get_response_api():
     referenced_files = request.json.get("files")
     response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
     return jsonify(response)
+
 
 @application.route("/api/Ignore", methods=["GET"])
 def get_AIIgnore():
@@ -209,8 +210,8 @@ def get_logs():
         # Assuming you have a dictionary of UserLogger instances, where the email is the key
         user_logger = user_loggers.get(email)
         if user_logger:
-            logs = user_logger.get_last_logs()
-            return jsonify(logs)
+            logs, percent, time = user_logger.get_last_logs()
+            return jsonify({"logs": logs, "percentage" : percent, "time" : time})
         else:
             return "User Logger not found", 404
     else:
@@ -261,7 +262,6 @@ def setRates():
     message, code = set_rates(request.args.get("rates"), email)
     return jsonify({"message": message}), code
 
-from flask import request, jsonify, g
 
 @application.route("/api/clone", methods=["GET"])
 def getClones():
@@ -327,7 +327,7 @@ def github_api():
         client_secret = "613f61d82e9dae784ee76bb85dbf11eaf24d2766"
     elif client_id == "7de77ae768aa62b79e09":
         client_secret = "bb481efea8c764dd02af801d783ff61f3954b43d"
-    elif  client_id == "40acda1a937125d9193b":
+    elif client_id == "40acda1a937125d9193b":
         client_secret = "d5f903e15c64c6ffb7fbf011fac15045cc2f0758"
     else:
         return jsonify({"error": "Invalid client_id"}), 400
@@ -354,18 +354,54 @@ def get_user():
     else:
         return jsonify({'error': 'Failed to retrieve user data'})
 
+
+@application.route("/api/create_project_with_clarity", methods=["POST"])
+def cpwcl():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    project_prompt = data["prompt"]
+    questions = data["clarifyingQuestions"]
+    answers = data["userClarifyingAnswers"]
+    return jsonify(create_project_with_clarity(email, project_prompt, questions, answers ))
+
+
+@application.route("/api/create_project_with_spec", methods=["POST"])
+def cpws():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    return jsonify(create_project_with_spec(email,  data["spec"]))
+
+
+@application.route("/api/new_project", methods=["POST"])
+def get_project_questions():
+    email = getattr(g, "email", None)
+    data = request.get_json()
+    project_prompt = data["prompt"]
+    return jsonify(new_project(email, project_prompt))
+
+@application.route("/api/create_project_with_code", methods=["POST"])
+def cpwc():
+    data = request.get_json()
+    results = data["results"]
+    to_zip(results)
+    ZIP_FILE_PATH = "files.zip"
+    return send_file(ZIP_FILE_PATH, as_attachment=True)
+
+
 @application.route("/api/github/getallrepos", methods=["GET"])
 def get_alluserrepos():
     access_token = request.args.get('access_token')
     headers = {'Authorization': f'token {access_token}'}
-    params={'visibility': 'all','per_page': 1000}
+    params = {'visibility': 'all', 'per_page': 1000}
     response = requests.get('https://api.github.com/user/repos', headers=headers, params=params)
-    
+
     if response.status_code == 200:
         try:
             user_data = response.json()
             return jsonify(user_data)
         except ValueError:
             return jsonify({'error': 'Failed to parse JSON response'})
+
+
 if __name__ == "__main__":
     application.run(debug=True, port=8000)

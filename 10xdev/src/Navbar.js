@@ -42,9 +42,7 @@ function Navbar({file,onHamburgerClick}) {
     </nav>:
     <nav className="flex sticky top-0 bg-blue-900 h-10 z-50">
       <div className="text-white text-4xl font-bold ml-1 italic">
-        <Link to="/welcome">
           10XDEV.AI
-        </Link>
       </div>
       <div className="navbar-projectInfo">
 

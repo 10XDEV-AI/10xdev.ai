@@ -76,9 +76,7 @@ function UserPrompt({indexval, searchTerm, onReprompt}) {
         </>
         ) : (
           <div className="userPromptext">
-
                 {userPrompt}
-
           </div>
         )}
       </div>
