@@ -10,7 +10,7 @@ from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 from utilities.folder_tree_structure import generate_folder_structure
-
+from utilities.mixpanel import track_event
 fs = pd.DataFrame()
 
 
@@ -160,77 +160,15 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
     return ""
 
 
-def Ask_AI(prompt, userlogger, email, chatmessages, scope):
-    consolidated_prompt = consolidate_prompt_creation(chatmessages, prompt)
-    if consolidated_prompt:
-        prompt = consolidated_prompt
-
-    global fs
-    path = read_info(email)
-    if path == "":
-        return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
-    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
-    fs = pd.read_csv(filename)
-    fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
-    userlogger.log("Analyzing your query...")
-    files = search_functions(prompt, email, userlogger, scope)
-
-    referenced_code = get_referenced_code(path, files)
-    # print("Referenced code: ", referenced_code)
-    print("Analyzing files: " + str(files))
-    final_prompt = ""
-
-    estimated_tokens = 0
-    for i in files:
-        j = os.path.join(path, i)
-        if i.endswith(".ipynb"):
-            final_contents = convert_ipynb_to_python(j)
-        else:
-            final_contents = open(j).read()
-        final_contents = re.sub(r'\s+', ' ', final_contents)
-        estimated_tokens += tokenCount(final_contents)
-
-    if estimated_tokens > 15000:
-        for file in files:
-            final_prompt += "\nFile path " + file + ":\n"
-            final_prompt += fs['summary'][fs['file_path'] == file].values[0]
-
-        print("Estimated tokens: " + str(estimated_tokens))
-    else:
-        for i in files:
-            final_prompt += "\nFile path " + i + ":\n"
-            path = read_info(email)
-            j = os.path.join(path, i)
-            if j.endswith(".ipynb"):
-                final_contents = convert_ipynb_to_python(j)
-            else:
-                final_contents = open(j).read()
-            final_contents = re.sub(r'\s+', ' ', final_contents)
-            final_prompt += final_contents
-
-    system_message = "Act like you are a coding assistant with access to the codebase. Try to answer the current user prompt."
-    final_prompt += "\n" + "Current User Prompt: " + prompt
-    # print(final_prompt)
-    tokens = tokenCount(final_prompt)
-
-    # userlogger.log("Total Tokens in the query: " + str(tokens))
-    print("Total Tokens in the query: " + str(tokens))
-
-    userlogger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1)
-    userlogger.clear_logs()
-
-    return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
-
-
 def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     global fs
     history = False
+    path = read_info(email)
+    track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1]})
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
         history = True
-    path = read_info(email)
     if path == "":
         return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
     filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"

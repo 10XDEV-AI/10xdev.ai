@@ -8,6 +8,7 @@ from utilities.rates import get_rates
 from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
+from utilities.mixpanel import track_event
 def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
     max_attempts = 3
@@ -74,6 +75,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
 def train_AI(repo_name, userlogger, email):
     fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
 
+    track_event('trainAI', {'email': email, 'Repo': repo_name})
     file_paths_details = files2analyse(repo_name, email)
 
     if len(file_paths_details) == 0:

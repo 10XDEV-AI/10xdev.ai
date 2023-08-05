@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g
-from AskAI import Ask_AI, Ask_AI_search_files, Ask_AI_with_referenced_files
+from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
 from utilities.projectInfo import getprojectInfo
 from utilities.IgnoreAI import IgnoreAI
@@ -11,21 +11,18 @@ from utilities.clone_repo import get_clones, get_branches, select_branch, get_pr
 from utilities.repoutils import select_repo, list_repos, delete_repo
 from utilities.cognito import get_user_attributes
 from utilities.FilesToAnalyzedata import FilesToAnalyzedata
+from utilities.mixpanel import track_event
 from syncAI import syncAI
 import os, threading
 import requests
-import mixpanel
 
 
-def track_event(event_name, properties):
-    mixpanel_client.track(properties['email'], event_name, properties)
 
 application = Flask(
     __name__, static_folder="./10xdev/build/static", template_folder="./10xdev/build"
 )
 application.secret_key = os.urandom(24)
 user_loggers = {}
-mixpanel_client = mixpanel.Mixpanel('597ffd5c8a8491e60f4373120abecddb')
 
 
 @application.before_request
@@ -85,7 +82,6 @@ def get_trainAI():
     path = request.args.get("path")
     t = threading.Thread(target=train_AI, args=(path, user_logger, email))
     t.start()
-    track_event('trainAI', {'email': email, 'path': path})
     return jsonify("Training started"), 200
 
 
@@ -113,7 +109,6 @@ def get_syncAI():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
     sync_new_flag = request.args.get("sync_new")
-    track_event('syncAI', {'email': email, 'sync_new_flag': sync_new_flag})
     if sync_new_flag == "true":
         message, files = syncAI(True, user_logger, email)
 
@@ -147,7 +142,7 @@ def search_files_api():
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)
-    track_event('AskAI', {'email': email, 'chat': chat_messages })
+
     return jsonify(response)
 
 @application.route("/api/get_response", methods=["POST"])
