@@ -95,6 +95,9 @@ export const Create = () => {
     try {
       const response = await fetch("/api/create_project_with_code", {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           results: results,
         }),
@@ -105,20 +108,22 @@ export const Create = () => {
       }
 
       const blob = await response.blob();
-      const fileName = "project.zip"; // You can set the desired filename here
-
-      // Create a temporary link to trigger the download
-      const downloadLink = window.document.createElement("a");
-      downloadLink.href = window.URL.createObjectURL(blob);
-      downloadLink.download = fileName;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-
-      // Clean up
-      document.body.removeChild(downloadLink);
-      window.URL.revokeObjectURL(downloadLink.href);
+      const url = URL.createObjectURL(blob);
+  
+      // Create a link element to initiate the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'files.zip';
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up by removing the link element and revoking the URL object
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+  
     } catch (error) {
-      console.error("Error during API call:", error);
+      // Handle any errors that occurred during the fetch or download process
+      console.error(error);
     }
   };
 
