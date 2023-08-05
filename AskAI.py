@@ -160,6 +160,7 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
 
 
 def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
+    global fs
     history = False
     path = read_info(email)
     track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1]})
@@ -173,11 +174,11 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     user_logger.log("Analyzing your query...")
-    files = search_functions(prompt, email, user_logger, scope)
+    files = search_functions(prompt, email, user_logger, scope, history)
     return {'files': files}
 
 
-def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files):
+def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, files):
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
