@@ -163,7 +163,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     global fs
     history = False
     path = read_info(email)
-    track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1]})
+    track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
@@ -182,10 +182,10 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
-        system_message = "As a coding assistant, you will be provided with [1] a conversation between a human and an AI delimited by xml tags and [2] file paths and contents of relevant files in the repository delimited by triple quotes. Your task is to help the user with the 'Current user prompt'."
+        system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Your task is to help the user with the 'Current user prompt'."
     else:
         prompt = "User Prompt: "+prompt
-        system_message = "As a coding assistant, you will be provided with [1] User Prompt and [2] file paths and contents of relevant files in the repository delimited by triple quotes. Your task is to help the user with the 'User prompt'."
+        system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] User Prompt. Your task is to help the user with the 'User prompt'."
 
     path = read_info(email)
     if path == "":

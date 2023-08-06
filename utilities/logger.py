@@ -26,9 +26,9 @@ class UserLogger:
         self.logger.info(msg)
         if msg is not "":
             self.log_history.append(msg)
-        if percent is not "":
+        if percent != "":
             self.completion_percentage = percent
-        if time_left is not "":
+        if time_left != "":
             self.estimated_time = time_left
         if len(self.log_history) > self.MAX_LOGS:
             self.log_history.pop(0)
