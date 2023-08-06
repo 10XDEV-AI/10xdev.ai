@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g, send_file
 from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
@@ -161,6 +162,7 @@ def get_AIIgnore():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
     path = request.args.get("path")
+    time.sleep(2)
     files2ignore, files2analyse = IgnoreAI(email, user_logger, path)
     print(len(files2analyse))
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
@@ -190,16 +192,6 @@ def save_files_to_ignore():
     except Exception as e:
         # Handle any exceptions or errors
         return {"error": str(e)}, 500
-
-
-@application.route("/api/CheckAIIgnore", methods=["GET"])
-def get_CheckAIIgnore():
-    email = getattr(g, "email", None)
-    path = request.args.get("path")
-    if os.path.exists("../user/" + email + "/" + path + "/.AIIgnore"):
-        return jsonify({"AIIgnore": True})
-    else:
-        return jsonify({"AIIgnore": False})
 
 
 @application.route("/api/logs", methods=["GET"])

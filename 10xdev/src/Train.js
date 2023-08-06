@@ -14,10 +14,9 @@ import {BsFillFileEarmarkCheckFill } from 'react-icons/bs';
 import {AiFillFileUnknown} from 'react-icons/ai';
 
 const Train = () => {
-  const { isLoading, setIsLoading, path } = useContext(SearchContext);
+  const { isLoading, setIsLoading, path, filesToIgnore, setFilesToIgnore } = useContext(SearchContext);
   const [input, setInput] = useState(path);
   const [filesToAnalyze, setFilesToAnalyze] = useState([]);
-  const [filesToIgnore, setFilesToIgnore] = useState([]);
   const [showFilesToIgnore, setShowFilesToIgnore] = useState(false);
   const [showFilesToAnalyze, setShowFilesToAnalyze] = useState(false);
   const [Treedata, setTreedata] = useState([]);
@@ -61,17 +60,17 @@ const Train = () => {
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
+      handleSaveFilesToIgnore();
+      setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
       console.log(data);
       setFilesToAnalyze(data.files2analyze);
-      setFilesToIgnore(data.files2ignore);
       setShowFilesToIgnore(true);
       const tree = convertToTree(data.files2analyze);
       setTreedata(tree);
       setShowFilesToAnalyze(true);
       setIsLoading(false);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +97,6 @@ const Train = () => {
       console.log(error);
     }
   };
-
 
 
   useEffect(() => {
@@ -139,7 +137,6 @@ const Train = () => {
         },
       });
       console.log(data);
-      handleGetGitIgnore();
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -166,16 +163,6 @@ const Train = () => {
     try {
       const updatedFilesToIgnore = [...filesToIgnore, filePath];
       setFilesToIgnore(updatedFilesToIgnore);
-
-      // Make API call to save the updated ignore list
-      await callAPI('/api/saveFilesToIgnore', {
-        method: 'POST',
-        body: JSON.stringify({ path: input, filesToIgnore: updatedFilesToIgnore }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      handleGetGitIgnore();
     } catch (error) {
       console.error(error);
     }
@@ -257,7 +244,8 @@ const Train = () => {
             </div>
           </div>
           <div className="filesdiff border-t mt-2">
-            {showFilesToIgnore && showFilesToAnalyze ? (
+            {showFilesToIgnore && showFilesToAnalyze? (
+
               <div className="w-full flex justify-center">
                 <div className="w-8/12 pt-1">
                   <div className=" ">
@@ -296,7 +284,7 @@ const Train = () => {
                                     onClick={() => handleAddToIgnore(file.Path)}
                                       className={`text-white rounded-sm mx-1 px-1 ${showAddButton[index] ? 'bg-blue-800' : ''}`}
                                     >
-                                      Add File
+                                      Add
                                     </button>
                                   </td>
                                 </tr>
@@ -328,9 +316,9 @@ const Train = () => {
                 </div>
                     <form className="w-4/12 mx-4  mt-3 shadow-md sm:rounded-lg">
                        <div class="w-full rounded-lg bg-slate-200  min-h-[65vh]">
-                           <div class="flex items-center justify-between px-2 ">
+                           <div class="flex items-center justify-between px-2 mb-1">
                                <h2 className="text-gray-700 uppercase text-xl font-bold">Files to Ignore</h2>
-                               <button onClick={handleSaveFilesToIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center px-3 py-1 mt-1 mb-1 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                               <button onClick={handleGetGitIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center px-3  mt-2 mb-2 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
                                   Save & Refresh
                                </button>
                            </div>
@@ -346,37 +334,6 @@ const Train = () => {
                            </div>
                        </div>
                     </form>
-
-                    {/*
-
-                <div className="w-4/12 mx-4 p-1">
-                      <div className="bg-gray-300 w-full">
-                                        <div className="w-full">
-                                          <div className="">
-                                            <div className="flex items-center">
-                                              <h2 className="text-xl font-bold">Files to Ignore:</h2>
-                                              <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 mb-2 rounded-md hover:bg-blue-700">
-                                                <button onClick={handleSaveFilesToIgnore} className="">
-                                                  Save & Refresh
-                                                </button>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          {
-                                            <textarea
-                                              className="w-full min-h-[75vh] p-2 rounded-md text-black"
-                                              placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
-                                              value={filesToIgnore.join('\n')}
-                                              onChange={(event) =>
-                                                setFilesToIgnore(event.target.value.split('\n'))
-                                              }
-                                            />
-                                          }
-                                        </div>
-                                      </div>
-
-                </div> */}
-
               </div>
             ) : (
               <div className="ignorecontainer min-h-[65vh]">

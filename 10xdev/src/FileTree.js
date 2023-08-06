@@ -34,7 +34,6 @@ function DirectoryTreeView(props) {
       return;
     }
 
-    // File handling logic remains the same
     if (checkedFiles.includes(filename)) {
       await setCheckedFiles((prevCheckedFiles) =>
         prevCheckedFiles.filter((file) => file !== filename)
@@ -209,9 +208,25 @@ function DirectoryTreeView(props) {
                     </div>
                   </div>
                 ) : (
-                  <div>
+                  <div className="flex w-full">
+                    <div>
                     <FileIcon filename={element.name} />
+                    </div>
                     {element.name}
+                    {countFiles &&
+                        <div
+                          className={`text-xs bg-blue-900 text-white rounded-md px-4 ml-auto my-auto transition-opacity ${
+                            hoveredFolder === element.id
+                              ? "opacity-100 pointer-events-auto hover:bg-blue-800"
+                              : "opacity-0 pointer-events-none"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddButtonClick(element);
+                          }}
+                        >
+                         Add File
+                        </div>}
                   </div>
                 )}
                 {isBranch && countFiles && (
