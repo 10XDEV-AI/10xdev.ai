@@ -8,6 +8,7 @@ from utilities.files2analyse import check_file_type, files2analyse
 from utilities.rates import get_rates
 from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
+from utilities.mixpanel import track_event
 import difflib
 
 fs = pd.DataFrame()

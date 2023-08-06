@@ -247,7 +247,7 @@ const Train = () => {
             {showFilesToIgnore && showFilesToAnalyze? (
 
               <div className="w-full flex justify-center">
-                <div className="w-8/12 pt-1">
+                <div className="w-8/12 py-1">
                   <div className=" ">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-2  min-h-[70vh]">
                         <table class="w-full text-sm text-left">
@@ -316,9 +316,9 @@ const Train = () => {
                 </div>
                     <form className="w-4/12 mx-4  mt-3 shadow-md sm:rounded-lg">
                        <div class="w-full rounded-lg bg-slate-200  min-h-[65vh]">
-                           <div class="flex items-center justify-between px-2 mb-1">
+                           <div class="flex items-center justify-between p-2">
                                <h2 className="text-gray-700 uppercase text-xl font-bold">Files to Ignore</h2>
-                               <button onClick={handleGetGitIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center px-3  mt-2 mb-2 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                               <button onClick={handleGetGitIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center p-1 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
                                   Save & Refresh
                                </button>
                            </div>
@@ -357,16 +357,11 @@ const Train = () => {
                     <div className="">
                       <div className="flex items-center">
                         <h2 className="text-xl font-bold">Files to Ignore:</h2>
-                        <div className="ml-auto bg-blue-900 text-white px-2 py-1 mx-2 mb-2 rounded-md hover:bg-blue-700">
-                          <button onClick={handleSaveFilesToIgnore} className="">
-                            Save
-                          </button>
-                        </div>
                       </div>
                     </div>
                     {
                       <textarea
-                        className="w-full min-h-[75vh] p-2 rounded-md text-black"
+                        className="w-full min-h-[75vh] p-2 rounded-md text-black h-fit overflow-y-scroll"
                         placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
                         value={filesToIgnore.join('\n')}
                         onChange={(event) =>
