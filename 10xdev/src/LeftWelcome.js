@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState ,useEffect} from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
@@ -7,12 +7,21 @@ import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import Repos from "./Repos";
+import { CopyBlock,irBlack } from "react-code-blocks";
 
+  
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
   const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
+  
+
+  const [showcode, setShowcode] = useState(false);
+  const [fileext, setFilext] = useState("");
+  const [filecode, setFilecode] = useState("");
+
+
 
   const navigate = useNavigate();
 
@@ -67,7 +76,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                         Loading......
                       </div>
                     ) : (
-                      <FileTree data={treeData} showCheckboxes={showCheckboxes} />
+                      <FileTree data={treeData} showCheckboxes={showCheckboxes} landingpage="true" showcode={showcode} setShowcode={setShowcode} setFilext={setFilext} setFilecode={setFilecode}  />
                     )}
                   </div>
                 </div>
@@ -98,6 +107,19 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
             )}
           </>
         )}
+        { showcode && <div className=" mx-4 my-1">
+      <CopyBlock
+text={filecode}
+language={fileext}
+lineProps={{ style: { marginBottom: "0px" } }}
+showLineNumbers={true}
+startingLineNumber={1}
+theme={irBlack}
+codeBlock
+/>
+      </div>
+      
+      }
       </div>
     );
   };

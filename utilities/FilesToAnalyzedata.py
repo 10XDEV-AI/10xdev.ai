@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor
 from utilities.projectInfo import read_info
 
 
-
 def process_file(root, filename, path, user_logger):
     # Skip the .git folder and its contents
     if ".git" in root.split(os.path.sep):
@@ -17,17 +16,15 @@ def process_file(root, filename, path, user_logger):
         user_logger.log("Analysing new data type: " + str(filename))
         with open(os.path.join(root, filename), 'rb') as f:
             if os.path.getsize(os.path.join(root, filename)) > 400:
-                data = f.read(400)  # Read only the first 100 bytes of the file
+                data = f.read(400)  # Read only the first 400 bytes of the file
             else:
                 data = f.read()  # Read the entire file
         result = chardet.detect(data)
-        if result['encoding'] == 'ascii' or result['encoding'] == 'ISO-8859-1' or result['encoding'] == 'utf-8' or result['encoding'] == 'utf-16':
-            pass
-        else:
+        if result['encoding'] not in ['ascii', 'ISO-8859-1', 'utf-8', 'utf-16']:
             return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
     try:
-        file_contents = open(os.path.join(root, filename), 'r').read()
+        file_contents = open(os.path.join(root, filename), 'r', encoding='utf-8', errors='ignore').read()
     except UnicodeDecodeError:
         return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
@@ -36,20 +33,19 @@ def process_file(root, filename, path, user_logger):
     else:
         token_count = tokenCount(file_contents)
         tick_or_cross = '✅' if token_count < 15000 else '⚠️'
-        return {"Path": os.path.relpath(os.path.join(root, filename), path)}
-
-
+        code = file_contents  # Storing the file code
+        extension = os.path.splitext(filename)[-1][1:].lower()  # Removing the dot from the extension
+        return {"Path": os.path.relpath(os.path.join(root, filename), path), "Code": code, "Extension": extension}
 
 
 def FilesToAnalyzedata(email, user_logger, path):
     if path == "":
         path = read_info(email).split('/')[-1]
         print(path)
-    files_paths = []
+    files_data = []
 
     with ThreadPoolExecutor() as executor:
         futures = []
-
 
         for root, _, files in os.walk(os.path.join("../user", email, path)):
             for filename in files:
@@ -58,8 +54,14 @@ def FilesToAnalyzedata(email, user_logger, path):
         for future in futures:
             result = future.result()
             if result:
-                files_paths.append(result)
+                files_data.append(result)
 
     user_logger.clear_logs()
     files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
-    return files2ignore, files_paths
+    return files2ignore, files_data
+
+
+# Call the function with email, user_logger, and path
+# For example:
+# files2ignore, files_data = FilesToAnalyzedata("example_email", user_logger, "example_path")
+# You can replace "example_email" and "example_path" with actual values.
