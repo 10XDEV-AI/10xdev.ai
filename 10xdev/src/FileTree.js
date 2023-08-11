@@ -137,14 +137,17 @@ function DirectoryTreeView(props) {
     }
   
     if (node.name === filename) {
-      props.setFilecode(node.code);
-      props.setFilext(node.extension);
+      props.onFileClick(node.name ,node.code, node.extension);
       return;
     }
   
     if (node.children && node.children.length > 0) {
       for (const childNode of node.children) {
-        getfilecodefromfilteredData(filename, childNode);
+        try{
+          getfilecodefromfilteredData(filename, childNode);
+        }catch(e){
+          console.log(e);
+        }
       }
     }
   };
@@ -242,7 +245,7 @@ function DirectoryTreeView(props) {
                    { props.landingpage==="true"?<div
                       onClick={() => {
                         getfilecodefromfilteredData(element.name,Alldata)
-                        props.setShowcode(!props.showcode);
+                        // props.setShowcode(!props.showcode);
                       }}
                     >
                       {element.name}
