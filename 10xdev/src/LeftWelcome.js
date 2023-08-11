@@ -141,7 +141,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
           </span>
           <CopyBlock
             text={file.code}
-            language={file.extention !== "md" ? file.extention : "markdown"}
+            language={"jsx"}
             lineProps={{ style: { marginBottom: "0px" } }}
             showLineNumbers={true}
             startingLineNumber={1}
