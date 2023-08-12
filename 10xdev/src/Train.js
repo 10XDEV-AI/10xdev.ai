@@ -35,23 +35,26 @@ const Train = () => {
     const root = { name: "", children: [] };
     const nodeMap = { root };
     const pathRegex = /[\\/]/; // Matches either forward slash or backslash
-
-    files.forEach((file) => {
-      const pathComponents = file.Path.split(pathRegex);
+    console.log(files);
+  
+    files.forEach((fileData) => {
+      const pathComponents = fileData.Path.split(pathRegex);
       let parent = root;
       for (let i = 0; i < pathComponents.length; i++) {
         const nodeName = pathComponents[i];
         if (!nodeMap[nodeName]) {
-          const newNode = { name: nodeName, children: [] };
+          const newNode = { name: nodeName, children: [], code: fileData.code, extension: fileData.Extension };
           nodeMap[nodeName] = newNode;
           parent.children.push(newNode);
         }
         parent = nodeMap[nodeName];
       }
+      parent.code = fileData.Code; // Assigning file code to the node
+      parent.extension = fileData.Extension; // Assigning file extension to the node
     });
-
     return root;
   };
+  
 
   const handleSync = async () => {
     navigate('/welcome');
@@ -64,10 +67,11 @@ const Train = () => {
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
-      console.log(data);
       setFilesToAnalyze(data.files2analyze);
       setShowFilesToIgnore(true);
+      
       const tree = convertToTree(data.files2analyze);
+      console.log(tree);
       setTreedata(tree);
       setShowFilesToAnalyze(true);
       setIsLoading(false);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState ,useEffect} from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import SearchContext from "./context/SearchContext";
 import "./Welcome.css";
@@ -7,11 +7,24 @@ import LoadingRing from "./Loader/Loader";
 import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import Repos from "./Repos";
-
+import { CopyBlock,irBlack } from "react-code-blocks";
+import Alert from "./UiComponents/alert";
+  
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
   const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
+  };
+  
+
+  const [showcode, setShowcode] = useState(false);
+  const [filesShow,setFilesShow] = useState([]);
+  const [showalert,setShowalert] = useState(true);
+  var id=0;
+  const handleFileClick = (filename,filecode, fileData) => {
+    id=id+1;
+    setFilesShow([...filesShow,{_id :id+1,name: filename, code: filecode, extention: fileData }]);
+    setShowcode(true);
   };
 
   const navigate = useNavigate();
@@ -67,7 +80,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                         Loading......
                       </div>
                     ) : (
-                      <FileTree data={treeData} showCheckboxes={showCheckboxes} />
+                      <FileTree data={treeData} showCheckboxes={showCheckboxes} landingpage="true" showcode={showcode} setShowcode={setShowcode} filesShow={filesShow} setFilesShow={setFilesShow} onFileClick={handleFileClick}  />
                     )}
                   </div>
                 </div>
@@ -97,7 +110,53 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
               </>
             )}
           </>
-        )}
+        )} 
+        {showcode && filesShow && filesShow.map((file, index) => (
+        file.code? <div>
+        <div key={index} className="mx-4 my-2">
+          <span className="bg-black text-white pb-1 font-bold p-2 rounded-t-md">
+          {file.name}  
+          <button
+  className="inline-flex items-center justify-center ml-4 w-5 h-5 rounded-full bg-gray-700 text-white hover:bg-gray-600 focus:outline-none"
+  onClick={(e) => {
+    e.preventDefault();
+    setShowalert(false);
+    const newFilesShow = filesShow.filter((f) => f.name !== file.name && f.code !== file.code );
+    setFilesShow(newFilesShow);
+    setShowalert(true);
+  }}
+>
+  <svg
+    className="w-3 h-3"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path d="M6 18L18 6M6 6l12 12" />
+  </svg>
+</button>
+          </span>
+          <CopyBlock
+            text={file.code}
+            language={"jsx"}
+            lineProps={{ style: { marginBottom: "0px" } }}
+            showLineNumbers={true}
+            startingLineNumber={1}
+            theme={irBlack}
+            codeBlock
+            wrapLines
+          />
+        </div>
+        </div> : <div>
+        {showalert &&
+<Alert type={600} />
+        }
+        
+        </div>
+      ))}
       </div>
     );
   };

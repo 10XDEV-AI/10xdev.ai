@@ -15,6 +15,7 @@ import SearchContext from "./context/SearchContext";
 function DirectoryTreeView(props) {
   const [filteredData, setFilteredData] = useState(flattenTree(props.data));
   const [countFiles, setCountFiles] = useState(props.CountFiles);
+  const [Alldata, setAlldata] = useState(props.data);
   const {
     checkedFiles,
     setCheckedFiles,
@@ -48,7 +49,12 @@ function DirectoryTreeView(props) {
 
   useEffect(() => {
     filterData();
+    
   }, [filesearchTerm]);
+
+  useEffect(() => {
+    setAlldata(props.data);
+  }, [props.data]);
 
   const filterData = async () => {
     if (!filesearchTerm.trim()) {
@@ -68,6 +74,8 @@ function DirectoryTreeView(props) {
       name: "",
       children: filteredData.map((node) => node.id),
       parent: null,
+      code:"",
+      extention:""
     };
 
     filteredData.unshift(rootNode);
@@ -123,6 +131,27 @@ function DirectoryTreeView(props) {
     setFilesToIgnore(updatedFilesToIgnore);
   };
 
+  const getfilecodefromfilteredData = (filename, node) => {
+    if (!node) {
+      return "";
+    }
+  
+    if (node.name === filename) {
+      props.onFileClick(node.name ,node.code, node.extension);
+      return;
+    }
+  
+    if (node.children && node.children.length > 0) {
+      for (const childNode of node.children) {
+        try{
+          getfilecodefromfilteredData(filename, childNode);
+        }catch(e){
+          console.log(e);
+        }
+      }
+    }
+  };
+
   return (
     <div className="">
       {showCheckboxes && (
@@ -168,18 +197,18 @@ function DirectoryTreeView(props) {
                 )}
                 {isBranch ? (
                   <div className="w-[80%]">
-                    <div className="flex" >
-                    <div className="">
-                      <FolderIcon
-                        isOpen={isExpanded}
-                        onClick={() =>
-                          getNodeProps({
-                            nodeId: element.id,
-                            isExpanded: !isExpanded,
-                          })
-                        }
-                      />
-                    </div>
+                    <div className="flex">
+                      <div className="">
+                        <FolderIcon
+                          isOpen={isExpanded}
+                          onClick={() =>
+                            getNodeProps({
+                              nodeId: element.id,
+                              isExpanded: !isExpanded,
+                            })
+                          }
+                        />
+                      </div>
                       <div
                         className="cursor-pointer"
                         onClick={() =>
@@ -191,7 +220,7 @@ function DirectoryTreeView(props) {
                       >
                         {element.name}
                       </div>
-                      {countFiles &&
+                      {countFiles && (
                         <div
                           className={`text-xs bg-blue-900 text-white rounded-md px-4 ml-auto my-auto transition-opacity ${
                             hoveredFolder === element.id
@@ -203,30 +232,41 @@ function DirectoryTreeView(props) {
                             handleAddButtonClick(element);
                           }}
                         >
-                         Add Folder
-                        </div>}
+                          Add Folder
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
                   <div className="flex w-full">
                     <div>
-                    <FileIcon filename={element.name} />
+                      <FileIcon filename={element.name} />
                     </div>
-                    {element.name}
-                    {countFiles &&
-                        <div
-                          className={`text-xs bg-blue-900 text-white rounded-md px-4 ml-auto my-auto transition-opacity ${
-                            hoveredFolder === element.id
-                              ? "opacity-100 pointer-events-auto hover:bg-blue-800"
-                              : "opacity-0 pointer-events-none"
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddButtonClick(element);
-                          }}
-                        >
-                         Add File
-                        </div>}
+                   { props.landingpage==="true"?<div
+                      onClick={() => {
+                        getfilecodefromfilteredData(element.name,Alldata)
+                        // props.setShowcode(!props.showcode);
+                      }}
+                    >
+                      {element.name}
+                    </div>: element.name
+                    }
+ 
+                    {countFiles && (
+                      <div
+                        className={`text-xs bg-blue-900 text-white rounded-md px-4 ml-auto my-auto transition-opacity ${
+                          hoveredFolder === element.id
+                            ? "opacity-100 pointer-events-auto hover:bg-blue-800"
+                            : "opacity-0 pointer-events-none"
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddButtonClick(element);
+                        }}
+                      >
+                        Add File
+                      </div>
+                    )}
                   </div>
                 )}
                 {isBranch && countFiles && (

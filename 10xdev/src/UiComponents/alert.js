@@ -42,6 +42,8 @@ const Alert = (props) => {
         return 'Error 503: Service Unavailable';
       case 504:
         return 'Error 504: Gateway Timeout. Please Try Again';
+      case 600:
+        return 'Error: File not iterable';
       default:
         return 'Error: Something went wrong';
     }
