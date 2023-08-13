@@ -75,27 +75,21 @@ export const Welcome = () => {
     const root = { name: "", children: [] };
     const nodeMap = { root };
     const pathRegex = /[\\/]/; // Matches either forward slash or backslash
-
-    /* Tree data filtering for later
-    const filteredData = searchTerm
-      ? data.filter((file) => file.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      : data;
-    */
-
-    files.forEach((file) => {
-      const pathComponents = file.Path.split(pathRegex);
+    files.forEach((fileData) => {
+      const pathComponents = fileData.Path.split(pathRegex);
       let parent = root;
       for (let i = 0; i < pathComponents.length; i++) {
         const nodeName = pathComponents[i];
         if (!nodeMap[nodeName]) {
-          const newNode = { name: nodeName, children: [] };
+          const newNode = { name: nodeName, children: [], code: fileData.code, extension: fileData.Extension };
           nodeMap[nodeName] = newNode;
           parent.children.push(newNode);
         }
         parent = nodeMap[nodeName];
       }
+      parent.code = fileData.Code; // Assigning file code to the node
+      parent.extension = fileData.Extension; // Assigning file extension to the node
     });
-
     return root;
   };
 
@@ -166,7 +160,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
     {currentuser!=="new"? (
       <>
         <div className="flex ">
-      <div  className="w-1/2">
+      <div  className="w-1/2 overflow-auto">
         <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">
