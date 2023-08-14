@@ -11,6 +11,7 @@ from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 from utilities.folder_tree_structure import generate_folder_structure
 from utilities.mixpanel import track_event
+from sklearn.feature_extraction.text import TfidfVectorizer
 fs = pd.DataFrame()
 
 
@@ -231,6 +232,35 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
 
     estimated_tokens = 0
 
+    def process_file_contents(contents, user_prompt, max_tokens=2000):
+        # Function to process file contents using TF-IDF and return chunks related to the user prompt
+
+        tfidf_vectorizer = TfidfVectorizer(max_features=100)
+        chunks = re.split(r'\n\s*\n', contents)
+
+        tfidf_matrix = tfidf_vectorizer.fit_transform(chunks)
+        user_prompt_tfidf = tfidf_vectorizer.transform([user_prompt])
+
+        similarities = (tfidf_matrix * user_prompt_tfidf.T).toarray().flatten()
+        chunk_indices = similarities.argsort()[::-1]  # Get indices of chunks sorted by similarity
+
+        selected_chunks = []
+        selected_tokens = 0
+
+        for idx in chunk_indices:
+            chunk = chunks[idx]
+            chunk_tokens = tokenCount(chunk)
+
+            if selected_tokens + chunk_tokens <= max_tokens:
+                selected_chunks.append(chunk)
+                selected_tokens += chunk_tokens
+            else:
+                break
+
+        return "\n\n".join(selected_chunks)
+
+    # ... (Your existing code above)
+
     for i in files:
         final_prompt += "\n```File path " + str(i) + ":\n"
         path = read_info(email)
@@ -239,9 +269,14 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             final_contents = convert_ipynb_to_python(j)
         else:
             final_contents = open(j).read()
-        final_contents = re.sub(r'\s+', ' ', final_contents)
-        final_prompt += final_contents + "```"
-        estimated_tokens += tokenCount(final_contents)
+
+        if tokenCount(re.sub(r'\s+', ' ', final_contents)) > 5000:
+            processed_contents = process_file_contents(final_contents, prompt, max_tokens=5000)
+            final_prompt += re.sub(r'\s+', ' ', processed_contents)
+        else:
+            final_contents = re.sub(r'\s+', ' ', final_contents)
+            final_prompt += final_contents
+
 
     if estimated_tokens > 15000:
         for file in files:

@@ -8,35 +8,7 @@ from utilities.rates import get_rates
 from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
-def summarize_str(filename, string, email, userlogger):
-    openai.api_key = get_key(email)
-    max_attempts = 3
-    attempt_count = 0
-    if tokenCount(str(string)) > 3500:
-        model = "gpt-3.5-turbo-16k"
-    else:
-        model = "gpt-3.5-turbo"
-
-    while attempt_count < max_attempts:
-        try:
-            response = openai.ChatCompletion.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": "Summarize the contents of this file"},
-                    {"role": "user", "content": "File " + filename + " has " + string}
-                ],
-                temperature=0,
-            )
-            return response["choices"][0]["message"]["content"]
-
-        except Exception as e:
-            userlogger.log(f"Encountered error: {e}")
-            userlogger.log("Retrying in 20 seconds...")
-            time.sleep(20)
-            attempt_count += 1
-
-    userlogger.log("Exceeded maximum retry attempts.")
-    return None
+from utilities.summarize import summarize_str
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
     full_file_path = os.path.join("../user", email, repo_name, filepath)
@@ -63,7 +35,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
                 userlogger.log(p)
                 return i, "Ignore"
 
-    if tokenCount(file_contents) > 15000:
+    if tokenCount(file_contents) > 60000:
         p = ("File " + filepath + " was not analyzed as it is too long")
         userlogger.log(p)
         return i, "File content too long"
