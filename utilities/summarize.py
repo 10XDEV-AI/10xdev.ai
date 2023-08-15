@@ -26,7 +26,7 @@ def summarize_str(filename, string, email, userlogger):
     openai.api_key = get_key(email)
     max_attempts = 3
     attempt_count = 0
-    if tokenCount(str(string))>10000:
+    if tokenCount(str(string))>12000:
         return summarize_big(string, filename, email)
     if tokenCount(str(string)) > 3500:
         model = "gpt-3.5-turbo-16k"
