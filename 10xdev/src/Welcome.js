@@ -160,7 +160,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
     {currentuser!=="new"? (
       <>
         <div className="flex ">
-      <div  className="w-1/2">
+      <div  className="w-1/2 overflow-auto">
         <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">
