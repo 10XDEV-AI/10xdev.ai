@@ -3,11 +3,11 @@ from utilities.keyutils import get_key
 from utilities.tokenCount import tokenCount
 
 def summarize_big(input_string, filename, email):
-    from langchain import OpenAI
-    llm = OpenAI(temperature=0, openai_api_key=get_key(email), model_name="gpt-3.5-turbo-16k")
+    from langchain.chat_models import ChatOpenAI
+    llm = ChatOpenAI(temperature=0, openai_api_key=get_key(email), model_name="gpt-3.5-turbo-16k")
     from langchain.chains.summarize import load_summarize_chain
     from langchain.text_splitter import RecursiveCharacterTextSplitter
-    input_string = "File Path : " + filename + "\n"
+    input_string = "File Path : " + filename + "\n" + input_string
 
     # Initialize the text splitter
     text_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n"], chunk_size=10000, chunk_overlap=500)
@@ -27,7 +27,7 @@ def summarize_str(filename, string, email, userlogger):
     max_attempts = 3
     attempt_count = 0
     if tokenCount(str(string))>10000:
-        return summarize_big(string, filename, email, userlogger)
+        return summarize_big(string, filename, email)
     if tokenCount(str(string)) > 3500:
         model = "gpt-3.5-turbo-16k"
     else:

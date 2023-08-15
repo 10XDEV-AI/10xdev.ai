@@ -29,17 +29,17 @@ def process_file(root, filename, path, user_logger):
 
     if filename.endswith("ipynb"):
         file_contents = convert_ipynb_to_python(os.path.join(root, filename))
-        if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
+        if len(re.split(r'[.,;\n\s]+', file_contents)) > 60000:
             return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'warning'}
 
-        tick_or_cross = 'success' if tokenCount(file_contents) < 15000 else 'warning'
+        tick_or_cross = 'success' if tokenCount(file_contents) < 60000 else 'warning'
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": tokenCount(file_contents), "Sign": tick_or_cross}
 
-    if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
+    if len(re.split(r'[.,;\n\s]+', file_contents)) > 60000:
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": 'NA', "Sign": 'warning'}
     else:
         token_count = tokenCount(file_contents)
-        tick_or_cross = 'success' if token_count < 15000 else 'warning'
+        tick_or_cross = 'success' if token_count < 60000 else 'warning'
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Tokens": token_count, "Sign": tick_or_cross}
 
 

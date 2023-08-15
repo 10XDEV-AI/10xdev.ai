@@ -14,38 +14,22 @@ const LoadingRing = ({RedirectTo, dontLog }) => {
     navigate('/welcome');
   };
 
-  const loaders = [
-    <Rings
-      height={60}
-      width={60}
-      color="#000066"
-      radius={6}
-      wrapperStyle={{}}
-      wrapperClass=""
-      visible={true}
-      ariaLabel="rings-loading"
-      key="rings-loader"
-    />,
-    <Oval
-      height={80}
-      width={80}
-      color="#000066"
-      wrapperStyle={{}}
-      wrapperClass=""
-      visible={true}
-      ariaLabel='oval-loading'
-      secondaryColor="#000026"
-      strokeWidth={2}
-      strokeWidthSecondary={2}
-    />
-  ];
-
-  // Randomly select a loader
-  const randomLoader = loaders[Math.floor(Math.random() * loaders.length)];
-
   return (
     <div className="loading-ring-container">
-      <div className="loading-ring">{randomLoader}</div>
+      <div className="loading-ring">
+        <Oval
+              height={80}
+              width={80}
+              color="#000066"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#000026"
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            />
+      </div>
       {dontLog === 'true' ? null : (
       <>
         <div className="logbox pt-10">
