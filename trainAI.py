@@ -42,7 +42,6 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
 
     return i, summarize_str(filepath, file_contents, email, userlogger)
 
-
 def train_AI(repo_name, userlogger, email):
 
     fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
