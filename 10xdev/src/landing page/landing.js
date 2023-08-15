@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react';
 import './landing.css';
 import myimg from './images/feature-1.png';
-
+import DemoView from "../demo/demo";
 const LandingPage = () => {
   const hostname = window.location.hostname;
   let redirectUri;
@@ -93,6 +93,7 @@ const LandingPage = () => {
                 </div>
         </div>
       </section>
+      <DemoView/>
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
             <div class="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
@@ -126,6 +127,7 @@ const LandingPage = () => {
                     </ul>
                     <a href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`} class="text-white bg-blue-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-blue-900">Get started</a>
                 </div>
+                
 
                 <div class="flex flex-col max-w-lg p-6 mx-auto text-center text-gray-900 bg-white border border-gray-100 rounded-lg shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
                     <h3 class="mb-4 text-2xl font-semibold">Company</h3>

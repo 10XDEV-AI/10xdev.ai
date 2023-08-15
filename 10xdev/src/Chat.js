@@ -9,7 +9,7 @@ import LeftWelcome from "./LeftWelcome";
 import Navbar from "./Navbar";
 import { callAPI } from "./api";
 
-export const Chat = () => {
+export const Chat = ({Nonav,searchBar}) => {
   const {
     searchTerm,
     isLoading,
@@ -206,10 +206,10 @@ export const Chat = () => {
 
   return (
     <>
-        <div className="flex">
+        <div className="flex flex-col min-h-screen">
             {showLeftWelcome &&  <div className="w-6/12 fixed border-r"><LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} commitHash={commitHash}/></div>}
             <div className={`${showLeftWelcome ? "w-6/12 absolute right-0 " : "w-full"}`}>
-              <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
+             {Nonav!=="true" && <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />}
               <div class="w-full bg-slate-50 p-4 rounded-lg ">
                 <div class="flex flex-wrap gap-2 justify-center items-center" >
                   {checkedFiles.length>0&&
@@ -273,11 +273,16 @@ export const Chat = () => {
 
               </div>
             </div>
-            <div className="footer"></div>
+            <div className="flex-grow" />
+            {searchBar!=="nonsticky" ? <><div className="footer"></div>
               <div className={`searchbarrow ${sideContainerOpen ? "open z-0" : "z-0"}`}>
               <SearchBar onSearch={handleSearch} />
               </div>
-        </div>
+              </>
+              : 
+              <> 
+              <div className="w-full mb-20"><SearchBar onSearch={handleSearch} /></div>
+        </>}</div>
     </>
   );
 };

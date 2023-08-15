@@ -15,7 +15,7 @@ const Alert = (props) => {
   useEffect(() => {
     if (props.type === 401) {
       setTimeout(() => {
-        window.location.href = '/'; // Redirect to the home page
+        // window.location.href = '/'; // Redirect to the home page
       }, 4000);
     }
   }, [props.type]);
