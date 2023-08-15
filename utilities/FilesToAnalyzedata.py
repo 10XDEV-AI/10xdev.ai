@@ -28,11 +28,11 @@ def process_file(root, filename, path, user_logger):
     except UnicodeDecodeError:
         return {"Path": os.path.relpath(os.path.join(root, filename), path)}
 
-    if len(re.split(r'[.,;\n\s]+', file_contents)) > 15000:
+    if len(re.split(r'[.,;\n\s]+', file_contents)) > 60000:
         return {"Path": os.path.relpath(os.path.join(root, filename), path)}
     else:
         token_count = tokenCount(file_contents)
-        tick_or_cross = '✅' if token_count < 15000 else '⚠️'
+        tick_or_cross = '✅' if token_count < 60000 else '⚠️'
         code = file_contents  # Storing the file code
         extension = os.path.splitext(filename)[-1][1:].lower()  # Removing the dot from the extension
         return {"Path": os.path.relpath(os.path.join(root, filename), path), "Code": code, "Extension": extension}

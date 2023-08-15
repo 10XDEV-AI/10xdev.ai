@@ -70,7 +70,7 @@ export const Chat = () => {
       const filesData = await callAPI("/api/search_files", {
         method: "POST",
         body: JSON.stringify({
-          chatMessages: chatMessages,
+          chatMessages: chatMessages.slice(0, chatMessages.length - 1),
           checkedFiles: checkedFiles,
           prompt: input,
         }),
@@ -84,7 +84,7 @@ export const Chat = () => {
         method: "POST",
         body: JSON.stringify({
           prompt: input,
-          chatMessages: chatMessages,
+          chatMessages: chatMessages.slice(0, chatMessages.length - 1),
           files: filesData.files,
         }),
       });
@@ -152,7 +152,7 @@ export const Chat = () => {
               method: "POST",
               body: JSON.stringify({
                 prompt: input,
-                chatMessages: chatMessages,
+                chatMessages: chatMessages.slice(0, index),
                 files: filesData.files,
               }),
             });

@@ -11,8 +11,110 @@ from utilities.AskGPT import AskGPT
 from utilities.tokenCount import tokenCount
 from utilities.folder_tree_structure import generate_folder_structure
 from utilities.mixpanel import track_event
+from langchain.text_splitter import RecursiveCharacterTextSplitter, Language
+from sklearn.feature_extraction.text import TfidfVectorizer
+import re
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+
 fs = pd.DataFrame()
 
+
+def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2000, filename=""):
+    chunks = re.split(r'\n', contents)
+    stemmer = PorterStemmer()
+
+    stop_words = set(stopwords.words('english'))
+
+    # Apply stemming to chunks before vectorization
+    stemmed_chunks = []
+    for chunk in chunks:
+        # Tokenize the chunk and apply stemming to each token
+        tokens = chunk.split()
+        stemmed_tokens = [stemmer.stem(token) for token in tokens if token.lower() not in stop_words]
+        stemmed_chunk = ' '.join(stemmed_tokens)
+        stemmed_chunks.append(stemmed_chunk)
+
+    # Create TF-IDF matrix with the stemmed chunks
+    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_matrix = tfidf_vectorizer.fit_transform(stemmed_chunks)
+
+    # Transform the user prompt using the fitted vectorizer
+    tokens = user_prompt.split()
+    stemmed_tokens = [stemmer.stem(token) for token in tokens if token.lower() not in stop_words]
+    stemmed_prompt = ' '.join(stemmed_tokens)
+    user_prompt_tfidf = tfidf_vectorizer.transform([stemmed_prompt])
+
+    similarities = (tfidf_matrix * user_prompt_tfidf.T).toarray().flatten()
+    chunk_indices = similarities.argsort()[::-1]  # Get indices of chunks sorted by similarity
+    selected_tokens = 0
+    selected_chunk_indices = []
+
+    # Mapping of file extensions to programming languages
+    extension_to_lang = {
+        'cpp': 'cpp',
+        'h': 'cpp',
+        'hpp': 'cpp',
+        'hxx': 'cpp',
+        'cxx': 'cpp',
+        'go': 'go',
+        'java': 'java',
+        'js': 'js',
+        'php': 'php',
+        'proto': 'proto',
+        'py': 'python',
+        'rst': 'rst',
+        'rb': 'ruby',
+        'rs': 'rust',
+        'scala': 'scala',
+        'swift': 'swift',
+        'md': 'markdown',
+        'tex': 'latex',
+        'html': 'html',
+        'htm': 'html',
+        'sol': 'sol',
+    }
+
+    # Get language based on file extension or default to 'javascript'
+    lang = extension_to_lang.get(filename.split('.')[-1], 'javascript')
+
+    for e in Language:
+        if e.value == lang:
+            language = e.value
+            break
+
+    chunk_size = 3000  # Adjust the chunk size as needed
+    chunk_overlap = 0  # No overlap between chunks
+    langchain_splitter = RecursiveCharacterTextSplitter.from_language(
+        language=language, chunk_size=chunk_size, chunk_overlap=chunk_overlap
+    )
+
+    # Split the contents into LangChain documents
+    langchain_docs = langchain_splitter.create_documents([contents])
+
+    # Extract chunks from LangChain documents
+    big_chunks = [doc.page_content for doc in langchain_docs]
+    selected_big_chunk_indices = set()
+    total_tokens = 0
+
+    for idx in chunk_indices:
+        chunk = chunks[idx]
+        if idx>=2 and idx+2<len(chunks):
+            chunk_minus = chunks[idx-2]+"\n"+chunks[idx-1]+"\n"+chunks[idx]
+            chunk_plus = chunk+"\n"+chunks[idx+1]+"\n"+chunks[idx+2]
+        else:
+            chunk_plus = chunk
+            chunk_minus =chunk
+
+        for big_chunk_index, big_chunk in enumerate(big_chunks):
+            if chunk_plus in big_chunk or chunk_minus in big_chunk:
+                if total_tokens + tokenCount(big_chunk) <= maximum_tokens:
+                    selected_big_chunk_indices.add(big_chunk_index)
+                    joined_big_chunks = "\n".join([big_chunks[i] for i in selected_big_chunk_indices])
+                    total_tokens = tokenCount(re.sub(r'\s+', ' ', joined_big_chunks))
+
+    joined_big_chunks = "\n".join([big_chunks[i] for i in selected_big_chunk_indices])
+    return re.sub(r'\s+', ' ', joined_big_chunks)
 
 def max_cosine_sim(embeddings, prompt_embedding):
     y = 0
@@ -49,9 +151,6 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
 
 def search_functions(code_query, email, userlogger, scope, history):
     global fs
-    prompt_embedding = split_embed(code_query, email)
-
-    fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     if len(scope):
         files_in_scope = []
         for file in scope:
@@ -63,6 +162,8 @@ def search_functions(code_query, email, userlogger, scope, history):
         if len(files_in_scope) >= 5:
             fs = fs[fs['file_path'].isin(files_in_scope)]
 
+    prompt_embedding = split_embed(code_query, email)
+    fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
 
     res.index = range(1, len(res) + 1)
@@ -178,13 +279,13 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     return {'files': files}
 
 
-def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, files):
-    consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
+def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, files):
+    consolidated_prompt = consolidate_prompt_creation(chat_messages, og_prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
         system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Your task is to help the user with the 'Current user prompt'."
     else:
-        prompt = "User Prompt: "+prompt
+        prompt = "User Prompt: "+og_prompt
         system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] User Prompt. Your task is to help the user with the 'User prompt'."
 
     path = read_info(email)
@@ -231,6 +332,7 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
 
     estimated_tokens = 0
 
+
     for i in files:
         final_prompt += "\n```File path " + str(i) + ":\n"
         path = read_info(email)
@@ -239,9 +341,20 @@ def Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, file
             final_contents = convert_ipynb_to_python(j)
         else:
             final_contents = open(j).read()
-        final_contents = re.sub(r'\s+', ' ', final_contents)
-        final_prompt += final_contents + "```"
-        estimated_tokens += tokenCount(final_contents)
+
+        if tokenCount(re.sub(r'\s+', ' ', final_contents)) > 3000:
+            bag_of_words = og_prompt
+            for message in chat_messages:
+                bag_of_words += message['prompt']['searchTerm']
+                if message['response']['searchResults']:
+                    bag_of_words += message['response']['searchResults']
+
+            processed_contents = process_file_contents_with_langchain(final_contents, bag_of_words, 3000, j)
+            final_prompt += re.sub(r'\s+', ' ', processed_contents)
+        else:
+            final_contents = re.sub(r'\s+', ' ', final_contents)
+            final_prompt += final_contents
+
 
     if estimated_tokens > 15000:
         for file in files:
