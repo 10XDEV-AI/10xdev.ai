@@ -1,6 +1,6 @@
 import pandas as pd
 import regex as re
-import os
+import os, langchain
 from utilities.embedding import split_embed
 from openai.embeddings_utils import cosine_similarity
 from utilities.notebook_utils import convert_ipynb_to_python
