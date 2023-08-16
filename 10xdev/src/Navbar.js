@@ -36,16 +36,15 @@ function Navbar({file,onHamburgerClick}) {
                 <div className="text-blue-900">
                   <DropdownButton />
                 </div>
-
-
         </div>
     </nav>:
     <nav className="flex sticky top-0 bg-blue-900 h-10 z-50">
-      <div className="text-white text-4xl font-bold ml-1 italic">
-          10XDEV.AI
-      </div>
+      <Link to="/welcome" className="my-auto">
+          <div className="text-white text-4xl font-bold ml-1 italic">
+              10XDEV.AI
+          </div>
+      </Link>
       <div className="navbar-projectInfo">
-
       </div>
       <div className="linkscontainer">
       <div className="text-white linkColumn">

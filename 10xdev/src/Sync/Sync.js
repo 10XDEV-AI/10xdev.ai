@@ -7,7 +7,7 @@ import { FaFile } from 'react-icons/fa';
 import {useNavigate} from 'react-router-dom';
 
 function Sync(handleSyncClick) {
-  const { showSync, setShowSync , setPath, commitHash,setCommitHash, repository } = useContext(SearchContext);
+  const { showSync, setShowSync , setPath, commitHash,setCommitHash, repository, setCommitTime } = useContext(SearchContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showTick, setShowTick] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -65,7 +65,8 @@ function Sync(handleSyncClick) {
           setShowTick(true);
           setNewFiles([]);
           const data = await callAPI('/api/projectInfo');
-          setCommitHash(data.latest_commit_hash)
+          setCommitHash(data.latest_commit_hash);
+          setCommitTime(data.last_commit_time_difference);
           setTimeout(() => {
           setShowSync(false);
           }, 2000);

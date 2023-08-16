@@ -20,6 +20,7 @@ const SearchState = ({ children }) => {
   const [currentuser, setCurrentUser] = useState();
   const [searchFiles, setSearchFiles] = useState([]);
   const [commitHash, setCommitHash] = useState("");
+  const [commitTime, setCommitTime] = useState("");
   const [repository, setRepository] = useState('');
   const [branch, setBranch] = useState('');
   const [treeData, setTreeData] = useState([]);
@@ -121,6 +122,7 @@ const SearchState = ({ children }) => {
         setCheckedFiles,
         repos, setRepos,
         commitHash,setCommitHash,
+        commitTime, setCommitTime,
         repository, setRepository,
         branch, setBranch,
         sideContainerOpen, setSideContainerOpen,

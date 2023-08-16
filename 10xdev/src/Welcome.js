@@ -12,7 +12,7 @@ import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 
 export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash,setCommitHash,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash, setCommitHash, commitTime, setCommitTime,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
 
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
@@ -63,6 +63,7 @@ export const Welcome = () => {
           getTreeData();
           setRepository(data.repo_name);
           setCommitHash(data.latest_commit_hash);
+          setCommitTime(data.last_commit_time_difference);
           setBranch(data.branch_name);
         }
         setIsLoadingProjectInfo(false);
@@ -115,6 +116,7 @@ export const Welcome = () => {
     setInput(e.target.value);
     setTypingStarted(true);
   };
+
 
   const typewriterStrings = [
     "Implement a user registration form with validation",
@@ -176,13 +178,21 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
             <div className="border border-gray-400 rounded-lg shadow-md">
               <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
                 {typingStarted ? <textarea
-                                                   className="flex-grow h-[48vh] focus:outline-none"
-                                                   value={input}
-                                                   placeholder=""
-                                                   onClick={() => setTypingStarted(true)}
-                                                   onChange={handleInputChange}
-                                                   onKeyDown={(e) => e.key === 'Enter' && search(e)}
-                                                 /> : (
+                                   className="flex-grow h-[48vh] focus:outline-none"
+                                   value={input}
+                                   placeholder=""
+                                   onClick={() => setTypingStarted(true)}
+                                   onChange={handleInputChange}
+                                   onKeyDown={(e) => {
+                                     if (e.key === 'Enter' && !e.shiftKey) {
+                                       e.preventDefault();
+                                       search(e);
+                                     } else if (e.key === 'Enter' && e.shiftKey) {
+                                       setInput(prevInput => prevInput + '\n');
+                                     }
+                                   }}
+                                 />
+                 : (
                   <Typewriter className = "h-[48vh]"
                     options={{
                       strings: shuffledStrings,

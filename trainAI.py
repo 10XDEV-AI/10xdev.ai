@@ -9,6 +9,7 @@ from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
 from utilities.summarize import summarize_str
+from utilities.mixpanel import track_event
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
     full_file_path = os.path.join("../user", email, repo_name, filepath)
@@ -43,6 +44,7 @@ def summarize_file(repo_name, filepath, i, userlogger, email):
     return i, summarize_str(filepath, file_contents, email, userlogger)
 
 def train_AI(repo_name, userlogger, email):
+    track_event('TrainAI', {'email': email, 'Repo': repo_name})
 
     fsfilename = "../user/" + email + '/AIFiles/' + repo_name + ".csv"
 

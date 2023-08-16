@@ -111,7 +111,7 @@ def get_syncAI():
     sync_new_flag = request.args.get("sync_new")
     if sync_new_flag == "true":
         message, files = syncAI(True, user_logger, email)
-
+ 
     else:
         message, files = syncAI(False, user_logger, email)
     return jsonify({"message": message, "files": files})
@@ -119,7 +119,7 @@ def get_syncAI():
 
 @application.route("/api/data", methods=["POST", "GET"])
 def get_data():
-    email = getattr(g, "email", None)
+    email = getattr(g, "email", None) 
     user_logger = getattr(g, "user_loggers", None)[email]
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")

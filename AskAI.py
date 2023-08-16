@@ -19,7 +19,6 @@ from nltk.corpus import stopwords
 
 fs = pd.DataFrame()
 
-
 def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2000, filename=""):
     chunks = re.split(r'\n', contents)
     stemmer = PorterStemmer()

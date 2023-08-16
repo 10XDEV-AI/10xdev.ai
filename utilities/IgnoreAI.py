@@ -81,8 +81,8 @@ def IgnoreAI(email, user_logger, path):
 
 def parse_ignore_file(file_path):
     with open(file_path, 'r') as f:
-        patterns = [line.strip() for line in f if line.strip() and not line.strip().startswith('#')]
-    return lambda x: any(fnmatch.fnmatch(x, pattern) for pattern in patterns)
+        patterns = [line.strip().rstrip('/') for line in f if line.strip() and not line.strip().startswith('#')]
+    return lambda x: any(fnmatch.fnmatch(x.rstrip('/'), pattern) for pattern in patterns)
 
 
 def is_file_ignored(filename):

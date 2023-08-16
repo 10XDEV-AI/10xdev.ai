@@ -11,7 +11,7 @@ import { CopyBlock,irBlack } from "react-code-blocks";
 import Alert from "./UiComponents/alert";
   
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm}) => {
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
+  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, commitTime, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
@@ -87,6 +87,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
                 <div className="flex items-center text-blue-900 justify-center pt-4">
                   <div className="">
                     <h1 className="font-bold"> Last synced commit hash : #{commitHash}</h1>
+                    <h1 className="font-bold"> Last synced {commitTime}</h1>
                   </div>
                   <button className="bg-blue-900 text-white font-bold p-2 rounded ml-auto hover:bg-blue-600 shadow-md flex" onClick={handleSyncClick}>
                     Sync

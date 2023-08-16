@@ -102,7 +102,6 @@ function DirectoryTreeView(props) {
       return 1;
     }
 
-    // Recursively calculate the total number of files in children folders
     for (const childId of node.children) {
       const childNode = data.find((node) => node.id === childId);
       if (childNode) {
@@ -152,20 +151,30 @@ function DirectoryTreeView(props) {
     }
   };
 
+  const handleClearSearch = () => {
+      setFileSearchTerm("");
+    };
+
   return (
     <div className="">
-      {showCheckboxes && (
         <div className="flex w-full justify-center mt-1 border-b ">
-          <input
-            type="text"
-            value={filesearchTerm}
-            onChange={(e) => setFileSearchTerm(e.target.value)}
-            onKeyUp={() => filterData()}
-            placeholder="Search files..."
-            className="w-full px-2 py-1 border-none outline-none rounded-md focus:outline-none mb-0"
-          />
-        </div>
-      )}
+                <input
+                  type="text"
+                  value={filesearchTerm}
+                  onChange={(e) => setFileSearchTerm(e.target.value)}
+                  onKeyUp={() => filterData()}
+                  placeholder="Search files..."
+                  className="w-full px-2 py-1 border-none outline-none rounded-md focus:outline-none mb-0"
+                />
+                {filesearchTerm && (
+                  <button
+                    className="text-gray-500 mx-3 hover:text-gray-800"
+                    onClick={handleClearSearch}
+                  >
+                    &#x2715;
+                  </button>
+                )}
+              </div>
       <div className="px-4 pt-2 bg-white h-full font-mono text-base text-gray-800 select-none rounded-md">
         <TreeView
           data={filteredData}

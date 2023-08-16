@@ -28,8 +28,8 @@ def files2analyse(repo_name, email):
 
 def parse_ignore_file(file_path):
     with open(file_path, 'r') as f:
-        patterns = [line.strip() for line in f if line.strip() and not line.strip().startswith('#')]
-    return lambda x: any(fnmatch.fnmatch(x, pattern) for pattern in patterns)
+        patterns = [line.strip().rstrip('/') for line in f if line.strip() and not line.strip().startswith('#')]
+    return lambda x: any(fnmatch.fnmatch(x.rstrip('/'), pattern) for pattern in patterns)
 
 def check_file_type(file_path):
     ignored_extensions = ('.jpg', '.svg', '.gif', '.png', '.jpeg', '.ico', '.pdf', '.docx', '.doc', '.xlsx', '.xls',
