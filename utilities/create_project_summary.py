@@ -31,7 +31,9 @@ def create_project_summary(repo_name, email):
     if tokenCount(prompt) < 15000:
         project_summary = AskGPT(email=email, prompt=prompt)
     else:
-        fs.sort_values(len('summary'), ascending=False).head(30)
+        fs['summary_length'] = fs['summary'].apply(len)
+        fs  = fs.sort_values(by='summary_length', ascending=False)
+        fs = fs.head(30)
         file_paths = fs['file_path'].tolist()
         summaries = fs['summary'].tolist()
 
