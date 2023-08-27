@@ -125,11 +125,11 @@ def max_cosine_sim(embeddings, prompt_embedding):
 def filter_functions(result_string, filepaths, email, userlogger, history):
     if history:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the Current user prompt, filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
-        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a chat between AI and Human User delimited XML tags. "
+        system_message = "You will be provided with [1] A list of file paths and their roles and summaries delimited by triple quotes and [2] a chat between AI and Human User delimited XML tags. "
         system_message += "Your job is to guess the relevant files that the user is speaking about in the Current User Prompt and return a filtered list of file paths. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
     else:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
-        system_message = "You will be provided with [1] A list of file paths and their summaries delimited by triple quotes and [2] a user prompt delimited by XML tags. "
+        system_message = "You will be provided with [1] A list of file paths and their roles and summaries delimited by triple quotes and [2] a user prompt delimited by XML tags. "
         system_message += "Your job is to guess the relevant files that the user is speaking about in the User Prompt and return a filtered list of file paths . If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
 
     filter_prompt = result_string
@@ -161,7 +161,9 @@ def search_functions(code_query, email, userlogger, scope, history):
         if len(files_in_scope) >= 5:
             fs = fs[fs['file_path'].isin(files_in_scope)]
 
-    prompt_embedding = split_embed(code_query, email)
+    from nltk.corpus import stopwords
+    stop_words = set(stopwords.words('english'))
+    prompt_embedding = split_embed(' '.join([word for word in code_query .split() if word.lower() not in stop_words]), email)
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
 
@@ -170,8 +172,12 @@ def search_functions(code_query, email, userlogger, scope, history):
     for index, row in res.iterrows():
         file_path = row['file_path']
         summary = row['summary']
+        role = row['role']
         if summary != "Ignore" and summary:
-            file_summary = f'''"""File path: {file_path} Summary: {summary}"""'''
+            if role :
+                file_summary = f'''"""File path: {file_path} \nRole: {role} \nSummary: {summary}"""'''
+            else:
+                file_summary = f'''"""File path: {file_path} Summary: {summary}"""'''
             file_summary_string.append(file_summary.replace('\n',' '))
         else:
             file_summary_string.append(f'''File path: {file_path}''')
@@ -282,10 +288,10 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
     consolidated_prompt = consolidate_prompt_creation(chat_messages, og_prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
-        system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Your task is to help the user with the 'Current user prompt'."
+        system_message = "You will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Answer the 'Current user prompt' using given context."
     else:
         prompt = "User Prompt: "+og_prompt
-        system_message = "As a coding assistant, you will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] User Prompt. Your task is to help the user with the 'User prompt'."
+        system_message = "You will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] User Prompt. Answer the 'User prompt' using given context"
 
     path = read_info(email)
     if path == "":
@@ -302,17 +308,17 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
         if len(files) ==0:
             if consolidated_prompt:
                 prompt = consolidated_prompt
-                system_message = "As a coding assistant, you will be provided with [1] a conversation between a human and an AI delimited by xml tags and [2] summary and architechture of a repository. Your task is to help the user with the 'Current user prompt'."
+                system_message = "You will be provided with [1] a conversation between a human and an AI delimited by xml tags and [2] summary and architechture of a repository."
             else:
                 prompt = "User Prompt: "+prompt
-                system_message = "As a coding assistant, you will be provided with [1] User Prompt and [2] summary and architechture of a repository. Your task is to help the user with the 'User prompt'."
+                system_message = "You will be provided with [1] User Prompt and [2] summary and architechture of a repository. "
         else:
             if consolidated_prompt:
                 prompt = consolidated_prompt
-                system_message = "As a coding assistant, you will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. Your task is to help the user with the 'Current user prompt'."
+                system_message = "You will be provided with \n1. a conversation between a human and an AI delimited by xml tags \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. Your task is to help the user with the 'Current user prompt'."
             else:
                 prompt = "User Prompt: "+prompt
-                system_message = "As a coding assistant, you will be provided with \n1. a User Prompt \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. Your task is to help the user with the 'User prompt'."
+                system_message = "You will be provided with \n1. a User Prompt \n2. summary and architechture of a repository \n3.A list of file paths and their summaries delimited by triple quotes. "
     '''else:
         user_logger.log("Referring Files : " + str(files))
 
@@ -372,7 +378,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
 
 
 if __name__ == "__main__":
-    '''
+    
     question = "What should I do next in this project?" #passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
@@ -389,7 +395,7 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
-    
+    '''
 
     question = "Hi" #TMI
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
@@ -410,8 +416,6 @@ if __name__ == "__main__":
     print(question)
     print(Answer)
 
-
-    '''
     question = "How do I add dark mode functionality to the project" #Passed
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
@@ -426,3 +430,6 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
+
+
+    '''

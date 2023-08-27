@@ -55,3 +55,17 @@ def create_project_summary(repo_name, email):
     summary_file_path = "../user/" + email + "/AIFiles/" + repo_name.split('/')[-1] + "_full_project_info.txt"
     with open(summary_file_path, 'w') as file:
         file.write(project_summary)
+
+def get_project_summary(repo_name, email):
+    summary_file_path = "../user/" + email + "/AIFiles/" + repo_name.split('/')[-1] + "_full_project_info.txt"
+    with open(summary_file_path, 'r') as file:
+        project_summary = file.read()
+
+    return_string = "Project Summary: \n" + project_summary
+
+    # Generate the folder tree structure
+    folder_tree = generate_folder_structure(email, repo_name)
+
+    return_string += "\n\nFolder tree structure: \n" + folder_tree
+
+    return return_string

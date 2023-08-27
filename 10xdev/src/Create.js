@@ -133,8 +133,8 @@ export const Create = () => {
         <div className="flex">
             <div className="w-full">
               <Navbar/>
-              <h1 class="mx-[15%] mt-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 ">Your project will be created based on below instructions</h1>
-               <p class="mx-[15%] mb-4 text-lg font-normal text-gray-500 lg:text-xl ">You can edit these instructions to get better results</p>
+              <h1 className="mx-[15%] mt-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 ">Your project will be created based on below instructions</h1>
+               <p className="mx-[15%] mb-4 text-lg font-normal text-gray-500 lg:text-xl ">You can edit these instructions to get better results</p>
               <div className="w-full">
               {chatMessages.map((chatMessage, index) => (
                 <div key={index}>

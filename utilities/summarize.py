@@ -38,7 +38,7 @@ def summarize_str(filename, string, email, userlogger):
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": "Summarize the contents of this file"},
+                    {"role": "system", "content": "Summarize the contents of this file in a paragraph."},
                     {"role": "user", "content": "File " + filename + " has " + string}
                 ],
                 temperature=0,
