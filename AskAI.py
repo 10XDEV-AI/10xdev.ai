@@ -1,6 +1,6 @@
 import pandas as pd
 import regex as re
-import os, langchain
+import os
 from utilities.embedding import split_embed
 from openai.embeddings_utils import cosine_similarity
 from utilities.notebook_utils import convert_ipynb_to_python
@@ -339,7 +339,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
 
 
     for i in files:
-        final_prompt += "\n```File path " + str(i) + ":\n"
+        final_prompt += "```File path " + str(i) + ":\n"
         path = read_info(email)
         j = os.path.join(path, i)
         if j.endswith(".ipynb"):
@@ -354,11 +354,11 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
                 if message['response']['searchResults']:
                     bag_of_words += message['response']['searchResults']
 
-            processed_contents = process_file_contents_with_langchain(final_contents, bag_of_words, 3000, j)
-            final_prompt += re.sub(r'\s+', ' ', processed_contents)
+            processed_contents = process_file_contents_with_langchain(final_contents, bag_of_words, 2500, j)
+            final_prompt += re.sub(r'\s+', ' ', processed_contents) + "\n```" +'\n'
         else:
             final_contents = re.sub(r'\s+', ' ', final_contents)
-            final_prompt += final_contents
+            final_prompt += final_contents + "\n```" + '\n'
 
 
     if estimated_tokens > 15000:
@@ -366,12 +366,12 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
             final_prompt += "\nFile path " + file + ":\n"
             final_prompt += fs['summary'][fs['file_path'] == file].values[0]
 
-    final_prompt += "\n" + prompt + "\n Response :"
+    final_prompt += "\n\n" + prompt #+ "\n Response :"
     tokens = tokenCount(final_prompt)
     print("Total Tokens in the query: " + str(tokens))
     user_logger.clear_logs()
     user_logger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=0.7)
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1)
     referenced_code = get_referenced_code(path, files)
     user_logger.clear_logs()
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
