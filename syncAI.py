@@ -162,7 +162,8 @@ def syncAI(sync_flag, user_logger, userid):
 
     user_logger.clear_logs()
     
-    filtered_fs = fs[fs['role'] == '']
+    filtered_fs = fs[pd.isnull(fs["role"])]
+
     if len(filtered_fs) > 0:
             
         prompt_string = get_project_summary(path.split("/")[-1], userid)
@@ -185,7 +186,7 @@ def syncAI(sync_flag, user_logger, userid):
         batch_prompt = prompt_string
         batch_token_count = total_token_count
         processed_indices = []
-
+        parsable = ''
         for ind in filtered_fs.index:
             if ind in processed_indices:
                 continue
@@ -199,45 +200,45 @@ def syncAI(sync_flag, user_logger, userid):
                 batch_token_count += file_summary_token_count
                 processed_indices.append(ind)
             else:
-                parsable = AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
-                print(parsable)
+                parsable += AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
+                batch_prompt = prompt_string
+                batch_token_count = total_token_count
 
-                regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
+        parsable += AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
+        regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
 
-                matches = re.finditer(regex, parsable, re.DOTALL)
+        matches = re.finditer(regex, parsable, re.DOTALL)
 
-                for match in matches:
-                    # Strip the filename of any non-allowed characters and convert / to \
-                    path = re.sub(r'[\:<>"|?*]', "", match.group(1))
+        for match in matches:
+            # Strip the filename of any non-allowed characters and convert / to \
+            path = re.sub(r'[\:<>"|?*]', "", match.group(1))
 
-                    # Remove leading and trailing brackets
-                    path = re.sub(r"^\[(.*)\]$", r"\1", path)
+            # Remove leading and trailing brackets
+            path = re.sub(r"^\[(.*)\]$", r"\1", path)
 
-                    # Remove leading and trailing backticks
-                    path = re.sub(r"^`(.*)`$", r"\1", path)
+            # Remove leading and trailing backticks
+            path = re.sub(r"^`(.*)`$", r"\1", path)
 
-                    # Remove trailing ]
-                    path = re.sub(r"[\]\:]$", "", path)
+            # Remove trailing ]
+            path = re.sub(r"[\]\:]$", "", path)
 
-                    # Get the code
-                    role = match.group(2)
+            # Get the code
+            role = match.group(2)
 
-                    if "File Path :" in path or "File Path:" in path:
-                        path = path.replace("File Path :", "").replace("File Path:", "")
+            if "File Path :" in path or "File Path:" in path:
+                path = path.replace("File Path :", "").replace("File Path:", "")
 
-                    if "Role :" in role or "Role:" in role:
-                        role = role.replace("Role :", "").replace("Role:", "")
+            if "Role :" in role or "Role:" in role:
+                role = role.replace("Role :", "").replace("Role:", "")
 
-                    fs.loc[fs['file_path'] == path, 'role'] = role
+            fs.loc[fs['file_path'] == path, 'role'] = role
+            fs.loc[fs['file_path'] == path, 'embedding'] = ''
 
-                    batch_prompt = prompt_string
-                    batch_token_count = total_token_count
 
-        parsable = AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
+        filtered_fs = fs[pd.isnull(fs["role"])]
+        parsable = ''
 
-        filtered_fs = fs[fs['role'] == '']
-
-        prompt_string = get_project_summary(path.split("/")[-1], userid)
+        prompt_string = get_project_summary(read_info(email=userid).split("/")[-1], userid)
         total_token_count = tokenCount(prompt_string)
         batch_size_limit = 10000
         system_message = """
@@ -276,37 +277,8 @@ def syncAI(sync_flag, user_logger, userid):
                     batch_token_count = total_token_count
             parsable += AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
 
-
-            regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
-
-            matches = re.finditer(regex, parsable, re.DOTALL)
-
-            for match in matches:
-                # Strip the filename of any non-allowed characters and convert / to \
-                path = re.sub(r'[\:<>"|?*]', "", match.group(1))
-
-                # Remove leading and trailing brackets
-                path = re.sub(r"^\[(.*)\]$", r"\1", path)
-
-                # Remove leading and trailing backticks
-                path = re.sub(r"^`(.*)`$", r"\1", path)
-
-                # Remove trailing ]
-                path = re.sub(r"[\]\:]$", "", path)
-
-                # Get the code
-                role = match.group(2)
-
-                if "File Path :" in path or "File Path:" in path:
-                    path = path.replace("File Path :", "").replace("File Path:", "")
-
-                if "Role :" in role or "Role:" in role:
-                    role = role.replace("Role :", "").replace("Role:", "")
-
-                fs.loc[fs['file_path'] == path, 'role'] = role
-
             if len(fs[fs["role"] == '']) != 0:
-                filtered_fs = fs[fs["role"] == '']
+                filtered_fs = fs[pd.isnull(fs["role"])]
                 path = read_info(userid)
                 prompt_string = get_project_summary(path.split("/")[-1], userid)
                 total_token_count = tokenCount(prompt_string)
@@ -347,7 +319,7 @@ def syncAI(sync_flag, user_logger, userid):
                         batch_token_count = total_token_count
                 parsable += AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
 
-                filtered_fs = fs[fs['role']=='' or fs['role']=='nan' or fs['role']==None]
+                filtered_fs = fs[pd.isnull(fs["role"])]
 
                 if len(filtered_fs) != 0:
 
@@ -390,33 +362,34 @@ def syncAI(sync_flag, user_logger, userid):
                     parsable += AskGPT(email=userid, system_message=system_message, prompt=batch_prompt, temperature=0)
 
 
-                    regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
+            regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
 
-                    matches = re.finditer(regex, parsable, re.DOTALL)
+            matches = re.finditer(regex, parsable, re.DOTALL)
 
-                    for match in matches:
-                        # Strip the filename of any non-allowed characters and convert / to \
-                        path = re.sub(r'[\:<>"|?*]', "", match.group(1))
+            for match in matches:
+                # Strip the filename of any non-allowed characters and convert / to \
+                path = re.sub(r'[\:<>"|?*]', "", match.group(1))
 
-                        # Remove leading and trailing brackets
-                        path = re.sub(r"^\[(.*)\]$", r"\1", path)
+                # Remove leading and trailing brackets
+                path = re.sub(r"^\[(.*)\]$", r"\1", path)
 
-                        # Remove leading and trailing backticks
-                        path = re.sub(r"^`(.*)`$", r"\1", path)
+                # Remove leading and trailing backticks
+                path = re.sub(r"^`(.*)`$", r"\1", path)
 
-                        # Remove trailing ]
-                        path = re.sub(r"[\]\:]$", "", path)
+                # Remove trailing ]
+                path = re.sub(r"[\]\:]$", "", path)
 
-                        # Get the code
-                        role = match.group(2)
+                # Get the code
+                role = match.group(2)
 
-                        if "File Path :" in path or "File Path:" in path:
-                            path = path.replace("File Path :", "").replace("File Path:", "")
+                if "File Path :" in path or "File Path:" in path:
+                    path = path.replace("File Path :", "").replace("File Path:", "")
 
-                        if "Role :" in role or "Role:" in role:
-                            role = role.replace("Role :", "").replace("Role:", "")
+                if "Role :" in role or "Role:" in role:
+                    role = role.replace("Role :", "").replace("Role:", "")
 
-                        fs.loc[fs['file_path'] == path, 'role'] = role
+                fs.loc[fs['file_path'] == path, 'role'] = role
+                fs.loc[fs['file_path'] == path, 'embedding'] = ''
 
     filtered_fs = fs[fs["embedding"] == '']
 
