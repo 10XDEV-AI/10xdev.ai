@@ -1,6 +1,8 @@
-import openai, time, langchain
+import openai, os, time, langchain
 from utilities.keyutils import get_key
 from utilities.tokenCount import tokenCount
+from utilities.notebook_utils import convert_ipynb_to_python
+from utilities.files2analyse import check_file_type
 
 def summarize_big(input_string, filename, email):
     from langchain.chat_models import ChatOpenAI
@@ -53,3 +55,33 @@ def summarize_str(filename, string, email, userlogger):
 
     userlogger.log("Exceeded maximum retry attempts.")
     return None
+
+def summarize_file(repo_name, filepath, i, userlogger, email):
+    full_file_path = os.path.join("../user", email, repo_name, filepath)
+
+    if not check_file_type(full_file_path):
+        print("File " + filepath + " was not summarized as it is not a text file")
+        p = ("File " + filepath + " was not Analyzed as it is not a text file")
+        userlogger.log(p)
+        return i, "Ignore"
+
+    i += 1
+
+    if filepath.endswith(".ipynb"):
+        # Convert .ipynb file to human-readable format
+        file_contents = convert_ipynb_to_python(full_file_path)
+    else:
+        with open(full_file_path, 'r') as f:
+            try:
+                file_contents = f.read()
+            except UnicodeDecodeError:
+                p = ("File " + filepath + " was not Analyzed as it is not a text file")
+                userlogger.log(p)
+                return i, "Ignore"
+
+    if tokenCount(file_contents) > 60000:
+        p = ("File " + filepath + " was not analyzed as it is too long")
+        userlogger.log(p)
+        return i, "File content too long"
+
+    return i, summarize_str(filepath, file_contents, email, userlogger)

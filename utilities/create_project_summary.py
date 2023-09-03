@@ -61,11 +61,12 @@ def get_project_summary(repo_name, email):
     with open(summary_file_path, 'r') as file:
         project_summary = file.read()
 
-    return_string = "Project Summary: \n" + project_summary
+    if "Project Summary" not in project_summary:
+       return_string = "Project Summary: \n" + project_summary
 
     # Generate the folder tree structure
-    folder_tree = generate_folder_structure(email, repo_name)
+    '''folder_tree = generate_folder_structure(email, repo_name)
 
     return_string += "\n\nFolder tree structure: \n" + folder_tree
-
+    '''
     return return_string

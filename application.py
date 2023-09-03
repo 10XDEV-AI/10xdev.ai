@@ -59,7 +59,6 @@ def before_request():
 
         g.user_loggers = user_loggers
 
-    return
 
 
 @application.route("/", defaults={"path": ""})

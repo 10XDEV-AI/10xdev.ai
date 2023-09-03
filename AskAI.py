@@ -142,13 +142,13 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
 
     for i in filepaths:
         # find i in response_functions using regex
-        if re.search(i, response_functions):
+        if re.search(str(i), response_functions):
             files.append(i)
 
     return files
 
 
-def search_functions(code_query, email, userlogger, scope, history):
+def search_functions(code_query, email, userlogger, scope, history, history_files):
     global fs
     if len(scope):
         files_in_scope = []
@@ -166,28 +166,31 @@ def search_functions(code_query, email, userlogger, scope, history):
     prompt_embedding = split_embed(' '.join([word for word in code_query .split() if word.lower() not in stop_words]), email)
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
+    filepaths = set(res['file_path'])
+    filepaths.add(x for x in history_files)
 
-    res.index = range(1, len(res) + 1)
     file_summary_string = []
-    for index, row in res.iterrows():
+    
+    for index, row  in fs.iterrows():
         file_path = row['file_path']
-        summary = row['summary']
-        role = row['role']
-        if summary != "Ignore" and summary:
-            if role :
-                file_summary = f'''"""File path: {file_path} \nRole: {role} \nSummary: {summary}"""'''
+        if file_path in filepaths:
+            # Get the summary from the file path    
+            summary = row['summary']
+            role = row['role']
+            if summary != "Ignore" and summary:
+                if role :
+                    file_summary = f'''"""File path: {file_path} \nRole: {role} \nSummary: {summary}"""'''
+                else:
+                    file_summary = f'''"""File path: {file_path} Summary: {summary}"""'''
+                file_summary_string.append(file_summary.replace('\n',' '))
             else:
-                file_summary = f'''"""File path: {file_path} Summary: {summary}"""'''
-            file_summary_string.append(file_summary.replace('\n',' '))
-        else:
-            file_summary_string.append(f'''File path: {file_path}''')
-        # Convert the concatenated list to a single string
+                file_summary_string.append(f'''File path: {file_path}''')
+            # Convert the concatenated list to a single string
     result_string = '\n\n'.join(file_summary_string)
     if not history:
         result_string += f"\n\n<User Prompt>\n{code_query}\n</User Prompt>\n"
     else:
         result_string+= f"\n{code_query}\n"
-    filepaths = fs['file_path'].tolist()
     return filter_functions(result_string, filepaths, email, userlogger, history)
 
 
@@ -271,6 +274,10 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     path = read_info(email)
     track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
+    history_files = []
+    if chat_messages is not None:
+        for message in chat_messages:
+            history_files.append( message['response']['files'])
     if consolidated_prompt:
         prompt = consolidated_prompt
         history = True
@@ -280,7 +287,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
     user_logger.log("Analyzing your query...")
-    files = search_functions(prompt, email, user_logger, scope, history)
+    files = search_functions(prompt, email, user_logger, scope, history, history_files)
     return {'files': files}
 
 

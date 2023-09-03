@@ -31,7 +31,7 @@ def extract_role(path, role):
     return path, role
 
 
-def evaluate_role(fs, userid):
+def evaluate_role(fs, userid, threshold):
     filtered_fs = fs[pd.isnull(fs["role"])]
     system_message = """
                         You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. 
@@ -48,7 +48,7 @@ def evaluate_role(fs, userid):
                         """
     
     batch_size_limit = 10000
-    if len(filtered_fs) > 0:
+    if len(filtered_fs) > threshold:
             
         prompt_string = get_project_summary( read_info(userid).split("/")[-1], userid)
         total_token_count = tokenCount(prompt_string)

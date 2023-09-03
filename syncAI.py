@@ -2,17 +2,15 @@ import time, subprocess, os, pandas as pd
 from utilities.projectInfo import read_info
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
-from utilities.str2float import str2float
 from utilities.AskGPT import AskGPT
 from utilities.files2analyse import check_file_type, files2analyse
 from utilities.notebook_utils import convert_ipynb_to_python
-from utilities.create_project_summary import create_project_summary, get_project_summary
+from utilities.create_project_summary import create_project_summary
 from utilities.mixpanel import track_event
-import difflib, re
-from utilities.tokenCount import tokenCount
+import difflib
 from utilities.role_analyzer import evaluate_role
 from nltk.corpus import stopwords
-
+from utilities.summarize import summarize_file
 
 fs = pd.DataFrame()
 
@@ -43,33 +41,6 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
     else:
         return None
 
-def summarize_str(filename, file_contents, userid):
-    prompt = "File " + filename + " has " + file_contents
-    system_message = "Summarize what this file in the codebase does, assume context when necessary."
-    return AskGPT(userid, system_message=system_message, prompt=prompt, temperature=0)
-
-
-def summarize(filename, userid):
-    root = read_info(userid)
-    full_filepath = os.path.join(root, filename)
-
-    if not check_file_type(full_filepath):
-        print("File " + filename + " was not summarized as it is not a text file")
-        return "Ignore"
-
-    if filename.endswith(".ipynb"):
-        # Convert .ipynb file to human-readable format
-        file_contents = convert_ipynb_to_python(full_filepath)
-    else:
-        with open(full_filepath, 'r') as f:
-            try:
-                file_contents = f.read()
-            except UnicodeDecodeError:
-                print("File " + filename + " was not summarized as it is not a text file")
-                return "Ignore"
-
-    return summarize_str(filename, file_contents, userid)
-
 def syncAI(sync_flag, user_logger, userid):
     path = read_info(userid)
     track_event('syncAI', {'email': userid, 'Repo': path})
@@ -95,7 +66,7 @@ def syncAI(sync_flag, user_logger, userid):
         if get_diff(os.path.join(path, file), clone_path) is not None:
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
-            summary = summarize(file, userid)
+            j, summary = summarize_file(path.split('/'), filepath=file, i=0,userlogger=user_logger, email=userid)
             if summary == "Ignore":
                 continue
             fs["summary"][fs["file_path"] == file] = summary
@@ -163,7 +134,7 @@ def syncAI(sync_flag, user_logger, userid):
 
     user_logger.clear_logs()
     
-    fs = evaluate_role(fs, userid)
+    fs = evaluate_role(fs, userid, 3)
 
     filtered_fs = fs[fs["embedding"] == '']
 
