@@ -288,10 +288,10 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
     consolidated_prompt = consolidate_prompt_creation(chat_messages, og_prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
-        system_message = "You will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Answer the 'Current user prompt' using given context."
+        system_message = "You will be provided with [1] file paths and contents of the files in the repository delimited by triple quotes and [2] a conversation between a human and an AI delimited by xml tags. Answer the 'Current user prompt' using given context."
     else:
         prompt = "User Prompt: "+og_prompt
-        system_message = "You will be provided with [1] file paths and contents of relevant files in the repository delimited by triple quotes and [2] User Prompt. Answer the 'User prompt' using given context"
+        system_message = "You will be provided with [1] file paths and contents of the files in the repository delimited by triple quotes and [2] User Prompt. You are a helpful coding assistant, that helps the user."
 
     path = read_info(email)
     if path == "":
@@ -347,15 +347,15 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
         else:
             final_contents = open(j).read()
 
-        if tokenCount(re.sub(r'\s+', ' ', final_contents)) > 3000:
+        if tokenCount(re.sub(r'\s+', ' ', final_contents)) > 5000:
             bag_of_words = og_prompt
             for message in chat_messages:
                 bag_of_words += message['prompt']['searchTerm']
                 if message['response']['searchResults']:
                     bag_of_words += message['response']['searchResults']
 
-            processed_contents = process_file_contents_with_langchain(final_contents, bag_of_words, 2500, j)
-            final_prompt += re.sub(r'\s+', ' ', processed_contents) + "\n```" +'\n'
+            processed_contents = process_file_contents_with_langchain(final_contents, bag_of_words, 7000, j)
+            final_prompt += re.sub(r'\s+', ' ', processed_contents) + "\n```" +'\n\n'
         else:
             final_contents = re.sub(r'\s+', ' ', final_contents)
             final_prompt += final_contents + "\n```" + '\n'

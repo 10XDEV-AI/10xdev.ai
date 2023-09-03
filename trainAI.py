@@ -3,14 +3,13 @@ from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
 from utilities.files2analyse import files2analyse, check_file_type
 from utilities.tokenCount import tokenCount
-from utilities.rates import get_rates
 from  utilities.repoutils import select_repo
 from utilities.notebook_utils import convert_ipynb_to_python
-from utilities.create_project_summary import create_project_summary, get_project_summary
+from utilities.create_project_summary import create_project_summary
 from utilities.summarize import summarize_str
 from utilities.mixpanel import track_event
-from utilities.AskGPT import AskGPT
 from nltk.corpus import stopwords
+from utilities.role_analyzer import evaluate_role
 
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
@@ -64,7 +63,7 @@ def train_AI(repo_name, userlogger, email):
     i = 0
     fs['summary'] = ''
     fs['embedding'] = ''
-    fs['role'] = ''
+    fs['role'] = None
     userlogger.log("Starting analysis", percent="0", time_left="0")
 
     for ind in fs.index:
@@ -83,75 +82,8 @@ def train_AI(repo_name, userlogger, email):
 
     fs.to_csv(fsfilename, index=False)
     create_project_summary(repo_name,email)
-    prompt_string = get_project_summary(repo_name, email)
-    total_token_count = tokenCount(prompt_string)
-    batch_size_limit = 10000
-    system_message = """
-                You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. 
-                Your task is to evaluate what the role of each of the files is in the codebase.
-                
-                Then you will output the role of each file.
-                Each file's role must strictly follow a markdown code block format:
-                
-                File Path : FILEPATH
-                ```
-                Role : ROLE
-                ```
-                Before you finish, double check that the role of all the file paths mentioned by the user has been clarified. Be concise. Answer in a short sentence.
-                """
-        
-    batch_prompt = prompt_string
-    batch_token_count = total_token_count 
     
-    processed_indices = []
-    parsable = ''
-    for ind in fs.index:
-        if ind in processed_indices:
-            continue
-        
-        file_path = fs['file_path'][ind]
-        summary = fs['summary'][ind]
-        file_summary_token_count = tokenCount(file_path) + tokenCount(summary)
-        
-        if batch_token_count + file_summary_token_count < batch_size_limit:
-            batch_prompt += f"\n\nFile path: {file_path}\n{summary}"
-            batch_token_count += file_summary_token_count
-            processed_indices.append(ind)
-        else:
-            parsable += AskGPT(email=email, system_message=system_message, prompt=batch_prompt, temperature=0)
-            print(parsable)
-            batch_prompt = prompt_string
-            batch_token_count = total_token_count
-    parsable += AskGPT(email=email, system_message=system_message, prompt=batch_prompt, temperature=0)
-
-
-    regex = r"(\S+)\n\s*```[^\n]*\n(.+?)```"
-
-    matches = re.finditer(regex, parsable, re.DOTALL)
-
-    for match in matches:
-        # Strip the filename of any non-allowed characters and convert / to \
-        path = re.sub(r'[\:<>"|?*]', "", match.group(1))
-
-        # Remove leading and trailing brackets
-        path = re.sub(r"^\[(.*)\]$", r"\1", path)
-
-        # Remove leading and trailing backticks
-        path = re.sub(r"^`(.*)`$", r"\1", path)
-
-        # Remove trailing ]
-        path = re.sub(r"[\]\:]$", "", path)
-
-        # Get the code
-        role = match.group(2)
-
-        if "File Path :" in path or "File Path:" in path:
-            path = path.replace("File Path :", "").replace("File Path:", "")
-
-        if "Role :" in role or "Role:" in role:
-            role = role.replace("Role :", "").replace("Role:", "")
-
-        fs.loc[fs['file_path'] == path, 'role'] = role
+    fs = evaluate_role(fs, email)
 
     userlogger.clear_logs()
     userlogger.log("Indexing files")
@@ -182,5 +114,4 @@ def train_AI(repo_name, userlogger, email):
     userlogger.clear_logs()
     userlogger.log("Your repo was trained into the AI successfully")
     time.sleep(2)
-    userlogger.clear_logs()
-    return
+    userlogger.clear_logs() 
