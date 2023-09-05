@@ -66,7 +66,7 @@ def syncAI(sync_flag, user_logger, userid):
         if get_diff(os.path.join(path, file), clone_path) is not None:
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
-            j, summary = summarize_file(path.split('/'), filepath=file, i=0,userlogger=user_logger, email=userid)
+            j, summary = summarize_file(read_info(userid).split('/'), filepath=file, i=0,userlogger=user_logger, email=userid)
             if summary == "Ignore":
                 continue
             fs["summary"][fs["file_path"] == file] = summary
@@ -107,8 +107,8 @@ def syncAI(sync_flag, user_logger, userid):
 
         for ind in new_fs.index:
             user_logger.log("Analyzing New File: " + new_fs["file_path"][ind])
-            new_fs["summary"][ind] = summarize(new_fs["file_path"][ind], userid)
-
+            j, summary = summarize_file(path.split('/')[-1], filepath=new_fs["file_path"][ind], i=0, userlogger=user_logger, email=userid)
+            new_fs["summary"][ind] = summary
         fs = pd.concat([fs, new_fs], ignore_index=True)
 
         # Add new summaries to the summary file with the keyword "Recently_added_file_path"
