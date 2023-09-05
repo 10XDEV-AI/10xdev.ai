@@ -272,7 +272,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     global fs
     history = False
     path = read_info(email)
-    track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
+    #track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     history_files = []
     if chat_messages is not None:

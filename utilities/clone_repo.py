@@ -11,20 +11,17 @@ def get_clones(url, email):
         if os.path.exists(path):
             shutil.rmtree(path)
 
-        current_path = os.getcwd()
-        #cd into email folder
-        os.chdir("../user/" + email)
+        target_directory = os.path.join("../user", email)
 
         # Clone the repository into email folder
-        subprocess.run(['git', 'clone', url])
+        subprocess.run(['git', 'clone', url], cwd=target_directory)
         print("Cloned " + url)
         # Get the path of the cloned repository
         repo_path = os.path.splitext(os.path.basename(url))[0]
         print(repo_path)
         # Get the list of branches
-        branches = subprocess.check_output(['git', '-C', repo_path, 'branch', '-r']).decode('utf-8').splitlines()
+        branches = subprocess.check_output(['git', '-C', repo_path, 'branch', '-r'], cwd = target_directory).decode('utf-8').splitlines()
 
-        os.chdir(current_path)
 
         filtered_branches = [branch.replace('*', '').strip() for branch in branches]
         filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
@@ -68,19 +65,16 @@ def get_private_clones(url, email, access_token):
         if os.path.exists(path):
             shutil.rmtree(path)
 
-        current_path = os.getcwd()
-
-        # cd into email folder
-        os.chdir("../user/" + email)
-
         # Split the URL to get the username and repository name
         username, repo_name = url.split("/")[-2], url.split("/")[-1].replace(".git", "")
 
         # Construct the clone URL with the access token
         clone_url = f"https://oauth2:{access_token}@github.com/{username}/{repo_name}.git"
 
-        # Clone the repository into email folder
-        subprocess.run(['git', 'clone', clone_url])
+
+        target_directory = os.path.join("../user", email)
+
+        subprocess.run(['git', 'clone', clone_url], cwd=target_directory)
         print("Cloned " + url)
 
         # Get the path of the cloned repository
@@ -88,9 +82,8 @@ def get_private_clones(url, email, access_token):
         print(repo_path)
 
         # Get the list of branches
-        branches = subprocess.check_output(['git', '-C', repo_path, 'branch', '-r']).decode('utf-8').splitlines()
+        branches = subprocess.check_output(['git', '-C', repo_path, 'branch', '-r'], cwd = target_directory).decode('utf-8').splitlines()
 
-        os.chdir(current_path)
 
         filtered_branches = [branch.replace('*', '').strip() for branch in branches]
         filtered_branches = [branch.replace('origin/HEAD -> origin/', '').strip() for branch in filtered_branches]
