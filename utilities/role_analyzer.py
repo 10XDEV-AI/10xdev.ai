@@ -2,7 +2,6 @@ import re
 import pandas as pd
 from utilities.create_project_summary import get_project_summary
 from utilities.tokenCount import tokenCount
-from utilities.projectInfo import read_info
 from utilities.AskGPT import AskGPT
 
 
@@ -31,7 +30,7 @@ def extract_role(path, role):
     return path, role
 
 
-def evaluate_role(fs, userid, threshold):
+def evaluate_role(fs, userid, threshold, path):
     filtered_fs = fs[pd.isnull(fs["role"])]
     system_message = """
                         You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. 
@@ -49,7 +48,6 @@ def evaluate_role(fs, userid, threshold):
     
     batch_size_limit = 10000
     if len(filtered_fs) > threshold:
-        path = read_info(userid).split("/")[-1]
         prompt_string = get_project_summary( path, userid)
         total_token_count = tokenCount(prompt_string)
 
