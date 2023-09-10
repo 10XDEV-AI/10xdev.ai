@@ -21,7 +21,7 @@ const SearchState = ({ children }) => {
   const [searchFiles, setSearchFiles] = useState([]);
   const [commitHash, setCommitHash] = useState("");
   const [commitTime, setCommitTime] = useState("");
-  const [repository, setRepository] = useState('');
+  const [repository, setRepository] = useState("");
   const [branch, setBranch] = useState('');
   const [treeData, setTreeData] = useState([]);
   const [sideContainerOpen, setSideContainerOpen] = useState(false);

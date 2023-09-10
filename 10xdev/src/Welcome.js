@@ -53,17 +53,19 @@ export const Welcome = () => {
       if (cognitoCode) {
         setIsLoadingProjectInfo(true);
         const data = await callAPI('/api/projectInfo');
+        console.log(data);
         if (data.repo_name === 'No Repos selected') {
           localStorage.setItem('currentuser', "new");
           setCurrentUser("new");
         } else {
           setCurrentUser("old");
-          console.log("old user");
           localStorage.setItem('currentuser', "old");
           setRepository(data.repo_name);
           setCommitHash(data.latest_commit_hash);
           setCommitTime(data.last_commit_time_difference);
           setBranch(data.branch_name);
+          console.log(repository);
+          console.log(data);
           getTreeData();
         }
         setIsLoadingProjectInfo(false);
@@ -96,7 +98,6 @@ export const Welcome = () => {
 
   const getTreeData = async () => {
     try {
-      if(currentRepo==='No Repos selected') return;
       const data = await callAPI(`/api/Treedata?path=${repository}`);
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
