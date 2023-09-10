@@ -209,7 +209,7 @@ def files2str(files):
     return files_str
 
 
-def get_referenced_code(path, files):
+def get_referenced_code(path, files, email):
     referenced_code = []
 
     for file in files:
@@ -217,7 +217,7 @@ def get_referenced_code(path, files):
             if file.endswith(".ipynb"):
                 code = convert_ipynb_to_python(os.path.join(path, file))
             else:
-                with open(os.path.join(path, file), 'r') as f:
+                with open(os.path.join("../user/"+email+"/"+path, file), 'r') as f:
                     code = f.read()
             code_block = f"{file}\n{code}"
             referenced_code.append(code_block)
@@ -268,11 +268,11 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
     return ""
 
 
-def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
+def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, project_name):
     global fs
     history = False
-    path = read_info(email)
-    #track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
+    path = "../user/" + email + "/AIFiles/" + project_name    
+    track_event('AskAI', {'email': email, 'chat': chat_messages, 'Repo': path.split('/')[-1],  'prompt':prompt})
     consolidated_prompt = consolidate_prompt_creation(chat_messages, prompt)
     history_files = []
     if chat_messages is not None:
@@ -291,7 +291,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope):
     return {'files': files}
 
 
-def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, files):
+def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, files, path):
     consolidated_prompt = consolidate_prompt_creation(chat_messages, og_prompt)
     if consolidated_prompt:
         prompt = consolidated_prompt
@@ -300,17 +300,17 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
         prompt = "User Prompt: "+og_prompt
         system_message = "You will be provided with [1] file paths and contents of the files in the repository delimited by triple quotes and [2] User Prompt. You are a helpful coding assistant, that helps the user."
 
-    path = read_info(email)
+    
     if path == "":
         return {'files': "", 'response': "You have not selected any repos, please open settings ⚙️ and set repo"}
-    filename = "../user/" + email + "/AIFiles/" + path.split('/')[-1] + ".csv"
+    filename = "../user/" + email + "/AIFiles/" + path + ".csv"
     fs = pd.read_csv(filename)
     fs['embedding'] = fs.embedding.apply(lambda x: str2float(str(x)))
 
     final_prompt = ""
     if "Referring Project Context" in files:
-        final_prompt = open("../user/"+email+"/AIFiles/"+path.split('/')[-1]+"_full_project_info.txt").read()
-        final_prompt += "File Structure:\n" + generate_folder_structure(email,path.split('/')[-1])
+        final_prompt = open("../user/"+email+"/AIFiles/"+path+"_full_project_info.txt").read()
+        final_prompt += "File Structure:\n" + generate_folder_structure(email,path)
         files.remove("Referring Project Context")
         if len(files) ==0:
             if consolidated_prompt:
@@ -347,8 +347,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
 
     for i in files:
         final_prompt += "```File path " + str(i) + ":\n"
-        path = read_info(email)
-        j = os.path.join(path, i)
+        j = os.path.join("../user/"+email+"/"+path, i)
         if j.endswith(".ipynb"):
             final_contents = convert_ipynb_to_python(j)
         else:
@@ -379,7 +378,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
     user_logger.clear_logs()
     user_logger.log("Thinking of an answer...")
     FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1)
-    referenced_code = get_referenced_code(path, files)
+    referenced_code = get_referenced_code(path, files, email)
     user_logger.clear_logs()
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
 

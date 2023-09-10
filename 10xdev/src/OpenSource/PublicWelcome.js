@@ -1,18 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import SearchContext from "./context/SearchContext";
-import "./Welcome.css";
-import { callAPI } from "./api";
-import Cookies from "js-cookie";
-import DropDownButton from "./DropDownButton/DropDownButton";
+import { useNavigate, useParams } from "react-router-dom";
+import SearchContext from "../context/SearchContext";
+import "../Welcome.css";
+import { openAPI } from "../api";
 import Typewriter from "typewriter-effect";
-import LoadingRing from "./Loader/Loader";
-import NewWelcome from "./NewWelcome";
+import LoadingRing from "../Loader/Loader";
+import NewWelcome from "../NewWelcome";
 import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 
-export const Welcome = () => {
-  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash, setCommitHash, commitTime, setCommitTime,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
+export const PublicWelcome = () => {
+  const {projectName} = useParams();
+  const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash, setCommitHash, commitTime, repository, setRepository, setCommitTime,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
 
   const [input, setInput] = useState("");
   const [typingStarted, setTypingStarted] = useState(false);
@@ -21,56 +21,30 @@ export const Welcome = () => {
   const [isTreeLoading, setIsTreeLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const urlParams = new URLSearchParams(window.location.hash.substring(1));
-      const code = urlParams.get("access_token");
-      if (code) {
-        Cookies.set("cognitoCode", code, { path: "/", secure: true, sameSite: "None" });
-        console.log("Set the code");
-        console.log(code);
-        try {
-          setIsLoading(true);
-          console.log("Calling API");
-          console.log(code);
-          await callAPI(`/api/login`, { method: "GET" });
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname
-          );
-          setIsLoading(false);
-        } catch (error) {
-        }
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cognitoCode = Cookies.get("cognitoCode");
-      if (cognitoCode) {
-        setIsLoadingProjectInfo(true);
-        const data = await callAPI('/api/projectInfo');
-        if (data.repo_name === 'No Repos selected') {
-          localStorage.setItem('currentuser', "new");
-          setCurrentUser("new");
-        } else {
-          setCurrentUser("old");
-          console.log("old user");
-          localStorage.setItem('currentuser', "old");
-          getTreeData();
-          setRepository(data.repo_name);
-          setCommitHash(data.latest_commit_hash);
-          setCommitTime(data.last_commit_time_difference);
-          setBranch(data.branch_name);
-        }
-        setIsLoadingProjectInfo(false);
-      }
-    };
+    async function fetchData() {
+      getProjectInfo();
+      getTreeData();
+    }
     fetchData();
   }, []);
+  
+
+  const getProjectInfo = async() =>{
+    const data = await openAPI('/api/os_projectInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        projectName: projectName,
+      }),
+    });
+    setIsLoadingProjectInfo(false);
+    setCommitHash(data.latest_commit_hash);
+    setCommitTime(data.last_commit_time_difference);
+    setBranch(data.branch_name);
+    setRepository(data.repo_name);
+  };
 
   const convertToTree = (files) => {
     const root = { name: "", children: [] };
@@ -94,22 +68,34 @@ export const Welcome = () => {
     return root;
   };
 
+  
   const getTreeData = async () => {
     try {
-      if(currentRepo==='No Repos selected') return;
-      const data = await callAPI(`/api/Treedata`);
+      if (currentRepo === 'No Repos selected') return;
+
+      const data = await openAPI('/api/PublicTreedata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectName: projectName,
+        }),
+      });
+  
       const tree = convertToTree(data.files2analyze);
       setTreeData(tree);
       setIsTreeLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+  
   
   const search = (e) => {
     e.preventDefault();
     setSearchTerm(input);
-    navigate("/chat");
+    navigate("/opensource/"+repository+"/chat");
   };
 
   const handleInputChange = (e) => {
@@ -150,6 +136,7 @@ export const Welcome = () => {
     "Implement a real-time chat feature using websockets",
     "Add a progress bar to indicate the status of long-running tasks",
   ];
+
 const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   if (isLoading) {
   return (
@@ -163,13 +150,15 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
       <>
         <div className="flex ">
       <div  className="w-1/2 overflow-auto">
-        <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
+        <LeftWelcome isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash}/>
         </div>
       <div className="shadow-xl w-1/2 p-6">
         <div className="text-centre">
           <div className="h-[16vh] ">
             <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-                10XDEV.AI
+            <a href="/" className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+              10XDEV.AI
+            </a>
             </div>
           </div>
 
@@ -236,11 +225,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                      {emoji('🪄')}
                      </div>
                    </div>
-
                   </div>
-                </div>
-                <div className="absolute top-3 right-5">
-                  <DropDownButton />
                 </div>
               </div>
             </div>
@@ -253,4 +238,4 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
     );
   }
 };
-export default Welcome;
+export default PublicWelcome;

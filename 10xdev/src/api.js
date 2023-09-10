@@ -30,3 +30,18 @@ function showAlert(type) {
     ReactDOM.unmountComponentAtNode(alertContainer);
   }, 5000);
 }
+
+export const openAPI = async (url, options) => {
+  try {
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

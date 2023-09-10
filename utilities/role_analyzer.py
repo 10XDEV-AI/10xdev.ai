@@ -49,8 +49,8 @@ def evaluate_role(fs, userid, threshold):
     
     batch_size_limit = 10000
     if len(filtered_fs) > threshold:
-            
-        prompt_string = get_project_summary( read_info(userid).split("/")[-1], userid)
+        path = read_info(userid).split("/")[-1]
+        prompt_string = get_project_summary( path, userid)
         total_token_count = tokenCount(prompt_string)
 
         batch_prompt = prompt_string
@@ -80,15 +80,15 @@ def evaluate_role(fs, userid, threshold):
         matches = re.finditer(regex, parsable, re.DOTALL)
 
         for match in matches:
-            path, role = match.group(1).strip(), match.group(2).strip()
-            fs.loc[fs['file_path'] == path, 'role'] = role
-            fs.loc[fs['file_path'] == path, 'embedding'] = ''
+            file_path, role = match.group(1).strip(), match.group(2).strip()
+            fs.loc[fs['file_path'] == file_path, 'role'] = role
+            fs.loc[fs['file_path'] == file_path, 'embedding'] = ''
 
 
         filtered_fs = fs[pd.isnull(fs["role"])]
         parsable = ''
 
-        prompt_string = get_project_summary(read_info(email=userid).split("/")[-1], userid)
+        prompt_string = get_project_summary(path.split("/")[-1], userid)
         total_token_count = tokenCount(prompt_string)
         batch_size_limit = 10000
         
@@ -117,7 +117,6 @@ def evaluate_role(fs, userid, threshold):
 
             if len(fs[fs["role"] == '']) != 0:
                 filtered_fs = fs[pd.isnull(fs["role"])]
-                path = read_info(userid)
                 prompt_string = get_project_summary(path.split("/")[-1], userid)
                 total_token_count = tokenCount(prompt_string)
                 batch_prompt = prompt_string
@@ -145,7 +144,7 @@ def evaluate_role(fs, userid, threshold):
                 filtered_fs = fs[pd.isnull(fs["role"])]
 
                 if len(filtered_fs) != 0:
-                    prompt_string = get_project_summary(read_info(userid).split("/")[-1], userid)
+                    prompt_string = get_project_summary(path, userid)
                     total_token_count = tokenCount(prompt_string)                    
                     batch_prompt = prompt_string
                     batch_token_count = total_token_count

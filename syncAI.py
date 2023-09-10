@@ -41,8 +41,7 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
     else:
         return None
 
-def syncAI(sync_flag, user_logger, userid):
-    path = read_info(userid)
+def syncAI(sync_flag, user_logger, userid, path):
     track_event('syncAI', {'email': userid, 'Repo': path})
 
     filename = "../user/" + userid + "/AIFiles/" + path.split('/')[-1] + "_full_project_info.txt"
@@ -66,7 +65,7 @@ def syncAI(sync_flag, user_logger, userid):
         if get_diff(os.path.join(path, file), clone_path) is not None:
             print("File " + file + " has changed")
             user_logger.log("File " + file + " has changed. Syncing AI...")
-            j, summary = summarize_file(read_info(userid).split('/'), filepath=file, i=0,userlogger=user_logger, email=userid)
+            j, summary = summarize_file(path, filepath=file, i=0,userlogger=user_logger, email=userid)
             if summary == "Ignore":
                 continue
             fs["summary"][fs["file_path"] == file] = summary
@@ -159,7 +158,7 @@ def syncAI(sync_flag, user_logger, userid):
 
 
     user_logger.log("Syncing file contents..")
-    create_clone(read_info(userid).split("/")[-1], userid)
+    create_clone(path, userid)
 
     fs.to_csv(fsfilename, index=False)
     return "DONE", list(new_file_paths)

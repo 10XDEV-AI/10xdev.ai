@@ -3,7 +3,7 @@ from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g, send_file
 from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
 from trainAI import train_AI
-from utilities.projectInfo import getprojectInfo
+from utilities.projectInfo import getprojectInfo, getbranchInfo, read_info
 from utilities.IgnoreAI import IgnoreAI
 from utilities.logger import UserLogger
 from utilities.keyutils import set_key, delete_key, test_key, get_key
@@ -29,6 +29,9 @@ user_loggers = {}
 def before_request():
     session.permanent = True
     application.permanent_session_lifetime = timedelta(minutes=720)
+    
+    if request.endpoint in ["get_PuclicFilesToAnalyze", "/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files"]:
+        return
     # Retrieve the Authorization header from the request
     auth_header = request.headers.get("Authorization")
 
@@ -73,6 +76,15 @@ def get_projectInfo():
     return jsonify(getprojectInfo(email))
 
 
+
+@application.route("/api/os_projectInfo", methods=["POST"])
+def get_OpenSourceBranchInfo():
+    data = request.get_json()
+    user_logger = UserLogger("public@gmail.com")
+    projectName = data["projectName"]   
+    return jsonify(getbranchInfo(projectName))
+
+
 @application.route("/api/train", methods=["GET"])
 def get_trainAI():
     email = getattr(g, "email", None)
@@ -109,29 +121,24 @@ def get_syncAI():
     user_logger = getattr(g, "user_loggers", None)[email]
     sync_new_flag = request.args.get("sync_new")
     if sync_new_flag == "true":
-        message, files = syncAI(True, user_logger, email)
- 
+        message, files = syncAI(True, user_logger, email, path=read_info(email) )
     else:
-        message, files = syncAI(False, user_logger, email)
+        message, files = syncAI(False, user_logger, email, path=read_info(email))
     return jsonify({"message": message, "files": files})
 
 
-@application.route("/api/data", methods=["POST", "GET"])
-def get_data():
-    email = getattr(g, "email", None) 
-    user_logger = getattr(g, "user_loggers", None)[email]
-    scope = request.json.get("checkedFiles")
-    prompt = request.json.get("prompt")
-    chat_messages = request.json.get("chatMessages")
-    referenced_files = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)["files"]
-    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
-    return jsonify(
-        {
-            "files": response["files"],
-            "response": response["response"],
-            "referenced_code": response["referenced_code"],
-        }
-    )
+@application.route("/api/os_sync", methods=["POST"])
+def get_os_syncAI():
+    email = "public@gmail.com"
+    user_logger = UserLogger(email)
+    data = request.get_json()
+    projectName = data["projectName"]  
+    sync_new_flag = data["sync_new"]
+    if sync_new_flag == "true":
+        message, files = syncAI(True, user_logger, email, path="../user/"+email+"/"+projectName)
+    else:
+        message, files = syncAI(False, user_logger, email, path="../user/"+email+"/"+projectName)
+    return jsonify({"message": message, "files": files})
 
 
 @application.route("/api/search_files", methods=["POST"])
@@ -141,7 +148,20 @@ def search_files_api():
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope)
+    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, read_info(email).split("/")[-1] )
+    return jsonify(response)
+
+
+
+@application.route("/api/os_search_files", methods=["POST"])
+def os_search_files_api():
+    email = "public@gmail.com"
+    user_logger = UserLogger(email)
+    scope = request.json.get("checkedFiles")
+    prompt = request.json.get("prompt")
+    chat_messages = request.json.get("chatMessages")
+    projectName = request.json.get("projectName")
+    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, projectName)
     return jsonify(response)
 
 
@@ -152,7 +172,21 @@ def get_response_api():
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     referenced_files = request.json.get("files")
-    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files)
+    path = read_info(email).split("/")[-1]
+    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files, path)
+    return jsonify(response)
+
+
+
+@application.route("/api/os_get_response", methods=["POST"])
+def get_os_response_api():
+    email = "public@gmail.com"
+    user_logger = UserLogger(email)
+    prompt = request.json.get("prompt")
+    chat_messages = request.json.get("chatMessages")
+    referenced_files = request.json.get("files")
+    path = request.json.get("projectName")
+    response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files, path)
     return jsonify(response)
 
 
@@ -171,8 +205,17 @@ def get_AIIgnore():
 def get_FilesToAnalyze():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
-    path = request.args.get("path")
+    path = read_info(email)
     files2ignore, files2analyse = FilesToAnalyzedata(email, user_logger, path)
+    return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
+
+
+@application.route("/api/PublicTreedata", methods=["POST"])
+def get_PuclicFilesToAnalyze():    
+    data = request.get_json()
+    user_logger = UserLogger("public@gmail.com")
+    projectName = data["projectName"]    
+    files2ignore, files2analyse = FilesToAnalyzedata("public@gmail.com", user_logger, projectName)
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
 

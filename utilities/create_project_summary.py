@@ -63,7 +63,8 @@ def get_project_summary(repo_name, email):
 
     if "Project Summary" not in project_summary:
        return_string = "Project Summary: \n" + project_summary
-
+    else:
+        return_string = project_summary
     # Generate the folder tree structure
     '''folder_tree = generate_folder_structure(email, repo_name)
 

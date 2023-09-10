@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Audio, Dna, InfinitySpin, Oval, RevolvingDot, Rings } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
 import SearchContext from '../context/SearchContext';

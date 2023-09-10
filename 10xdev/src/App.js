@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Train from "./Train";
 import Repos from "./Repos";
 import Welcome from "./Welcome";
+import PublicWelcome from "./OpenSource/PublicWelcome";
+import PublicChat from "./OpenSource/PublicChat";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
 import Apis from "./Apis/Apis";
@@ -10,14 +12,11 @@ import Branch from "./Branch/Branch";
 import Clone from "./Clone";
 import LoadingRing from "./Loader/Loader";
 import LandingPage from "./landing page/landing";
-import LeftWelcome from "./LeftWelcome";
 import NewWelcome from "./NewWelcome";
-import User from "./User";
 import CreateProject from "./CreateProject";
 import Create from "./Create";
 
 function App () {
-  
   return (
     <div className="App">
     <div id="alert-container"></div>
@@ -35,9 +34,9 @@ function App () {
                 <Route path="/create" element={<Create/>} />
                 <Route path="/clarify" element={<CreateProject/>} />
                 <Route path="/branch" element={<Branch/>} />
-                <Route path="/test" element={
-                <NewWelcome/>
-                } />
+                <Route path="/test" element={<NewWelcome/>} />
+                <Route path="/opensource/:projectName" element={<PublicWelcome/>} />
+                <Route path="/opensource/:projectName/chat" element={<PublicChat/>} />
             </Routes>
         </Router>
     </SearchState>
