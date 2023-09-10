@@ -58,7 +58,7 @@ const SearchState = ({ children }) => {
   }, []);
 
     useEffect(() => {
-      const getResults = async () => {
+      /*const getResults = async () => {
         try {
           const code = Cookies.get('cognitoCode');
 
@@ -100,7 +100,7 @@ const SearchState = ({ children }) => {
         }
       };
 
-      getResults();
+      getResults();*/
     }, [searchTerm]);
 
 
@@ -130,6 +130,7 @@ const SearchState = ({ children }) => {
         treeData, setTreeData,
         showCheckboxes, setShowCheckboxes,
         filesearchTerm, setFileSearchTerm,
+        referenced_code, setreferenced_code,
         filesToIgnore, setFilesToIgnore,
       }}
     >

@@ -13,10 +13,10 @@ export const Chat = () => {
   const {
     searchTerm,
     isLoading,
-    results,
+    results,setResults,
     setIsLoading,
     logFiles, setLogFiles,
-    referenced_code,
+    referenced_code,setreferenced_code,
     checkedFiles,setCheckedFiles,
     sideContainerOpen, setSideContainerOpen,
     repository, setRepository,
@@ -179,21 +179,24 @@ export const Chat = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    setChatMessages([
-      {
-        index: 0,
-        prompt: {
-          searchTerm: searchTerm,
-        },
-        response: {
-          searchResults: results,
-          files: logFiles,
-          referenced_code: referenced_code,
-        },
-      },
-    ]);
-  }, [results, searchTerm, referenced_code]);
+    
+
+useEffect(() => {
+    const getResults = async () => {
+      try {
+        if (searchTerm.length > 0) {
+          handleSearch(searchTerm);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.error(error);
+      }
+    };
+
+    getResults();
+  }, [searchTerm]);
+
+      
 
   useEffect(() => {
     if (isLoading && loadingRingRef.current) {

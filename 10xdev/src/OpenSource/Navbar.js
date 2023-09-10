@@ -30,7 +30,7 @@ function Navbar({file,onHamburgerClick}) {
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </Link>
                 </div>
-            <button className="font-bold text-sm px-2" onClick={onHamburgerClick}>
+                <button className="font-bold text-sm px-2" onClick={onHamburgerClick}>
                     #{commitHash}
                 </button>
         </div>

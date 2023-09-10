@@ -70,6 +70,9 @@ export const Chat = () => {
     try {
       const filesData = await openAPI("/api/os_search_files", {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           chatMessages: chatMessages.slice(0, chatMessages.length - 1),
           checkedFiles: checkedFiles,
@@ -84,6 +87,9 @@ export const Chat = () => {
       // Second API call to get the results
       const data = await openAPI("/api/os_get_response", {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           prompt: input,
           chatMessages: chatMessages.slice(0, chatMessages.length - 1),
@@ -140,6 +146,9 @@ export const Chat = () => {
       try {
             const filesData = await openAPI("/api/os_search_files", {
               method: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+              },
               body: JSON.stringify({
                 chatMessages: chatMessages.slice(0, index),
                 checkedFiles: checkedFiles,
@@ -154,6 +163,9 @@ export const Chat = () => {
             // Second API call to get the results
               const data = await openAPI("/api/os_get_response", {
               method: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+              },
               body: JSON.stringify({
                 prompt: input,
                 chatMessages: chatMessages.slice(0, index),
@@ -184,21 +196,22 @@ export const Chat = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    setChatMessages([
-      {
-        index: 0,
-        prompt: {
-          searchTerm: searchTerm,
-        },
-        response: {
-          searchResults: results,
-          files: logFiles,
-          referenced_code: referenced_code,
-        },
-      },
-    ]);
-  }, [results, searchTerm, referenced_code]);
+  
+useEffect(() => {
+  const getResults = async () => {
+    try {
+      if (searchTerm.length > 0) {
+        handleSearch(searchTerm);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
+  };
+
+  getResults();
+}, [searchTerm]);
+
 
   useEffect(() => {
     if (isLoading && loadingRingRef.current) {

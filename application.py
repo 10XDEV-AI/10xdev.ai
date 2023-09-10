@@ -30,7 +30,7 @@ def before_request():
     session.permanent = True
     application.permanent_session_lifetime = timedelta(minutes=720)
     
-    if request.endpoint in ["get_PuclicFilesToAnalyze", "/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files"]:
+    if request.endpoint in ["get_PuclicFilesToAnalyze", "/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files", "/api/os_get_response"]:
         return
     # Retrieve the Authorization header from the request
     auth_header = request.headers.get("Authorization")
@@ -148,7 +148,7 @@ def search_files_api():
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, read_info(email).split("/")[-1] )
+    response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, read_info(email).split("/")[-1])
     return jsonify(response)
 
 
@@ -157,10 +157,11 @@ def search_files_api():
 def os_search_files_api():
     email = "public@gmail.com"
     user_logger = UserLogger(email)
+    data = request.get_json()
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
-    projectName = request.json.get("projectName")
+    projectName = request.json.get("projectname")
     response = Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, projectName)
     return jsonify(response)
 
@@ -185,7 +186,7 @@ def get_os_response_api():
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     referenced_files = request.json.get("files")
-    path = request.json.get("projectName")
+    path = request.json.get("projectname")
     response = Ask_AI_with_referenced_files(prompt, user_logger, email, chat_messages, referenced_files, path)
     return jsonify(response)
 
