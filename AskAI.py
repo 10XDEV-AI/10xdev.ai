@@ -13,9 +13,10 @@ from utilities.folder_tree_structure import generate_folder_structure
 from utilities.mixpanel import track_event
 from langchain.text_splitter import RecursiveCharacterTextSplitter, Language
 from sklearn.feature_extraction.text import TfidfVectorizer
-import re
+import re, nltk
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
+nltk.download('stopwords')
 
 fs = pd.DataFrame()
 
