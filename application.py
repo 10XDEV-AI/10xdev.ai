@@ -206,7 +206,7 @@ def get_AIIgnore():
 def get_FilesToAnalyze():
     email = getattr(g, "email", None)
     user_logger = getattr(g, "user_loggers", None)[email]
-    path = read_info(email)
+    path = request.args.get("path")
     files2ignore, files2analyse = FilesToAnalyzedata(email, user_logger, path)
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
