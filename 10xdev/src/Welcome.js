@@ -60,11 +60,11 @@ export const Welcome = () => {
           setCurrentUser("old");
           console.log("old user");
           localStorage.setItem('currentuser', "old");
-          getTreeData();
           setRepository(data.repo_name);
           setCommitHash(data.latest_commit_hash);
           setCommitTime(data.last_commit_time_difference);
           setBranch(data.branch_name);
+          getTreeData();
         }
         setIsLoadingProjectInfo(false);
       }
