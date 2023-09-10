@@ -44,8 +44,6 @@ def get_clones(url, email):
         if repo_path not in data['repos']:
             data['repos'].append(os.path.splitext(os.path.basename(url))[0])
 
-        data['current_repo'] = os.path.basename(url))[0]
-
         with open(os.path.join("../user/" + email, 'AIFiles', 'info.json'), 'w') as outfile:
             json.dump(data, outfile)
 
@@ -110,8 +108,6 @@ def get_private_clones(url, email, access_token):
 
         if repo_path not in data['repos']:
             data['repos'].append(repo_path)
-
-        data['current_repo'] = repo_path
 
         with open(os.path.join("../user/" + email, 'AIFiles', 'info.json'), 'w') as outfile:
             json.dump(data, outfile)
