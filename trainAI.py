@@ -87,7 +87,7 @@ def train_AI(repo_name, userlogger, email):
     fs.to_csv(fsfilename, index=False)
     create_project_summary(repo_name,email)
     
-    fs = evaluate_role(fs, email, 0)
+    fs = evaluate_role(fs, email, 0, path)
 
     userlogger.clear_logs()
     userlogger.log("Indexing files")
