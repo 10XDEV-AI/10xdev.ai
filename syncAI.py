@@ -133,7 +133,7 @@ def syncAI(sync_flag, user_logger, userid, path):
 
     user_logger.clear_logs()
     
-    fs = evaluate_role(fs, userid, 3)
+    fs = evaluate_role(fs, userid, 3, path=path)
 
     filtered_fs = fs[fs["embedding"] == '']
 
