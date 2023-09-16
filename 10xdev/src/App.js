@@ -10,7 +10,7 @@ import SearchState from "./context/SearchState";
 import Apis from "./Apis/Apis";
 import Branch from "./Branch/Branch";
 import Clone from "./Clone";
-import LoadingRing from "./Loader/Loader";
+import LoadingRing from "./OpenSource/Loader/Loader"
 import LandingPage from "./landing page/landing";
 import NewWelcome from "./NewWelcome";
 import CreateProject from "./CreateProject";
@@ -34,7 +34,7 @@ function App () {
                 <Route path="/create" element={<Create/>} />
                 <Route path="/clarify" element={<CreateProject/>} />
                 <Route path="/branch" element={<Branch/>} />
-                <Route path="/test" element={<NewWelcome/>} />
+                <Route path="/test" element={<LoadingRing/>} />
                 <Route path="/opensource/:projectName" element={<PublicWelcome/>} />
                 <Route path="/opensource/:projectName/chat" element={<PublicChat/>} />
             </Routes>

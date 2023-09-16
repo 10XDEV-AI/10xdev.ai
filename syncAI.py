@@ -158,7 +158,7 @@ def syncAI(sync_flag, user_logger, userid, path):
 
 
     user_logger.log("Syncing file contents..")
-    create_clone(path, userid)
+    create_clone(path.split('/')[-1], userid)
 
     fs.to_csv(fsfilename, index=False)
     return "DONE", list(new_file_paths)
