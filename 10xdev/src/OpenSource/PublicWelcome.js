@@ -10,8 +10,8 @@ import NewWelcome from "../NewWelcome";
 import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 
-export const PublicWelcome = () => {
-  const {projectName} = useParams();
+export const PublicWelcome = (props) => {
+
   const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash, setCommitHash, commitTime, repository, setRepository, setCommitTime,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
 
   const [input, setInput] = useState("");
@@ -36,7 +36,7 @@ export const PublicWelcome = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        projectName: projectName,
+        projectName: props.projectName,
       }),
     });
     setIsLoadingProjectInfo(false);
@@ -79,7 +79,7 @@ export const PublicWelcome = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          projectName: projectName,
+          projectName: props.projectName,
         }),
       });
   
@@ -206,12 +206,12 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
               </button>
             </div>
                   <div className="">
-                   <div className="flex justify-center mx-auto my-1 mt-[5%]">
+                   <div className="flex justify-center text-sm mx-auto my-1 mt-[5%]">
                      <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
                      <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
                      <div className="py-1 px-1"> {emoji('⚡️')}</div>Generate commands
                    </div>
-                   <div className="flex justify-center">
+                   <div className="flex justify-center text-sm">
                      <div className="py-1 px-1">
                        {emoji('🐞')}
                      </div>Fix Bugs & Errors

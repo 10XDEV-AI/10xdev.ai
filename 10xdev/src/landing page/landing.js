@@ -1,6 +1,8 @@
 import React,{useEffect} from 'react';
 import './landing.css';
 import myimg from './images/feature-1.png';
+import PublicWelcome from '../OpenSource/PublicWelcome';
+import { Route } from 'react-router-dom';
 
 const LandingPage = () => {
   const hostname = window.location.hostname;
@@ -55,6 +57,35 @@ const LandingPage = () => {
                 <img className="hidden w-full rounded-lg lg:mb-0 lg:flex" src={myimg} width="500" />
             </div>
         </div>
+    </section>
+
+    <section class="bg-gray-50 dark:bg-gray-800">
+            <div class="max-w-screen-xl px-4 py-4 mx-auto text-center lg:py-6 lg:px-6">
+                <figure class="max-w-screen-md mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 mx-auto mb-3 text-gray-400 dark:text-gray-600">
+                        <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
+                    </svg>
+                    <blockquote>
+                        <p class="text-xl font-medium text-gray-900 md:text-2xl dark:text-white">Try it out with any of our pre-trained repositories here!</p>
+                    </blockquote>
+                    <figcaption class="flex items-center justify-center mt-6 space-x-3">
+                        <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
+                            <div class="pr-3 font-medium text-gray-900 dark:text-white">GPT-Engineer</div>
+                            <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
+                            <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400"></div>
+                            <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+          </section>
+
+    <section className="">
+      <div className="bg-gray-800 p-10">
+        <div className = 'bg-white rounded-xl max-w-screen-xl mx-auto'>
+        <PublicWelcome  projectName = 'Test'/>
+        </div>
+      </div>
     </section>
 
 

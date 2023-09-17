@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Train from "./Train";
 import Repos from "./Repos";
 import Welcome from "./Welcome";
-import PublicWelcome from "./OpenSource/PublicWelcome";
+import PublicRouter from "./OpenSource/PublicRouter";
 import PublicChat from "./OpenSource/PublicChat";
 import Chat from "./Chat";
 import SearchState from "./context/SearchState";
@@ -35,7 +35,7 @@ function App () {
                 <Route path="/clarify" element={<CreateProject/>} />
                 <Route path="/branch" element={<Branch/>} />
                 <Route path="/test" element={<LoadingRing/>} />
-                <Route path="/opensource/:projectName" element={<PublicWelcome/>} />
+                <Route path="/opensource/:projectName" element={<PublicRouter/>} />
                 <Route path="/opensource/:projectName/chat" element={<PublicChat/>} />
             </Routes>
         </Router>
