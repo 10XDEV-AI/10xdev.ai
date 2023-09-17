@@ -27,7 +27,7 @@ const LandingPage = () => {
         <nav className="bg-gray-50 border-gray-200 py-2.5 dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
                <button className="flex items-center">
-                   <span className="self-center text-4xl font-extrabold italic whitespace-nowrap text-blue-500">10XDEV.AI</span>
+                   <span className="self-center text-4xl font-extrabold italic whitespace-nowrap dark:text-blue-500 text-blue-700">10XDEV.AI</span>
                </button>
 
                 <div className="flex items-center lg:order-2">
@@ -70,9 +70,8 @@ const LandingPage = () => {
                     </blockquote>
                     <figcaption class="flex items-center justify-center mt-6 space-x-3">
                         <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
-                            <div class="pr-3 font-medium text-gray-900 dark:text-white">GPT-Engineer</div>
+                            <div class="px-3 font-medium text-gray-900 dark:text-white">GPT-Engineer</div>
                             <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
-                            <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400"></div>
                             <div class="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
                         </div>
                     </figcaption>
@@ -80,9 +79,9 @@ const LandingPage = () => {
             </div>
           </section>
 
-    <section className="">
-      <div className="bg-gray-800 p-10">
-        <div className = 'bg-white rounded-xl max-w-screen-xl mx-auto'>
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="p-10">
+        <div className = 'bg-white  max-w-screen-xl mx-auto'  style={{ boxShadow: '0 0 5px #cedcee' }}>
         <PublicWelcome  projectName = 'Test'/>
         </div>
       </div>
@@ -90,7 +89,7 @@ const LandingPage = () => {
 
 
 
-    <section className="bg-gray-50 dark:bg-gray-800">
+    <section className="bg-white dark:bg-gray-800">
         <div className="max-w-screen-xl px-4 py-8 mx-auto space-y-12 lg:space-y-20 lg:px-6">
 
             <div className="items-center gap-8 lg:grid lg:grid-cols-2 xl:gap-16">
@@ -124,7 +123,7 @@ const LandingPage = () => {
                 </div>
         </div>
       </section>
-    <section className="bg-white dark:bg-gray-900">
+    <section className="bg-gray-50 dark:bg-gray-900">
         <div className="max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
             <div className="max-w-screen-md mx-auto mb-8 text-center lg:mb-12">
                 <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Designed for business teams like yours</h2>
