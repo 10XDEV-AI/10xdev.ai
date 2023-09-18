@@ -21,10 +21,9 @@ export const callAPI = async (url, options = {}) => {
 
 function showAlert(type) {
   const alertContainer = document.getElementById('alert-container');
-  ReactDOM.render(
-    <Alert  type={type} />,
-    alertContainer
-  );
+  const root = ReactDOM.createRoot(alertContainer);
+  root.render(<Alert type={type} />);
+
 
   setTimeout(() => {
     ReactDOM.unmountComponentAtNode(alertContainer);

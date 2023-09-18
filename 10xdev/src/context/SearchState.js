@@ -54,7 +54,6 @@ const SearchState = ({ children }) => {
   }
   useEffect(() => {
     setCurrentUser(window.localStorage.getItem('currentuser'));
-    console.log("current user",currentuser);
   }, []);
 
     useEffect(() => {

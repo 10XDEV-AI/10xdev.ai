@@ -16,7 +16,7 @@ function Navbar({file,onHamburgerClick}) {
         <nav className="flex sticky top-0 text-blue-900 bg-slate-50 h-10 z-50">
             <div className="w-full flex">
                 <button onClick={onHamburgerClick}>
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-900 ml-1 px-1 w-10 h-8">
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="text-blue-900 ml-1 px-1 w-10 h-8">
                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                    </svg>
                 </button>

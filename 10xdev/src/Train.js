@@ -263,20 +263,20 @@ const Train = () => {
               <div className="w-full flex justify-center">
                 <div className="w-8/12 py-1">
                   <div className=" ">
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-2  min-h-[70vh]">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs  text-gray-700 uppercase bg-slate-200">
+                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-2  min-h-[70vh]">
+                        <table className="w-full text-sm text-left">
+                            <thead className="text-xs  text-gray-700 uppercase bg-slate-200">
                                 <tr>
-                                    <th scope="col" class=" w-[70%]">
+                                    <th scope="col" className=" w-[70%]">
                                         <h2 className="text-xl font-bold ml-2">Files to Analyze</h2>
                                     </th>
-                                    <th scope="col" class="px-1 py-3 text-center w-[15%]">
+                                    <th scope="col" className="px-1 py-3 text-center w-[15%]">
                                         Tokens
                                     </th>
-                                    <th scope="col" class="px-1 py-3 text-center w-[12%]">
+                                    <th scope="col" className="px-1 py-3 text-center w-[12%]">
                                         Status
                                     </th>
-                                    <th scope="col" class="py-3  w-[3%]">
+                                    <th scope="col" className="py-3  w-[3%]">
                                     </th>
                                 </tr>
                             </thead>
@@ -329,15 +329,15 @@ const Train = () => {
                   </div>
                 </div>
                     <form className="w-4/12 mx-4  mt-3 shadow-md sm:rounded-lg">
-                       <div class="w-full rounded-lg bg-slate-200  min-h-[65vh]">
-                           <div class="flex items-center justify-between p-2">
+                       <div className="w-full rounded-lg bg-slate-200  min-h-[65vh]">
+                           <div className="flex items-center justify-between p-2">
                                <h2 className="text-gray-700 uppercase text-xl font-bold">Files to Ignore</h2>
-                               <button onClick={handleGetGitIgnore} class="rounded cursor-pointer sm:ml-auto inline-flex items-center p-1 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                               <button onClick={handleGetGitIgnore} className="rounded cursor-pointer sm:ml-auto inline-flex items-center p-1 text-sm font-small text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
                                   Save & Refresh
                                </button>
                            </div>
-                           <div class="bg-white">
-                               <textarea id="editor" rows="8" class="min-h-[70vh] w-full px-2 text-sm bg-white border-0 focus:ring-0"
+                           <div className="bg-white">
+                               <textarea id="editor" rows="8" className="min-h-[70vh] w-full px-2 text-sm bg-white border-0 focus:ring-0"
                                placeholder={"Type files and folders you want the AI to ignore here like this : \n\nsrc/build/ \nnode_modules/ \n.env \n*.zip"}
                                                                              value={filesToIgnore.join('\n')}
                                                                              onChange={(event) =>

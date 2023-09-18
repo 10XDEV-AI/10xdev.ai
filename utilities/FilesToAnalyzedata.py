@@ -1,6 +1,7 @@
 import chardet
 import os
 import re
+import pandas as pd
 from utilities.tokenCount import tokenCount
 from concurrent.futures import ThreadPoolExecutor
 
@@ -52,12 +53,34 @@ def FilesToAnalyzedata(email, user_logger, path):
             if result:
                 files_data.append(result)
 
-    user_logger.clear_logs()
-    files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
-    return files2ignore, files_data
+        fsfilename = "../user/" + email + '/AIFiles/' + path + ".csv"
+        fs = pd.read_csv(fsfilename)
+        #Creat a list of files in the file_path colum of fs
+        files = fs['file_path'].tolist()
+        for file_path in files:
+            # Check if file_path is in files_data
+            for file_data in files_data:
+                if file_path == file_data['Path']:
+                    import textwrap
+
+                    # Maximum line length for the rectangular paragraph
+                    max_line_length = 80
+
+                    # Get the summary from the DataFrame
+                    summary = fs.loc[fs['file_path'] == file_path, 'summary'].iloc[0]
+
+                    # Remove existing '\n' characters
+                    summary = summary.replace('\n', '')
+
+                    # Wrap the summary at sentence boundaries
+                    wrapped_summary = textwrap.fill(summary, max_line_length)
+
+                    # Add the separator and wrapped summary to 'file_data['Code']'
+                    file_data['Code'] = 90 * "-" + '\n'+wrapped_summary + '\n' + 90 * "-" + "\n\n" + file_data['Code']
 
 
-# Call the function with email, user_logger, and path
-# For example:
-# files2ignore, files_data = FilesToAnalyzedata("example_email", user_logger, "example_path")
-# You can replace "example_email" and "example_path" with actual values.
+
+
+        user_logger.clear_logs()
+        files2ignore = open(os.path.join("../user", email, '.AIIgnore' + path), 'r').read().splitlines()
+        return files2ignore, files_data

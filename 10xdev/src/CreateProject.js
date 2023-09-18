@@ -112,31 +112,31 @@ function CreateProject() {
         <a href="https://www.freepik.com/free-vector/business-idea-concept-with-people_5949651.htm#query=idea&position=2&from_view=keyword&track=sph">
           <img src='https://i.postimg.cc/K8fCt5bh/3081627.jpg' alt="start" className="h-[28vh] w-[42vh] mx-auto"/>
         </a>
-      <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
+      <h1 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
         Create your project in just few steps
       </h1>
-      <p class="mb-6 p-1 text-lg font-normal text-gray-500 lg:text-xl ">
+      <p className="mb-6 p-1 text-lg font-normal text-gray-500 lg:text-xl ">
         Describe your project. AI will ask clarifying questions next
       </p>
       <form onSubmit={handleSubmit}>
-        <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
-          <div class="px-4 py-2 bg-white rounded-t-lg ">
-            <label for="comment" class="sr-only">
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+          <div className="px-4 py-2 bg-white rounded-t-lg ">
+            <label for="comment" className="sr-only">
               Your Project
             </label>
             <textarea
               onChange={handlePromptChange}
               id="comment"
               rows="10"
-              class="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
+              className="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
               placeholder="Describe your goal..."
               required
             ></textarea>
           </div>
-          <div class="flex items-center justify-between px-3 py-2 border-t ">
+          <div className="flex items-center justify-between px-3 py-2 border-t ">
             <button
               type="submit"
-              class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
+              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
             >
               Submit
             </button>
@@ -145,27 +145,27 @@ function CreateProject() {
       </form>
       {clarifyingQuestions.length > 0 && (
         <div>
-          <h1 class="mt-10 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
+          <h1 className="mt-10 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
             Clarifying Questions:
           </h1>
           <p className="whitespace-pre-line p-5">{clarifyingQuestions}</p>
-            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
-              <div class="px-4 py-2 bg-white rounded-t-lg ">
-                <label class="sr-only">
+            <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+              <div className="px-4 py-2 bg-white rounded-t-lg ">
+                <label className="sr-only">
                   Created an instruction set to create your project
                 </label>
                 <textarea
                   onChange={handleAnswerChange}
-                  class="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0"
+                  className="w-full px-2 text-sm text-gray-900 bg-white border-0 focus:ring-0"
                   rows="10"
                   placeholder="Add clarifying answers here"
                   required
                 ></textarea>
               </div>
-              <div class="flex items-center justify-between px-3 py-2 border-t ">
+              <div className="flex items-center justify-between px-3 py-2 border-t ">
                 <button
                   onClick={handleClarifyingQuestionsSubmit}
-                  class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
+                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
                 >
                   Submit
                 </button>
@@ -175,13 +175,13 @@ function CreateProject() {
       )}
       {spec.length > 0 && (
                   <div>
-                    <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
+                    <h1 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl ">
                       Spec:
                     </h1>
                     <p className="whitespace-pre-line p-5">{spec}</p>
                     <button
                       onClick={handleProceedClick}
-                      class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
+                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
                     >
                       Proceed
                     </button>
