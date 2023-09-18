@@ -73,7 +73,7 @@ const LandingPage = () => {
                             <div className="px-3 font-medium text-gray-900 dark:text-white">GPT-Engineer</div>
                             <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
                                  <a
-                                    href="https://10xdevai.com/opensource/Google-Clone-React"
+                                    href="https://10xdevai.com/opensource/Google-clone-reactjs"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-3 text-sm font-light text-gray-500 dark:text-gray-400"
@@ -97,7 +97,7 @@ const LandingPage = () => {
                                   </a>
                             </div>
                             <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
-                            <a href="https://10xdevai.com/opensource/PAL-Robotics-ROS" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                            <a href="https://10xdevai.com/opensource/aruco_ros" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
                                 PAL Robotics ROS
                               </a>
                             </div>

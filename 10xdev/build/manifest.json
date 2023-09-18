@@ -1,19 +1,19 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "10XDEV.AI",
+  "name": "Understand big codebases",
   "icons": [
     {
-      "src": "10x.ico",
+      "src": "./static/10x.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "10x.png",
+      "src": "./static/10x.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "10x.png",
+      "src": "./static/10x.png",
       "type": "image/png",
       "sizes": "512x512"
     }
