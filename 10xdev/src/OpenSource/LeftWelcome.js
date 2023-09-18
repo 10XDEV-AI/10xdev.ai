@@ -8,8 +8,9 @@ import FileTree from "../FileTree";
 import Sync from "./Sync";
 import { CopyBlock,irBlack } from "react-code-blocks";
 import Alert from "../UiComponents/alert";
+import { openAPI } from "../api";
   
-export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm}) => {
+export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm, filesShow ,setFilesShow, showalert,setShowalert}) => {
   const { isLoading,showSync, setShowSync,isLoadingProjectInfo , commitHash, commitTime, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm, repository, branch} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
@@ -17,14 +18,31 @@ export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm}) => {
   
 
   const [showcode, setShowcode] = useState(false);
-  const [filesShow,setFilesShow] = useState([]);
-  const [showalert,setShowalert] = useState(true);
   var id=0;
   const handleFileClick = (filename,filecode, fileData) => {
     id=id+1;
     setFilesShow([...filesShow,{_id :id+1,name: filename, code: filecode, extention: fileData }]);
     setShowcode(true);
   };
+
+  const handleSummaryFileClick = async () => {
+      const code = await openAPI("/api/os_summary", {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body : JSON.stringify({
+                  repository : repository,
+              }),
+          });
+
+      console.log(code);
+      setFilesShow(prevFilesShow => [
+        { _id: id + 1, name: "Summary", code: code.summary, extention: "txt" },
+        ...prevFilesShow
+      ]);
+      setShowcode(true);
+    }
 
   const navigate = useNavigate();
 
@@ -55,6 +73,11 @@ export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm}) => {
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </>
                   </h1>
+                  <button className="ml-auto rounded  hover:text-blue-600" onClick={() => handleSummaryFileClick()}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
+                                        <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
                 </div>
                 <div className="h-[57vh] overflow-y-auto overflow-x-hidden ">
                   <div className="flex items-center justify-center">
@@ -100,53 +123,7 @@ export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm}) => {
                     </div>
                 </div>
           </>
-        )} 
-        {showcode && filesShow && filesShow.map((file, index) => (
-        file.code? <div>
-        <div key={index} className="mx-4 my-2">
-          <span className="bg-black text-white pb-1 font-bold p-2 rounded-t-md">
-          {file.name}  
-          <button
-  className="inline-flex items-center justify-center ml-4 w-5 h-5 rounded-full bg-gray-700 text-white hover:bg-gray-600 focus:outline-none"
-  onClick={(e) => {
-    e.preventDefault();
-    setShowalert(false);
-    const newFilesShow = filesShow.filter((f) => f.name !== file.name && f.code !== file.code );
-    setFilesShow(newFilesShow);
-    setShowalert(true);
-  }}
->
-  <svg
-    className="w-3 h-3"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="2"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path d="M6 18L18 6M6 6l12 12" />
-  </svg>
-</button>
-          </span>
-          <CopyBlock
-            text={file.code}
-            language={"jsx"}
-            lineProps={{ style: { marginBottom: "0px" } }}
-            showLineNumbers={true}
-            startingLineNumber={1}
-            theme={irBlack}
-            codeBlock
-            wrapLines
-          />
-        </div>
-        </div> : <div>
-        {showalert &&
-<Alert type={600} />
-        }
-        
-        </div>
-      ))}
+        )}
       </div>
     );
   };

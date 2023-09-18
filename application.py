@@ -25,23 +25,16 @@ application = Flask(
 )
 application.secret_key = os.urandom(24)
 user_loggers = {}
-
+user_loggers["public@gmail.com"] = UserLogger(
+    "public@gmail.com"
+)
 
 @application.before_request
 def before_request():
     session.permanent = True
     application.permanent_session_lifetime = timedelta(minutes=720)
     
-    if request.endpoint in ["get_PuclicFilesToAnalyze", "/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files", "/api/os_get_response", "/api/os_logs"]:
-
-        email = "public@gmail.com"
-        g.email = email
-        if "public@gmail.com" not in user_loggers:
-            user_loggers["public@gmail.com"] = UserLogger(
-                "public@gmail.com"
-            )  # Create UserLogger instance for the user
-
-            g.user_loggers = user_loggers
+    if request.endpoint in ["/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files", "/api/os_get_response", "/api/os_logs"]:
         return
     # Retrieve the Authorization header from the request
     auth_header = request.headers.get("Authorization")
@@ -91,7 +84,6 @@ def get_projectInfo():
 @application.route("/api/os_projectInfo", methods=["POST"])
 def get_OpenSourceBranchInfo():
     data = request.get_json()
-    user_logger = UserLogger("public@gmail.com")
     projectName = data["projectName"]   
     return jsonify(getbranchInfo(projectName))
 
@@ -141,7 +133,7 @@ def get_syncAI():
 @application.route("/api/os_sync", methods=["POST"])
 def get_os_syncAI():
     email = "public@gmail.com"
-    user_logger = UserLogger(email)
+    user_logger = user_loggers[email]
     data = request.get_json()
     projectName = data["projectName"]  
     sync_new_flag = data["sync_new"]
@@ -167,7 +159,7 @@ def search_files_api():
 @application.route("/api/os_search_files", methods=["POST"])
 def os_search_files_api():
     email = "public@gmail.com"
-    user_logger = getattr(g, "user_loggers", None)[email]
+    user_logger = user_loggers[email]
     data = request.get_json()
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
@@ -193,7 +185,7 @@ def get_response_api():
 @application.route("/api/os_get_response", methods=["POST"])
 def get_os_response_api():
     email = "public@gmail.com"
-    user_logger = getattr(g, "user_loggers", None)[email]
+    user_logger = user_loggers[email]
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
     referenced_files = request.json.get("files")
@@ -269,10 +261,8 @@ def get_logs():
 @application.route("/api/os_logs", methods=["GET"])
 def get_os_logs():
     email = "public@gmail.com"
-    user_loggers = getattr(g, "user_loggers", None)
+    user_logger = user_loggers[email]
     if email:
-        # Assuming you have a dictionary of UserLogger instances, where the email is the key
-        user_logger = user_loggers[email]
         if user_logger:
             logs, percent, time = user_logger.get_last_logs()
             return jsonify({"logs": logs, "percentage" : percent, "time" : time})
@@ -368,6 +358,18 @@ def getBranches():
 def getSummary():
     data = request.get_json()
     email = getattr(g, "email", None)
+    path = data["repository"]
+    print(path)
+    summary = get_project_summary(path, email)
+    summary += '\n' + generate_folder_structure(email, path)
+    print(len(summary))
+    return jsonify({"summary": summary})
+
+
+@application.route("/api/os_summary", methods=["POST"])
+def getOSSummary():
+    data = request.get_json()
+    email = "public@gmail.com"
     path = data["repository"]
     print(path)
     summary = get_project_summary(path, email)

@@ -23,7 +23,7 @@ const LandingPage = () => {
   return (
     <div>
     <body>
-    <header className="fixed w-full">
+    <header className="fixed w-full z-10">
         <nav className="bg-gray-50 border-gray-200 py-2.5 dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
                <button className="flex items-center">
@@ -68,11 +68,39 @@ const LandingPage = () => {
                     <blockquote>
                         <p className="text-xl font-medium text-gray-900 md:text-2xl dark:text-white">Try it out with any of our pre-trained repositories here!</p>
                     </blockquote>
-                    <figcaption className="flex items-center justify-center mt-6 space-x-3">
+                    <figcaption className="flex items-center justify-center mt-6 ">
                         <div className="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
                             <div className="px-3 font-medium text-gray-900 dark:text-white">GPT-Engineer</div>
-                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
-                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">Google-Clone-React</div>
+                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                                 <a
+                                    href="https://10xdevai.com/opensource/Google-Clone-React"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 text-sm font-light text-gray-500 dark:text-gray-400"
+                                  >
+                                    Google-Clone-React
+                                  </a>
+                            </div>
+                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                                <a href="https://10xdevai.com/opensource/Test" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                                Simple Web Project
+                                </a>
+                            </div>
+                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                                 <a
+                                    href="https://10xdevai.com/opensource/babyagi"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 text-sm font-light text-gray-500 dark:text-gray-400"
+                                  >
+                                    Baby-AGI
+                                  </a>
+                            </div>
+                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                            <a href="https://10xdevai.com/opensource/PAL-Robotics-ROS" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                                PAL Robotics ROS
+                              </a>
+                            </div>
                         </div>
                     </figcaption>
                 </figure>
@@ -81,7 +109,7 @@ const LandingPage = () => {
 
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="p-10">
-        <div className = 'bg-white  max-w-screen-xl mx-auto'  style={{ boxShadow: '0 0 5px #cedcee' }}>
+        <div className = 'bg-white relative h-screen z-0 max-w-screen-xl mx-auto'  style={{ boxShadow: '0 0 5px #cedcee' }}>
         <PublicWelcome  projectName = 'Test'/>
         </div>
       </div>

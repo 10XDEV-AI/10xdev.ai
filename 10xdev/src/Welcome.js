@@ -10,7 +10,7 @@ import LoadingRing from "./Loader/Loader";
 import NewWelcome from "./NewWelcome";
 import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
-import { CopyBlock, codepen, dracula, far, github, googlecode, hopscotch, hybrid, irBlack, monoBlue, monokai, monokaiSublime, nord, obsidian, ocean, paraisoDark, paraisoLight, pojoaque, purebasic, railscast, rainbow, shadesOfPurple, solarizedDark, solarizedLight, sunburst, tomorrow, tomorrowNight, tomorrowNightBlue, tomorrowNightBright, tomorrowNightEighties, vs2015, xt256, zenburn } from "react-code-blocks";
+import { CopyBlock, dracula} from "react-code-blocks";
 import Alert from "./UiComponents/alert";
 
 export const Welcome = () => {
@@ -174,42 +174,42 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
             </div>
           </div>
           <div>
-          {filesShow && filesShow.map((file, index) => (
-                  file.code? <div>
-                  <div key={index} className="mx-1 my-4">
-                    <span className="bg-[#272A36] text-white pb-1 font-bold p-2 rounded-t-md">
-                    {file.name}
-                    <button
-            className="inline-flex items-center justify-center ml-4 w-5 h-5 rounded-full bg-gray-700 text-white hover:bg-gray-600 focus:outline-none"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowalert(false);
-              const newFilesShow = filesShow.filter((f) => f.name !== file.name && f.code !== file.code );
-              setFilesShow(newFilesShow);
-              setShowalert(true);
-            }}
-          >
-            <svg className="w-3 h-3" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-                    </span>
-                    <CopyBlock
-                      text={file.code}
-                      language={"jsx"}
-                      lineProps={{ style: { marginBottom: "0px" } }}
-                      showLineNumbers={false}
-                      startingLineNumber={1}
-                      theme={dracula}
-                      codeBlock
-                      wrapLines
-                    />
-                  </div>
-                  </div> :
-                  <div>
-                    {showalert && <Alert type={600} />}
-                  </div>
-                ))}
+              {filesShow && filesShow.map((file, index) => (
+                      file.code? <div>
+                      <div key={index} className="mx-1 my-4">
+                        <span className="bg-[#272A36] text-white pb-1 font-bold p-2 rounded-t-md">
+                        {file.name}
+                        <button
+                className="inline-flex items-center justify-center ml-4 w-5 h-5 rounded-full bg-gray-700 text-white hover:bg-gray-600 focus:outline-none"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowalert(false);
+                  const newFilesShow = filesShow.filter((f) => f.name !== file.name && f.code !== file.code );
+                  setFilesShow(newFilesShow);
+                  setShowalert(true);
+                }}
+              >
+                <svg className="w-3 h-3" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+                        </span>
+                        <CopyBlock
+                          text={file.code}
+                          language={"jsx"}
+                          lineProps={{ style: { marginBottom: "0px" } }}
+                          showLineNumbers={false}
+                          startingLineNumber={1}
+                          theme={dracula}
+                          codeBlock
+                          wrapLines
+                        />
+                      </div>
+                      </div> :
+                      <div>
+                        {showalert && <Alert type={600} />}
+                      </div>
+                    ))}
           </div>
           <div className="">
             <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
