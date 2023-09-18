@@ -21,7 +21,7 @@ export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm, filesShow
   var id=0;
   const handleFileClick = (filename,filecode, fileData) => {
     id=id+1;
-    setFilesShow([...filesShow,{_id :id+1,name: filename, code: filecode, extention: fileData }]);
+    setFilesShow([{_id :id+1,name: filename, code: filecode, extention: fileData },...filesShow ]);
     setShowcode(true);
   };
 

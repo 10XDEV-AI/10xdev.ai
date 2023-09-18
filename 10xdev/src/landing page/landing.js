@@ -110,7 +110,7 @@ const LandingPage = () => {
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="p-10">
         <div className = 'bg-white relative h-screen z-0 max-w-screen-xl mx-auto'  style={{ boxShadow: '0 0 5px #cedcee' }}>
-        <PublicWelcome  projectName = 'Test'/>
+        <PublicWelcome  projectName = 'gpt-engineer'/>
         </div>
       </div>
     </section>
