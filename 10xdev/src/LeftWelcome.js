@@ -72,7 +72,7 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
             {showRepos ? <Repos /> : (
               <>
                 <div className="flex items-center text-blue-900 justify-center h-[16vh]">
-                  <h1 className="text-2xl">
+                  <h1 className="text-xl">
                      <Link to="/repos">
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </Link>

@@ -68,7 +68,7 @@ export const LeftWelcome = ({ isTreeLoading, treeData, filesearchTerm, filesShow
         ) : (
           <>
                 <div className="flex items-center text-blue-900 h-[16vh]">
-                  <h1 className="text-2xl">
+                  <h1 className="text-xl">
                      <>
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </>

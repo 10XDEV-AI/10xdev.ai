@@ -1,4 +1,4 @@
-import time
+import time, textwrap
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, session, g, send_file
 from AskAI import Ask_AI_search_files, Ask_AI_with_referenced_files
@@ -160,7 +160,6 @@ def search_files_api():
 def os_search_files_api():
     email = "public@gmail.com"
     user_logger = user_loggers[email]
-    data = request.get_json()
     scope = request.json.get("checkedFiles")
     prompt = request.json.get("prompt")
     chat_messages = request.json.get("chatMessages")
@@ -373,7 +372,8 @@ def getOSSummary():
     path = data["repository"]
     print(path)
     summary = get_project_summary(path, email)
-    summary += '\n' + generate_folder_structure(email, path)
+    summary = textwrap.fill(summary, 80)
+    summary += '\n\nFolder Structure :' + generate_folder_structure(email, path)
     print(len(summary))
     return jsonify({"summary": summary})
 
