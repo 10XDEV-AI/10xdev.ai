@@ -1,24 +1,47 @@
-import pandas as pd, os, time, re
+import pandas as pd, os, time
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
-from utilities.files2analyse import files2analyse
-from  utilities.repoutils import select_repo
+from utilities.files2analyse import files2analyse, check_file_type
+from utilities.tokenCount import tokenCount
+from utilities.repoutils import select_repo
+from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
-from utilities.summarize import summarize_file
+from utilities.summarize import summarize_str
 from utilities.mixpanel import track_event
 from nltk.corpus import stopwords
 from utilities.role_analyzer import evaluate_role
-from multiprocessing import Pool
 
-summarize_file_count = 0
-start_time = time.time()
+def summarize_file(repo_name, filepath, i, userlogger, email):
+    full_file_path = os.path.join("../user", email, repo_name, filepath)
 
-def summarize_file_parallel(args):
-    global summarize_file_count
-    repo_name, file_path, i, userlogger, email = args
-    i_new, summary = summarize_file(repo_name, file_path, i, userlogger, email)
-    return i_new, summary
+    if not check_file_type(full_file_path):
+        print("File " + filepath + " was not summarized as it is not a text file")
+        p = ("File " + filepath + " was not Analyzed as it is not a text file")
+        userlogger.log(p)
+        return i, "Ignore"
 
+    i += 1
+    p = ("Analyzing " + filepath)
+    userlogger.log(p)
+
+    if filepath.endswith(".ipynb"):
+        # Convert .ipynb file to human-readable format
+        file_contents = convert_ipynb_to_python(full_file_path)
+    else:
+        with open(full_file_path, 'r') as f:
+            try:
+                file_contents = f.read()
+            except UnicodeDecodeError:
+                p = ("File " + filepath + " was not Analyzed as it is not a text file")
+                userlogger.log(p)
+                return i, "Ignore"
+
+    if tokenCount(file_contents) > 60000:
+        p = ("File " + filepath + " was not analyzed as it is too long")
+        userlogger.log(p)
+        return i, "File content too long"
+
+    return i, summarize_str(filepath, file_contents, email, userlogger)
 
 def train_AI(repo_name, userlogger, email):
     track_event('TrainAI', {'email': email, 'Repo': repo_name})
@@ -44,45 +67,22 @@ def train_AI(repo_name, userlogger, email):
     fs['role'] = None
     userlogger.log("Starting analysis", percent="0", time_left="0")
 
-    num_processes = os.cpu_count()
-    pool = Pool(processes=num_processes)
-    results = []
-    global summarize_file_count
     for ind in fs.index:
-        args = (repo_name, fs['file_path'][ind], i, userlogger, email)
-        results.append(pool.apply_async(summarize_file_parallel, (args,)))
-
-        # Increment the count of summarize_file calls
-        summarize_file_count += 1
-
-        # Check if the rate limit has been reached
-        if summarize_file_count > 10:
-            # Calculate the time elapsed since the last minute
-            time_elapsed = time.time() - start_time
-
-            # If the time elapsed is less than a minute, sleep for the remaining time
-            if time_elapsed < 60:
-                time.sleep(60 - time_elapsed)
-            
-            # Reset the summarize_file count
-            summarize_file_count = 0
-
-    for ind, result in enumerate(results):
-        i_new, summary = result.get()
-        fs['summary'][ind] = summary
+        i_new, fs['summary'][ind] = summarize_file(repo_name, fs['file_path'][ind], i, userlogger, email)
+        if fs['summary'][ind] != "Ignore":
+            fs['embedding'][ind] = split_embed(fs['file_path'][ind]+" "+fs['summary'][ind], email)
         if i_new != i:
             i = i_new
-            if i != 0:
-                time_elapsed = time.time() - start_time
-                p = str(round(100 * (ind + 1) / len(fs)))
-                t = str(round(time_elapsed / 60, 2))
-                log_str = "Analyzing " + fs['file_path'][ind]
-                userlogger.clear_logs()
-                userlogger.log(log_str, percent=p, time_left=t)
+        if i != 0:
+            time_elapsed = time.time() - start_time
+            p = str(round(100 * (ind + 1) / len(fs)))
+            t = str(round(time_elapsed / 60, 2))
+            userlogger.clear_logs()
+            userlogger.log("",percent=p,time_left=t)
 
-    pool.close()
-    pool.join()
     fs = fs[fs['summary'] != "Ignore"]
+
+    userlogger.log("Analyzed all files successfully")
 
     fs.to_csv(fsfilename, index=False)
     create_project_summary(repo_name,email)
