@@ -50,11 +50,14 @@ def syncAI(sync_flag, user_logger, userid, path):
 
     # git pull at path
     subprocess.run(["git", "fetch", "--prune"], cwd=path)
+    print('done pruning')
+
     subprocess.run(["git", "pull"], cwd=path)
+    print('done pulling')
 
     global fs
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
-
+    print('read')
     fs = pd.read_csv(fsfilename)
     '''
     if "role" not in fs.columns:
