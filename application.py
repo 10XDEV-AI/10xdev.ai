@@ -358,10 +358,11 @@ def getSummary():
     data = request.get_json()
     email = getattr(g, "email", None)
     path = data["repository"]
-    print(path)
     summary = get_project_summary(path, email)
-    summary += '\n' + generate_folder_structure(email, path)
-    print(len(summary))
+    line_width = 80
+    wrapped_text = textwrap.wrap(summary, width=line_width, replace_whitespace=False)
+    summary = '\n'.join(wrapped_text)
+    summary += '\n\nFolder Structure :\n' + generate_folder_structure(email, path)
     return jsonify({"summary": summary})
 
 
@@ -372,9 +373,10 @@ def getOSSummary():
     path = data["repository"]
     print(path)
     summary = get_project_summary(path, email)
-    summary = textwrap.fill(summary, 80)
-    summary += '\n\nFolder Structure :' + generate_folder_structure(email, path)
-    print(len(summary))
+    line_width = 80
+    wrapped_text = textwrap.wrap(summary, width=line_width, replace_whitespace=False)
+    summary = '\n'.join(wrapped_text)
+    summary += '\n\nFolder Structure :\n' + generate_folder_structure(email, path)
     return jsonify({"summary": summary})
 
 

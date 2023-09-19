@@ -100,7 +100,7 @@ def train_AI(repo_name, userlogger, email):
     delay = 60/embedding_rate
     for ind in fs.index:
         if fs['summary'][ind] != "Ignore":
-            filtered_summary = ' '.join([word for word in (fs['file_path'][ind] + fs['role'][ind] + fs['summary'][ind]).split() if word.lower() not in stop_words])
+            filtered_summary = ' '.join([word for word in (fs['file_path'][ind] + fs['role'][ind] if fs['role'][ind] else '' + fs['summary'][ind]).split() if word.lower() not in stop_words])
             fs['embedding'][ind] = split_embed(filtered_summary, email)
             time_elapsed = time.time() - start_time
             p = str(round(100 * (ind + 1) / len(fs)))

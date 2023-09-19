@@ -42,7 +42,7 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
         return None
 
 def syncAI(sync_flag, user_logger, userid, path):
-    track_event('syncAI', {'email': userid, 'Repo': path})
+    '''track_event('syncAI', {'email': userid, 'Repo': path})
 
     filename = "../user/" + userid + "/AIFiles/" + path.split('/')[-1] + "_full_project_info.txt"
     if not os.path.exists(filename):
@@ -156,9 +156,9 @@ def syncAI(sync_flag, user_logger, userid, path):
                 fs.loc[fs['file_path'] == file_path, 'embedding'] = x
                 time.sleep(0.1)
 
-
+    '''
     user_logger.log("Syncing file contents..")
     create_clone(path.split('/')[-1], userid)
 
-    fs.to_csv(fsfilename, index=False)
-    return "DONE", list(new_file_paths)
+    #fs.to_csv(fsfilename, index=False)
+    return "DONE", {} #list(new_file_paths)
