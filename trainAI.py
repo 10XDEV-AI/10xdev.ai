@@ -1,4 +1,4 @@
-import pandas as pd, os, time
+import pandas as pd, os, time, nltk
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone
 from utilities.files2analyse import files2analyse, check_file_type
@@ -9,6 +9,7 @@ from utilities.create_project_summary import create_project_summary
 from utilities.summarize import summarize_str
 from utilities.mixpanel import track_event
 from nltk.corpus import stopwords
+nltk.download('stopwords')
 from utilities.role_analyzer import evaluate_role
 
 def summarize_file(repo_name, filepath, i, userlogger, email):

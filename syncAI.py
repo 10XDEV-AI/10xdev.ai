@@ -1,15 +1,13 @@
-import time, subprocess, os, pandas as pd
-from utilities.projectInfo import read_info
+import time, subprocess, os, pandas as pd, nltk
 from utilities.embedding import split_embed
 from utilities.create_clone import create_clone, get_clone_filepath
-from utilities.AskGPT import AskGPT
-from utilities.files2analyse import check_file_type, files2analyse
-from utilities.notebook_utils import convert_ipynb_to_python
+from utilities.files2analyse import files2analyse
 from utilities.create_project_summary import create_project_summary
 from utilities.mixpanel import track_event
 import difflib
 from utilities.role_analyzer import evaluate_role
 from nltk.corpus import stopwords
+nltk.download('stopwords')
 from utilities.summarize import summarize_file
 
 fs = pd.DataFrame()
@@ -59,7 +57,7 @@ def syncAI(sync_flag, user_logger, userid, path):
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
     print('read')
     fs = pd.read_csv(fsfilename)
-    '''
+
     if "role" not in fs.columns:
         fs["role"] = ''
     file_paths_details = files2analyse(path.split("/")[-1], userid)
@@ -136,7 +134,7 @@ def syncAI(sync_flag, user_logger, userid, path):
 
 
     user_logger.clear_logs()
-    '''
+
     print("Evall")
     fs = evaluate_role(fs, userid, 3, path=path)
 
@@ -165,5 +163,5 @@ def syncAI(sync_flag, user_logger, userid, path):
     user_logger.log("Syncing file contents..")
     create_clone(path.split('/')[-1], userid)
 
-    #fs.to_csv(fsfilename, index=False)
-    return "DONE", {} #list(new_file_paths)
+    fs.to_csv(fsfilename, index=False)
+    return "DONE", list(new_file_paths)
