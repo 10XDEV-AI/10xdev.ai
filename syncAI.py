@@ -42,7 +42,7 @@ def get_diff(old_file_path, new_file_path, threshold=0.1):
         return None
 
 def syncAI(sync_flag, user_logger, userid, path):
-    '''track_event('syncAI', {'email': userid, 'Repo': path})
+    track_event('syncAI', {'email': userid, 'Repo': path})
 
     filename = "../user/" + userid + "/AIFiles/" + path.split('/')[-1] + "_full_project_info.txt"
     if not os.path.exists(filename):
@@ -56,6 +56,7 @@ def syncAI(sync_flag, user_logger, userid, path):
     fsfilename = "../user/" + userid + "/AIFiles/" + path.split("/")[-1] + ".csv"
 
     fs = pd.read_csv(fsfilename)
+    '''
     if "role" not in fs.columns:
         fs["role"] = ''
     file_paths_details = files2analyse(path.split("/")[-1], userid)
@@ -132,7 +133,7 @@ def syncAI(sync_flag, user_logger, userid, path):
 
 
     user_logger.clear_logs()
-    
+    '''
     fs = evaluate_role(fs, userid, 3, path=path)
 
     filtered_fs = fs[fs["embedding"] == '']
@@ -156,7 +157,7 @@ def syncAI(sync_flag, user_logger, userid, path):
                 fs.loc[fs['file_path'] == file_path, 'embedding'] = x
                 time.sleep(0.1)
 
-    '''
+
     user_logger.log("Syncing file contents..")
     create_clone(path.split('/')[-1], userid)
 

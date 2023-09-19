@@ -32,6 +32,7 @@ def extract_role(path, role):
 
 def evaluate_role(fs, userid, threshold, path):
     filtered_fs = fs[pd.isnull(fs["role"])]
+    print("Evaluating role for " + userid + "`project. At path " +path)
     system_message = """
                         You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. 
                         Your task is to evaluate what the role of each of the files is in the codebase.
