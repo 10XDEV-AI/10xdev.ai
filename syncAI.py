@@ -5,10 +5,8 @@ from utilities.files2analyse import files2analyse
 from utilities.create_project_summary import create_project_summary
 from utilities.mixpanel import track_event
 import difflib
-from utilities.role_analyzer import evaluate_role
-from nltk.corpus import stopwords
-nltk.download('stopwords')
 from utilities.summarize import summarize_file
+from utilities.role_analyzer import evaluate_role
 
 fs = pd.DataFrame()
 
@@ -125,37 +123,25 @@ def syncAI(sync_flag, user_logger, userid, path):
     with open(filename, 'r') as file:
         for line in file:
             keyword_count += line.count(keyword)
-    total_files_count = len(fs)
-    keyword_percentage = keyword_count / total_files_count
 
-    if keyword_percentage > 0.05:
+    if keyword_count > 3:
         # Call the function create_project_summary if the condition is met
         create_project_summary(path.split("/")[-1], userid)
 
 
     user_logger.clear_logs()
 
-    print("Evall")
-    fs = evaluate_role(fs, userid, 3, path=path)
+    fs = evaluate_role(fs, userid, 5, path=path)
 
-    filtered_fs = fs[fs["embedding"] == '']
+    filtered_fs = fs[fs["embedding"].isnull()]
 
-    stop_words = set(stopwords.words('english'))
     for ind in filtered_fs.index:
-        if filtered_fs["role"][ind] != '':
-            string_to_embed = filtered_fs["file_path"][ind] + filtered_fs["summary"][ind] + filtered_fs["role"][ind]
-        else:
-            string_to_embed = filtered_fs["file_path"][ind] +' '+ filtered_fs["summary"][ind]
-        string_to_embed = ' '.join([word for word in string_to_embed.split() if word.lower() not in stop_words])
+        string_to_embed = filtered_fs["file_path"][ind] +' '+ filtered_fs["summary"][ind] + filtered_fs["summary"][ind] if filtered_fs["role"][ind] else ''
         file_path = filtered_fs.loc[ind, 'file_path']
 
         for fsindex in fs.index:
             if fs.iloc[fsindex]['file_path'] == file_path:
                 x = str(split_embed(string_to_embed, userid))
-                print("Type x")
-                print(type(x))
-                print("Type x2")
-                print(type(fs.loc[fsindex]['embedding']))
                 fs.loc[fs['file_path'] == file_path, 'embedding'] = x
                 time.sleep(0.1)
 

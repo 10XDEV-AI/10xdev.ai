@@ -33,7 +33,7 @@ user_loggers["public@gmail.com"] = UserLogger(
 def before_request():
     session.permanent = True
     application.permanent_session_lifetime = timedelta(minutes=720)
-    
+
     if request.endpoint in ["/api/os_projectInfo", "/api/os_sync" , "/api/os_search_files", "/api/os_get_response", "/api/os_logs"]:
         return
     # Retrieve the Authorization header from the request
@@ -84,7 +84,7 @@ def get_projectInfo():
 @application.route("/api/os_projectInfo", methods=["POST"])
 def get_OpenSourceBranchInfo():
     data = request.get_json()
-    projectName = data["projectName"]   
+    projectName = data["projectName"]
     return jsonify(getbranchInfo(projectName))
 
 
@@ -135,7 +135,7 @@ def get_os_syncAI():
     email = "public@gmail.com"
     user_logger = user_loggers[email]
     data = request.get_json()
-    projectName = data["projectName"]  
+    projectName = data["projectName"]
     sync_new_flag = data["sync_new"]
     if sync_new_flag == "true":
         message, files = syncAI(True, user_logger, email, path="../user/"+email+"/"+projectName)
@@ -216,10 +216,10 @@ def get_FilesToAnalyze():
 
 
 @application.route("/api/PublicTreedata", methods=["POST"])
-def get_PuclicFilesToAnalyze():    
+def get_PuclicFilesToAnalyze():
     data = request.get_json()
     user_logger = UserLogger("public@gmail.com")
-    projectName = data["projectName"]    
+    projectName = data["projectName"]
     files2ignore, files2analyse = FilesToAnalyzedata("public@gmail.com", user_logger, projectName)
     return jsonify({"files2ignore": files2ignore, "files2analyze": files2analyse})
 
@@ -261,14 +261,11 @@ def get_logs():
 def get_os_logs():
     email = "public@gmail.com"
     user_logger = user_loggers[email]
-    if email:
-        if user_logger:
-            logs, percent, time = user_logger.get_last_logs()
-            return jsonify({"logs": logs, "percentage" : percent, "time" : time})
-        else:
-            return "User Logger not found", 404
+    if user_logger:
+        logs, percent, time = user_logger.get_last_logs()
+        return jsonify({"logs": logs, "percentage" : percent, "time" : time})
     else:
-        return "User email not found in session", 401
+        return "User Logger not found", 404
 
 
 @application.route("/api/setKey", methods=["GET"])
@@ -320,20 +317,24 @@ def setRates():
 def getClones():
     email = getattr(g, "email", None)
     path = request.args.get("path")
+    user_logger = getattr(g, "user_loggers", None)[email]
     # Check if the path ends with ".git"
     if not path.endswith(".git"):
         path += ".git"
-    branches, code = get_clones(path, email)
-    return jsonify(branches), code
+    t = threading.Thread(target=get_clones, args=(path, email, user_logger))
+    t.start()
+    return jsonify("Cloning Completed"), 200
 
 
 @application.route("/api/clone-private", methods=["GET"])
 def getPrivateClones():
     email = getattr(g, "email", None)
     path = request.args.get("path")
+    user_logger = getattr(g, "user_loggers", None)[email]
     access_token = request.args.get("access_token")
-    branches, code = get_private_clones(path, email, access_token)
-    return jsonify(branches), code
+    t = threading.Thread(target=get_private_clones, args=(path, email, access_token, user_logger))
+    t.start()
+    return jsonify("Cloning Completed"), 200
 
 
 @application.route("/api/setBranch", methods=["GET"])

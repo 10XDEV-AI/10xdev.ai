@@ -53,6 +53,7 @@ function DirectoryTreeView(props) {
   }, [filesearchTerm]);
 
   useEffect(() => {
+    console.log(Alldata)
     setAlldata(props.data);
   }, [props.data]);
 
@@ -254,7 +255,6 @@ function DirectoryTreeView(props) {
                    { props.landingpage==="true"?<div
                       onClick={() => {
                         getfilecodefromfilteredData(element.name,Alldata)
-                        // props.setShowcode(!props.showcode);
                       }}
                     >
                       {element.name}

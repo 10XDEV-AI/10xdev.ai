@@ -8,10 +8,9 @@ import FileTree from "./FileTree";
 import Sync from "./Sync/Sync";
 import Repos from "./Repos";
 import { CopyBlock,irBlack } from "react-code-blocks";
-import Alert from "./UiComponents/alert";
 import { callAPI } from "./api";
   
-export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm, filesShow ,setFilesShow, showalert,setShowalert}) => {
+export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm, filesShow ,setFilesShow}) => {
   const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, commitTime, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
@@ -19,15 +18,18 @@ export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filese
   
 
   const [showcode, setShowcode] = useState(false);
-  var id=0;
-  const handleFileClick = (filename, filecode, fileData) => {
+  var id = 0;
+  const handleFileClick = async (filename, filecode, fileData) => {
     id = id + 1;
-    setFilesShow(prevFilesShow => [
-      { _id: id + 1, name: filename, code: filecode, extention: fileData },
-     ...prevFilesShow
-    ]);
-    setShowcode(true);
+    if (filecode) {
+          setShowcode(true);
+          setFilesShow((prevFilesShow) => [
+            { _id: id, name: filename, code: filecode, extension: fileData },
+            ...prevFilesShow,
+          ]);
+        }
   };
+
 
   const handleSummaryFileClick = async () => {
     const code = await callAPI("/api/summary", {

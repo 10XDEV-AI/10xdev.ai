@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Oval } from 'react-loader-spinner';
 import './Loader.css';
 import LogViewer from './LogViewer/LogViewer';
@@ -7,12 +6,6 @@ import SearchContext from '../context/SearchContext';
 
 const LoadingRing = ({RedirectTo, dontLog }) => {
   const { setIsLoading, logFiles } = useContext(SearchContext);
-  const navigate = useNavigate();
-
-  const handleRunInBackground = () => {
-    setIsLoading(false);
-    navigate('/welcome');
-  };
 
   return (
     <div className="loading-ring-container">

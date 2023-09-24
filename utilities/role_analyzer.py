@@ -21,11 +21,8 @@ def extract_role(path, role):
     # Remove leading and trailing 'Role :' or 'Role:'
     role = re.sub(r"Role\s*:\s*", "", role, flags=re.IGNORECASE)
 
-    if "File Path :" in path or "File Path:" in path:
-        path = path.replace("File Path :", "").replace("File Path:", "")
-
-    if "Role :" in role or "Role:" in role:
-        role = role.replace("Role :", "").replace("Role:", "")
+    path = path.replace("File Path :", "").replace("File Path:", "")
+    role = role.replace("Role :", "").replace("Role:", "")
 
     return path, role
 
@@ -33,19 +30,7 @@ def extract_role(path, role):
 def evaluate_role(fs, userid, threshold, path):
     filtered_fs = fs[pd.isnull(fs["role"])]
     print("Evaluating role for " + userid + "`project. At path " +path)
-    system_message = """
-                        You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. 
-                        Your task is to evaluate what the role of each of the files is in the codebase.
-                        
-                        Then you will output the role of each file.
-                        Each file's role must strictly follow a markdown code block format:
-                        
-                        File Path : FILEPATH
-                        ```
-                        Role : ROLE
-                        ```
-                        Before you finish, double check that the role of all the file paths mentioned by the user has been clarified. Be concise.Answer in a short sentence.
-                        """
+    system_message = """You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. Your task is to evaluate what the role of each of the files is in the codebase.Then you will output the role of each file. Each file's role must strictly follow a markdown code block format: \nFile Path : FILEPATH\n```\nRole : ROLE\n```\nBefore you finish, double check that the role of all the file paths mentioned by the user has been clarified. Be concise.Answer in a short sentence."""
     
     batch_size_limit = 10000
     if len(filtered_fs) > threshold:

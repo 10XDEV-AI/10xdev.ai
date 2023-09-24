@@ -216,7 +216,7 @@ const Train = () => {
       )}
 
       {isLoading ? (
-        <div  className="h-screen"><LoadingRing RedirectTo="/repos"/></div>
+        <div  className="h-screen"><LoadingRing RedirectTo="/welcome"/></div>
       ) : (
         <div>
           <Navbar />

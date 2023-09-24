@@ -8,8 +8,6 @@ from utilities.notebook_utils import convert_ipynb_to_python
 from utilities.create_project_summary import create_project_summary
 from utilities.summarize import summarize_str
 from utilities.mixpanel import track_event
-from nltk.corpus import stopwords
-nltk.download('stopwords')
 from utilities.role_analyzer import evaluate_role
 
 def summarize_file(repo_name, filepath, i, userlogger, email):
@@ -96,12 +94,11 @@ def train_AI(repo_name, userlogger, email):
     userlogger.log("Indexing files")
     start_time = time.time()
     embedding_rate = 600
-    stop_words = set(stopwords.words('english'))
     
     delay = 60/embedding_rate
     for ind in fs.index:
         if fs['summary'][ind] != "Ignore":
-            filtered_summary = ' '.join([word for word in (fs['file_path'][ind] + fs['role'][ind] if fs['role'][ind] else '' + fs['summary'][ind]).split() if word.lower() not in stop_words])
+            filtered_summary = fs['file_path'][ind] + fs['role'][ind] if fs['role'][ind] else '' + fs['summary'][ind]
             fs['embedding'][ind] = split_embed(filtered_summary, email)
             time_elapsed = time.time() - start_time
             p = str(round(100 * (ind + 1) / len(fs)))

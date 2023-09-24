@@ -16,15 +16,20 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import re, nltk
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+if not nltk.corpus.stopwords.words('english'):
+    print("Stopwords not found. Downloading...")
+    nltk.download('stopwords')
+else:
+    print("Stopwords are already downloaded.")
+
+# Now, you can use stopwords
+stop_words = set(stopwords.words('english'))
 
 fs = pd.DataFrame()
 
 def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2000, filename=""):
     chunks = re.split(r'\n', contents)
     stemmer = PorterStemmer()
-
-    stop_words = set(stopwords.words('english'))
 
     # Apply stemming to chunks before vectorization
     stemmed_chunks = []
@@ -47,8 +52,6 @@ def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2
 
     similarities = (tfidf_matrix * user_prompt_tfidf.T).toarray().flatten()
     chunk_indices = similarities.argsort()[::-1]  # Get indices of chunks sorted by similarity
-    selected_tokens = 0
-    selected_chunk_indices = []
 
     # Mapping of file extensions to programming languages
     extension_to_lang = {
@@ -162,9 +165,7 @@ def search_functions(code_query, email, userlogger, scope, history, history_file
         if len(files_in_scope) >= 5:
             fs = fs[fs['file_path'].isin(files_in_scope)]
 
-    from nltk.corpus import stopwords
-    stop_words = set(stopwords.words('english'))
-    prompt_embedding = split_embed(' '.join([word for word in code_query .split() if word.lower() not in stop_words]), email)
+    prompt_embedding = split_embed(code_query , email)
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
     filepaths = set(res['file_path'])
@@ -254,8 +255,6 @@ def consolidate_prompt_creation(chatmessages, current_prompt):
         # Add previous user prompts, AI responses, and file references to the consolidated prompt
         for i, user_prompt in enumerate(previous_user_prompts):
             ai_response = previous_search_results[i]
-            file_references = previous_files[i]  # Assuming each search returns 10 files
-
             consolidated_prompt = f"User prompt {i + 1}: {user_prompt}\n" \
                                   f"AI Response {i + 1}: {ai_response}\n"
             history_prompt += consolidated_prompt
@@ -378,7 +377,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
     print("Total Tokens in the query: " + str(tokens))
     user_logger.clear_logs()
     user_logger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1)
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1, model='gpt-4')
     referenced_code = get_referenced_code(path, files, email)
     user_logger.clear_logs()
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}
@@ -437,6 +436,4 @@ if __name__ == "__main__":
     Answer = Ask_AI_search_files(question, user_logger=UserLogger("prathamthepro@gmail.com"), email="prathamthepro@gmail.com",chat_messages=None, scope=[])
     print(question)
     print(Answer)
-
-
     '''

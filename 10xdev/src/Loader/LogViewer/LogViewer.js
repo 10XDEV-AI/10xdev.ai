@@ -16,32 +16,29 @@ function LogViewer(props) {
     const fetchLogs = async () => {
       try {
         const response = await callAPI('/api/logs');
-        console.log(response.logs);
+        console.log('Logs' + response.logs);
         setPercentage(response.percentage);
-        console.log(response.percentage);
+        console.log('Perc'+response.percentage);
         setTime(response.time);
-        console.log(response.time);
+        console.log('Time '+response.time);
 
-        if (Array.isArray(response.logs)&& response.logs.length > 0) {
+        if (Array.isArray(response.logs)) {
           let result = response.logs.join(',\n');
+          console.log(result)
           if (result === '' && props.RedirectTo) {
             setIsLoading(false);
-          const currentUrl = window.location.href;
-          const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/repos';
-          window.location.href = newUrl;
+            navigate(props.RedirectTo);
           }
           result = result.replace(/,/g, ''); // remove commas
           result = result.replace(/"/g, ''); // remove double quotes
           result = splitRows(result); // split rows longer than 200 characters
           setLogs(result);
         } else {
-          console.error('Invalid response format or missing body property');
           setIsLoading(false)
           console.log(props.RedirectTo)
           if (props.RedirectTo) {
           const currentUrl = window.location.href;
-          const newUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'))+'/welcome';
-          window.location.href = newUrl;
+          navigate('/erorr');
           }
         }
       } catch (error) {
