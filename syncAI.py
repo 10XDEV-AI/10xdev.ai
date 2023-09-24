@@ -132,8 +132,7 @@ def syncAI(sync_flag, user_logger, userid, path):
     user_logger.clear_logs()
 
     fs = evaluate_role(fs, userid, 5, path=path)
-
-    filtered_fs = fs[fs["embedding"].isnull()]
+    filtered_fs = fs[fs["embedding"].isnull() | (fs["embedding"] == '')]
 
     for ind in filtered_fs.index:
         string_to_embed = filtered_fs["file_path"][ind] +' '+ filtered_fs["summary"][ind] + filtered_fs["summary"][ind] if filtered_fs["role"][ind] else ''

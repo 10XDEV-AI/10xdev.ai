@@ -28,9 +28,9 @@ def extract_role(path, role):
 
 
 def evaluate_role(fs, userid, threshold, path):
-    filtered_fs = fs[pd.isnull(fs["role"])]
+    filtered_fs = fs[fs["role"].isnull() | (fs["role"] == '')]
     print("Evaluating role for " + userid + "`project. At path " +path)
-    system_message = """You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. Your task is to evaluate what the role of each of the files is in the codebase.Then you will output the role of each file. Each file's role must strictly follow a markdown code block format: \nFile Path : FILEPATH\n```\nRole : ROLE\n```\nBefore you finish, double check that the role of all the file paths mentioned by the user has been clarified. Be concise.Answer in a short sentence."""
+    system_message = """You will be given a summary of a codebase, it's folder structure, few file paths and the summarised contents of the files. Your task is to evaluate what the role of each of the files is in the codebase.Then you will output the role of each file. Each file's role must strictly follow a markdown code block format: \nFile Path: FILEPATH\n```\nRole : ROLE\n```\nBefore you finish, double check that the role of all the file paths mentioned by the user has been clarified. Be concise.Answer in a short sentence."""
     
     batch_size_limit = 10000
     if len(filtered_fs) > threshold:
@@ -65,6 +65,7 @@ def evaluate_role(fs, userid, threshold, path):
 
         for match in matches:
             file_path, role = match.group(1).strip(), match.group(2).strip()
+            file_path, role = extract_role(file_path, role)
             fs.loc[fs['file_path'] == file_path, 'role'] = role
             fs.loc[fs['file_path'] == file_path, 'embedding'] = ''
 
@@ -158,6 +159,7 @@ def evaluate_role(fs, userid, threshold, path):
 
             for match in matches:
                 path, role = match.group(1).strip(), match.group(2).strip()
+                path, role = extract_role(path, role)
                 fs.loc[fs['file_path'] == path, 'role'] = role
                 fs.loc[fs['file_path'] == path, 'embedding'] = ''
 
