@@ -19,10 +19,17 @@ const LandingPage = () => {
     window.localStorage.removeItem('currentuser');
     }, []);
 
+    function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        console.log(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
 
   return (
     <div>
-    <body>
     <header className="fixed w-full z-10">
         <nav className="bg-gray-50 border-gray-200 py-2.5 dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
@@ -36,7 +43,10 @@ const LandingPage = () => {
                 <div className="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use Auto GPT</a>
+                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use</a>
+                        </li>
+                        <li>
+                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Compare with other tools</a>
                         </li>
                     </ul>
                 </div>
@@ -46,22 +56,24 @@ const LandingPage = () => {
 
     <section className="bg-white dark:bg-gray-900">
         <div className="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
-            <div className="mr-auto place-self-center lg:col-span-6">
-                <h1 className="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl dark:text-white">Use the power of Auto GPT to become a 10X developer</h1>
-                <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Train 10XDEV.AI on your git repository for free</p>
-                <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                    <a href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`} className="text-white bg-blue-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-8 py-4 mr-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-700">Start Free</a>
-                </div>
+            <div className="place-self-center content-center text-center lg:col-span-12">
+            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Be a <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 dark:bg-gradient-to-r dark:to-emerald-600 dark:from-sky-400">10X Developer</span> with Autonomous Software Development on your codebase</h1>
+            <p className="mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Train 10XDEV.AI on your git repository for free</p>
+            <div className="flex justify-center"> 
+                <button type="button"  className="text-white bg-blue-700 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-8 py-2 dark:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-700" onClick={() => scrollToSection('features')} >Try Now</button>
+                <a href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`} className="py-3 px-5 mx-2 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Add Your Repo</a>
             </div>
-            <div className="hidden lg:mt-0 lg:col-span-6 lg:flex">
-                <img className="hidden w-full rounded-lg lg:mb-0 lg:flex" src={myimg} width="500" />
+            </div>
+            <div className="hidden lg:mt-0 lg:col-span-12 lg:flex lg:p-20 ">
+                <img className="w-full  bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 p-1 w-full p-1 rounded-lg lg:mb-0" src={myimg} width="500" alt="Your Image" />
             </div>
         </div>
     </section>
 
-    <section className="bg-gray-50 dark:bg-gray-800">
-            <div className="max-w-screen-xl px-4 py-4 mx-auto text-center lg:py-6 lg:px-6">
-                <figure className="max-w-screen-md mx-auto">
+    
+    <section id="features" className="bg-gray-50 dark:bg-gray-800">
+            <div className="max-w-screen-xl px-4 mx-auto text-center lg:py-6 lg:px-6">
+                <figure className="max-w-screen-md mx-auto mt-10">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 mx-auto mb-3 text-gray-400 dark:text-gray-600">
                         <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clipRule="evenodd" />
                     </svg>
@@ -107,7 +119,7 @@ const LandingPage = () => {
             </div>
           </section>
 
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section  className="bg-gray-50 dark:bg-gray-900">
       <div className="p-10">
         <div className = 'bg-white relative h-screen z-0 max-w-screen-xl mx-auto'  style={{ boxShadow: '0 0 5px #cedcee' }}>
         <PublicWelcome  projectName = 'gpt-engineer'/>
@@ -123,7 +135,7 @@ const LandingPage = () => {
             <div className="items-center gap-8 lg:grid lg:grid-cols-2 xl:gap-16">
 
                 <div className="text-gray-500 sm:text-lg dark:text-gray-400">
-                    <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Train your repository into AutoGPT</h2>
+                    <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Train your repository into our algorithm</h2>
                     <p className="mb-8 font-light lg:text-xl">Now you can ask the AI to </p>
 
                     <ul role="list" className="space-y-5  border-gray-200  dark:border-gray-700">
@@ -249,7 +261,6 @@ const LandingPage = () => {
         </div>
     </footer>
     <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
-    </body>
     </div>
   );
 };

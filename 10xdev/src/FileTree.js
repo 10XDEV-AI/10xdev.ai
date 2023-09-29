@@ -1,3 +1,4 @@
+
 import React, { useContext, useState, useEffect } from "react";
 import { DiJavascript, DiCss3, DiNpm } from "react-icons/di";
 import {
@@ -126,10 +127,17 @@ function DirectoryTreeView(props) {
         break;
       }
     }
-    var res = folderPath.join("/");
-    const updatedFilesToIgnore = [...filesToIgnore, res];
-    setFilesToIgnore(updatedFilesToIgnore);
+    const folderPathString = folderPath.join("/");
+  
+    // Check if the folderPathString exists in the filtered data
+    const folderNode = filteredData.find((node) => node.name === folderPathString);
+  
+    if (folderNode) {
+      const updatedFilesToIgnore = [...filesToIgnore, folderPathString];
+      setFilesToIgnore(updatedFilesToIgnore);
+    }
   };
+  
 
   const getfilecodefromfilteredData = (filename, node) => {
     if (!node) {
