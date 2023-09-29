@@ -377,7 +377,7 @@ def Ask_AI_with_referenced_files(og_prompt, user_logger, email, chat_messages, f
     print("Total Tokens in the query: " + str(tokens))
     user_logger.clear_logs()
     user_logger.log("Thinking of an answer...")
-    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1, model='gpt-4')
+    FinalAnswer = AskGPT(email=email, system_message=system_message, prompt=final_prompt, temperature=1, model='gpt-3.5-turbo')
     referenced_code = get_referenced_code(path, files, email)
     user_logger.clear_logs()
     return {'files': files, 'response': FinalAnswer, 'referenced_code': referenced_code}

@@ -218,32 +218,35 @@ const Clone = () => {
                                         </svg>
                                     </div>
                                     <input type="search" id="default-search" onChange={(e) => SearchRepos(e.target.value)} className="block w-full py-2 pl-10 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Search Repository" required />
+                                    <div className="w-full  bg-white border-dashed border-gray-300 border-2 rounded-lg mt-2" data-aos="fade-right" data-aos-duration="500">
+                                          {filteredRepos.map((repo) => (
+                                            <>
+                                                <ul key={repo.id} className="m-2 flex justify-center">
+                                                  <li className="w-full">
+                                                    <button
+                                                      className="w-full flex text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
+                                                      onClick={() => {
+                                                        console.log(repo);
+                                                        console.log("User wants to clone " + repo.url);
+                                                        setPath(repo.name);
+                                                        handleClonePrivate(repo.url);
+                                                        setRepos([]);
+                                                      }}
+                                                    >
+                                                      <BsGithub className="mr-3 my-1" />
+                                                      {repo.full_name}
+                                                    </button>
+                                                  </li>
+                                                </ul>
+                                            </>
+                                          ))}
+                                      </div>
                                     </div>
+
                                   </form>
+
                               </div>
-                              <div className=" bg-white border-dashed border-gray-300 border-2 rounded-lg mx-[30%]" data-aos="fade-right" data-aos-duration="500">
-                                  {filteredRepos.map((repo) => (
-                                    <>
-                                        <ul key={repo.id} className="m-2 flex justify-center">
-                                          <li className="w-full">
-                                            <button
-                                              className="w-full flex text-start bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
-                                              onClick={() => {
-                                                console.log(repo);
-                                                console.log("User wants to clone " + repo.url);
-                                                setPath(repo.name);
-                                                handleClonePrivate(repo.url);
-                                                setRepos([]);
-                                              }}
-                                            >
-                                              <BsGithub className="mr-3 my-1" />
-                                              {repo.full_name}
-                                            </button>
-                                          </li>
-                                        </ul>
-                                    </>
-                                  ))}
-                              </div>
+
                           </>
                         ) : null}
                       </div>
