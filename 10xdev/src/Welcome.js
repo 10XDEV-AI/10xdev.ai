@@ -163,7 +163,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
     {currentuser!=="new"? (
       <>
         <div className="flex ">
-          <div  className="w-5/12 overflow-auto fixed">
+          <div  className="hidden overflow-auto fixed">
             <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash} filesShow={filesShow} setFilesShow={setFilesShow}/>
           </div>
           <div className="w-7/12 p-6 absolute right-0">

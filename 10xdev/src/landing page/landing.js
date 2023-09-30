@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react';
 import './landing.css';
-import myimg from './images/feature-1.png';
+import myimg from './images/feature-2.png';
 import PublicWelcome from '../OpenSource/PublicWelcome';
 import { Route } from 'react-router-dom';
 
@@ -45,8 +45,9 @@ const LandingPage = () => {
                         <li>
                            <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use</a>
                         </li>
+                        <li className='px-2'>
+                        </li>
                         <li>
-                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Compare with other tools</a>
                         </li>
                     </ul>
                 </div>
@@ -64,16 +65,16 @@ const LandingPage = () => {
                 <a href={`https://10xdevgoogleauth.auth.eu-north-1.amazoncognito.com/oauth2/authorize?client_id=7rj9u2ntqm57fsqeod3lmgloag&response_type=token&scope=aws.cognito.signin.user.admin+email+openid&redirect_uri=${redirectUri}`} className="py-3 px-5 mx-2 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Add Your Repo</a>
             </div>
             </div>
-            <div className="hidden lg:mt-0 lg:col-span-12 lg:flex lg:p-20 ">
-                <img className="w-full  bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 p-1 w-full p-1 rounded-lg lg:mb-0" src={myimg} width="500" alt="Your Image" />
+            <div className="p-5 lg:mt-0 lg:col-span-12 lg:flex lg:px-20">
+                <iframe className="aspect-video rounded-md bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 p-1 w-full p-1 rounded-lg lg:mb-0"  src="https://www.youtube.com/embed/lybtjtJ946U?si=57xHqxKCVolsNYfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
         </div>
     </section>
 
     
     <section id="features" className="bg-gray-50 dark:bg-gray-800">
-            <div className="max-w-screen-xl px-4 mx-auto text-center lg:py-6 lg:px-6">
-                <figure className="max-w-screen-md mx-auto mt-10">
+            <div className="max-w-screen-xl px-4 mx-auto text-center lg:py-10 lg:px-6">
+                <figure className="max-w-screen-md mx-auto pt-8">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 mx-auto mb-3 text-gray-400 dark:text-gray-600">
                         <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clipRule="evenodd" />
                     </svg>
@@ -97,16 +98,6 @@ const LandingPage = () => {
                                 <a href="https://10xdevai.com/opensource/Test" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
                                 Simple Web Project
                                 </a>
-                            </div>
-                            <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
-                                 <a
-                                    href="https://10xdevai.com/opensource/babyagi"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-3 text-sm font-light text-gray-500 dark:text-gray-400"
-                                  >
-                                    Baby-AGI
-                                  </a>
                             </div>
                             <div className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
                             <a href="https://10xdevai.com/opensource/aruco_ros" target="_blank" rel="noopener noreferrer" className="px-3 text-sm font-light text-gray-500 dark:text-gray-400">
@@ -159,7 +150,7 @@ const LandingPage = () => {
                         </li>
                     </ul>
                 </div>
-                <iframe className="w-full aspect-video rounded-md" src="https://www.youtube.com/embed/JBIiaIgwNQo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <img className="hidden mx-auto w-1/2 p-1 rounded-lg lg:mb-0 lg:flex" src={myimg} width="200" alt="Your Image" />
                 </div>
         </div>
       </section>

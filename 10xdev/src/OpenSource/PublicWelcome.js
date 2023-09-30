@@ -150,11 +150,11 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   return (<>
     {currentuser!=="new"? (
       <>
-        <div className="flex w-full relative">
-      <div  className="w-5/12 overflow-auto absolute">
+      <div className="flex w-full relative">
+      <div  className="hidden lg:block lg:w-5/12 overflow-auto absolute">
         <LeftWelcome isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash} filesShow={filesShow} setFilesShow={setFilesShow} />
         </div>
-      <div className="shadow-xl w-7/12 p-6 h-screen absolute right-0 overflow-auto">
+      <div className="shadow-xl p-2 lg:w-7/12 lg:p-6 h-screen absolute lg:right-0 overflow-auto">
         <div className="text-centre">
           <div className="h-[16vh] ">
             <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
@@ -202,7 +202,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                       ))}
           </div>
           <div className="">
-            <div className="text-xl font-bold mb-2">Describe a task, query, or a bug:</div>
+            <div className="text-xl font-bold mb-2 sm:mr-20 md:mr-40">Describe a task, query, or a bug:</div>
             <div className="border border-gray-400 rounded-lg shadow-md">
               <div className="flex text-base  h-[50vh] pt-2 pl-2 pr-2"  onClick={() => setTypingStarted(true)}>
                 {typingStarted ? <textarea
@@ -244,7 +244,7 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                 </svg>
               </button>
             </div>
-                  <div className="">
+                  <div className="hidden lg:block">
                    <div className="flex justify-center text-sm mx-auto my-1 mt-[5%]">
                      <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
                      <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
