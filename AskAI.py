@@ -130,15 +130,15 @@ def filter_functions(result_string, filepaths, email, userlogger, history):
     if history:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the Current user prompt, filter the file paths that will be required to answer the current user prompt based on above given file summaries and the conversation between human and AI.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO'. \n-----\nYour Response : \n"
         system_message = "You will be provided with [1] A list of file paths and their roles and summaries delimited by triple quotes and [2] a chat between AI and Human User delimited XML tags. "
-        system_message += "Your job is to guess the relevant files that the user is speaking about in the Current User Prompt and return a filtered list of file paths. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
+        system_message += "Your job is to guess the relevant files that the user is speaking about in the Current User Prompt and return a filtered list of file paths. If the user is not speaking about any specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO'"
     else:
         #old task = "\nTask for you : If the user is speaking about a specific file path or particular functionality in the 'User prompt', just return the file paths that will be required to answer the current user prompt based on above given file summaries.\n If in the 'Current user prompt', the user strictly needs general information about the project like architechture, folder structure, tech stack or overall functionality, mention the code word 'FULL_PROJECT_INFO' \n-----\nYour Response : \n"
         system_message = "You will be provided with [1] A list of file paths and their roles and summaries delimited by triple quotes and [2] a user prompt delimited by XML tags. "
-        system_message += "Your job is to guess the relevant files that the user is speaking about in the User Prompt and return a filtered list of file paths . If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO' \n"
+        system_message += "Your job is to guess the relevant files that the user is speaking about in the User Prompt and return a filtered list of file paths . If the user is not speaking about specific files, but is speaking in general about the project like architecture, folder structure, functionality or usage mention the code word 'FULL_PROJECT_INFO'"
 
     filter_prompt = result_string
 
-    response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0)
+    response_functions = AskGPT(email, system_message=system_message, prompt=filter_prompt, temperature=0, max_tokens=700)
     #userlogger.log(response_functions)
     files = []
     if 'FULL_PROJECT_INFO' in response_functions:
@@ -169,7 +169,8 @@ def search_functions(code_query, email, userlogger, scope, history, history_file
     fs['similarities'] = fs.embedding.apply(lambda x: max_cosine_sim(x, prompt_embedding) if x is not None else 1)
     res = fs.sort_values('similarities', ascending=False).head(10)
     filepaths = set(res['file_path'])
-    filepaths.add(x for x in history_files)
+    for x in history_files:
+        filepaths.add(x)
 
     file_summary_string = []
     
@@ -278,7 +279,7 @@ def Ask_AI_search_files(prompt, user_logger, email, chat_messages, scope, projec
     history_files = []
     if chat_messages is not None:
         for message in chat_messages:
-            history_files.append( message['response']['files'])
+            history_files = message['response']['files']
     if consolidated_prompt:
         prompt = consolidated_prompt
         history = True

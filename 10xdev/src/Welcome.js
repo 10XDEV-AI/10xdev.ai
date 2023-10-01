@@ -12,6 +12,7 @@ import LeftWelcome from "./LeftWelcome";
 import emoji from 'react-easy-emoji'
 import { CopyBlock, dracula} from "react-code-blocks";
 import Alert from "./UiComponents/alert";
+import ProjectInfo from "./ProjectInfo/ProjectInfo";
 
 export const Welcome = () => {
   const { setSearchTerm, isLoading, setIsLoading, currentuser, showSync, setShowSync, setCurrentUser, currentRepo, showRepos, setShowRepos, isLoadingProjectInfo, setIsLoadingProjectInfo, commitHash, setCommitHash, commitTime, setCommitTime,repository, setRepository,branch, setBranch, treeData, setTreeData} = useContext(SearchContext);
@@ -162,16 +163,23 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
   return (<>
     {currentuser!=="new"? (
       <>
-        <div className="flex ">
-          <div  className="hidden overflow-auto fixed">
+        <div className="flex w-full relative">
+          <div  className="hidden md:block lg:block md:w-5/12 md:w-5/12 overflow-auto">
             <LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash} filesShow={filesShow} setFilesShow={setFilesShow}/>
           </div>
-          <div className="w-7/12 p-6 absolute right-0">
+          <div className="shadow-xl w-full p-2 md:w-7/12 lg:p-6 absolute h-screen md:right-0 overflow-auto">
             <div className="text-centre">
               <div className="h-[16vh] ">
-                <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-                    10XDEV.AI
-                </div>
+              <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+              <a href="/" className="md:text-6xl font-bold italic text-blue-900 text-center pt-5 text-4xl">
+                10XDEV.AI
+              </a>
+              </div>
+              <h1 className="mt-5 md:hidden">
+                  <div lassName = "">
+                    <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                  </div>
+              </h1>
               </div>
               <div>
                   {filesShow && filesShow.map((file, index) => (
@@ -257,10 +265,10 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
               </button>
             </div>
                   <div className="">
-                   <div className="flex justify-center mx-auto my-1 mt-[5%]">
-                     <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
-                     <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
-                     <div className="py-1 px-1"> {emoji('⚡️')}</div>Generate commands
+                  <div className="flex justify-center mx-auto my-1 mt-[5%]">
+                     <div className="py-1 lg:px-1"> {emoji('⭐️')}</div>Implement Features
+                     <div className="py-1 lg:px-1"> {emoji('❓')}</div>Understand Code
+                     <div className="hidden lg:block py-1 lg:px-1"> {emoji('⚡️')}</div><div className="hidden lg:block">Generate commands</div>
                    </div>
                    <div className="flex justify-center">
                      <div className="py-1 px-1">
@@ -269,14 +277,15 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                      <div className="py-1 px-1">
                        {emoji('🧪')}
                      </div>Create Testcases
-                     <div className="py-1 px-1">
+                     <div className="hidden lg:block py-1 px-1">
                        {emoji('📕')}
-                     </div>Create Documentation and More
-                     <div className="py-1 px-1">
+                     </div><div className="hidden lg:block">
+                          Create Documentation and More
+                      </div>
+                     <div className="hidden lg:block py-1 px-1">
                      {emoji('🪄')}
                      </div>
                    </div>
-
                   </div>
                 </div>
                 <div className="absolute top-3 right-5">

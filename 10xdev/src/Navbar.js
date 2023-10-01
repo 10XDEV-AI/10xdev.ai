@@ -21,16 +21,16 @@ function Navbar({file,onHamburgerClick}) {
                    </svg>
                 </button>
                 <Link to="/welcome" className="my-auto">
-                    <div className="italic font-bold text-xl">
+                    <div className="hidden md:block italic font-bold text-xl">
                         10XDEV.AI
                     </div>
                 </Link>
-                <div className="my-auto mx-auto">
+                <div className="text-xs my-auto mx-auto">
                     <Link to="/repos" className="">
                        <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
                      </Link>
                 </div>
-                <button className="font-bold text-sm" onClick={onHamburgerClick}>
+                <button className="text-xs font-bold md:text-sm" onClick={onHamburgerClick}>
                     #{commitHash}
                 </button>
                 <div className="text-blue-900">

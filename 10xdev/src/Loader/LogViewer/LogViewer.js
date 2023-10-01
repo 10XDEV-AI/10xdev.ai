@@ -16,11 +16,8 @@ function LogViewer(props) {
     const fetchLogs = async () => {
       try {
         const response = await callAPI('/api/logs');
-        console.log('Logs' + response.logs);
         setPercentage(response.percentage);
-        console.log('Perc'+response.percentage);
         setTime(response.time);
-        console.log('Time '+response.time);
 
         if (Array.isArray(response.logs)) {
           let result = response.logs.join(',\n');

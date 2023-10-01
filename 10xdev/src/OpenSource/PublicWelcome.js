@@ -7,6 +7,7 @@ import Typewriter from "typewriter-effect";
 import LoadingRing from "../Loader/Loader";
 import NewWelcome from "../NewWelcome";
 import LeftWelcome from "./LeftWelcome";
+import ProjectInfo from "../ProjectInfo/ProjectInfo";
 import emoji from 'react-easy-emoji'
 import { CopyBlock, dracula} from "react-code-blocks";
 import Alert from "../UiComponents/alert";
@@ -151,17 +152,22 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
     {currentuser!=="new"? (
       <>
       <div className="flex w-full relative">
-      <div  className="hidden lg:block lg:w-5/12 overflow-auto absolute">
+      <div  className="hidden md:block lg:block md:w-5/12 md:w-5/12 overflow-auto">
         <LeftWelcome isTreeLoading={isTreeLoading} treeData={treeData} filesearchTerm={filesearchTerm} commitHash={commitHash} filesShow={filesShow} setFilesShow={setFilesShow} />
-        </div>
-      <div className="shadow-xl p-2 lg:w-7/12 lg:p-6 h-screen absolute lg:right-0 overflow-auto">
+      </div>
+      <div className="shadow-xl w-full p-2 md:w-7/12 lg:p-6 absolute h-screen md:right-0 overflow-auto">
         <div className="text-centre">
           <div className="h-[16vh] ">
             <div className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
-            <a href="/" className="lg:text-6xl font-bold italic text-blue-900 text-center pt-5 sm:text-3xl">
+            <a href="/" className="md:text-6xl font-bold italic text-blue-900 text-center pt-5 text-4xl">
               10XDEV.AI
             </a>
             </div>
+            <h1 className="mt-5 md:hidden">
+                <div lassName = "">
+                  <ProjectInfo isLoadingProjectInfo={isLoadingProjectInfo} repository={repository} branch={branch} />
+                </div>
+            </h1>
           </div>
           <div>
                 {filesShow && filesShow.map((file, index) => (
@@ -244,23 +250,25 @@ const shuffledStrings = typewriterStrings.sort(() => Math.random() - 0.5);
                 </svg>
               </button>
             </div>
-                  <div className="hidden lg:block">
-                   <div className="flex justify-center text-sm mx-auto my-1 mt-[5%]">
-                     <div className="py-1 px-1"> {emoji('⭐️')}</div>Implement Features
-                     <div className="py-1 px-1"> {emoji('❓')}</div>Understand Code
-                     <div className="py-1 px-1"> {emoji('⚡️')}</div>Generate commands
+                  <div className="">
+                   <div className="flex justify-center mx-auto my-1 mt-[5%]">
+                     <div className="py-1 lg:px-1"> {emoji('⭐️')}</div>Implement Features
+                     <div className="py-1 lg:px-1"> {emoji('❓')}</div>Understand Code
+                     <div className="hidden lg:block py-1 lg:px-1"> {emoji('⚡️')}</div><div className="hidden lg:block">Generate commands</div>
                    </div>
-                   <div className="flex justify-center text-sm">
+                   <div className="flex justify-center">
                      <div className="py-1 px-1">
                        {emoji('🐞')}
                      </div>Fix Bugs & Errors
                      <div className="py-1 px-1">
                        {emoji('🧪')}
                      </div>Create Testcases
-                     <div className="py-1 px-1">
+                     <div className="hidden lg:block py-1 px-1">
                        {emoji('📕')}
-                     </div>Create Documentation and More
-                     <div className="py-1 px-1">
+                     </div><div className="hidden lg:block">
+                          Create Documentation and More
+                      </div>
+                     <div className="hidden lg:block py-1 px-1">
                      {emoji('🪄')}
                      </div>
                    </div>

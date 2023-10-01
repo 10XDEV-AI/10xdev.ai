@@ -70,7 +70,7 @@ export const Chat = () => {
       const filesData = await callAPI("/api/search_files", {
         method: "POST",
         body: JSON.stringify({
-          chatMessages: chatMessages.slice(0, chatMessages.length - 1),
+          chatMessages: chatMessages,
           checkedFiles: checkedFiles,
           prompt: input,
         }),
@@ -132,6 +132,7 @@ export const Chat = () => {
       updatedMessages.splice(index + 1);
       return updatedMessages;
     });
+    console.log(chatMessages);
     setIsLoading(true);
     setLogFiles([]);
       try {
@@ -213,7 +214,7 @@ useEffect(() => {
             {showLeftWelcome &&  <div className="w-6/12 fixed border-r"><LeftWelcome repository={repository} branch={branch} isTreeLoading={isTreeLoading} treeData={treeData} commitHash={commitHash}/></div>}
             <div className={`${showLeftWelcome ? "w-6/12 absolute right-0 " : "w-full"}`}>
               <Navbar LoadProjectInfo="True" file="chat" onHamburgerClick={handleHamburgerClick} />
-              <div className="w-full bg-slate-50 p-4 rounded-lg ">
+              <div className="w-full p-4 rounded-lg ">
                 <div className="flex flex-wrap gap-2 justify-center items-center" >
                   {checkedFiles.length>0&&
                       <div onClick={handleHamburgerClick}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 my-1">

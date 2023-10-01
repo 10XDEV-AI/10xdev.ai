@@ -30,7 +30,10 @@ def AskGPT(email, system_message="", prompt="Hi", temperature=0, max_tokens=-1, 
                 messages=[{"role": "system", "content": system_message},
                           {"role": "user", "content": prompt}],
                 temperature=temperature,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
             )
         return response["choices"][0]["message"]['content']
     except Exception as e:
