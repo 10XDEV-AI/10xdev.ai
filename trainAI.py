@@ -68,8 +68,6 @@ def train_AI(repo_name, userlogger, email):
 
     for ind in fs.index:
         i_new, fs['summary'][ind] = summarize_file(repo_name, fs['file_path'][ind], i, userlogger, email)
-        if fs['summary'][ind] != "Ignore":
-            fs['embedding'][ind] = split_embed(fs['file_path'][ind]+" "+fs['summary'][ind], email)
         if i_new != i:
             i = i_new
         if i != 0:

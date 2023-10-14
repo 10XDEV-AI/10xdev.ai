@@ -43,7 +43,7 @@ const LandingPage = () => {
                 <div className="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                           <a href={`https://near-nest-eb1.notion.site/How-to-use-10XDEV-AI-ade88e19510749a68c46e0aa98b7826b?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">How to use</a>
+                           <a href={`https://near-nest-eb1.notion.site/Compare-Us-98decebde26f4135bc68b9b2139211ef?pvs=4`} className="block py-2 pl-3 pr-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Compare Us!</a>
                         </li>
                         <li className='px-2'>
                         </li>
@@ -66,7 +66,7 @@ const LandingPage = () => {
             </div>
             </div>
             <div className="p-5 lg:mt-0 lg:col-span-12 lg:flex lg:px-20">
-                <iframe className="aspect-video rounded-md bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 p-1 w-full p-1 rounded-lg lg:mb-0"  src="https://www.youtube.com/embed/lybtjtJ946U?si=57xHqxKCVolsNYfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe className="aspect-video rounded-md bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 p-1 w-full p-1 rounded-lg lg:mb-0"  src="https://www.youtube.com/embed/4dgS96DCezE?si=kl_fx1_5psoO575u" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
         </div>
     </section>
@@ -192,7 +192,7 @@ const LandingPage = () => {
                     <h3 className="mb-4 text-2xl font-semibold">Company</h3>
                     <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">Relevant for multiple users, extended & premium support.</p>
                     <div className="flex items-baseline justify-center my-8">
-                        <span className="mr-2 text-5xl font-extrabold">$99</span>
+                        <span className="mr-2 text-5xl font-extrabold">$30</span>
                         <span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">/month</span>
                     </div>
                     <ul role="list" className="mb-8 space-y-4 text-left">
@@ -215,7 +215,7 @@ const LandingPage = () => {
                     <h3 className="mb-4 text-2xl font-semibold">Enterprise</h3>
                     <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">Best for large scale uses and extended redistribution rights.</p>
                     <div className="flex items-baseline justify-center my-8">
-                        <span className="mr-2 text-5xl font-extrabold">$499</span>
+                        <span className="mr-2 text-5xl font-extrabold">$40</span>
                         <span className="text-gray-500 dark:text-gray-400">/month</span>
                     </div>
                     <ul role="list" className="mb-8 space-y-4 text-left">
