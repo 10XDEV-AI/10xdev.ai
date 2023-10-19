@@ -11,7 +11,7 @@ import { CopyBlock,irBlack } from "react-code-blocks";
 import { callAPI } from "./api";
   
 export const LeftWelcome = ({repository, branch, isTreeLoading, treeData, filesearchTerm, filesShow ,setFilesShow}) => {
-  const { isLoading,showSync, setShowSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, commitTime, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
+  const { isLoading,showSync, /howSync,showRepos, setShowRepos , isLoadingProjectInfo , commitHash, commitTime, checkedFiles, setCheckedFiles, showCheckboxes, setShowCheckboxes, setFileSearchTerm} = useContext(SearchContext);
   const handleSyncClick = () => {
     setShowSync(true);
   };
