@@ -33,19 +33,6 @@ const NewWelcome = () => {
 
                 }}
             >Add your own repository for Auto GPT to start working on.</h6>
-                <h6 className="text-center"
-                    style={{
-                        fontWeight: "semibold",
-                        fontSize: "1.25rem",
-                        lineHeight: "1.75rem",
-                        color: "#374151",
-                        marginTop: "1rem",
-                        marginBottom: "1rem",
-                        textAlign: "center",
-                        maxWidth: "100%",
-
-                    }}
-                >You can also create a repository from a prompt</h6>
             <div className="flex justify-center gap-4">
             <button
              onClick={handleSetupClick}
