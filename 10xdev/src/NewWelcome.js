@@ -52,12 +52,6 @@ const NewWelcome = () => {
                 >You can also create a repository from a prompt</h6>
             <div className="flex justify-center gap-4">
             <button
-            onClick={handleCreateClick}
-            className="bg-blue-900 hover:bg-blue-800 font-bold px-6 py-2 my-6 text-white px-2 rounded"
-            >
-              Create Project
-            </button>
-            <button
              onClick={handleSetupClick}
              className="bg-blue-900 hover:bg-blue-800 font-bold px-6 py-2 my-6 text-white px-2 rounded"
              >
