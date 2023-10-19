@@ -8,10 +8,6 @@ const NewWelcome = () => {
         navigate("/clone");
     }
 
-  const handleCreateClick = (e) => {
-      e.preventDefault();
-      navigate("/clarify");
-      }
 
   return (
     <div className="flex justify-center">
