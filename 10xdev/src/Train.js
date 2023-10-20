@@ -63,7 +63,7 @@ const Train = () => {
   const handleGetGitIgnore = async () => {
     try {
       setIsLoading(true);
-      handleSaveFilesToIgnore();
+      handleSaveFilesToIgnore(false);
       setIsLoading(true);
       const data = await callAPI(`/api/Ignore?path=${input}`);
       console.log("Analyse Data");
@@ -130,8 +130,8 @@ const Train = () => {
     setShowPopup(false);
   };
 
-  const handleSaveFilesToIgnore = async () => {
-    setIsLoading(true);
+  const handleSaveFilesToIgnore = async (shouldToggleLoading = true) => {
+    if (shouldToggleLoading) setIsLoading(true);
     console.log(filesToIgnore);
     try {
       const data = await callAPI('/api/saveFilesToIgnore', {
@@ -142,7 +142,7 @@ const Train = () => {
         },
       });
       console.log(data);
-      setIsLoading(false);
+      if (shouldToggleLoading) setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
