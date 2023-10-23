@@ -15,15 +15,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter, Language
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re, nltk
 from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
-if not nltk.corpus.stopwords.words('english'):
-    print("Stopwords not found. Downloading...")
-    nltk.download('stopwords')
-else:
-    print("Stopwords are already downloaded.")
-
-# Now, you can use stopwords
-stop_words = set(stopwords.words('english'))
 
 fs = pd.DataFrame()
 
@@ -36,7 +27,7 @@ def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2
     for chunk in chunks:
         # Tokenize the chunk and apply stemming to each token
         tokens = chunk.split()
-        stemmed_tokens = [stemmer.stem(token) for token in tokens if token.lower() not in stop_words]
+        stemmed_tokens = [stemmer.stem(token) for token in tokens]
         stemmed_chunk = ' '.join(stemmed_tokens)
         stemmed_chunks.append(stemmed_chunk)
 
@@ -46,7 +37,7 @@ def process_file_contents_with_langchain(contents, user_prompt, maximum_tokens=2
 
     # Transform the user prompt using the fitted vectorizer
     tokens = user_prompt.split()
-    stemmed_tokens = [stemmer.stem(token) for token in tokens if token.lower() not in stop_words]
+    stemmed_tokens = [stemmer.stem(token) for token in tokens]
     stemmed_prompt = ' '.join(stemmed_tokens)
     user_prompt_tfidf = tfidf_vectorizer.transform([stemmed_prompt])
 
