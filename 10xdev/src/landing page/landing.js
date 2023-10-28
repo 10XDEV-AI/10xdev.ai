@@ -1,6 +1,5 @@
 import React,{useEffect} from 'react';
 import './landing.css';
-import myimg from './images/feature-2.png';
 import PublicWelcome from '../OpenSource/PublicWelcome';
 import { Route } from 'react-router-dom';
 
@@ -150,7 +149,6 @@ const LandingPage = () => {
                         </li>
                     </ul>
                 </div>
-                <img className="hidden mx-auto w-1/2 p-1 rounded-lg lg:mb-0 lg:flex" src={myimg} width="200" alt="Your Image" />
                 </div>
         </div>
       </section>
